@@ -27,7 +27,7 @@ public class Medicine {
     @Column(name = "medicine_manufacturer", nullable = false)
     private String manufacturer;
     @Column(nullable = false)
-    private Long price;
+    private Double price;
     @Column(nullable = false)
     private Boolean recipe;
     @ManyToOne

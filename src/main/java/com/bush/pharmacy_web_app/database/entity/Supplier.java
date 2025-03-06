@@ -19,7 +19,7 @@ public class Supplier {
     @Id
     @Column(nullable = false)
     private String itn;
-    @Column(nullable = false)
+    @Column(name = "supplier_name", nullable = false)
     private String name;
     @OneToOne
     @JoinColumn(name = "f_key_address_id", nullable = false)

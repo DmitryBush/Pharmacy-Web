@@ -19,7 +19,7 @@ import java.util.List;
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false)
+    @Column(name = "order_id", nullable = false)
     private Long id;
     @Column(name = "status_order")
     private Short statusOrder;
