@@ -1,0 +1,27 @@
+package com.bush.pharmacy_web_app.database.entity;
+
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@Entity
+@Table(name = "storage")
+public class StorageItems {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "record_id", nullable = false)
+    private Long id;
+    private Integer amount;
+    @ManyToOne
+    @JoinColumn(name = "f_key_medicine_id", nullable = false)
+    private Medicine medicine;
+    @ManyToOne
+    @JoinColumn(name = "f_key_branch_id", nullable = false)
+    private PharmacyBranch branch;
+}
