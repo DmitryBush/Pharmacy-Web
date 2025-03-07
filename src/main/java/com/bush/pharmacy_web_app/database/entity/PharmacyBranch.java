@@ -1,10 +1,7 @@
 package com.bush.pharmacy_web_app.database.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +9,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString(exclude = {"items", "orders"})
 @Entity
 @Table(name = "pharmacy_branches")
 public class PharmacyBranch {

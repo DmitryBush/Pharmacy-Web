@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +28,7 @@ public class Medicine {
     @Column(name = "medicine_manufacturer", nullable = false)
     private String manufacturer;
     @Column(nullable = false)
-    private Double price;
+    private BigDecimal price;
     @Column(nullable = false)
     private Boolean recipe;
     @ManyToOne

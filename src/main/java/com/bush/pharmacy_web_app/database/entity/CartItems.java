@@ -1,16 +1,12 @@
 package com.bush.pharmacy_web_app.database.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-import java.util.List;
+import lombok.*;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString(exclude = {"order"})
 @Builder
 @Entity
 @Table(name = "shopping_carts")
