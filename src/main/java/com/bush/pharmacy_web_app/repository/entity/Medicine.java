@@ -29,7 +29,7 @@ public class Medicine {
     private BigDecimal price;
     @Column(nullable = false)
     private Boolean recipe;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "f_key_supplier_itn")
     private Supplier supplier;
 }

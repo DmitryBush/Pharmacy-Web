@@ -9,7 +9,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString(exclude = "medicines")
+@ToString(exclude = {"medicines", "address"})
 @Builder
 @Entity
 @Table(name = "suppliers")
@@ -19,7 +19,7 @@ public class Supplier {
     private String itn;
     @Column(name = "supplier_name", nullable = false)
     private String name;
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "f_key_address_id", nullable = false)
     private Address address;
 

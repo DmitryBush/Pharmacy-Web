@@ -9,7 +9,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString(exclude = {"items", "orders"})
+@ToString(exclude = {"items", "orders", "address"})
 @Entity
 @Table(name = "pharmacy_branches")
 public class PharmacyBranch {
@@ -17,12 +17,12 @@ public class PharmacyBranch {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "branch_id", nullable = false)
     private Integer id;
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "f_key_address_id", nullable = false)
     private Address address;
 
-    @OneToMany(mappedBy = "branch")
+    @OneToMany(mappedBy = "branch", fetch = FetchType.LAZY)
     private List<StorageItems> items = new ArrayList<>();
-    @OneToMany(mappedBy = "branch")
+    @OneToMany(mappedBy = "branch", fetch = FetchType.LAZY)
     private List<Order> orders = new ArrayList<>();
 }
