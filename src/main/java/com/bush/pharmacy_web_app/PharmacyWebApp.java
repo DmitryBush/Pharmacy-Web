@@ -4,10 +4,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class PharmacyWebAppApplication {
+public class PharmacyWebApp {
 
 	public static void main(String[] args) {
-		SpringApplication.run(PharmacyWebAppApplication.class, args);
+		SpringApplication.run(PharmacyWebApp.class, args);
 	}
 
 }
