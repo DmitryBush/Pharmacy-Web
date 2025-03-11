@@ -18,10 +18,10 @@ public class CartItems {
     @Column(name = "obj_amount")
     private Integer amount;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "f_key_medicine_id", nullable = false)
     private Medicine medicine;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "f_key_order_id", nullable = false)
     private Order order;
 }

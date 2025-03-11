@@ -21,7 +21,7 @@ public class StorageItems {
     @ManyToOne
     @JoinColumn(name = "f_key_medicine_id", nullable = false)
     private Medicine medicine;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "f_key_branch_id", nullable = false)
     private PharmacyBranch branch;
 }
