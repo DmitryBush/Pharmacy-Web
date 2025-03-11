@@ -11,13 +11,13 @@ import org.springframework.data.domain.PageRequest;
 
 @SpringBootTest
 @Transactional
-public class OrderTest {
+public class OrderRepositoryTest {
     @Autowired
     private OrderRepository orderRepository;
 
     @Test
     public void findOrderById() {
-        var page = PageRequest.of(1, 2);
+        var page = PageRequest.of(0, 2);
         var orders = orderRepository.findAll(page);
         orders.stream().forEach(System.out::println);
 
@@ -25,7 +25,7 @@ public class OrderTest {
     }
     @Test
     public void findCustomerOrdersByPhone() {
-        var page = PageRequest.of(1, 2);
+        var page = PageRequest.of(0, 2);
         var orders = orderRepository.findByCustomerMobilePhone("+79123456789", page);
         orders.stream()
                 .flatMap(lamb -> lamb.getCartItems().stream())

@@ -9,7 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 @Transactional
-public class StorageTest {
+public class StorageRepositoryTest {
     @Autowired
     private StorageRepository storageRepository;
 
