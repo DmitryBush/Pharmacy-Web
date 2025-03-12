@@ -3,10 +3,13 @@ package com.bush.pharmacy_web_app.repository.entity;
 import com.bush.pharmacy_web_app.repository.StorageRepository;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+// Test temporarily disabled for CI due to local database
+@Tag("DatabaseRequired")
 @SpringBootTest
 @Transactional
 public class StorageRepositoryTest {
