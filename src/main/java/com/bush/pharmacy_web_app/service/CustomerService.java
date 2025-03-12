@@ -1,0 +1,66 @@
+package com.bush.pharmacy_web_app.service;
+
+import com.bush.pharmacy_web_app.repository.CustomerRepository;
+import com.bush.pharmacy_web_app.repository.dto.CustomerCreateDto;
+import com.bush.pharmacy_web_app.repository.dto.CustomerReadDto;
+import com.bush.pharmacy_web_app.repository.mapper.CustomerCreateMapper;
+import com.bush.pharmacy_web_app.repository.mapper.CustomerReadMapper;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Optional;
+
+@Service
+@RequiredArgsConstructor
+@Transactional(readOnly = true)
+public class CustomerService implements CrudOperable<String, CustomerReadDto, CustomerCreateDto> {
+    private final CustomerRepository customerRepository;
+    private final CustomerReadMapper readMapper;
+    private final CustomerCreateMapper createMapper;
+
+    @Override
+    public List<CustomerReadDto> findAll() {
+        return customerRepository.findAll().stream()
+                .map(readMapper::map)
+                .toList();
+    }
+
+    @Override
+    public List<CustomerReadDto> findById(String s) {
+        return customerRepository.findById(s).stream()
+                .map(readMapper::map)
+                .toList();
+    }
+
+    @Override
+    public CustomerReadDto create(CustomerCreateDto customerCreateDto) {
+        return Optional.ofNullable(customerCreateDto)
+                .map(createMapper::map)
+                .map(customerRepository::save)
+                .map(readMapper::map)
+                .orElseThrow();
+    }
+
+    @Override
+    @Transactional
+    public Optional<CustomerReadDto> update(String s, CustomerCreateDto customerCreateDto) {
+        return customerRepository.findById(s)
+                .map(lamb -> createMapper.map(customerCreateDto, lamb))
+                .map(customerRepository::saveAndFlush)
+                .map(readMapper::map);
+    }
+
+    @Override
+    @Transactional
+    public boolean delete(String s, CustomerCreateDto customerCreateDto) {
+        return customerRepository.findById(s)
+                .map(lamb -> {
+                    customerRepository.delete(lamb);
+                    customerRepository.flush();
+                    return true;
+                })
+                .orElse(false);
+    }
+}
