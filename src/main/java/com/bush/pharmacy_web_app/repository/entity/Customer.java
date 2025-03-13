@@ -25,6 +25,6 @@ public class Customer {
     private String lastName;
 
     @Builder.Default
-    @OneToMany(mappedBy = "customer")
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.REMOVE)
     private List<Order> orders = new ArrayList<>();
 }
