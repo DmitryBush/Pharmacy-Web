@@ -5,8 +5,8 @@ import java.util.Optional;
 
 public interface CrudOperable<ID, ReadDto, EditDto> {
     List<ReadDto> findAll();
-    List<ReadDto> findById(ID id);
+    Optional<ReadDto> findById(ID id);
     ReadDto create(EditDto editDto);
     Optional<ReadDto> update(ID id, EditDto editDto);
-    boolean delete(ID id, EditDto editDto);
+    boolean delete(ID id);
 }

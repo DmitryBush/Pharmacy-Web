@@ -28,10 +28,9 @@ public class CustomerService implements CrudOperable<String, CustomerReadDto, Cu
     }
 
     @Override
-    public List<CustomerReadDto> findById(String s) {
-        return customerRepository.findById(s).stream()
-                .map(readMapper::map)
-                .toList();
+    public Optional<CustomerReadDto> findById(String s) {
+        return customerRepository.findById(s)
+                .map(readMapper::map);
     }
 
     @Override
@@ -54,7 +53,7 @@ public class CustomerService implements CrudOperable<String, CustomerReadDto, Cu
 
     @Override
     @Transactional
-    public boolean delete(String s, CustomerCreateDto customerCreateDto) {
+    public boolean delete(String s) {
         return customerRepository.findById(s)
                 .map(lamb -> {
                     customerRepository.delete(lamb);
