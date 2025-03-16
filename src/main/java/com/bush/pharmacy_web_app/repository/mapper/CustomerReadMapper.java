@@ -11,13 +11,13 @@ import java.util.Optional;
 @Component
 @RequiredArgsConstructor
 public class CustomerReadMapper implements DtoMapper<Customer, CustomerReadDto> {
-    private final OrderReadMapper customerReadMapper;
+    private final OrderReadMapper orderReadMapper;
 
     @Override
     public CustomerReadDto map(Customer obj) {
         var orders = Optional.ofNullable(obj.getOrders())
                 .map(list -> list.stream()
-                        .map(customerReadMapper::map)
+                        .map(orderReadMapper::map)
                         .toList())
                 .orElse(Collections.emptyList());
         return new CustomerReadDto(obj.getMobilePhone(), obj.getName(), obj.getSurname(), obj.getLastName(), orders);
