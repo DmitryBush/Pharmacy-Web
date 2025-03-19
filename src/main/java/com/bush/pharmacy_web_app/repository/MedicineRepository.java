@@ -6,7 +6,7 @@ import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-public interface MedicineRepository extends JpaRepository<Medicine, Long> {
+public interface MedicineRepository extends JpaRepository<Medicine, Integer> {
     @Query("select distinct m from Medicine m " +
             "join StorageItems s on m = s.medicine")
     Slice<Medicine> findDistinctMedicineStorageLocated(Pageable pageable);

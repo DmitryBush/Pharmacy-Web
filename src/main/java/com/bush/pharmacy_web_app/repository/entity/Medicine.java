@@ -30,6 +30,6 @@ public class Medicine {
     @Column(nullable = false)
     private Boolean recipe;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "f_key_supplier_itn")
+    @JoinColumn(name = "f_key_supplier_itn", nullable = false)
     private Supplier supplier;
 }
