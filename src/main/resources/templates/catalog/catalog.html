@@ -1,14 +1,74 @@
 <!DOCTYPE html>
-<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<html lang="ru" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <title>Каталог</title>
 </head>
 <body>
     <h1>Лекарства [(${medicines.size()})] товаров</h1>
+    <div>
+        <form action="/api/v1/catalog">
+            <div>
+                <h3>Цена</h3>
+                <div>
+                    <label for="minPrice">
+                        <input type="number" id="minPrice" name="minPrice" placeholder="От">
+                    </label>
+                    <label for="maxPrice">
+                        <input type="number" id="maxPrice" name="maxPrice" placeholder="До">
+                    </label>
+                </div>
+            </div>
+            <div>
+                <h3>Тип товара</h3>
+                <ul>
+                    <li th:each="medicineType : ${types}">
+                        <label>
+                            <input type="checkbox" name="type" th:value="${medicineType.type}">
+                            [(${medicineType.type})]
+                        </label>
+                    </li>
+                </ul>
+            </div>
+            <div>
+                <h3>Производитель</h3>
+                <ul>
+                    <li th:each="medicineManufacturer : ${manufacturers}">
+                        <label>
+                            <input type="checkbox" name="manufacturer" th:value="${medicineManufacturer.manufacturer}">
+                            [(${medicineManufacturer.manufacturer})]
+                        </label>
+                    </li>
+                </ul>
+            </div>
+            <div>
+                <h3>Рецепт</h3>
+                <label>
+                    <input type="radio" name="recipe" value="0" checked>
+                    <span class="checkmark"></span>
+                    Не важно
+                </label>
+                <label>
+                    <input type="radio" name="recipe" value="1">
+                    <span class="checkmark"></span>
+                    С рецептом
+                </label>
+                <label>
+                    <input type="radio" name="recipe" value="2">
+                    <span class="checkmark"></span>
+                    Без рецепта
+                </label>
+            </div>
+            <div>
+                <button type="submit">Применить фильтрацию</button>
+                <button type="reset">Сбросить фильтрацию</button>
+            </div>
+        </form>
+    </div>
     <div th:each="medicine : ${medicines}">
         <img src="https://cdn.kama-med.ru/images/products/1/6479/373201231/bint-elast.jpg"
-            width="200px" alt="[(${medicine.name})]">
+             width="200px"
+             alt="[(${medicine.name})]">
         <p>[(${medicine.name})]</p>
         <p>[(${medicine.price})] ₽</p>
         <button>Купить</button>

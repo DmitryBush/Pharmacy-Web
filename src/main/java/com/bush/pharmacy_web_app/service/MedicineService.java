@@ -2,6 +2,9 @@ package com.bush.pharmacy_web_app.service;
 
 import com.bush.pharmacy_web_app.repository.MedicineRepository;
 import com.bush.pharmacy_web_app.repository.dto.catalog.MedicineCreateDto;
+import com.bush.pharmacy_web_app.repository.dto.catalog.MedicineManufacturer;
+import com.bush.pharmacy_web_app.repository.dto.catalog.MedicineTypeDto;
+import com.bush.pharmacy_web_app.repository.filter.MedicineFilter;
 import com.bush.pharmacy_web_app.repository.dto.orders.MedicineReadDto;
 import com.bush.pharmacy_web_app.repository.mapper.MedicineCreateMapper;
 import com.bush.pharmacy_web_app.repository.mapper.orders.MedicineReadMapper;
@@ -23,6 +26,24 @@ public class MedicineService {
     public List<MedicineReadDto> findAll() {
         return medicineRepository.findAll().stream()
                 .map(readMapper::map)
+                .toList();
+    }
+
+    public List<MedicineReadDto> findAll(MedicineFilter filter) {
+        return medicineRepository.findAllByFilter(filter).stream()
+                .map(readMapper::map)
+                .toList();
+    }
+
+    public List<MedicineTypeDto> findAllTypes() {
+        return medicineRepository.findDistinctMedicineType().stream()
+                .map(MedicineTypeDto::new)
+                .toList();
+    }
+
+    public List<MedicineManufacturer> findAllManufacturers() {
+        return medicineRepository.findDistinctMedicineManufacturer().stream()
+                .map(MedicineManufacturer::new)
                 .toList();
     }
 
