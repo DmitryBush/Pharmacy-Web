@@ -9,6 +9,8 @@ import com.bush.pharmacy_web_app.repository.dto.orders.MedicineReadDto;
 import com.bush.pharmacy_web_app.repository.mapper.MedicineCreateMapper;
 import com.bush.pharmacy_web_app.repository.mapper.orders.MedicineReadMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,10 +31,9 @@ public class MedicineService {
                 .toList();
     }
 
-    public List<MedicineReadDto> findAll(MedicineFilter filter) {
-        return medicineRepository.findAllByFilter(filter).stream()
-                .map(readMapper::map)
-                .toList();
+    public Page<MedicineReadDto> findAll(MedicineFilter filter, Pageable pageable) {
+        return medicineRepository.findAllByFilter(filter, pageable)
+                .map(readMapper::map);
     }
 
     public List<MedicineTypeDto> findAllTypes() {

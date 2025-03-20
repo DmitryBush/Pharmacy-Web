@@ -5,7 +5,7 @@
     <title>Каталог</title>
 </head>
 <body>
-    <h1>Лекарства [(${medicines.size()})] товаров</h1>
+    <h1>Лекарства [(${medicines.getTotalElements()})] товаров</h1>
     <div>
         <form action="/api/v1/catalog">
             <div>
@@ -65,13 +65,38 @@
             </div>
         </form>
     </div>
-    <div th:each="medicine : ${medicines}">
+    <div th:each="medicine : ${medicines.content}">
         <img src="https://cdn.kama-med.ru/images/products/1/6479/373201231/bint-elast.jpg"
              width="200px"
              alt="[(${medicine.name})]">
         <p>[(${medicine.name})]</p>
         <p>[(${medicine.price})] ₽</p>
         <button>Купить</button>
+    </div>
+    <div>
+        <a th:if="${medicines.hasPrevious()}"
+           th:href="@{${baseUrl}(page=${medicines.number - 1}, size=${medicines.size})}">
+            ←
+        </a>
+        <span th:unless="${medicines.hasPrevious()}">←</span>
+
+        <div>
+            <span th:each="pageNum : ${#numbers.sequence(1, medicines.totalPages)}">
+                <a th:if="${pageNum - 1 != medicines.number}"
+                   th:href="@{${baseUrl}(page=${pageNum - 1}, size=${medicines.size})}"
+                   th:text="${pageNum}">
+                </a>
+                <span th:if="${pageNum - 1 == medicines.number}"
+                      th:text="${pageNum}">
+                </span>
+            </span>
+        </div>
+
+        <a th:if="${medicines.hasNext()}"
+           th:href="@{${baseUrl}(page=${medicines.number + 1}, size=${medicines.size})}">
+            →
+        </a>
+        <span th:unless="${medicines.hasNext()}">→</span>
     </div>
     <script src="/catalog/js/catalog.js"></script>
 </body>
