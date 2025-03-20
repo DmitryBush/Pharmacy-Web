@@ -18,7 +18,8 @@ public class CatalogController {
     private final MedicineService service;
 
     @GetMapping
-    public String findAllMedicines(Model model, MedicineFilter filter, Pageable pageable) {
+    public String findAllMedicines(Model model, MedicineFilter filter,
+                                   @PageableDefault(size = 15) Pageable pageable) {
         var page = service.findAll(filter, pageable);
 
         model.addAttribute("types", service.findAllTypes());

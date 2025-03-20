@@ -80,23 +80,29 @@
         </a>
         <span th:unless="${medicines.hasPrevious()}">←</span>
 
-        <div>
-            <span th:each="pageNum : ${#numbers.sequence(1, medicines.totalPages)}">
-                <a th:if="${pageNum - 1 != medicines.number}"
-                   th:href="@{${baseUrl}(page=${pageNum - 1}, size=${medicines.size})}"
-                   th:text="${pageNum}">
-                </a>
-                <span th:if="${pageNum - 1 == medicines.number}"
-                      th:text="${pageNum}">
-                </span>
+        <span th:each="pageNum : ${#numbers.sequence(1, medicines.totalPages)}">
+            <a th:if="${pageNum - 1 != medicines.number}"
+               th:href="@{${baseUrl}(page=${pageNum - 1}, size=${medicines.size})}"
+               th:text="${pageNum}">
+            </a>
+            <span th:if="${pageNum - 1 == medicines.number}"
+                  th:text="${pageNum}">
             </span>
-        </div>
+        </span>
 
         <a th:if="${medicines.hasNext()}"
            th:href="@{${baseUrl}(page=${medicines.number + 1}, size=${medicines.size})}">
             →
         </a>
         <span th:unless="${medicines.hasNext()}">→</span>
+
+        <label for="pageSize">Показывать по:</label>
+        <select name="pageSize" id="pageSize">
+            <option value="15" th:selected="${medicines.size == 15}">15</option>
+            <option value="30" th:selected="${medicines.size == 30}">30</option>
+            <option value="50" th:selected="${medicines.size == 50}">50</option>
+            <option value="75" th:selected="${medicines.size == 75}">75</option>
+        </select>
     </div>
     <script src="/catalog/js/catalog.js"></script>
 </body>

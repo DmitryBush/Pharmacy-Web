@@ -31,6 +31,15 @@ document.querySelector("form").addEventListener("change", function() {
         window.location.search = params;
     });
 
+    document.getElementById("pageSize").addEventListener("change", function() {
+        const url = new URL(window.location.href);
+        url.searchParams.set('size', this.value);
+
+        url.searchParams.set('page', 0);
+        window.location.href = url.toString();
+    })
+
+
 document.getElementById("resetFilters").addEventListener("click", function() {
     document.querySelector("form").reset();
 
