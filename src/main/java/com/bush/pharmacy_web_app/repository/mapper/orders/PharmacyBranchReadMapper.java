@@ -1,8 +1,9 @@
-package com.bush.pharmacy_web_app.repository.mapper;
+package com.bush.pharmacy_web_app.repository.mapper.orders;
 
-import com.bush.pharmacy_web_app.repository.dto.AddressReadDto;
-import com.bush.pharmacy_web_app.repository.dto.PharmacyBranchReadDto;
+import com.bush.pharmacy_web_app.repository.dto.orders.AddressReadDto;
+import com.bush.pharmacy_web_app.repository.dto.orders.PharmacyBranchReadDto;
 import com.bush.pharmacy_web_app.repository.entity.PharmacyBranch;
+import com.bush.pharmacy_web_app.repository.mapper.DtoMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
