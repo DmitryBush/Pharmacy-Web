@@ -1,7 +1,8 @@
-package com.bush.pharmacy_web_app.repository.mapper;
+package com.bush.pharmacy_web_app.repository.mapper.orders;
 
-import com.bush.pharmacy_web_app.repository.dto.AddressReadDto;
+import com.bush.pharmacy_web_app.repository.dto.orders.AddressReadDto;
 import com.bush.pharmacy_web_app.repository.entity.Address;
+import com.bush.pharmacy_web_app.repository.mapper.DtoMapper;
 import org.springframework.stereotype.Component;
 
 @Component

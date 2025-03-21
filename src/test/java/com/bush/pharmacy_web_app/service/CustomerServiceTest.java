@@ -1,7 +1,7 @@
 package com.bush.pharmacy_web_app.service;
 
-import com.bush.pharmacy_web_app.repository.dto.CustomerCreateDto;
-import com.bush.pharmacy_web_app.repository.dto.CustomerReadDto;
+import com.bush.pharmacy_web_app.repository.dto.orders.CustomerCreateDto;
+import com.bush.pharmacy_web_app.repository.dto.orders.CustomerReadDto;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;

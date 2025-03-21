@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Заказы</title>
+</head>
+<body>
+    <h1>Заказы</h1>
+    <div th:each="order : ${ordersPage.content}">
+        <div>
+            <p><b>Заказ</b> "[(${order.id})]" от [(${order.date})]</p>
+        </div>
+        <div>
+            <p>Статус заказа: [(${order.statusOrder})]</p>
+            <p>Филиал получения: [(${order.branch.address.settlement})],
+                [(${order.branch.address.street})],
+                [(${order.branch.address.house})]
+            </p>
+        </div>
+        <div th:each="item: ${order.cartItems}">
+            <div>
+                <img src="https://cdn.kama-med.ru/images/products/1/6479/373201231/bint-elast.jpg"
+                     width="200px"
+                     alt="стерильные бинты">
+            </div>
+            <div>
+                <a href="https://google.com">
+                    [(${item.medicine.name})]
+                </a>
+                <p>Производитель: [(${item.medicine.manufacturer})]</p>
+            </div>
+            <div>
+                <div>
+                    <p>Цена: [(${item.medicine.price})] ₽</p>
+                </div>
+                <div>
+                    <p>[(${item.amount})] шт. x [(${item.medicine.price})] ₽</p>
+                </div>
+            </div>
+        </div>
+        <div>
+            <p><b>Итого:</b> [(${order.result})]</p>
+        </div>
+    </div>
+</body>
+</html>
