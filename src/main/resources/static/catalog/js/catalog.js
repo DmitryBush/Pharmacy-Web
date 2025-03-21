@@ -39,6 +39,13 @@ document.querySelector("form").addEventListener("change", function() {
         window.location.href = url.toString();
     })
 
+    document.getElementById("sortBy").addEventListener("change", function() {
+        const url = new URL(window.location.href);
+        url.searchParams.set('sort', this.value);
+
+        window.location.href = url.toString();
+    })
+
 
 document.getElementById("resetFilters").addEventListener("click", function() {
     document.querySelector("form").reset();

@@ -65,6 +65,17 @@
             </div>
         </form>
     </div>
+    <div>
+        <label for="sortBy">
+            Сортировать по
+            <select id="sortBy">
+                <option value="price,asc"
+                        th:selected="${#strings.equals(medicines.sort, 'price: ASC')}">По возрастанию цены</option>
+                <option value="price,desc"
+                        th:selected="${#strings.equals(medicines.sort, 'price: DESC')}">По убыванию цены</option>
+            </select>
+        </label>
+    </div>
     <div th:each="medicine : ${medicines.content}">
         <img src="https://cdn.kama-med.ru/images/products/1/6479/373201231/bint-elast.jpg"
              width="200px"

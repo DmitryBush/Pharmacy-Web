@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.query.QueryUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,20 +22,22 @@ public class FilterMedicineRepositoryImpl implements FilterMedicineRepository {
     public Page<Medicine> findAllByFilter(MedicineFilter filter, Pageable pageable) {
         var criteriaBuilder = entityManager.getCriteriaBuilder();
 
-        var medicines = applyPagination(createFilteredQuery(filter, criteriaBuilder), pageable);
+        var medicines = applyPagination(createFilteredQuery(filter, criteriaBuilder, pageable), pageable);
 
         Long totalElementsCount = entityManager.createQuery(createCountQuery(filter, criteriaBuilder))
                 .getSingleResult();
         return new PageImpl<>(medicines, pageable, totalElementsCount);
     }
 
-    private CriteriaQuery<Medicine> createFilteredQuery(MedicineFilter filter, CriteriaBuilder criteriaBuilder) {
+    private CriteriaQuery<Medicine> createFilteredQuery(MedicineFilter filter, CriteriaBuilder criteriaBuilder,
+                                                        Pageable pageable) {
         var query = criteriaBuilder.createQuery(Medicine.class);
         var medicine = query.from(Medicine.class);
         query.select(medicine);
 
         var predicates = buildPredicates(filter, criteriaBuilder, medicine);
         query.where(predicates.toArray(Predicate[]::new));
+        query.orderBy(QueryUtils.toOrders(pageable.getSort(), medicine, criteriaBuilder));
 
         return query;
     }
