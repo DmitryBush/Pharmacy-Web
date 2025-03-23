@@ -80,9 +80,13 @@
         <img src="https://cdn.kama-med.ru/images/products/1/6479/373201231/bint-elast.jpg"
              width="200px"
              alt="[(${medicine.name})]">
-        <p>[(${medicine.name})]</p>
-        <p>[(${medicine.price})] ₽</p>
-        <button>Купить</button>
+        <div>
+            <a th:href="@{/catalog/{id}(id=${medicine.id})}" th:text="${medicine.name}"></a>
+        </div>
+        <div>
+            <p>[(${medicine.price})] ₽</p>
+            <button>Купить</button>
+        </div>
     </div>
     <div>
         <a th:if="${medicines.hasPrevious()}"

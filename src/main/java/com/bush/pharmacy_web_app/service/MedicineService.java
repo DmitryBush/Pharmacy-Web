@@ -1,13 +1,16 @@
 package com.bush.pharmacy_web_app.service;
 
 import com.bush.pharmacy_web_app.repository.MedicineRepository;
+import com.bush.pharmacy_web_app.repository.PharmacyBranchRepository;
 import com.bush.pharmacy_web_app.repository.dto.catalog.MedicineCreateDto;
 import com.bush.pharmacy_web_app.repository.dto.catalog.MedicineManufacturer;
 import com.bush.pharmacy_web_app.repository.dto.catalog.MedicineTypeDto;
+import com.bush.pharmacy_web_app.repository.dto.orders.PharmacyBranchReadDto;
 import com.bush.pharmacy_web_app.repository.filter.MedicineFilter;
 import com.bush.pharmacy_web_app.repository.dto.orders.MedicineReadDto;
 import com.bush.pharmacy_web_app.repository.mapper.MedicineCreateMapper;
 import com.bush.pharmacy_web_app.repository.mapper.orders.MedicineReadMapper;
+import com.bush.pharmacy_web_app.repository.mapper.orders.PharmacyBranchReadMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,8 +25,10 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public class MedicineService {
     private final MedicineRepository medicineRepository;
+    private final PharmacyBranchRepository branchRepository;
     private final MedicineReadMapper readMapper;
     private final MedicineCreateMapper createMapper;
+    private final PharmacyBranchReadMapper branchReadMapper;
 
     public List<MedicineReadDto> findAll() {
         return medicineRepository.findAll().stream()
@@ -48,9 +53,15 @@ public class MedicineService {
                 .toList();
     }
 
-    public List<MedicineReadDto> findById(Integer id) {
-        return medicineRepository.findById(id).stream()
-                .map(readMapper::map)
+    public Optional<MedicineReadDto> findById(Integer id) {
+        return medicineRepository.findById(id)
+                .map(readMapper::map);
+    }
+
+    public List<PharmacyBranchReadDto> findBranchesMedicineLocated(Long medicineId) {
+        return branchRepository.findBranchesMedicineLocated(medicineId)
+                .stream()
+                .map(branchReadMapper::map)
                 .toList();
     }
 
