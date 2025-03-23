@@ -1,4 +1,4 @@
-package com.bush.pharmacy_web_app.controllers;
+package com.bush.pharmacy_web_app.controllers.http;
 
 import com.bush.pharmacy_web_app.repository.filter.MedicineFilter;
 import com.bush.pharmacy_web_app.service.MedicineService;

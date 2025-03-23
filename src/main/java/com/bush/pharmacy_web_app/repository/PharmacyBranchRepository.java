@@ -10,6 +10,6 @@ import java.util.List;
 public interface PharmacyBranchRepository extends JpaRepository<PharmacyBranch, Integer> {
     @Query("select b from PharmacyBranch b " +
             "join StorageItems s on b = s.branch " +
-            "where s.medicine = :medicineId")
-    List<PharmacyBranch> findBranchesMedicineLocated(@Param("medicineId") Integer medicineId);
+            "where s.medicine.id = :id")
+    List<PharmacyBranch> findBranchesMedicineLocated(@Param("id") Long id);
 }

@@ -2,7 +2,7 @@
 <html lang="ru" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title th:text="${product.name}"></title>
 </head>
 <body>
     <h1 th:text="${product.name}"></h1>
@@ -42,12 +42,13 @@
             </li>
         </ul>
     </div>
-    
+
     <div>
         <h3>Наличие в аптеках</h3>
-        <ul>
+        <ul id="availability-stores-container">
 
         </ul>
     </div>
+    <script src="/product/js/product.js"></script>
 </body>
 </html>

@@ -58,7 +58,7 @@ public class MedicineService {
                 .map(readMapper::map);
     }
 
-    public List<PharmacyBranchReadDto> findBranchesMedicineLocated(Integer medicineId) {
+    public List<PharmacyBranchReadDto> findBranchesMedicineLocated(Long medicineId) {
         return branchRepository.findBranchesMedicineLocated(medicineId)
                 .stream()
                 .map(branchReadMapper::map)

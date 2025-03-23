@@ -9,6 +9,6 @@ import org.springframework.stereotype.Component;
 public class MedicineReadMapper implements DtoMapper<Medicine, MedicineReadDto> {
     @Override
     public MedicineReadDto map(Medicine obj) {
-        return new MedicineReadDto(obj.getName(), obj.getManufacturer(), obj.getPrice());
+        return new MedicineReadDto(obj.getId(), obj.getName(), obj.getManufacturer(), obj.getType(), obj.getPrice());
     }
 }
