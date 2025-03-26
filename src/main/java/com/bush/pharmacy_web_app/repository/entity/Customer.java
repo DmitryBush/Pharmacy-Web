@@ -23,6 +23,8 @@ public class Customer {
     private String surname;
     @Column(name = "last_name")
     private String lastName;
+    @Column(nullable = false)
+    private String password;
 
     @Builder.Default
     @OneToMany(mappedBy = "customer", cascade = CascadeType.REMOVE)
