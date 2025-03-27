@@ -1,5 +1,12 @@
 package com.bush.pharmacy_web_app.repository.entity.role;
 
-public enum RoleType {
-    ADMIN, OPERATOR, CUSTOMER
+import org.springframework.security.core.GrantedAuthority;
+
+public enum RoleType implements GrantedAuthority {
+    ADMIN, OPERATOR, CUSTOMER;
+
+    @Override
+    public String getAuthority() {
+        return name();
+    }
 }

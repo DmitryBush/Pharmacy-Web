@@ -8,6 +8,9 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 
+import static com.bush.pharmacy_web_app.repository.entity.role.RoleType.ADMIN;
+import static com.bush.pharmacy_web_app.repository.entity.role.RoleType.OPERATOR;
+
 @Slf4j
 @Configuration
 @EnableWebSecurity
@@ -17,9 +20,10 @@ public class SecurityConfig {
         return httpSecurity
                 .authorizeHttpRequests(lamb -> lamb
                         .requestMatchers("/login", "/register", "/catalog/**", "/").permitAll()
-                        .requestMatchers("/orders").denyAll()
+                        .requestMatchers("/orders", "/cart").hasAnyRole(ADMIN.getAuthority(),
+                                OPERATOR.getAuthority())
+                        .requestMatchers("/admin/**").hasRole(ADMIN.getAuthority())
                         .anyRequest().authenticated())
-                .httpBasic(Customizer.withDefaults())
                 .formLogin(login -> login.loginPage("/login")
                         .defaultSuccessUrl("/api/v1/orders").permitAll())
                 .logout(logout -> logout.logoutUrl("/logout")
