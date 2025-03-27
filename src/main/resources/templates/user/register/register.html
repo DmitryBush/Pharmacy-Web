@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Регистрация</title>
@@ -8,11 +8,41 @@
     <div>
       <h1>Регистрация</h1>
       <div>
-        <form>
-          <label for="registerForm">Введите номер телефона</label>
-          <input id="registerForm" type="text" placeholder="+79XXXXXXXXXX">
+        <form th:action="@{/register}" method="post" th:object="${createDto}">
+            <div>
+                <label for="name">
+                    Введите имя
+                    <input id="name" name="name" type="text" placeholder="Имя">
+                </label>
+            </div>
+            <div>
+                <label for="surname">
+                    Введите фамилию
+                    <input id="surname" name="surname" type="text" placeholder="Фамилия">
+                </label>
+            </div>
+            <div>
+                <label for="last_Name">
+                    Введите отчество
+                    <input id="last_Name" name="lastName" type="text" placeholder="Отчество">
+                </label>
+            </div>
+            <div>
+                <label for="mobile_phone">
+                    Введите номер телефона
+                    <input id="mobile_phone" name="mobilePhone" type="text" placeholder="+79XXXXXXXXXX">
+                </label>
+            </div>
+            <div>
+                <label for="password">
+                    Введите пароль
+                    <input id="password" name="password" type="password">
+                </label>
+            </div>
+            <div>
+                <button type="submit">Зарегистрироваться</button>
+            </div>
         </form>
-        <button>Зарегистрироваться</button>
       </div>
     </div>
 </body>

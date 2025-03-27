@@ -10,6 +10,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,10 +32,9 @@ public class CustomerOrdersController {
     private final TemplateEngine templateEngine;
 
     @GetMapping(produces = MediaType.TEXT_HTML_VALUE)
-    public String findAll(
-            @PageableDefault Pageable pageable) {
+    public String findAll(@PageableDefault Pageable pageable, @AuthenticationPrincipal UserDetails userDetails) {
         PageImpl<OrderReadDto> page = new PageImpl<>(
-                Objects.requireNonNull(customerService.findById("+79221234567").orElse(null)).orders());
+                Objects.requireNonNull(customerService.findById(userDetails.getUsername()).orElse(null)).orders());
 
         Context context = new Context();
         context.setVariable("ordersPage", page);
