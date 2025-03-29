@@ -1,4 +1,4 @@
-package com.bush.pharmacy_web_app.repository.dto;
+package com.bush.pharmacy_web_app.repository.dto.orders;
 
 public record CustomerCreateDto(String name,
                                 String surname,

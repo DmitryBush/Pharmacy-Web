@@ -19,7 +19,7 @@ public class Medicine {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "medicine_id", nullable = false)
-    private Integer id;
+    private Long id;
     @Column(name = "medicine_name", nullable = false)
     private String name;
     @Column(name = "medicine_type", nullable = false)
@@ -32,6 +32,6 @@ public class Medicine {
     @Column(nullable = false)
     private Boolean recipe;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "f_key_supplier_itn")
+    @JoinColumn(name = "f_key_supplier_itn", nullable = false)
     private Supplier supplier;
 }

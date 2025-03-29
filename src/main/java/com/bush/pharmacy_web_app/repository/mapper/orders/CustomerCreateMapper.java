@@ -1,7 +1,8 @@
-package com.bush.pharmacy_web_app.repository.mapper;
+package com.bush.pharmacy_web_app.repository.mapper.orders;
 
-import com.bush.pharmacy_web_app.repository.dto.CustomerCreateDto;
+import com.bush.pharmacy_web_app.repository.dto.orders.CustomerCreateDto;
 import com.bush.pharmacy_web_app.repository.entity.Customer;
+import com.bush.pharmacy_web_app.repository.mapper.DtoMapper;
 import org.springframework.stereotype.Component;
 
 import java.util.Collections;
@@ -16,7 +17,6 @@ public class CustomerCreateMapper implements DtoMapper<CustomerCreateDto, Custom
 
     @Override
     public Customer map(CustomerCreateDto fromObj, Customer toObj) {
-        copyObj(fromObj, toObj);
         return copyObj(fromObj, toObj);
     }
 
