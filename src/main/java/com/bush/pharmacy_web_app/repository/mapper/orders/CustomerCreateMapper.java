@@ -25,6 +25,7 @@ public class CustomerCreateMapper implements DtoMapper<CustomerCreateDto, Custom
         toObj.setSurname(fromObj.surname());
         toObj.setLastName(fromObj.lastName());
         toObj.setMobilePhone(fromObj.mobilePhone());
+        toObj.setPassword(fromObj.password());
         toObj.setOrders(Collections.emptyList());
         return toObj;
     }

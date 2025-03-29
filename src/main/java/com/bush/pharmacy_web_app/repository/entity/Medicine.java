@@ -1,5 +1,6 @@
 package com.bush.pharmacy_web_app.repository.entity;
 
+import com.bush.pharmacy_web_app.repository.entity.manufacturer.Manufacturer;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,8 +24,9 @@ public class Medicine {
     private String name;
     @Column(name = "medicine_type", nullable = false)
     private String type;
-    @Column(name = "medicine_manufacturer", nullable = false)
-    private String manufacturer;
+    @ManyToOne
+    @JoinColumn(name = "fk_medicine_manufacturer")
+    private Manufacturer manufacturer;
     @Column(nullable = false)
     private BigDecimal price;
     @Column(nullable = false)
