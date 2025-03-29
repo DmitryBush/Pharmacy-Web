@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${product.name}"></title>
+</head>
+<body>
+    <h1 th:text="${product.name}"></h1>
+
+    <div>
+        <img src="https://cdn.kama-med.ru/images/products/1/6479/373201231/bint-elast.jpg"
+             alt="[(${product.name})]"
+             width="400px">
+    </div>
+    <div>
+        <ul>
+            <li>
+                <span>Производитель: </span>
+                <span th:text="${product.manufacturer}"></span>
+            </li>
+            <li>
+                <span>Тип товара: </span>
+                <span th:text="${product.type}"></span>
+            </li>
+        </ul>
+    </div>
+    <div>
+        <p>Цена</p>
+        <p th:text="${product.price}+ ' ₽'"></p>
+        <button type="button">В корзину</button>
+    </div>
+    <div>
+        <h3>Характеристики</h3>
+        <ul>
+            <li>
+                <span>Производитель: </span>
+                <span th:text="${product.manufacturer}"></span>
+            </li>
+            <li>
+                <span>Тип товара: </span>
+                <span th:text="${product.type}"></span>
+            </li>
+        </ul>
+    </div>
+
+    <div>
+        <h3>Наличие в аптеках</h3>
+        <ul id="availability-stores-container">
+
+        </ul>
+    </div>
+    <script src="/product/js/product.js"></script>
+</body>
+</html>

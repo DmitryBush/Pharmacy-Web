@@ -30,6 +30,6 @@ public class Order {
     @JoinColumn(name = "f_key_branch_id")
     private PharmacyBranch branch;
     @Builder.Default
-    @OneToMany(mappedBy = "order")
+    @OneToMany(mappedBy = "order", cascade = CascadeType.REMOVE)
     private List<CartItems> cartItems = new ArrayList<>();
 }

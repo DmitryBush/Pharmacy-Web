@@ -1,5 +1,6 @@
 package com.bush.pharmacy_web_app.repository.entity;
 
+import com.bush.pharmacy_web_app.repository.entity.manufacturer.Manufacturer;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,18 +19,19 @@ public class Medicine {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "medicine_id", nullable = false)
-    private Integer id;
+    private Long id;
     @Column(name = "medicine_name", nullable = false)
     private String name;
     @Column(name = "medicine_type", nullable = false)
     private String type;
-    @Column(name = "medicine_manufacturer", nullable = false)
-    private String manufacturer;
+    @ManyToOne
+    @JoinColumn(name = "fk_medicine_manufacturer")
+    private Manufacturer manufacturer;
     @Column(nullable = false)
     private BigDecimal price;
     @Column(nullable = false)
     private Boolean recipe;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "f_key_supplier_itn")
+    @JoinColumn(name = "f_key_supplier_itn", nullable = false)
     private Supplier supplier;
 }
