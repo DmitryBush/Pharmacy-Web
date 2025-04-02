@@ -8,6 +8,6 @@ public record OrderReadDto(Long id,
                            Short statusOrder,
                            Instant date,
                            PharmacyBranchReadDto branch,
-                           List<CartItemsReadDto> cartItems,
+                           CartReadDto cart,
                            BigDecimal result) {
 }
