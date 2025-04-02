@@ -9,7 +9,7 @@ import lombok.*;
 @ToString(exclude = {"order"})
 @Builder
 @Entity
-@Table(name = "shopping_carts")
+@Table(name = "cart_items")
 public class CartItems {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

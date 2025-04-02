@@ -35,8 +35,8 @@
                 <ul>
                     <li th:each="medicineManufacturer : ${manufacturers}">
                         <label>
-                            <input type="checkbox" name="manufacturer" th:value="${medicineManufacturer.manufacturer}">
-                            [(${medicineManufacturer.manufacturer})]
+                            <input type="checkbox" name="manufacturer" th:value="${medicineManufacturer.name}">
+                            [(${medicineManufacturer.name})]
                         </label>
                     </li>
                 </ul>
