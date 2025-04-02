@@ -16,7 +16,7 @@ import java.util.Set;
 @Builder
 @Entity
 @Table(name = "customers")
-public class Customer {
+public class User {
     @Id
     @Column(name = "mobile_phone", nullable = false, length = 15)
     private String mobilePhone;

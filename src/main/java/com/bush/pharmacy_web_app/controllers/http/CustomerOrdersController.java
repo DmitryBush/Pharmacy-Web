@@ -1,8 +1,10 @@
 package com.bush.pharmacy_web_app.controllers.http;
 
-import com.bush.pharmacy_web_app.service.CustomerService;
+import com.bush.pharmacy_web_app.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,16 +13,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.util.Objects;
 
 
-@RequestMapping("api/v1/orders")
+@RequestMapping("/orders")
 @Controller
 @RequiredArgsConstructor
 public class CustomerOrdersController {
-    private final CustomerService customerService;
+    private final UserService userService;
 
     @GetMapping
-    public String findAllOrders(Model model) {
+    public String findAllOrders(Model model, @AuthenticationPrincipal UserDetails userDetails) {
         var page = new PageImpl<>(
-                Objects.requireNonNull(customerService.findById("+79221234567").orElse(null)).orders());
+                Objects.requireNonNull(userService.findById(userDetails.getUsername()).orElse(null)).orders());
 
         model.addAttribute("ordersPage", page);
         return "order/order";

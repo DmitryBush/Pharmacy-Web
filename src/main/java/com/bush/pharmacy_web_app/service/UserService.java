@@ -1,6 +1,6 @@
 package com.bush.pharmacy_web_app.service;
 
-import com.bush.pharmacy_web_app.repository.CustomerRepository;
+import com.bush.pharmacy_web_app.repository.UserRepository;
 import com.bush.pharmacy_web_app.repository.dto.orders.CustomerCreateDto;
 import com.bush.pharmacy_web_app.repository.dto.orders.CustomerReadDto;
 import com.bush.pharmacy_web_app.repository.mapper.orders.CustomerCreateMapper;
@@ -22,22 +22,22 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class CustomerService implements UserDetailsService {
-    private final CustomerRepository customerRepository;
+public class UserService implements UserDetailsService {
+    private final UserRepository userRepository;
     private final CustomerReadMapper readMapper;
     private final CustomerCreateMapper createMapper;
 
     public List<CustomerReadDto> findAll() {
-        return customerRepository.findAll().stream().map(readMapper::map).toList();
+        return userRepository.findAll().stream().map(readMapper::map).toList();
     }
 
     public Page<CustomerReadDto> findAll(Pageable pageable) {
-        return customerRepository.findAll(pageable)
+        return userRepository.findAll(pageable)
                 .map(readMapper::map);
     }
 
     public Optional<CustomerReadDto> findById(String s) {
-        return customerRepository.findById(s)
+        return userRepository.findById(s)
                 .map(readMapper::map);
     }
 
@@ -45,25 +45,25 @@ public class CustomerService implements UserDetailsService {
     public CustomerReadDto create(CustomerCreateDto customerCreateDto) {
         return Optional.ofNullable(customerCreateDto)
                 .map(createMapper::map)
-                .map(customerRepository::save)
+                .map(userRepository::save)
                 .map(readMapper::map)
                 .orElseThrow();
     }
 
     @Transactional
     public Optional<CustomerReadDto> update(String s, CustomerCreateDto customerCreateDto) {
-        return customerRepository.findById(s)
+        return userRepository.findById(s)
                 .map(lamb -> createMapper.map(customerCreateDto, lamb))
-                .map(customerRepository::saveAndFlush)
+                .map(userRepository::saveAndFlush)
                 .map(readMapper::map);
     }
 
     @Transactional
     public boolean delete(String s) {
-        return customerRepository.findById(s)
+        return userRepository.findById(s)
                 .map(lamb -> {
-                    customerRepository.delete(lamb);
-                    customerRepository.flush();
+                    userRepository.delete(lamb);
+                    userRepository.flush();
                     return true;
                 })
                 .orElse(false);
@@ -71,7 +71,7 @@ public class CustomerService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return customerRepository.findById(username)
+        return userRepository.findById(username)
                 .map(customer -> new User(customer.getMobilePhone(),
                         customer.getPassword(), Collections.emptyList()))
                 .orElseThrow(() -> new UsernameNotFoundException("Mistake in username or password"));
