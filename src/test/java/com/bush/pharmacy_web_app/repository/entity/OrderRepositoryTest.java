@@ -1,6 +1,6 @@
 package com.bush.pharmacy_web_app.repository.entity;
 
-import com.bush.pharmacy_web_app.repository.CustomerRepository;
+import com.bush.pharmacy_web_app.repository.UserRepository;
 import com.bush.pharmacy_web_app.repository.OrderRepository;
 import com.bush.pharmacy_web_app.repository.PharmacyBranchRepository;
 import jakarta.transaction.Transactional;
@@ -24,7 +24,7 @@ public class OrderRepositoryTest {
     @Autowired
     private PharmacyBranchRepository pharmacyBranchRepository;
     @Autowired
-    private CustomerRepository customerRepository;
+    private UserRepository userRepository;
 
     private final Pageable page = PageRequest.of(0, 2);
 
@@ -48,12 +48,12 @@ public class OrderRepositoryTest {
     @Test
     public void createOrder() {
         var pharmacyBranch = pharmacyBranchRepository.findById(1).orElseThrow();
-        var customer = customerRepository.findById("+79192345678").orElseThrow();
+        var customer = userRepository.findById("+79192345678").orElseThrow();
         Order order = Order.builder()
                 .statusOrder((short) 1)
                 .date(Instant.now())
                 .branch(pharmacyBranch)
-                .customer(customer)
+                .user(customer)
                 .build();
         Assertions.assertEquals(orderRepository.save(order), order);
     }

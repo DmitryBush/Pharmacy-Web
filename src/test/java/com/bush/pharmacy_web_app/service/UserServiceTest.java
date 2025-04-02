@@ -15,9 +15,9 @@ import java.util.Collections;
 @Tag("DatabaseRequired")
 @SpringBootTest
 @Rollback
-public class CustomerServiceTest {
+public class UserServiceTest {
     @Autowired
-    private CustomerService service;
+    private UserService service;
 
     @Test
     public void findAllCustomers() {

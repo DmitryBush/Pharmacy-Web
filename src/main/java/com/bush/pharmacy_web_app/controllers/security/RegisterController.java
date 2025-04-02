@@ -1,10 +1,11 @@
 package com.bush.pharmacy_web_app.controllers.security;
 
-import com.bush.pharmacy_web_app.repository.dto.CustomerCreateDto;
-import com.bush.pharmacy_web_app.service.CustomerService;
+import com.bush.pharmacy_web_app.repository.dto.orders.CustomerCreateDto;
+import com.bush.pharmacy_web_app.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,14 +15,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/register")
 @RequiredArgsConstructor
 public class RegisterController {
-    private final CustomerService service;
+    private final UserService service;
 
     @GetMapping
     public String register() {
         return "user/register/register";
     }
     @PostMapping
-    public String register(@ModelAttribute("customer")CustomerCreateDto createDto, BindingResult bindingResult) {
+    public String register(@ModelAttribute("customer")@Validated CustomerCreateDto createDto,
+                           BindingResult bindingResult) {
         if (bindingResult.hasErrors())
             return "user/register/register";
 

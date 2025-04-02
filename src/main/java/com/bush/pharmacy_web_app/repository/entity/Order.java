@@ -25,7 +25,7 @@ public class Order {
 
     @ManyToOne
     @JoinColumn(name = "f_key_customer_id", nullable = false)
-    private Customer customer;
+    private User user;
     @ManyToOne
     @JoinColumn(name = "f_key_branch_id")
     private PharmacyBranch branch;
