@@ -20,8 +20,6 @@ public class SecurityConfig {
         return httpSecurity
                 .authorizeHttpRequests(lamb -> lamb
                         .requestMatchers("/login", "/register", "/catalog/**", "/").permitAll()
-                        .requestMatchers("/orders", "/cart").hasAnyRole(ADMIN.getAuthority(),
-                                OPERATOR.getAuthority())
                         .requestMatchers("/admin/**").hasRole(ADMIN.getAuthority())
                         .anyRequest().authenticated())
                 .formLogin(login -> login.loginPage("/login")
