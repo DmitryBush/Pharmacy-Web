@@ -36,6 +36,6 @@ public class User {
     private Set<Role> roles = new HashSet<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "customer", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<Order> orders = new ArrayList<>();
 }

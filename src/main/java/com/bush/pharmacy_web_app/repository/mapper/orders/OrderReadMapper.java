@@ -14,18 +14,16 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class OrderReadMapper implements DtoMapper<Order, OrderReadDto> {
     private final PharmacyBranchReadMapper branchReadMapper;
-    private final CartItemsReadMapper cartItemsReadMapper;
+    private final CartReadMapper cartReadMapper;
     @Override
     public OrderReadDto map(Order obj) {
         var branch = Optional.ofNullable(obj.getBranch())
                 .map(branchReadMapper::map)
                 .orElse(null);
-        var cart = Optional.ofNullable(obj.getCartItems())
-                .map(list -> list.stream()
-                        .map(cartItemsReadMapper::map)
-                        .toList())
-                .orElse(Collections.emptyList());
-        BigDecimal result = cart.stream()
+        var cart = Optional.ofNullable(obj.getCart())
+                .map(cartReadMapper::map)
+                .orElseThrow();
+        BigDecimal result = cart.cartItems().stream()
                 .map(lamb -> lamb.medicine().price().multiply(BigDecimal.valueOf(lamb.amount())))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 

@@ -17,14 +17,16 @@
                 [(${order.branch.address.house})]
             </p>
         </div>
-        <div th:each="item: ${order.cartItems}">
+        <div th:each="item: ${order.cart.cartItems}">
             <div>
-                <img src="https://cdn.kama-med.ru/images/products/1/6479/373201231/bint-elast.jpg"
-                     width="200px"
-                     alt="стерильные бинты">
+                <a th:href="@{/catalog/{id}(id=${item.medicine.id})}">
+                    <img src="https://cdn.kama-med.ru/images/products/1/6479/373201231/bint-elast.jpg"
+                         width="200px"
+                         th:alt="${item.medicine.name}">
+                </a>
             </div>
             <div>
-                <a href="https://google.com">
+                <a th:href="@{/catalog/{id}(id=${item.medicine.id})}">
                     [(${item.medicine.name})]
                 </a>
                 <p>Производитель: [(${item.medicine.manufacturer})]</p>

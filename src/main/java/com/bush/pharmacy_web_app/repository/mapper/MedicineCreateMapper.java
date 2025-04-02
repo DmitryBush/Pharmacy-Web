@@ -11,6 +11,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class MedicineCreateMapper implements DtoMapper<MedicineCreateDto, Medicine>{
     private final SupplierCreateMapper createMapper;
+    private final ManufacturerCreateMapper manufacturerCreateMapper;
     @Override
     public Medicine map(MedicineCreateDto obj) {
         return copyObj(obj, new Medicine());
@@ -25,9 +26,12 @@ public class MedicineCreateMapper implements DtoMapper<MedicineCreateDto, Medici
         var supplier = Optional.ofNullable(fromObj.supplier())
                         .map(createMapper::map)
                                 .orElseThrow();
+        var manufacturer = Optional.ofNullable(fromObj.manufacturer())
+                .map(manufacturerCreateMapper::map)
+                .orElseThrow();
         toObj.setName(fromObj.name());
         toObj.setType(fromObj.type());
-        toObj.setManufacturer(fromObj.manufacturer());
+        toObj.setManufacturer(manufacturer);
         toObj.setPrice(fromObj.price());
         toObj.setRecipe(fromObj.recipe());
         toObj.setSupplier(supplier);
