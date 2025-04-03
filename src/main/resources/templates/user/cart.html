@@ -13,33 +13,39 @@
         <button>Войти</button>
     </div>
     <div sec:authorize="isAuthenticated()">
-        <div th:if="${cartItems.size == 0}">
+        <div th:if="${cartItems == null}">
             <h2>В корзине пока ничего нет</h2>
             <p>Вы можете добавить товары <a href="/catalog">из каталога</a></p>
         </div>
-        <div th:unless="${cartItems.size == 0}">
-            <div th:each="item : ${cartItems}">
-                <div>
-                    <a th:href="@{/catalog/{id}(id=${item.medicine.id})}">
-                        <img src="https://cdn.kama-med.ru/images/products/1/6479/373201231/bint-elast.jpg"
-                            width="100px"
-                            th:alt="item.medicine.name">
-                    </a>
+        <div th:unless="${cartItems == null}">
+            <div th:if="${cartItems.size == 0}">
+                <h2>В корзине пока ничего нет</h2>
+                <p>Вы можете добавить товары <a href="/catalog">из каталога</a></p>
+            </div>
+            <div th:unless="${cartItems.size == 0}">
+                <div th:each="item : ${cartItems}">
+                    <div>
+                        <a th:href="@{/catalog/{id}(id=${item.medicine.id})}">
+                            <img src="https://cdn.kama-med.ru/images/products/1/6479/373201231/bint-elast.jpg"
+                                width="100px"
+                                th:alt="item.medicine.name">
+                        </a>
+                    </div>
+                    <div>
+                        <a th:href="@{/catalog{id}(id=${item.medicine.id})}"
+                           th:text="${item.medicine.name}"></a>
+                    </div>
+                    <div>
+                        <label for="amount">
+                            <input type="number" id="amount" name="amount" th:value="${item.amount}">
+                            [(${item.medicine.price})] ₽ шт.
+                        </label>
+                    </div>
+                    <div>
+                        <p th:text="${item.medicine.price * item.amount}"></p>
+                    </div>
+                    <button>Оформить заказ</button>
                 </div>
-                <div>
-                    <a th:href="@{/catalog{id}(id=${item.medicine.id})}"
-                       th:text="${item.medicine.name}"></a>
-                </div>
-                <div>
-                    <label for="amount">
-                        <input type="number" id="amount" name="amount" th:value="${item.amount}">
-                        [(${item.medicine.price})] ₽ шт.
-                    </label>
-                </div>
-                <div>
-                    <p th:text="${item.medicine.price * item.amount}"></p>
-                </div>
-                <button>Оформить заказ</button>
             </div>
         </div>
     </div>

@@ -7,12 +7,14 @@ import com.bush.pharmacy_web_app.repository.mapper.cart.CartCreateMapper;
 import com.bush.pharmacy_web_app.repository.mapper.orders.CartReadMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class CartService {
     private final CartRepository cartRepository;
     private final CartReadMapper cartReadMapper;
@@ -30,6 +32,7 @@ public class CartService {
                 .map(cartReadMapper::map);
     }
 
+    @Transactional
     public Optional<CartReadDto> create(CartCreateDto cartCreateDto) {
         return Optional.ofNullable(cartCreateDto)
                 .map(cartCreateMapper::map)
@@ -37,6 +40,7 @@ public class CartService {
                 .map(cartReadMapper::map);
     }
 
+    @Transactional
     public Optional<CartReadDto> update(Long id, CartCreateDto cartCreateDto) {
         return cartRepository.findById(id)
                 .map(cart -> cartCreateMapper.map(cartCreateDto, cart))
