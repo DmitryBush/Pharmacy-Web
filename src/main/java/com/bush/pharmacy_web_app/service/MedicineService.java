@@ -53,7 +53,7 @@ public class MedicineService {
                 .toList();
     }
 
-    public Optional<MedicineReadDto> findById(Integer id) {
+    public Optional<MedicineReadDto> findById(Long id) {
         return medicineRepository.findById(id)
                 .map(readMapper::map);
     }
@@ -72,14 +72,14 @@ public class MedicineService {
                 .map(readMapper::map);
     }
     @Transactional
-    public Optional<MedicineReadDto> updateMedicine(Integer id, MedicineCreateDto createDto) {
+    public Optional<MedicineReadDto> updateMedicine(Long id, MedicineCreateDto createDto) {
         return medicineRepository.findById(id)
                 .map(lamb -> createMapper.map(createDto, lamb))
                 .map(medicineRepository::saveAndFlush)
                 .map(readMapper::map);
     }
     @Transactional
-    public boolean deleteMedicine(Integer id) {
+    public boolean deleteMedicine(Long id) {
         return medicineRepository.findById(id)
                 .map(lamb -> {
                     medicineRepository.deleteById(id);

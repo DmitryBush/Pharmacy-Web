@@ -33,7 +33,7 @@ public class CatalogController {
 
     @GetMapping("/{id}")
     public String getProduct(Model model,
-                             @PathVariable Integer id) {
+                             @PathVariable Long id) {
         var product = service.findById(id).orElseThrow();
 
         model.addAttribute("product", product);
