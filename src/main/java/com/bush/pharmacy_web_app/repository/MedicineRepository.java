@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-public interface MedicineRepository extends JpaRepository<Medicine, Integer>, FilterMedicineRepository {
+public interface MedicineRepository extends JpaRepository<Medicine, Long>, FilterMedicineRepository {
     @Query("select distinct m from Medicine m " +
             "join StorageItems s on m = s.medicine")
     Slice<Medicine> findDistinctMedicineStorageLocated(Pageable pageable);

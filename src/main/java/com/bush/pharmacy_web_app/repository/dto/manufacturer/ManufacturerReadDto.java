@@ -1,4 +1,4 @@
-package com.bush.pharmacy_web_app.repository.dto;
+package com.bush.pharmacy_web_app.repository.dto.manufacturer;
 
 public record ManufacturerReadDto(String name,
                                   String country) {

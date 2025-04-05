@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org"
+                xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Корзина</title>
+</head>
+<body>
+    <h1>Корзина</h1>
+    <div sec:authorize="!isAuthenticated()">
+        <h2>Корзина недоступна пользователям не вошедшим в систему</h2>
+        <p>Для того чтобы пользоваться корзиной и другими функциями сайта, необходимо <a href="/login">войти</a></p>
+        <button>Войти</button>
+    </div>
+    <div sec:authorize="isAuthenticated()">
+        <div th:if="${cart == null}">
+            <h2>В корзине пока ничего нет</h2>
+            <p>Вы можете добавить товары <a href="/catalog">из каталога</a></p>
+        </div>
+        <div th:unless="${cart == null}">
+            <div th:if="${cart.cartItems.size() == 0}">
+                <h2>В корзине пока ничего нет</h2>
+                <p>Вы можете добавить товары <a href="/catalog">из каталога</a></p>
+            </div>
+            <div th:unless="${cart.cartItems.size() == 0}">
+                <div th:each="item : ${cart.cartItems}">
+                    <div>
+                        <a th:href="@{/catalog/{id}(id=${item.medicine.id})}">
+                            <img src="https://cdn.kama-med.ru/images/products/1/6479/373201231/bint-elast.jpg"
+                                width="100px"
+                                th:alt="item.medicine.name">
+                        </a>
+                    </div>
+                    <div>
+                        <a th:href="@{/catalog{id}(id=${item.medicine.id})}"
+                           th:text="${item.medicine.name}"></a>
+                    </div>
+                    <div>
+                        <label for="amount">
+                            <input type="number" id="amount" name="amount" th:value="${item.amount}">
+                            [(${item.medicine.price})] ₽ шт.
+                        </label>
+                    </div>
+                    <div>
+                        <p th:text="${item.medicine.price * item.amount}"></p>
+                    </div>
+                </div>
+                <div>
+                    <button>Оформить заказ</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

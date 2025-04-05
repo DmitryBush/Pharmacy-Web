@@ -1,6 +1,6 @@
 package com.bush.pharmacy_web_app.repository.dto.catalog;
 
-import com.bush.pharmacy_web_app.repository.dto.ManufacturerCreateDto;
+import com.bush.pharmacy_web_app.repository.dto.manufacturer.ManufacturerCreateDto;
 
 import java.math.BigDecimal;
 

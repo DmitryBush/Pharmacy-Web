@@ -1,12 +1,13 @@
-package com.bush.pharmacy_web_app.repository.entity;
+package com.bush.pharmacy_web_app.repository.entity.cart;
 
+import com.bush.pharmacy_web_app.repository.entity.Medicine;
 import jakarta.persistence.*;
 import lombok.*;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString(exclude = {"order"})
+@ToString(exclude = {"cart"})
 @Builder
 @Entity
 @Table(name = "cart_items")
@@ -21,7 +22,7 @@ public class CartItems {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "f_key_medicine_id", nullable = false)
     private Medicine medicine;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "f_key_order_id", nullable = false)
-    private Order order;
+    @ManyToOne
+    @JoinColumn(name = "f_key_cart_id")
+    private Cart cart;
 }

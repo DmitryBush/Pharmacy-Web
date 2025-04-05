@@ -1,6 +1,6 @@
 package com.bush.pharmacy_web_app.repository;
 
-import com.bush.pharmacy_web_app.repository.entity.Order;
+import com.bush.pharmacy_web_app.repository.entity.order.Order;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
