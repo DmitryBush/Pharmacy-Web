@@ -2,6 +2,7 @@ package com.bush.pharmacy_web_app.repository.mapper;
 
 import com.bush.pharmacy_web_app.repository.dto.catalog.MedicineCreateDto;
 import com.bush.pharmacy_web_app.repository.entity.Medicine;
+import com.bush.pharmacy_web_app.repository.mapper.manufacturer.ManufacturerCreateMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

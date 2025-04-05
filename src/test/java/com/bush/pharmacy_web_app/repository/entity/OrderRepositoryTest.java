@@ -3,6 +3,7 @@ package com.bush.pharmacy_web_app.repository.entity;
 import com.bush.pharmacy_web_app.repository.UserRepository;
 import com.bush.pharmacy_web_app.repository.OrderRepository;
 import com.bush.pharmacy_web_app.repository.PharmacyBranchRepository;
+import com.bush.pharmacy_web_app.repository.entity.order.Order;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Tag;

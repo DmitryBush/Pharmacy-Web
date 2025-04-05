@@ -1,5 +1,6 @@
-package com.bush.pharmacy_web_app.repository.entity;
+package com.bush.pharmacy_web_app.repository.entity.cart;
 
+import com.bush.pharmacy_web_app.repository.entity.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;

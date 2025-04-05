@@ -1,13 +1,12 @@
-package com.bush.pharmacy_web_app.repository.mapper;
+package com.bush.pharmacy_web_app.repository.mapper.manufacturer;
 
-import com.bush.pharmacy_web_app.repository.dto.CountryCreateDto;
-import com.bush.pharmacy_web_app.repository.dto.ManufacturerCreateDto;
+import com.bush.pharmacy_web_app.repository.dto.manufacturer.CountryCreateDto;
 import com.bush.pharmacy_web_app.repository.entity.manufacturer.Country;
-import com.bush.pharmacy_web_app.repository.entity.manufacturer.Manufacturer;
+import com.bush.pharmacy_web_app.repository.mapper.DtoMapper;
 import org.springframework.stereotype.Component;
 
 @Component
-public class CountryCreateMapper implements DtoMapper<CountryCreateDto, Country>{
+public class CountryCreateMapper implements DtoMapper<CountryCreateDto, Country> {
     @Override
     public Country map(CountryCreateDto obj) {
         return copyObj(obj, new Country());

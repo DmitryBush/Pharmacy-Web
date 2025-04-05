@@ -23,7 +23,7 @@ public class SecurityConfig {
                         .requestMatchers("/admin/**").hasRole(ADMIN.getAuthority())
                         .anyRequest().authenticated())
                 .formLogin(login -> login.loginPage("/login")
-                        .defaultSuccessUrl("/api/v1/orders").permitAll())
+                        .defaultSuccessUrl("/").permitAll())
                 .logout(logout -> logout.logoutUrl("/logout")
                         .logoutSuccessUrl("/")
                         .deleteCookies("JSESSIONID"))

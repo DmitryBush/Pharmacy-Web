@@ -1,9 +1,10 @@
-package com.bush.pharmacy_web_app.repository.mapper.orders;
+package com.bush.pharmacy_web_app.repository.mapper.cart;
 
-import com.bush.pharmacy_web_app.repository.dto.orders.CartItemsReadDto;
+import com.bush.pharmacy_web_app.repository.dto.cart.CartItemReadDto;
 import com.bush.pharmacy_web_app.repository.dto.orders.MedicineReadDto;
-import com.bush.pharmacy_web_app.repository.entity.CartItems;
+import com.bush.pharmacy_web_app.repository.entity.cart.CartItems;
 import com.bush.pharmacy_web_app.repository.mapper.DtoMapper;
+import com.bush.pharmacy_web_app.repository.mapper.orders.MedicineReadMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -11,13 +12,13 @@ import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
-public class CartItemsReadMapper implements DtoMapper<CartItems, CartItemsReadDto> {
+public class CartItemsReadMapper implements DtoMapper<CartItems, CartItemReadDto> {
     private final MedicineReadMapper mapper;
     @Override
-    public CartItemsReadDto map(CartItems obj) {
+    public CartItemReadDto map(CartItems obj) {
         MedicineReadDto medicineDto = Optional.ofNullable(obj.getMedicine())
                 .map(mapper::map)
                 .orElse(null);
-        return new CartItemsReadDto(medicineDto, obj.getAmount());
+        return new CartItemReadDto(medicineDto, obj.getAmount());
     }
 }

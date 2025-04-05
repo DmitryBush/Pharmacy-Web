@@ -17,7 +17,7 @@
                 [(${order.branch.address.house})]
             </p>
         </div>
-        <div th:each="item: ${order.cart.cartItems}">
+        <div th:each="item: ${order.cartItems}">
             <div>
                 <a th:href="@{/catalog/{id}(id=${item.medicine.id})}">
                     <img src="https://cdn.kama-med.ru/images/products/1/6479/373201231/bint-elast.jpg"
@@ -29,11 +29,11 @@
                 <a th:href="@{/catalog/{id}(id=${item.medicine.id})}">
                     [(${item.medicine.name})]
                 </a>
-                <p>Производитель: [(${item.medicine.manufacturer})]</p>
+                <p>Производитель: [(${item.medicine.manufacturer.name})]</p>
             </div>
             <div>
                 <div>
-                    <p>Цена: [(${item.medicine.price})] ₽</p>
+                    <p>Цена: [(${item.price})] ₽</p>
                 </div>
                 <div>
                     <p>[(${item.amount})] шт. x [(${item.medicine.price})] ₽</p>

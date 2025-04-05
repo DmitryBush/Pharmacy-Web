@@ -2,9 +2,9 @@ package com.bush.pharmacy_web_app.service;
 
 import com.bush.pharmacy_web_app.repository.CartRepository;
 import com.bush.pharmacy_web_app.repository.dto.cart.CartCreateDto;
-import com.bush.pharmacy_web_app.repository.dto.orders.CartReadDto;
+import com.bush.pharmacy_web_app.repository.dto.cart.CartReadDto;
 import com.bush.pharmacy_web_app.repository.mapper.cart.CartCreateMapper;
-import com.bush.pharmacy_web_app.repository.mapper.orders.CartReadMapper;
+import com.bush.pharmacy_web_app.repository.mapper.cart.CartReadMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

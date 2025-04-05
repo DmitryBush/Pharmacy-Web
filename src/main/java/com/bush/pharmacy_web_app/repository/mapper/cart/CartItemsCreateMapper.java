@@ -2,7 +2,7 @@ package com.bush.pharmacy_web_app.repository.mapper.cart;
 
 import com.bush.pharmacy_web_app.repository.MedicineRepository;
 import com.bush.pharmacy_web_app.repository.dto.cart.CartItemCreateDto;
-import com.bush.pharmacy_web_app.repository.entity.CartItems;
+import com.bush.pharmacy_web_app.repository.entity.cart.CartItems;
 import com.bush.pharmacy_web_app.repository.mapper.DtoMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

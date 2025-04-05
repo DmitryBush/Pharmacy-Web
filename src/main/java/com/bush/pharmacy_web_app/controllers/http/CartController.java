@@ -1,6 +1,5 @@
 package com.bush.pharmacy_web_app.controllers.http;
 
-import com.bush.pharmacy_web_app.repository.dto.orders.CartReadDto;
 import com.bush.pharmacy_web_app.service.CartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -18,11 +17,12 @@ public class CartController {
 
     @GetMapping
     public String showCart(Model model, @AuthenticationPrincipal UserDetails userDetails) {
-
+        var cart = cartService.findById(1L)
+                .orElse(null);
         if (userDetails != null)
-            model.addAttribute("cartItems", cartService.findById(1L));
+            model.addAttribute("cart", cart);
         else
-            model.addAttribute("cartItems", null);
+            model.addAttribute("cart", null);
         return "user/cart";
     }
 }

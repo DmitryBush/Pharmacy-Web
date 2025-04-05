@@ -13,17 +13,17 @@
         <button>Войти</button>
     </div>
     <div sec:authorize="isAuthenticated()">
-        <div th:if="${cartItems == null}">
+        <div th:if="${cart == null}">
             <h2>В корзине пока ничего нет</h2>
             <p>Вы можете добавить товары <a href="/catalog">из каталога</a></p>
         </div>
-        <div th:unless="${cartItems == null}">
-            <div th:if="${cartItems.size == 0}">
+        <div th:unless="${cart == null}">
+            <div th:if="${cart.cartItems.size() == 0}">
                 <h2>В корзине пока ничего нет</h2>
                 <p>Вы можете добавить товары <a href="/catalog">из каталога</a></p>
             </div>
-            <div th:unless="${cartItems.size == 0}">
-                <div th:each="item : ${cartItems}">
+            <div th:unless="${cart.cartItems.size() == 0}">
+                <div th:each="item : ${cart.cartItems}">
                     <div>
                         <a th:href="@{/catalog/{id}(id=${item.medicine.id})}">
                             <img src="https://cdn.kama-med.ru/images/products/1/6479/373201231/bint-elast.jpg"
@@ -44,6 +44,8 @@
                     <div>
                         <p th:text="${item.medicine.price * item.amount}"></p>
                     </div>
+                </div>
+                <div>
                     <button>Оформить заказ</button>
                 </div>
             </div>

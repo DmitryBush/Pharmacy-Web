@@ -1,7 +1,8 @@
-package com.bush.pharmacy_web_app.repository.mapper;
+package com.bush.pharmacy_web_app.repository.mapper.manufacturer;
 
-import com.bush.pharmacy_web_app.repository.dto.ManufacturerCreateDto;
+import com.bush.pharmacy_web_app.repository.dto.manufacturer.ManufacturerCreateDto;
 import com.bush.pharmacy_web_app.repository.entity.manufacturer.Manufacturer;
+import com.bush.pharmacy_web_app.repository.mapper.DtoMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -9,7 +10,7 @@ import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
-public class ManufacturerCreateMapper implements DtoMapper<ManufacturerCreateDto, Manufacturer>{
+public class ManufacturerCreateMapper implements DtoMapper<ManufacturerCreateDto, Manufacturer> {
     private final CountryCreateMapper countryCreateMapper;
     @Override
     public Manufacturer map(ManufacturerCreateDto obj) {

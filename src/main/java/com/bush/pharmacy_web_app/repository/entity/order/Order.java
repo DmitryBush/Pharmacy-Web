@@ -1,5 +1,7 @@
-package com.bush.pharmacy_web_app.repository.entity;
+package com.bush.pharmacy_web_app.repository.entity.order;
 
+import com.bush.pharmacy_web_app.repository.entity.PharmacyBranch;
+import com.bush.pharmacy_web_app.repository.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -29,7 +31,7 @@ public class Order {
     @ManyToOne
     @JoinColumn(name = "f_key_branch_id")
     private PharmacyBranch branch;
-    @OneToOne
-    @JoinColumn(name = "f_key_cart_id")
-    private Cart cart;
+    @Builder.Default
+    @OneToMany(mappedBy = "order")
+    private List<OrderItem> orderItemList = new ArrayList<>();
 }
