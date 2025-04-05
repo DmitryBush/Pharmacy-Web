@@ -9,3 +9,5 @@ databaseChangeLog:
       file: db/changelog/major/changelog-1.1.sql
   - include:
       file: db/changelog/maintenance/changelog-1.1.1.sql
+  - include:
+      file: db/changelog/minor/changelog-1.1.2.sql

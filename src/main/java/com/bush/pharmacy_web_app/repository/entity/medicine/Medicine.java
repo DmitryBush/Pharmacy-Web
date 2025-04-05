@@ -1,5 +1,6 @@
-package com.bush.pharmacy_web_app.repository.entity;
+package com.bush.pharmacy_web_app.repository.entity.medicine;
 
+import com.bush.pharmacy_web_app.repository.entity.Supplier;
 import com.bush.pharmacy_web_app.repository.entity.manufacturer.Manufacturer;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -22,8 +23,9 @@ public class Medicine {
     private Long id;
     @Column(name = "medicine_name", nullable = false)
     private String name;
-    @Column(name = "medicine_type", nullable = false)
-    private String type;
+    @ManyToOne
+    @JoinColumn(name = "f_key_medicine_type", nullable = false)
+    private MedicineType type;
     @ManyToOne
     @JoinColumn(name = "fk_medicine_manufacturer")
     private Manufacturer manufacturer;

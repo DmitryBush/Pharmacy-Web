@@ -1,6 +1,6 @@
 package com.bush.pharmacy_web_app.repository.filter;
 
-import com.bush.pharmacy_web_app.repository.entity.Medicine;
+import com.bush.pharmacy_web_app.repository.entity.medicine.Medicine;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
