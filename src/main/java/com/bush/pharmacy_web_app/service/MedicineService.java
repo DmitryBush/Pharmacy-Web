@@ -81,9 +81,8 @@ public class MedicineService {
     @Transactional
     public boolean deleteMedicine(Long id) {
         return medicineRepository.findById(id)
-                .map(lamb -> {
-                    medicineRepository.deleteById(id);
-                    medicineRepository.flush();
+                .map(medicine -> {
+                    medicineRepository.delete(medicine);
                     return true;
                 })
                 .orElse(false);

@@ -8,6 +8,7 @@ import com.bush.pharmacy_web_app.repository.mapper.orders.CustomerReadMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -15,6 +16,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -73,7 +75,11 @@ public class UserService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findById(username)
                 .map(customer -> new User(customer.getMobilePhone(),
-                        customer.getPassword(), Collections.emptyList()))
+                        customer.getPassword(),
+                        customer.getRoles()
+                                .stream()
+                                .map(role -> new SimpleGrantedAuthority("ROLE_"+ role.getType()))
+                                .toList()))
                 .orElseThrow(() -> new UsernameNotFoundException("Mistake in username or password"));
     }
 }

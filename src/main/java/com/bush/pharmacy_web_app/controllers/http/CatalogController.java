@@ -19,7 +19,7 @@ public class CatalogController {
     private final MedicineService service;
 
     @GetMapping
-    public String findAllProducts(Model model,
+    public String showAllProducts(Model model,
                                   MedicineFilter filter,
                                   @PageableDefault(size = 15, sort = "price", direction = Sort.Direction.ASC)
                                        Pageable pageable) {
