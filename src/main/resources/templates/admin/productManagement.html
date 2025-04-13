@@ -3,12 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <title>Управление товарами</title>
+    <link href="/admin/css/productManagement.css" rel="stylesheet" type="text/css">
 </head>
 <body>
     <h1>Управление товарами</h1>
     <p>Всего найдено: [(${products.getTotalElements()})] товаров</p>
     <div>
-        <button>Добавить</button>
+        <button onclick="showCreateMenu()">Добавить продукт</button>
+    </div>
+    <div id="modalBackdrop" class="modal-backdrop"></div>
+    <div id="creationWindow" style="display: none" aria-modal="true">
+        <span class="close" onclick="closeCreateMenu()">&times;</span>
+        <h2>Создать новый продукт</h2>
+        <form action="/api/admin/product" method="post">
+            <div>
+                <label for="name">
+                    Название товара
+                    <input type="text" id="name" required>
+                </label>
+            </div>
+            <div>
+                <label for="type">
+                    Тип товара
+                    <input type="text" id="type" required>
+                </label>
+            </div>
+            <div>
+                <label for="price">
+                    Цена
+                    <input type="number" id="price" step="0.01" required>
+                </label>
+            </div>
+            <div>
+                <fieldset>
+                    <legend>Требуется рецепт</legend>
+                    <label>
+                        <input type="radio" name="recipe" value="1">
+                        Да
+                    </label>
+                    <label>
+                        <input type="radio" name="recipe" value="0" checked>
+                        Нет
+                    </label>
+                </fieldset>
+            </div>
+            <div>
+                <button type="submit">Создать</button>
+                <button id="closeModal" onclick="closeCreateMenu()">Отмена</button>
+            </div>
+        </form>
     </div>
     <div>
         <div class="product-item" th:each="item : ${products.content}">

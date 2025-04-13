@@ -13,6 +13,16 @@ document.querySelectorAll('.btn-delete').forEach(button => {
     });
 });
 
+function showCreateMenu() {
+    document.getElementById('creationWindow').style.display = 'block';
+    document.getElementById('modalBackdrop').style.display = 'block';
+}
+
+function closeCreateMenu() {
+    document.getElementById('creationWindow').style.display = 'none';
+    document.getElementById('modalBackdrop').style.display = 'none';
+}
+
 async function deleteProduct(id) {
     try {
         const response = await fetch(`/api/admin/product/${id}`, {
@@ -32,6 +42,6 @@ async function deleteProduct(id) {
         return response.status;
     } catch (error) {
         console.error('Delete error:', error);
-        throw error; 
+        throw error;
     }
 }

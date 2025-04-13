@@ -65,6 +65,7 @@ public class MedicineService {
                 .toList();
     }
 
+    @Transactional
     public Optional<MedicineReadDto> createMedicine(MedicineCreateDto createDto) {
         return Optional.ofNullable(createDto)
                 .map(createMapper::map)

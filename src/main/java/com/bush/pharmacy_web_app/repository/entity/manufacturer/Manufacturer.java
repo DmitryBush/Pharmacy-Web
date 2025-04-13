@@ -17,7 +17,7 @@ public class Manufacturer {
     private Long id;
     @Column(name = "manufacturer_name", nullable = false)
     private String name;
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "f_key_country_id", nullable = false)
     private Country country;
 }

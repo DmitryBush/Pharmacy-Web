@@ -1,0 +1,148 @@
+#creationWindow {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    max-width: 500px;
+    z-index: 1000;
+    /*!*Размытие заднего фона*!*/
+    background: rgba(255, 255, 255, 1);
+    /*backdrop-filter: blur(10px);*/
+    /*-webkit-backdrop-filter: blur(10px);*/
+}
+
+#creationWindow::backdrop {
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    z-index: 999; /* Ниже чем у модального окна */
+    display: none;
+}
+
+.close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #666;
+}
+
+.close:hover {
+    color: #333;
+}
+
+#creationWindow h2 {
+    margin-bottom: 1.5rem;
+    color: #2c3e50;
+    font-size: 1.5rem;
+}
+
+#creationWindow form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+#creationWindow label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #34495e;
+    font-weight: 500;
+}
+
+#creationWindow input[type="text"],
+#creationWindow input[type="number"] {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #bdc3c7;
+    border-radius: 4px;
+    font-size: 1rem;
+    margin-top: 0.3rem;
+}
+
+#creationWindow input[type="text"]:focus,
+#creationWindow input[type="number"]:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+}
+
+#creationWindow fieldset {
+    border: 1px solid #bdc3c7;
+    border-radius: 4px;
+    padding: 1rem;
+    margin: 0.5rem 0;
+}
+
+#creationWindow legend {
+    color: #34495e;
+    font-weight: 500;
+    padding: 0 0.5rem;
+}
+
+#creationWindow button[type="submit"] {
+    background-color: #3498db;
+    color: white;
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.2s;
+}
+
+#creationWindow button[id="closeModal"] {
+    background-color: #9E9E9E;
+    color: white;
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.2s;
+}
+
+#creationWindow button[type="submit"]:hover {
+    background-color: #2980b9;
+}
+
+#creationWindow button[type="button"]:hover {
+    background-color: #7f8c8d;
+}
+
+/* Радиокнопки */
+#creationWindow input[type="radio"] {
+    margin: 0 0.5rem 0 0;
+    accent-color: #3498db;
+}
+
+/* Адаптивность */
+@media (max-width: 480px) {
+    #creationWindow {
+        width: 95%;
+        padding: 1rem;
+    }
+
+    #creationWindow h2 {
+        font-size: 1.3rem;
+    }
+
+    #creationWindow input[type="text"],
+    #creationWindow input[type="number"] {
+        padding: 0.6rem;
+    }
+}

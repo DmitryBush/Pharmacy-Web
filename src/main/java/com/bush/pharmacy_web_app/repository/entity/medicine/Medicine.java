@@ -23,17 +23,17 @@ public class Medicine {
     private Long id;
     @Column(name = "medicine_name", nullable = false)
     private String name;
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "f_key_medicine_type", nullable = false)
     private MedicineType type;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "fk_medicine_manufacturer")
     private Manufacturer manufacturer;
     @Column(nullable = false)
     private BigDecimal price;
     @Column(nullable = false)
     private Boolean recipe;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "f_key_supplier_itn", nullable = false)
     private Supplier supplier;
 }

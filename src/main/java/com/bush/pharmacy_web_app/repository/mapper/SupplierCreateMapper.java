@@ -3,6 +3,7 @@ package com.bush.pharmacy_web_app.repository.mapper;
 import com.bush.pharmacy_web_app.repository.dto.catalog.SupplierCreateDto;
 import com.bush.pharmacy_web_app.repository.entity.Supplier;
 import com.bush.pharmacy_web_app.repository.mapper.orders.AddressReadMapper;
+import com.bush.pharmacy_web_app.repository.mapper.repository.SupplierRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -13,6 +14,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class SupplierCreateMapper implements DtoMapper<SupplierCreateDto, Supplier>{
     private final AddressCreateMapper createMapper;
+    private final SupplierRepository supplierRepository;
     @Override
     public Supplier map(SupplierCreateDto obj) {
         return copyObj(obj, new Supplier());
@@ -24,13 +26,16 @@ public class SupplierCreateMapper implements DtoMapper<SupplierCreateDto, Suppli
     }
 
     private Supplier copyObj(SupplierCreateDto fromObj, Supplier toObj) {
-        var address = Optional.ofNullable(fromObj.address())
-                        .map(createMapper::map)
-                                .orElseThrow();
-        toObj.setName(fromObj.name());
-        toObj.setItn(fromObj.itn());
-        toObj.setAddress(address);
-        toObj.setMedicines(Collections.emptyList());
-        return toObj;
+        return supplierRepository.findById(fromObj.itn())
+                .orElseGet(() -> {
+                    var address = Optional.ofNullable(fromObj.address())
+                            .map(createMapper::map)
+                            .orElseThrow();
+                    toObj.setName(fromObj.name());
+                    toObj.setItn(fromObj.itn());
+                    toObj.setAddress(address);
+                    toObj.setMedicines(Collections.emptyList());
+                    return toObj;
+                });
     }
 }
