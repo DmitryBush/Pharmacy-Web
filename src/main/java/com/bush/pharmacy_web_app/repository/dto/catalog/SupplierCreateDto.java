@@ -5,6 +5,6 @@ import jakarta.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Length;
 
 public record SupplierCreateDto(@NotNull @NotBlank @Length(min = 10, max = 12) String itn,
-                                @NotBlank String name,
+                                @NotNull @NotBlank String name,
                                 @NotNull AddressCreateDto address) {
 }

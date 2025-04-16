@@ -18,8 +18,9 @@ public class SecurityConfig {
         return httpSecurity
                 .csrf(csrf -> csrf.ignoringRequestMatchers("/api/**"))
                 .authorizeHttpRequests(lamb -> lamb
-                        .requestMatchers("/login", "/register", "/catalog/**", "/", "/cart", "/error").permitAll()
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/login", "/register", "/catalog/**", "/", "/cart", "/error"
+                        ,"/api/**").permitAll()
+                        .requestMatchers("/admin/**").permitAll()
                         .anyRequest().authenticated())
                 .httpBasic(Customizer.withDefaults())
                 .formLogin(login -> login.loginPage("/login")

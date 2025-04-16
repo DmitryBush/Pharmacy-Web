@@ -22,7 +22,7 @@ import org.springframework.web.server.ResponseStatusException;
 @RestController
 @RequestMapping("/api/admin/product")
 @RequiredArgsConstructor
-public class ProductManagementRestController {
+public class ProductRestController {
     private final MedicineService medicineService;
 
     @GetMapping

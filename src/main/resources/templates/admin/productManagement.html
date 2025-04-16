@@ -9,49 +9,131 @@
     <h1>Управление товарами</h1>
     <p>Всего найдено: [(${products.getTotalElements()})] товаров</p>
     <div>
-        <button onclick="showCreateMenu()">Добавить продукт</button>
+        <button id="createBtn">Добавить продукт</button>
     </div>
-    <div id="modalBackdrop" class="modal-backdrop"></div>
-    <div id="creationWindow" style="display: none" aria-modal="true">
-        <span class="close" onclick="closeCreateMenu()">&times;</span>
-        <h2>Создать новый продукт</h2>
-        <form action="/api/admin/product" method="post">
+    <div id="modalBackdrop" style="display: none" class="modal-backdrop"></div>
+    <div class="search-backdrop" style="display: none" id="search-backdrop"></div>
+    <div id="search-container" class="search-container" style="display: none">
+        <label for="search-field">
+            <input id="search-field" class="search-field" type="text" placeholder="Поиск">
+        </label>
+        <div id="search-result-container" class="search-result-container"></div>
+    </div>
+    <div id="modal" style="display: none" aria-modal="true">
+        <div class="modal-header">
+            <span class="close" onclick="closeCreateMenu()">&times;</span>
+            <h2>Создать новый продукт</h2>
             <div>
-                <label for="name">
-                    Название товара
-                    <input type="text" id="name" required>
-                </label>
+                <button id="search-btn" class="search-btn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2">
+                        <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                    </svg>
+                </button>
             </div>
-            <div>
-                <label for="type">
-                    Тип товара
-                    <input type="text" id="type" required>
-                </label>
+        </div>
+        <div class="modal-content">
+            <div class="modal-scroll-container">
+                <form id="productCreationForm" name="productCreationForm">
+                    <div id="supplierPart">
+                        <div class="input-group">
+                            <label class="input-group" for="itn">
+                                ИНН
+                                <input class="input-group" type="text" id="itn" required>
+                            </label>
+                        </div>
+                        <div class="input-group">
+                            <label class="input-group" for="supplierName">
+                                Название поставщика
+                                <input class="input-group" type="text" id="supplierName" required>
+                            </label>
+                        </div>
+                        <div class="input-group">
+                            <h3>Адрес поставщика</h3>
+                            <label class="input-group" for="subject">
+                                Область
+                                <input class="input-group" type="text" id="subject" required>
+                            </label>
+                            <label class="input-group" for="district">
+                                Район
+                                <input class="input-group" type="text" id="district">
+                            </label>
+                            <label class="input-group" for="settlement">
+                                Город
+                                <input class="input-group" type="text" id="settlement" required>
+                            </label>
+                            <label class="input-group" for="street">
+                                Улица
+                                <input class="input-group" type="text" id="street" required>
+                            </label>
+                            <label class="input-group" for="house">
+                                Дом
+                                <input class="input-group" type="text" id ="house" required>
+                            </label>
+                            <label class="input-group" for="apartment">
+                                Квартира
+                                <input class="input-group" type="text" id="apartment">
+                            </label>
+                            <label class="input-group" for="postalCode">
+                                Почтовый индекс
+                                <input class="input-group" type="text" id="postalCode" required>
+                            </label>
+                        </div>
+                    </div>
+                    <div id="manufacturerPart" style="display: none">
+                        <div>
+                            <label class="input-group" for="manufacturerName">
+                                Название производителя
+                                <input type="text" id="manufacturerName" required>
+                            </label>
+                        </div>
+                        <div>
+                            <h3>Страна производителя</h3>
+                            <label class="input-group" for="country">
+                                Страна
+                                <input type="text" id="country" required>
+                            </label>
+                        </div>
+                    </div>
+                    <div id="productPart" style="display: none">
+                        <div>
+                            <label class="input-group" for="name">
+                                Название товара
+                                <input class="input-group" type="text" id="name" required>
+                            </label>
+                        </div>
+                        <div>
+                            <label class="input-group" for="type">
+                                Тип товара
+                                <input class="input-group" type="text" id="type" required>
+                            </label>
+                        </div>
+                        <div>
+                            <label class="input-group" for="price">
+                                Цена
+                                <input class="input-group" type="number" id="price" step="0.01" required>
+                            </label>
+                        </div>
+                        <div>
+                            <fieldset>
+                                <legend>Требуется рецепт</legend>
+                                <label>
+                                    <input type="radio" name="recipe" value="1">
+                                    Да
+                                </label>
+                                <label>
+                                    <input type="radio" name="recipe" value="0" checked>
+                                    Нет
+                                </label>
+                            </fieldset>
+                        </div>
+                    </div>
+                </form>
             </div>
-            <div>
-                <label for="price">
-                    Цена
-                    <input type="number" id="price" step="0.01" required>
-                </label>
-            </div>
-            <div>
-                <fieldset>
-                    <legend>Требуется рецепт</legend>
-                    <label>
-                        <input type="radio" name="recipe" value="1">
-                        Да
-                    </label>
-                    <label>
-                        <input type="radio" name="recipe" value="0" checked>
-                        Нет
-                    </label>
-                </fieldset>
-            </div>
-            <div>
-                <button type="submit">Создать</button>
-                <button id="closeModal" onclick="closeCreateMenu()">Отмена</button>
-            </div>
-        </form>
+        </div>
+        <div class="modal-footer">
+            <button id="accept">Создать</button>
+            <button id="cancel">Отмена</button>
+        </div>
     </div>
     <div>
         <div class="product-item" th:each="item : ${products.content}">
@@ -61,13 +143,13 @@
                      alt="[(${item.name})]">
             </a>
             <div>
-                <a th:href="@{/admin/product/{id}(id=${item.id})}" th:text="${item.name}"></a>
+                <a th:href="@{/catalog/{id}(id=${item.id})}" th:text="${item.name}"></a>
             </div>
             <div>
                 <p>[(${item.price})] ₽</p>
             </div>
             <div>
-                <button class="btn-edit" th:data="${item.id}">Изменить</button>
+                <button class="btn-edit" th:data-id="${item.id}">Изменить</button>
             </div>
             <div>
                 <button class="btn-delete" th:data-id="${item.id}">Удалить</button>
