@@ -18,30 +18,22 @@ document.querySelectorAll('.btn-delete').forEach(button => {
 });
 
 document.querySelectorAll('.btn-update').forEach(button => {
-    button.addEventListener('click', async function() {
+    button.addEventListener('click',function() {
         const productId = this.getAttribute('data-id');
         try {
-
+            updateProduct(productId);
         } catch (error) {
             alert('Ошибка при обновлении: ' + error.message);
         }
     });
 });
 
-document.getElementById('createBtn').addEventListener('click', showCreateMenu);
+document.getElementById('createBtn').addEventListener('click', createProduct);
 
-async function createProduct() {
-    const form = document.getElementById('productCreationForm');
-    const product = fillProduct();
-
+async function sendProduct(url, method) {
+    const product = await fillProduct();
     try {
-        const response = await fetch('/api/admin/product', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(product)
-        });
+        const response = await getResponse(url, method, product);
 
         if (response.status === 403) {
             throw new Error('Требуется авторизация')
@@ -50,9 +42,6 @@ async function createProduct() {
             throw new Error(response.statusText);
         }
 
-        closeCreateMenu();
-
-        form.reset();
         return response.status;
     } catch (error) {
         console.error('Create error:', error);
@@ -60,9 +49,35 @@ async function createProduct() {
     }
 }
 
+function createProduct() {
+    showCreateMenu(false);
+}
+
+async function updateProduct(id) {
+    try {
+        const response = await getResponse(`/api/admin/product/${id}`, 'GET');
+
+        if (!response.ok)
+            throw new Error(response.statusText);
+
+        const data = await response.json();
+
+        primaryMedicine = data.id;
+
+        tmpDataStore.set(primaryMedicine, data);
+        for (let i = 1; i < 4; i++) {
+            fillForm(primaryMedicine, i);
+        }
+        showCreateMenu(true);
+    }
+    catch (error) {
+        console.log(error);
+        alert("Ошибка при подготовке обновления элемента: " + error.message);
+    }
+}
+
 async function fillProduct() {
     return {
-        id: primaryMedicine,
         name: document.getElementById('name').value,
         type: document.getElementById('type').value,
         manufacturer: {
@@ -76,7 +91,7 @@ async function fillProduct() {
             itn: document.getElementById('itn').value,
             name: document.getElementById('supplierName').value,
             address: {
-                id: tmpDataStore.get(primaryAddress).address.id,
+                id: primaryAddress,
                 subject: document.getElementById('subject').value,
                 district: document.getElementById('district').value.trim() || null,
                 settlement: document.getElementById('settlement').value,
@@ -87,15 +102,15 @@ async function fillProduct() {
             }
         },
         price: document.getElementById('price').value,
-        recipe: document.querySelector('input[name="recipe"]:checked').value === "1",
+        recipe: document.querySelector('input[name="recipe"]:checked').value === "1"
     };
 }
 
-function showCreateMenu() {
+function showCreateMenu(updateMode) {
     const modal = document.getElementById('modal');
     modal.style.display = 'block';
     document.getElementById('modalBackdrop').style.display = 'block';
-    initFormSteps();
+    initFormSteps(updateMode);
 
     modalOutsideClickListener = (event) => {
         const isSearchActive = document.getElementById('search-container').style.display === 'block';
@@ -112,9 +127,11 @@ function closeCreateMenu() {
     document.getElementById('modal').style.display = 'none';
     document.getElementById('modalBackdrop').style.display = 'none';
 
+    currentStep = 1;
     primaryMedicine = null;
     primaryManufacturer = null;
     primaryAddress = null;
+    tmpDataStore.clear();
     if (modalOutsideClickListener !== null) {
         document.removeEventListener('click', modalOutsideClickListener);
         modalOutsideClickListener = null;
@@ -161,10 +178,10 @@ let primaryAddress = null;
 let primaryManufacturer = null;
 let primaryMedicine = null;
 
-function initFormSteps() {
+function initFormSteps(updateMode) {
     currentStep = 1;
     showStep(currentStep);
-    setupNavigation();
+    setupNavigation(updateMode);
 }
 
 function showStep(stepNumber) {
@@ -184,15 +201,18 @@ function updateButtons(step) {
     const nextBtn = document.getElementById('accept');
 
     if (step === 3) {
-        prevBtn.style.display = 'Отмена';
+        prevBtn.textContent = 'Назад';
         nextBtn.textContent = 'Создать';
+    } else if (step === 2) {
+        prevBtn.textContent = 'Назад';
+        nextBtn.textContent = 'Далее';
     } else {
-        prevBtn.style.display = 'Отмена';
+        prevBtn.textContent = 'Отмена';
         nextBtn.textContent = 'Далее';
     }
 }
 
-function setupNavigation() {
+function setupNavigation(updateMode) {
     document.getElementById('cancel').addEventListener('click', () => {
         if (currentStep > 1) {
             currentStep--;
@@ -212,7 +232,12 @@ function setupNavigation() {
             }
         } else {
             if (validateStep(currentStep)) {
-                await createProduct();
+                if (updateMode) {
+                    await sendProduct(`/api/admin/product/${primaryMedicine}`,'PUT');
+                } else {
+                    await sendProduct(`/api/admin/product`,'POST');
+                }
+                closeCreateMenu();
             } else {
                 alert("Ошибка валидации");
             }
@@ -251,7 +276,7 @@ document.getElementById('search-field').addEventListener('input', function(e) {
     clearTimeout(debounceTimer);
     const searchTerm = e.target.value.trim();
 
-    if (searchTerm.length < 3) {
+    if (searchTerm.length < 1) {
         resultsContainer.innerHTML = '';
         return;
     }
@@ -261,25 +286,33 @@ document.getElementById('search-field').addEventListener('input', function(e) {
     }, DEBOUNCE_DELAY);
 });
 
-// Запрос к бэкенду
+async function getResponse(url, method, body) {
+    if (body !== null) {
+        return await fetch(url, {
+            method: method,
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(body)
+        });
+    } else {
+        return await fetch(url, {
+            method: method,
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+    }
+}
+
 async function fetchResults(searchTerm) {
     try {
         if (currentStep === 1) {
-            const response = await fetch(`/api/search/supplier?name=${searchTerm}`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
+            const response = await getResponse(`/api/search/supplier?name=${searchTerm}`, 'GET');
             const data = await response.json();
             displayResults(data);
         } else {
-            const response = await fetch(`/api/search/manufacturer?name=${searchTerm}`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
+            const response = await getResponse(`/api/search/manufacturer?name=${searchTerm}`, 'GET');
             const data = await response.json();
             displayResults(data);
         }
@@ -294,7 +327,6 @@ function displayResults(results) {
     if (results.length === 0) {
         primaryManufacturer = null;
         primaryAddress = null;
-        // resultsContainer.innerHTML = '<div class="result-item">Нет результатов</div>';
         return;
     }
 
@@ -311,9 +343,9 @@ function displayResults(results) {
 
 function handleSearchClick(result) {
     if (currentStep === 1) {
-        fillForm(result.itn, document.forms.productCreationForm, currentStep);
+        fillForm(result.itn, currentStep);
     } else if (currentStep === 2) {
-        fillForm(result.id, document.forms.productCreationForm, currentStep);
+        fillForm(result.id, currentStep);
     }
     setTimeout(() => closeSearch(), 10);
 }
@@ -347,9 +379,11 @@ function closeSearch() {
 function saveTMPData(result, parent) {
     if (currentStep === 2) {
         const dataToStore = {
-            id: result.id,
-            name: result.name,
-            country: result.country
+            manufacturer: {
+                id: result.id,
+                name: result.name,
+                country: result.country
+            }
         };
 
         // Сохраняем данные через WeakMap
@@ -359,9 +393,11 @@ function saveTMPData(result, parent) {
         parent.dataset.tmpData = JSON.stringify(dataToStore);
     } else {
         const dataToStore = {
-            itn: result.itn,
-            name: result.name,
-            address: result.address
+            supplier: {
+                itn: result.itn,
+                name: result.name,
+                address: result.address
+            }
         };
 
         // Сохраняем данные через WeakMap
@@ -372,32 +408,33 @@ function saveTMPData(result, parent) {
     }
 }
 
-function fillForm(id, form, step) {
+function fillForm(id, step) {
     const data = tmpDataStore.get(id);
+    const form = document.forms.productCreationForm;
     if (step === 3) {
         primaryMedicine = data.id;
 
-        form.elements.name = data.name;
-        form.elements.type = data.type;
-        form.elements.price = data.price;
-        form.elements.recipe = data.recipe;
+        form.elements.name.value = data.name;
+        form.elements.type.value = data.type;
+        form.elements.price.value = data.price;
+        form.elements.recipe.value = data.recipe;
     }if (step === 2) {
-        primaryManufacturer = data.id;
+        primaryManufacturer = data.manufacturer.id;
 
-        form.elements.manufacturerName.value = data.name;
-        form.elements.country.value = data.country;
+        form.elements.manufacturerName.value = data.manufacturer.name;
+        form.elements.country.value = data.manufacturer.country;
     } else {
-        primaryAddress = data.itn;
+        primaryAddress = data.supplier.itn;
 
-        form.elements.itn.value = data.itn;
-        form.elements.supplierName.value = data.name;
+        form.elements.itn.value = data.supplier.itn;
+        form.elements.supplierName.value = data.supplier.name;
 
-        form.elements.subject.value = data.address.subject;
-        form.elements.district.value = data.address.district || '';
-        form.elements.settlement.value = data.address.settlement;
-        form.elements.street.value = data.address.street;
-        form.elements.house.value = data.address.house;
-        form.elements.apartment.value = data.address.apartment || '';
-        form.elements.postalCode.value = data.address.postalCode;
+        form.elements.subject.value = data.supplier.address.subject;
+        form.elements.district.value = data.supplier.address.district || '';
+        form.elements.settlement.value = data.supplier.address.settlement;
+        form.elements.street.value = data.supplier.address.street;
+        form.elements.house.value = data.supplier.address.house;
+        form.elements.apartment.value = data.supplier.address.apartment || '';
+        form.elements.postalCode.value = data.supplier.address.postalCode;
     }
 }

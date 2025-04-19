@@ -34,7 +34,7 @@ public class CatalogController {
     @GetMapping("/{id}")
     public String getProduct(Model model,
                              @PathVariable Long id) {
-        var product = service.findById(id).orElseThrow();
+        var product = service.findDtoById(id).orElseThrow();
 
         model.addAttribute("product", product);
         return "catalog/product";

@@ -1,5 +1,6 @@
 package com.bush.pharmacy_web_app.controllers.rest.admin;
 
+import com.bush.pharmacy_web_app.repository.dto.admin.MedicineAdminReadDto;
 import com.bush.pharmacy_web_app.repository.dto.catalog.MedicineCreateDto;
 import com.bush.pharmacy_web_app.repository.dto.orders.MedicineReadDto;
 import com.bush.pharmacy_web_app.repository.filter.MedicineFilter;
@@ -35,8 +36,8 @@ public class ProductRestController {
     }
 
     @GetMapping("/{id}")
-    public MedicineReadDto findByIdProduct(@PathVariable Long id) {
-        return medicineService.findById(id)
+    public MedicineAdminReadDto findByIdProduct(@PathVariable Long id) {
+        return medicineService.findAdminDtoById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 

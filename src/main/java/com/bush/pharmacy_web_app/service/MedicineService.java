@@ -2,6 +2,7 @@ package com.bush.pharmacy_web_app.service;
 
 import com.bush.pharmacy_web_app.repository.MedicineRepository;
 import com.bush.pharmacy_web_app.repository.PharmacyBranchRepository;
+import com.bush.pharmacy_web_app.repository.dto.admin.MedicineAdminReadDto;
 import com.bush.pharmacy_web_app.repository.dto.catalog.MedicineCreateDto;
 import com.bush.pharmacy_web_app.repository.dto.catalog.MedicineManufacturer;
 import com.bush.pharmacy_web_app.repository.dto.catalog.MedicineTypeDto;
@@ -9,6 +10,7 @@ import com.bush.pharmacy_web_app.repository.dto.orders.PharmacyBranchReadDto;
 import com.bush.pharmacy_web_app.repository.filter.MedicineFilter;
 import com.bush.pharmacy_web_app.repository.dto.orders.MedicineReadDto;
 import com.bush.pharmacy_web_app.repository.mapper.MedicineCreateMapper;
+import com.bush.pharmacy_web_app.repository.mapper.admin.MedicineAdminReadMapper;
 import com.bush.pharmacy_web_app.repository.mapper.orders.MedicineReadMapper;
 import com.bush.pharmacy_web_app.repository.mapper.orders.PharmacyBranchReadMapper;
 import lombok.RequiredArgsConstructor;
@@ -26,19 +28,21 @@ import java.util.Optional;
 public class MedicineService {
     private final MedicineRepository medicineRepository;
     private final PharmacyBranchRepository branchRepository;
-    private final MedicineReadMapper readMapper;
-    private final MedicineCreateMapper createMapper;
+
+    private final MedicineReadMapper medicineReadMapper;
+    private final MedicineCreateMapper medicineCreateMapper;
     private final PharmacyBranchReadMapper branchReadMapper;
+    private final MedicineAdminReadMapper adminMedicineReadMapper;
 
     public List<MedicineReadDto> findAll() {
         return medicineRepository.findAll().stream()
-                .map(readMapper::map)
+                .map(medicineReadMapper::map)
                 .toList();
     }
 
     public Page<MedicineReadDto> findAll(MedicineFilter filter, Pageable pageable) {
         return medicineRepository.findAllByFilter(filter, pageable)
-                .map(readMapper::map);
+                .map(medicineReadMapper::map);
     }
 
     public List<MedicineTypeDto> findAllTypes() {
@@ -53,9 +57,14 @@ public class MedicineService {
                 .toList();
     }
 
-    public Optional<MedicineReadDto> findById(Long id) {
+    public Optional<MedicineReadDto> findDtoById(Long id) {
         return medicineRepository.findById(id)
-                .map(readMapper::map);
+                .map(medicineReadMapper::map);
+    }
+
+    public Optional<MedicineAdminReadDto> findAdminDtoById(Long id) {
+        return medicineRepository.findById(id)
+                .map(adminMedicineReadMapper::map);
     }
 
     public List<PharmacyBranchReadDto> findBranchesMedicineLocated(Long medicineId) {
@@ -68,16 +77,16 @@ public class MedicineService {
     @Transactional
     public Optional<MedicineReadDto> createMedicine(MedicineCreateDto createDto) {
         return Optional.ofNullable(createDto)
-                .map(createMapper::map)
+                .map(medicineCreateMapper::map)
                 .map(medicineRepository::save)
-                .map(readMapper::map);
+                .map(medicineReadMapper::map);
     }
     @Transactional
     public Optional<MedicineReadDto> updateMedicine(Long id, MedicineCreateDto createDto) {
         return medicineRepository.findById(id)
-                .map(lamb -> createMapper.map(createDto, lamb))
+                .map(lamb -> medicineCreateMapper.map(createDto, lamb))
                 .map(medicineRepository::saveAndFlush)
-                .map(readMapper::map);
+                .map(medicineReadMapper::map);
     }
     @Transactional
     public boolean deleteMedicine(Long id) {

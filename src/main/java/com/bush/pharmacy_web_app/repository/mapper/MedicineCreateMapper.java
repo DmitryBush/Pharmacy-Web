@@ -32,6 +32,25 @@ public class MedicineCreateMapper implements DtoMapper<MedicineCreateDto, Medici
     private Medicine copyObj(MedicineCreateDto fromObj, Medicine toObj) {
         return Optional.ofNullable(fromObj.id())
                 .flatMap(medicineRepository::findById)
+                .map(medicine -> {
+                    var supplier = Optional.ofNullable(fromObj.supplier())
+                            .map(supplierCreateMapper::map)
+                            .orElseThrow();
+                    var manufacturer = Optional.ofNullable(fromObj.manufacturer())
+                            .map(manufacturerCreateMapper::map)
+                            .orElseThrow();
+                    var medicineType = Optional.ofNullable(fromObj.type())
+                            .map(type -> typeRepository.findByType(type)
+                                    .orElseGet(() -> typeCreateMapper.map(type)))
+                            .orElseThrow();
+                    toObj.setName(fromObj.name());
+                    toObj.setType(medicineType);
+                    toObj.setManufacturer(manufacturer);
+                    toObj.setPrice(fromObj.price());
+                    toObj.setRecipe(fromObj.recipe());
+                    toObj.setSupplier(supplier);
+                    return toObj;
+                })
                 .orElseGet(() -> {
                     var supplier = Optional.ofNullable(fromObj.supplier())
                             .map(supplierCreateMapper::map)
