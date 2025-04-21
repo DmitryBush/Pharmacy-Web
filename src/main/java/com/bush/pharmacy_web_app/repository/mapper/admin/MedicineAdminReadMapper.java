@@ -27,6 +27,26 @@ public class MedicineAdminReadMapper implements DtoMapper<Medicine, MedicineAdmi
         var type = Optional.ofNullable(obj.getType())
                 .map(MedicineType::getType)
                 .orElseThrow();
-        return new MedicineAdminReadDto(obj.getId(), obj.getName(), supplier, manufacturer, type, obj.getPrice());
+        return MedicineAdminReadDto.builder()
+                .id(obj.getId())
+                .name(obj.getName())
+                .supplier(supplier)
+                .manufacturer(manufacturer)
+                .type(type)
+                .price(obj.getPrice())
+                .recipe(obj.getRecipe())
+                .activeIngredient(obj.getActiveIngredient())
+                .expirationDate(obj.getExpirationDate())
+                .composition(obj.getComposition())
+                .indication(obj.getIndication())
+                .contraindication(obj.getContraindications())
+                .sideEffect(obj.getSideEffect())
+                .interaction(obj.getInteraction())
+                .admissionCourse(obj.getAdmissionCourse())
+                .overdose(obj.getOverdose())
+                .specialInstruction(obj.getSpecialInstruction())
+                .storageCondition(obj.getStorageCondition())
+                .releaseForm(obj.getReleaseForm())
+                .build();
     }
 }

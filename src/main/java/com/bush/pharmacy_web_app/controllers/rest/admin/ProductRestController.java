@@ -5,6 +5,7 @@ import com.bush.pharmacy_web_app.repository.dto.catalog.MedicineCreateDto;
 import com.bush.pharmacy_web_app.repository.dto.orders.MedicineReadDto;
 import com.bush.pharmacy_web_app.repository.filter.MedicineFilter;
 import com.bush.pharmacy_web_app.service.MedicineService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -51,7 +52,7 @@ public class ProductRestController {
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.CREATED)
     public MedicineReadDto updateProduct(@PathVariable Long id,
-                                         @RequestBody MedicineCreateDto medicineCreateDto) {
+                                         @RequestBody @Valid MedicineCreateDto medicineCreateDto) {
         return medicineService.updateMedicine(id, medicineCreateDto)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }

@@ -14,6 +14,8 @@ public interface MedicineRepository extends JpaRepository<Medicine, Long>, Filte
             "join StorageItems s on m = s.medicine")
     Slice<Medicine> findDistinctMedicineStorageLocated(Pageable pageable);
 
+    List<Medicine> findByNameContainingIgnoreCase(String name);
+
     @Query("select distinct m.type from Medicine m ")
     List<String> findDistinctMedicineType();
     @Query("select distinct m.manufacturer from Medicine m ")

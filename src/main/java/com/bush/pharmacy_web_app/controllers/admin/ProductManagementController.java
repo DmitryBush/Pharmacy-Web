@@ -24,4 +24,12 @@ public class ProductManagementController {
         model.addAttribute("products", page);
         return "admin/productManagement";
     }
+
+    @GetMapping("/{id}")
+    public String getProduct(Model model, @PathVariable Long id) {
+        var product = medicineService.findAdminDtoById(id)
+                        .orElseThrow();
+        model.addAttribute("product", product);
+        return "admin/editingProduct";
+    }
 }

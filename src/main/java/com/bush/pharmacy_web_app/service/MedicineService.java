@@ -67,6 +67,13 @@ public class MedicineService {
                 .map(adminMedicineReadMapper::map);
     }
 
+    public List<MedicineReadDto> findByContainingName(String name) {
+        return medicineRepository.findByNameContainingIgnoreCase(name)
+                .stream()
+                .map(medicineReadMapper::map)
+                .toList();
+    }
+
     public List<PharmacyBranchReadDto> findBranchesMedicineLocated(Long medicineId) {
         return branchRepository.findBranchesMedicineLocated(medicineId)
                 .stream()

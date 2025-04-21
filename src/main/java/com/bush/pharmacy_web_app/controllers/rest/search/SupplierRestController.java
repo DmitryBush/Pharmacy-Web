@@ -1,4 +1,4 @@
-package com.bush.pharmacy_web_app.controllers.rest.admin;
+package com.bush.pharmacy_web_app.controllers.rest.search;
 
 import com.bush.pharmacy_web_app.repository.dto.catalog.SupplierReadDto;
 import com.bush.pharmacy_web_app.repository.filter.SupplierFilter;

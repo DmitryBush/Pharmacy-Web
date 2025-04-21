@@ -11,6 +11,13 @@
     <div>
         <button id="createBtn" class="createBtn">Добавить продукт</button>
     </div>
+    <div>
+        <button class="search-btn">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2">
+                <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+            </svg>
+        </button>
+    </div>
     <div id="modalBackdrop" style="display: none" class="modal-backdrop"></div>
     <div class="search-backdrop" style="display: none" id="search-backdrop"></div>
     <div id="search-container" class="search-container" style="display: none">
@@ -143,7 +150,7 @@
                      alt="[(${item.name})]">
             </a>
             <div>
-                <a th:href="@{/catalog/{id}(id=${item.id})}" th:text="${item.name}"></a>
+                <a th:href="@{/admin/product/{id}(id=${item.id})}" th:text="${item.name}"></a>
             </div>
             <div>
                 <p>[(${item.price})] ₽</p>

@@ -2,6 +2,8 @@ class ProductManagement {
     constructor() {
         this.tmpDataStore = new Map();
 
+        this.searchUrl = '';
+
         this.currentStep = 1;
         this.primaryAddress = null;
         this.primaryManufacturer = null;
@@ -24,10 +26,12 @@ class ProductManagement {
             button.addEventListener('click',
                 this.handleUpdate.bind(this, button.getAttribute('data-id')));
         });
+        document.querySelectorAll('.search-btn').forEach(button => {
+            button.addEventListener('click', this.handleOpenSearch.bind(this));
+        });
 
         document.getElementById('createBtn').addEventListener('click', this.handleCreate.bind(this));
         document.getElementById('close-modal').addEventListener('click', this.closeCreateMenu.bind(this));
-        document.getElementById('search-btn').addEventListener('click', this.handleOpenSearch.bind(this));
         document.getElementById('search-field').addEventListener('input', this.handleSearchInput.bind(this));
     }
 
@@ -51,7 +55,7 @@ class ProductManagement {
         clearTimeout(this.DEBOUNCE_DELAY);
         const searchTerm = e.target.value.trim();
 
-        if (searchTerm.length < 1) {
+        if (searchTerm.length < 2) {
             this.resultsContainer.innerHTML = '';
             return;
         }
@@ -274,13 +278,17 @@ class ProductManagement {
 
     async fetchResults(searchTerm) {
         try {
-            if (this.currentStep === 1) {
+            if (this.searchUrl === 'supplierPart') {
                 const data =
                     await (await this.fetchData(`/api/search/supplier?name=${searchTerm}`, 'GET')).json();
                 this.displayResults(data);
-            } else {
+            } else if (this.searchUrl === 'manufacturerPart') {
                 const data =
                     await (await this.fetchData(`/api/search/manufacturer?name=${searchTerm}`, 'GET')).json();
+                this.displayResults(data);
+            } else {
+                const data =
+                    await (await this.fetchData(`/api/search/medicine?name=${searchTerm}`, 'GET')).json();
                 this.displayResults(data);
             }
         } catch (error) {
@@ -309,10 +317,12 @@ class ProductManagement {
     }
 
     handleSearchClick(result) {
-        if (this.currentStep === 1) {
+        if (this.searchUrl === 'supplierPart') {
             this.fillForm(result.itn, this.currentStep);
-        } else if (this.currentStep === 2) {
+        } else if (this.searchUrl === 'manufacturerPart') {
             this.fillForm(result.id, this.currentStep);
+        } else {
+            window.location.replace(`/admin/product/${result.id}`);
         }
         setTimeout(() => this.closeSearch(), 10);
     }
@@ -408,6 +418,7 @@ class ProductManagement {
         });
 
         document.getElementById(steps[stepNumber - 1]).style.display = 'block';
+        this.searchUrl = steps[stepNumber - 1];
 
         this.updateButtons(stepNumber);
     }
