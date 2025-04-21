@@ -25,6 +25,16 @@ public class AddressCreateMapper implements DtoMapper<AddressCreateDto, Address>
     private Address copyObj(AddressCreateDto fromObj, Address toObj) {
         return Optional.ofNullable(fromObj.getId())
                 .flatMap(addressRepository::findById)
+                .map(address -> {
+                    toObj.setSubject(fromObj.getSubject());
+                    toObj.setDistrict(fromObj.getDistrict());
+                    toObj.setSettlement(fromObj.getSettlement());
+                    toObj.setStreet(fromObj.getStreet());
+                    toObj.setHouse(fromObj.getHouse());
+                    toObj.setApartment(fromObj.getApartment());
+                    toObj.setPostalCode(fromObj.getPostalCode());
+                    return toObj;
+                })
                 .orElseGet(() -> {
                     toObj.setSubject(fromObj.getSubject());
                     toObj.setDistrict(fromObj.getDistrict());

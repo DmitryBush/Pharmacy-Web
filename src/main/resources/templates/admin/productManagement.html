@@ -9,7 +9,7 @@
     <h1>Управление товарами</h1>
     <p>Всего найдено: [(${products.getTotalElements()})] товаров</p>
     <div>
-        <button id="createBtn">Добавить продукт</button>
+        <button id="createBtn" class="createBtn">Добавить продукт</button>
     </div>
     <div id="modalBackdrop" style="display: none" class="modal-backdrop"></div>
     <div class="search-backdrop" style="display: none" id="search-backdrop"></div>
@@ -21,7 +21,7 @@
     </div>
     <div id="modal" style="display: none" aria-modal="true">
         <div class="modal-header">
-            <span class="close" onclick="closeCreateMenu()">&times;</span>
+            <button class="close" id="close-modal">&times;</button>
             <h2>Создать новый продукт</h2>
             <div>
                 <button id="search-btn" class="search-btn">
@@ -113,15 +113,15 @@
                                 <input class="input-group" type="number" id="price" step="0.01" required>
                             </label>
                         </div>
-                        <div>
+                        <div class="form-radio">
                             <fieldset>
                                 <legend>Требуется рецепт</legend>
-                                <label>
-                                    <input type="radio" name="recipe" value="1">
+                                <label class="radio-label">
+                                    <input type="radio" name="recipe" class="recipe-input" value="1">
                                     Да
                                 </label>
-                                <label>
-                                    <input type="radio" name="recipe" value="0" checked>
+                                <label class="radio-label">
+                                    <input type="radio" name="recipe" class="recipe-input" value="0" checked>
                                     Нет
                                 </label>
                             </fieldset>
