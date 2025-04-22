@@ -58,43 +58,43 @@
             </div>
             <div>
                 <label for="composition">Состав</label>
-                <textarea id="composition" th:value="${product.composition}"></textarea>
+                <textarea id="composition" th:text="${product.composition}"></textarea>
             </div>
             <div>
                 <label class="input-group" for="indications">Показания</label>
-                <textarea id="indications" th:value="${product.indication}"></textarea>
+                <textarea id="indications" th:text="${product.indication}"></textarea>
             </div>
             <div>
                 <label class="input-group" for="contraindications">Противопоказания</label>
-                <textarea id="contraindications" th:value="${product.contraindication}"></textarea>
+                <textarea id="contraindications" th:text="${product.contraindication}"></textarea>
             </div>
             <div>
                 <label class="input-group" for="side-effects">Побочные эффекты</label>
-                <textarea id="side-effects" th:value="${product.sideEffect}"></textarea>
+                <textarea id="side-effects" th:text="${product.sideEffect}"></textarea>
             </div>
             <div>
                 <label class="input-group" for="interactions">Взаимодействия</label>
-                <textarea id="interactions" th:value="${product.interaction}"></textarea>
+                <textarea id="interactions" th:text="${product.interaction}"></textarea>
             </div>
             <div>
                 <label class="input-group" for="admission-course">Курс приема</label>
-                <textarea id="admission-course" th:value="${product.admissionCourse}"></textarea>
+                <textarea id="admission-course" th:text="${product.admissionCourse}"></textarea>
             </div>
             <div>
                 <label class="input-group" for="overdose">Передозировка</label>
-                <textarea id="overdose" th:value="${product.overdose}"></textarea>
+                <textarea id="overdose" th:text="${product.overdose}"></textarea>
             </div>
             <div>
                 <label class="input-group" for="release-form">Форма выпуска</label>
-                <textarea id="release-form" th:value="${product.releaseForm}"></textarea>
+                <textarea id="release-form" th:text="${product.releaseForm}"></textarea>
             </div>
             <div>
                 <label class="input-group" for="special-instructions">Специальные показания</label>
-                <textarea id="special-instructions" th:value="${product.specialInstruction}"></textarea>
+                <textarea id="special-instructions" th:text="${product.specialInstruction}"></textarea>
             </div>
             <div>
                 <label class="input-group" for="storage-conditions">Условия хранения</label>
-                <textarea id="storage-conditions" th:value="${product.storageCondition}"></textarea>
+                <textarea id="storage-conditions" th:text="${product.storageCondition}"></textarea>
             </div>
             <div id="supplierPart" th:data="${product.supplier.itn}">
                 <details>
@@ -105,13 +105,14 @@
                     <div class="input-group">
                         <label class="input-group" for="itn">
                             ИНН
-                            <input class="input-group" type="text" id="itn" required>
+                            <input class="input-group" type="text" id="itn" th:value="${product.supplier.itn}" required>
                         </label>
                     </div>
                     <div class="input-group">
                         <label class="input-group" for="supplierName">
                             Название поставщика
-                            <input class="input-group" type="text" id="supplierName" required>
+                            <input class="input-group" type="text" id="supplierName"
+                                   th:value="${product.supplier.name}" required>
                         </label>
                     </div>
                     <div class="input-group" id="addressPart" th:data-id="${product.supplier.address.id}">
@@ -122,31 +123,38 @@
                             </summary>
                             <label class="input-group" for="subject">
                                 Область
-                                <input class="input-group" type="text" id="subject" required>
+                                <input class="input-group" type="text" id="subject"
+                                       th:value="${product.supplier.address.subject}" required>
                             </label>
                             <label class="input-group" for="district">
                                 Район
-                                <input class="input-group" type="text" id="district">
+                                <input class="input-group" type="text" id="district"
+                                       th:value="${product.supplier.address.district}">
                             </label>
                             <label class="input-group" for="settlement">
                                 Город
-                                <input class="input-group" type="text" id="settlement" required>
+                                <input class="input-group" type="text" id="settlement"
+                                       th:value="${product.supplier.address.settlement}" required>
                             </label>
                             <label class="input-group" for="street">
                                 Улица
-                                <input class="input-group" type="text" id="street" required>
+                                <input class="input-group" type="text" id="street"
+                                       th:value="${product.supplier.address.street}" required>
                             </label>
                             <label class="input-group" for="house">
                                 Дом
-                                <input class="input-group" type="text" id ="house" required>
+                                <input class="input-group" type="text" id ="house"
+                                       th:value="${product.supplier.address.house}" required>
                             </label>
                             <label class="input-group" for="apartment">
                                 Квартира
-                                <input class="input-group" type="text" id="apartment">
+                                <input class="input-group" type="text" id="apartment"
+                                       th:value="${product.supplier.address.apartment}">
                             </label>
                             <label class="input-group" for="postalCode">
                                 Почтовый индекс
-                                <input class="input-group" type="text" id="postalCode" required>
+                                <input class="input-group" type="text" id="postalCode"
+                                       th:value="${product.supplier.address.postalCode}" required>
                             </label>
                         </details>
                     </div>
@@ -161,14 +169,15 @@
                     <div>
                         <label class="input-group" for="manufacturerName">
                             Название производителя
-                            <input type="text" id="manufacturerName" required>
+                            <input type="text" id="manufacturerName"
+                                   th:value="${product.manufacturer.name}" required>
                         </label>
                     </div>
                     <div>
                         <h3>Страна производителя</h3>
                         <label class="input-group" for="country">
                             Страна
-                            <input type="text" id="country" required>
+                            <input type="text" id="country" th:value="${product.manufacturer.country}" required>
                         </label>
                     </div>
                 </details>

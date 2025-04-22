@@ -34,9 +34,9 @@ public class Medicine {
     @Column(nullable = false)
     private Boolean recipe;
 
-    @Column(name = "active_ingredient")
+    @Column(name = "active_ingredient", nullable = false, length = 25)
     private String activeIngredient;
-    @Column(name = "expiration")
+    @Column(name = "expiration", nullable = false, length = 25)
     private String expirationDate;
     private String composition;
     @Column(name = "indications")
