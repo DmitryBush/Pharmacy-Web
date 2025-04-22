@@ -5,16 +5,24 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('delete-btn')
         .addEventListener('click', this.handleDelete.bind(this,
             document.getElementById('product-id').getAttribute('data-id')));
+    document.getElementById('cancel-btn').addEventListener('click', this.handleCancel.bind(this));
 });
 
 async function handleUpdate(id) {
     const body = getFormData();
-    console.log(body);
     await fetchData(`/api/admin/product/${id}`, 'PUT', body);
+    window.location.replace(`/admin/product`);
 }
 
 async function handleDelete(id) {
-    await fetchData(`/api/admin/product/${id}`, 'DELETE');
+    if (confirm('Удалить продукт?')) {
+        await fetchData(`/api/admin/product/${id}`, 'DELETE');
+        window.location.replace(`/admin/product`);
+    }
+}
+
+function handleCancel() {
+    window.location.replace(`/admin/product`);
 }
 
 function getFormData() {
