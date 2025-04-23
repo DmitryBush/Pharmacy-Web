@@ -1,5 +1,6 @@
 package com.bush.pharmacy_web_app.service;
 
+import com.bush.pharmacy_web_app.repository.MedicineImageRepository;
 import com.bush.pharmacy_web_app.repository.MedicineRepository;
 import com.bush.pharmacy_web_app.repository.PharmacyBranchRepository;
 import com.bush.pharmacy_web_app.repository.dto.admin.MedicineAdminReadDto;
@@ -36,6 +37,7 @@ import java.util.Optional;
 public class MedicineService {
     private final MedicineRepository medicineRepository;
     private final PharmacyBranchRepository branchRepository;
+    private final MedicineImageRepository imageRepository;
 
     private final MedicineReadMapper medicineReadMapper;
     private final MedicineCreateMapper medicineCreateMapper;
@@ -129,14 +131,8 @@ public class MedicineService {
     }
 
     public Optional<Resource> findImageByIdAndFilename(Long id, String filename) {
-        return medicineRepository.findById(id)
-                .map(Medicine::getImage)
-                .map(list -> list
-                        .stream()
-                        .map(MedicineImage::getPath)
-                        .filter(path -> path.equals(filename))
-                        .findFirst()
-                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND)))
+        return imageRepository.findByIdAndPath(id, filename)
+                .map(MedicineImage::getPath)
                 .map(storageService::loadAsResource);
     }
 }
