@@ -1,21 +1,26 @@
-package com.bush.pharmacy_web_app.repository.mapper;
+package com.bush.pharmacy_web_app.repository.mapper.medicine;
 
 import com.bush.pharmacy_web_app.repository.MedicineRepository;
 import com.bush.pharmacy_web_app.repository.TypeRepository;
 import com.bush.pharmacy_web_app.repository.dto.catalog.MedicineCreateDto;
 import com.bush.pharmacy_web_app.repository.entity.medicine.Medicine;
+import com.bush.pharmacy_web_app.repository.mapper.DtoMapper;
+import com.bush.pharmacy_web_app.repository.mapper.SupplierCreateMapper;
 import com.bush.pharmacy_web_app.repository.mapper.manufacturer.ManufacturerCreateMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.Collections;
 import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
-public class MedicineCreateMapper implements DtoMapper<MedicineCreateDto, Medicine>{
+public class MedicineCreateMapper implements DtoMapper<MedicineCreateDto, Medicine> {
     private final SupplierCreateMapper supplierCreateMapper;
     private final ManufacturerCreateMapper manufacturerCreateMapper;
     private final MedicineTypeCreateMapper typeCreateMapper;
+    private final MedicineImageCreateMapper imageCreateMapper;
+
     private final TypeRepository typeRepository;
     private final MedicineRepository medicineRepository;
     @Override
@@ -39,6 +44,13 @@ public class MedicineCreateMapper implements DtoMapper<MedicineCreateDto, Medici
                 .map(type -> typeRepository.findByType(type)
                         .orElseGet(() -> typeCreateMapper.map(type)))
                 .orElseThrow();
+        var images = Optional.ofNullable(fromObj.image())
+                .map(list -> list
+                        .stream()
+                        .map(imageCreateMapper::map)
+                        .toList())
+                .orElse(Collections.emptyList());
+
         return Optional.ofNullable(fromObj.id())
                 .flatMap(medicineRepository::findById)
                 .map(medicine -> {
@@ -48,6 +60,7 @@ public class MedicineCreateMapper implements DtoMapper<MedicineCreateDto, Medici
                     toObj.setPrice(fromObj.price());
                     toObj.setRecipe(fromObj.recipe());
                     toObj.setSupplier(supplier);
+                    toObj.setImage(images);
 
                     toObj.setActiveIngredient(fromObj.activeIngredient());
                     toObj.setExpirationDate(fromObj.expirationDate());
@@ -70,6 +83,7 @@ public class MedicineCreateMapper implements DtoMapper<MedicineCreateDto, Medici
                     toObj.setPrice(fromObj.price());
                     toObj.setRecipe(fromObj.recipe());
                     toObj.setSupplier(supplier);
+                    toObj.setImage(images);
 
                     toObj.setActiveIngredient(fromObj.activeIngredient());
                     toObj.setExpirationDate(fromObj.expirationDate());

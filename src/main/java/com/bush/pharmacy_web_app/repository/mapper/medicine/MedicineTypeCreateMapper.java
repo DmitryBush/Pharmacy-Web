@@ -1,6 +1,7 @@
-package com.bush.pharmacy_web_app.repository.mapper;
+package com.bush.pharmacy_web_app.repository.mapper.medicine;
 
 import com.bush.pharmacy_web_app.repository.entity.medicine.MedicineType;
+import com.bush.pharmacy_web_app.repository.mapper.DtoMapper;
 import org.springframework.stereotype.Component;
 
 @Component

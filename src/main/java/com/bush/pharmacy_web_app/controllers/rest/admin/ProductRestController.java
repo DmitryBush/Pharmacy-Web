@@ -7,6 +7,7 @@ import com.bush.pharmacy_web_app.repository.filter.MedicineFilter;
 import com.bush.pharmacy_web_app.service.MedicineService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -40,6 +41,12 @@ public class ProductRestController {
     public MedicineAdminReadDto findByIdProduct(@PathVariable Long id) {
         return medicineService.findAdminDtoById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    }
+
+    @GetMapping(value = "/{id}/{filename:.+}", produces = {MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE})
+    public ResponseEntity<Resource> findPreview(@PathVariable Long id, @PathVariable String filename) {
+        return ResponseEntity.ok(medicineService.findImageByIdAndFilename(id, filename)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND)));
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
