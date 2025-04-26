@@ -187,16 +187,24 @@
                     <div>
                         <label class="input-group" for="manufacturerName">
                             Название производителя
-                            <input type="text" id="manufacturerName"
+                            <input type="text" id="manufacturerName" class="input-group"
                                    th:value="${product.manufacturer.name}" required>
                         </label>
                     </div>
                     <div>
-                        <h3>Страна производителя</h3>
-                        <label class="input-group" for="country">
-                            Страна
-                            <input type="text" id="country" th:value="${product.manufacturer.country}" required>
-                        </label>
+                        <details>
+                            <summary class="section-header">
+                                <h3>Страна производителя</h3>
+                                <span class="arrow"></span>
+                            </summary>
+                            <div>
+                                <label class="input-group" for="country">
+                                    Страна
+                                    <input class="input-group" type="text"
+                                           id="country" th:value="${product.manufacturer.country}" required>
+                                </label>
+                            </div>
+                        </details>
                     </div>
                 </details>
             </div>
