@@ -5,6 +5,7 @@ import com.bush.pharmacy_web_app.repository.dto.manufacturer.ManufacturerReadDto
 import lombok.Builder;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Builder
 public record MedicineAdminReadDto(Long id,
@@ -14,6 +15,7 @@ public record MedicineAdminReadDto(Long id,
                                    String type,
                                    BigDecimal price,
                                    Boolean recipe,
+                                   List<String> imagePaths,
                                    String activeIngredient,
                                    String expirationDate,
                                    String composition,

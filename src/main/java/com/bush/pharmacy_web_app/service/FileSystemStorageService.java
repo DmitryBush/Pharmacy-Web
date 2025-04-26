@@ -28,11 +28,12 @@ public class FileSystemStorageService {
         try {
             if (file.isEmpty())
                 throw new StorageException("Upload file is empty");
-            Path dir = Paths.get(Optional.ofNullable(file.getOriginalFilename()).orElseThrow())
+            Path dir = Paths.get(rootLocation.toString(), Optional.ofNullable(file.getOriginalFilename()).orElseThrow())
                     .normalize()
                     .toAbsolutePath();
             if (!dir.getParent().equals(rootLocation.toAbsolutePath())) {
-                throw new StorageException("The file being uploaded cannot be located outside the upload area.");
+                throw new StorageException("The file being uploaded cannot be located outside the upload area. " +
+                        String.format("\nRoot location:%s\nCurrent saved location:%s", rootLocation.toAbsolutePath(), dir));
             }
             try(var inputStream = file.getInputStream()) {
                 Files.copy(inputStream, dir, StandardCopyOption.REPLACE_EXISTING);

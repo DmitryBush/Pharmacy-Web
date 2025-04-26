@@ -8,7 +8,6 @@ import com.bush.pharmacy_web_app.repository.dto.catalog.MedicineCreateDto;
 import com.bush.pharmacy_web_app.repository.dto.catalog.MedicineManufacturer;
 import com.bush.pharmacy_web_app.repository.dto.catalog.MedicineTypeDto;
 import com.bush.pharmacy_web_app.repository.dto.orders.PharmacyBranchReadDto;
-import com.bush.pharmacy_web_app.repository.entity.medicine.Medicine;
 import com.bush.pharmacy_web_app.repository.entity.medicine.MedicineImage;
 import com.bush.pharmacy_web_app.repository.filter.MedicineFilter;
 import com.bush.pharmacy_web_app.repository.dto.orders.MedicineReadDto;
@@ -16,20 +15,19 @@ import com.bush.pharmacy_web_app.repository.mapper.medicine.MedicineCreateMapper
 import com.bush.pharmacy_web_app.repository.mapper.admin.MedicineAdminReadMapper;
 import com.bush.pharmacy_web_app.repository.mapper.orders.MedicineReadMapper;
 import com.bush.pharmacy_web_app.repository.mapper.orders.PharmacyBranchReadMapper;
-import com.bush.pharmacy_web_app.service.exception.StorageException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.server.ResponseStatusException;
 
-import java.util.Comparator;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -97,18 +95,20 @@ public class MedicineService {
     public Optional<MedicineReadDto> createMedicine(MedicineCreateDto createDto) {
         return Optional.ofNullable(createDto)
                 .map(dto -> {
-                    storeMedicineImage(dto.image());
+//                    storeMedicineImage(dto.images());
                     return medicineCreateMapper.map(dto);
                 })
                 .map(medicineRepository::save)
                 .map(medicineReadMapper::map);
     }
     @Transactional
-    public Optional<MedicineReadDto> updateMedicine(Long id, MedicineCreateDto createDto) {
+    public Optional<MedicineReadDto> updateMedicine(Long id, MedicineCreateDto createDto, List<MultipartFile> images) {
         return medicineRepository.findById(id)
                 .map(lamb -> {
-                    storeMedicineImage(createDto.image());
-                    return medicineCreateMapper.map(createDto, lamb);
+                    var mergedDto = MedicineCreateDto.IMAGES_STRATEGY_MERGE
+                            .merge(MedicineCreateDto.builder().images(images).build(), createDto);
+                    storeMedicineImage(mergedDto.images());
+                    return medicineCreateMapper.map(mergedDto, lamb);
                 })
                 .map(medicineRepository::saveAndFlush)
                 .map(medicineReadMapper::map);
@@ -125,13 +125,13 @@ public class MedicineService {
 
     private void storeMedicineImage(List<MultipartFile> file) {
         for (var i : file) {
-            if (!file.isEmpty())
+            if (!i.isEmpty())
                 storageService.store(i);
         }
     }
 
     public Optional<Resource> findImageByIdAndFilename(Long id, String filename) {
-        return imageRepository.findByIdAndPath(id, filename)
+        return imageRepository.findByMedicineIdAndPath(id, filename)
                 .map(MedicineImage::getPath)
                 .map(storageService::loadAsResource);
     }

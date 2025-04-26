@@ -3,10 +3,7 @@ package com.bush.pharmacy_web_app.repository.entity.medicine;
 import com.bush.pharmacy_web_app.repository.entity.Supplier;
 import com.bush.pharmacy_web_app.repository.entity.manufacturer.Manufacturer;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -16,6 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@ToString(exclude = {"image", "supplier"})
 @Entity
 @Table(name = "medicine")
 public class Medicine {
@@ -62,6 +60,13 @@ public class Medicine {
     private Supplier supplier;
 
     @Builder.Default
-    @OneToMany(mappedBy = "medicine", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "medicine", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MedicineImage> image = new ArrayList<>();
+
+    public void setImage(List<MedicineImage> image) {
+        if (image != null) {
+            this.image.clear();
+            this.image.addAll(image);
+        }
+    }
 }

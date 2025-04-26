@@ -2,6 +2,7 @@ package com.bush.pharmacy_web_app.repository.mapper.admin;
 
 import com.bush.pharmacy_web_app.repository.dto.admin.MedicineAdminReadDto;
 import com.bush.pharmacy_web_app.repository.entity.medicine.Medicine;
+import com.bush.pharmacy_web_app.repository.entity.medicine.MedicineImage;
 import com.bush.pharmacy_web_app.repository.entity.medicine.MedicineType;
 import com.bush.pharmacy_web_app.repository.mapper.DtoMapper;
 import com.bush.pharmacy_web_app.repository.mapper.manufacturer.ManufacturerReadMapper;
@@ -9,6 +10,7 @@ import com.bush.pharmacy_web_app.repository.mapper.repository.SupplierRepository
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.Collections;
 import java.util.Optional;
 
 @Component
@@ -27,6 +29,12 @@ public class MedicineAdminReadMapper implements DtoMapper<Medicine, MedicineAdmi
         var type = Optional.ofNullable(obj.getType())
                 .map(MedicineType::getType)
                 .orElseThrow();
+        var imagePaths = Optional.ofNullable(obj.getImage())
+                .map(list -> list
+                        .stream()
+                        .map(MedicineImage::getPath)
+                        .toList())
+                .orElse(Collections.emptyList());
         return MedicineAdminReadDto.builder()
                 .id(obj.getId())
                 .name(obj.getName())
@@ -35,6 +43,7 @@ public class MedicineAdminReadMapper implements DtoMapper<Medicine, MedicineAdmi
                 .type(type)
                 .price(obj.getPrice())
                 .recipe(obj.getRecipe())
+                .imagePaths(imagePaths)
                 .activeIngredient(obj.getActiveIngredient())
                 .expirationDate(obj.getExpirationDate())
                 .composition(obj.getComposition())

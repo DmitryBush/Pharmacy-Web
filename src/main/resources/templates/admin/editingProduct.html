@@ -10,9 +10,25 @@
     <h1>Редактирование продукта</h1>
     <div id="product-id" th:data-id="${product.id}">
         <form id="productCreationForm" name="productCreationForm">
-            <img src="https://cdn.kama-med.ru/images/products/1/6479/373201231/bint-elast.jpg"
-                 width="350px"
-                 alt="[(${item.name})]">
+            <div class="image-preview-container">
+                <div id="imagePreview" class="preview-container">
+                    <!-- existing images -->
+                    <div th:each="image : ${product.imagePaths}" class="image-item">
+                        <img th:src="@{/api/admin/product/{id}/{image}(id=${product.id},image=${image})}"
+                             th:alt="${product.name}"
+                             width="350px">
+                        <button class="delete-image-btn"
+                                onclick="deleteImage(this)">×</button>
+                    </div>
+
+                    <!-- new images -->
+                </div>
+
+                <label class="file-input-label">
+                    <input type="file" id="imageInput" accept="image/*" multiple hidden>
+                    + Добавить изображения
+                </label>
+            </div>
             <div>
               <label class="input-group" for="name">
                 Название товара

@@ -6,6 +6,7 @@ import com.bush.pharmacy_web_app.repository.dto.orders.MedicineReadDto;
 import com.bush.pharmacy_web_app.repository.filter.MedicineFilter;
 import com.bush.pharmacy_web_app.service.MedicineService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Pageable;
@@ -20,7 +21,10 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/admin/product")
@@ -56,11 +60,12 @@ public class ProductRestController {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
-    @PutMapping("/{id}")
+    @PutMapping(value = "/{id}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     @ResponseStatus(HttpStatus.CREATED)
     public MedicineReadDto updateProduct(@PathVariable Long id,
-                                         @RequestBody @Valid MedicineCreateDto medicineCreateDto) {
-        return medicineService.updateMedicine(id, medicineCreateDto)
+                                         @RequestPart("product") @Valid MedicineCreateDto medicineCreateDto,
+                                         @RequestPart(value = "images", required = false) @Valid @NotNull List<MultipartFile> images) {
+        return medicineService.updateMedicine(id, medicineCreateDto, images)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
