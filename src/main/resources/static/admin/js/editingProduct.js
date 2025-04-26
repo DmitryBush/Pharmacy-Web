@@ -5,6 +5,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const newImagesContainer = document.querySelector('#imagePreview');
     let newImagesFiles = [];
 
+    document.getElementById('cancel-btn').addEventListener('click', () => {
+        window.location.replace('/admin/product');
+    })
 
     imageInput.addEventListener('change', (e) => {
         const files = Array.from(e.target.files);
@@ -96,7 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             if (response.ok) {
-                window.location.href = '/admin/product';
+                window.location.replace('/admin/product');
             } else {
                 const error = await response.text();
                 alert(`Ошибка: ${error}`);
@@ -116,7 +119,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             if (response.ok) {
-                window.location.href = '/admin/product';
+                window.location.replace('/admin/product');
             } else {
                 alert('Ошибка удаления');
             }

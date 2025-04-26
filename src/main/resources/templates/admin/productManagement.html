@@ -147,7 +147,7 @@
             <a th:href="@{/admin/product/{id}(id=${item.id})}">
                 <img src="https://cdn.kama-med.ru/images/products/1/6479/373201231/bint-elast.jpg"
                      width="50px"
-                     alt="[(${item.name})]">
+                     th:alt="${item.name}">
             </a>
             <div>
                 <a th:href="@{/admin/product/{id}(id=${item.id})}" th:text="${item.name}"></a>
