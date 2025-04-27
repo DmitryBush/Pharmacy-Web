@@ -48,12 +48,6 @@ public class ProductRestController {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
-    @GetMapping(value = "/{id}/{filename:.+}", produces = {MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE})
-    public ResponseEntity<Resource> findPreview(@PathVariable Long id, @PathVariable String filename) {
-        return ResponseEntity.ok(medicineService.findImageByIdAndFilename(id, filename)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND)));
-    }
-
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public MedicineReadDto createProduct(@RequestBody @Validated MedicineCreateDto medicineCreateDto) {

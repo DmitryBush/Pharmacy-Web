@@ -43,6 +43,15 @@ public class FileSystemStorageService {
         }
     }
 
+    public void delete(String filename) {
+        try {
+            Path file = load(filename);
+            Files.delete(file);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public Path load(String filename) {
         return rootLocation.resolve(filename);
     }

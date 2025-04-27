@@ -14,7 +14,7 @@
                 <div id="imagePreview" class="preview-container">
                     <!-- existing images -->
                     <div th:each="image : ${product.imagePaths}" class="image-item">
-                        <img th:src="@{/api/admin/product/{id}/{image}(id=${product.id},image=${image.path})}"
+                        <img th:src="@{/api/product-image/{id}/{image}(id=${product.id},image=${image.path})}"
                              th:alt="${product.name}"
                              width="350px">
                         <button class="delete-image-btn" th:data-id="${image.id}">×</button>

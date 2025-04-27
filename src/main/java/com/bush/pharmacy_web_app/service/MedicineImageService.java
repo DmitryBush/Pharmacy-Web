@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -36,11 +37,16 @@ public class MedicineImageService {
                 .map(MedicineImage::getPath);
     }
 
+    public void createImage(MultipartFile file) {
+        storageService.store(file);
+    }
+
     @Transactional
     public boolean deleteImage(Long id) {
         return imageRepository.findById(id)
                 .map(medicineImage -> {
                     imageRepository.delete(medicineImage);
+                    storageService.delete(medicineImage.getPath());
                     return true;
                 })
                 .orElse(false);

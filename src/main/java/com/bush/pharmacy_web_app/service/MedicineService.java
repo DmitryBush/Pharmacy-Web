@@ -16,11 +16,14 @@ import com.bush.pharmacy_web_app.repository.mapper.admin.MedicineAdminReadMapper
 import com.bush.pharmacy_web_app.repository.mapper.orders.MedicineReadMapper;
 import com.bush.pharmacy_web_app.repository.mapper.orders.PharmacyBranchReadMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.pulsar.PulsarProperties;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -32,14 +35,15 @@ import java.util.Optional;
 public class MedicineService {
     private final MedicineRepository medicineRepository;
     private final PharmacyBranchRepository branchRepository;
-    private final MedicineImageRepository imageRepository;
+//    private final MedicineImageRepository imageRepository;
 
     private final MedicineReadMapper medicineReadMapper;
     private final MedicineCreateMapper medicineCreateMapper;
     private final PharmacyBranchReadMapper branchReadMapper;
     private final MedicineAdminReadMapper adminMedicineReadMapper;
 
-    private final FileSystemStorageService storageService;
+//    private final FileSystemStorageService storageService;
+    private final MedicineImageService imageService;
 
     public List<MedicineReadDto> findAll() {
         return medicineRepository.findAll().stream()
@@ -102,9 +106,17 @@ public class MedicineService {
     public Optional<MedicineReadDto> updateMedicine(Long id, MedicineCreateDto createDto, List<MultipartFile> images) {
         return medicineRepository.findById(id)
                 .map(lamb -> {
+                    TransactionSynchronizationManager.registerSynchronization(
+                            new TransactionSynchronization() {
+                                @Override
+                                public void afterCompletion(int status) {
+                                    if (status == STATUS_COMMITTED)
+                                        images.forEach(imageService::createImage);
+                                }
+                            }
+                    );
                     var mergedDto = MedicineCreateDto.IMAGES_STRATEGY_MERGE
                             .merge(MedicineCreateDto.builder().images(images).build(), createDto);
-                    storeMedicineImage(mergedDto.images());
                     return medicineCreateMapper.map(mergedDto, lamb);
                 })
                 .map(medicineRepository::saveAndFlush)
@@ -114,22 +126,24 @@ public class MedicineService {
     public boolean deleteMedicine(Long id) {
         return medicineRepository.findById(id)
                 .map(medicine -> {
+                    var images = medicine
+                            .getImage()
+                            .stream()
+                            .map(MedicineImage::getId)
+                            .toList();
+                    TransactionSynchronizationManager.registerSynchronization(
+                            new TransactionSynchronization() {
+                                @Override
+                                public void afterCompletion(int status) {
+                                    if (status == STATUS_COMMITTED)
+                                        images.forEach(imageService::deleteImage);
+
+                                }
+                            }
+                    );
                     medicineRepository.delete(medicine);
                     return true;
                 })
                 .orElse(false);
-    }
-
-    private void storeMedicineImage(List<MultipartFile> file) {
-        for (var i : file) {
-            if (!i.isEmpty())
-                storageService.store(i);
-        }
-    }
-
-    public Optional<Resource> findImageByIdAndFilename(Long id, String filename) {
-        return imageRepository.findByMedicineIdAndPath(id, filename)
-                .map(MedicineImage::getPath)
-                .map(storageService::loadAsResource);
     }
 }
