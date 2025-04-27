@@ -28,6 +28,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
 
 @Service
 @RequiredArgsConstructor
@@ -111,7 +112,9 @@ public class MedicineService {
                                 @Override
                                 public void afterCompletion(int status) {
                                     if (status == STATUS_COMMITTED)
-                                        images.forEach(imageService::createImage);
+                                        images.stream()
+                                                .filter(Predicate.not(MultipartFile::isEmpty))
+                                                .forEach(imageService::createImage);
                                 }
                             }
                     );

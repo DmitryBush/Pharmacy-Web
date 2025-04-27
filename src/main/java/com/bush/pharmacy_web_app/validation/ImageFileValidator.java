@@ -4,10 +4,7 @@ import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class ImageFileValidator implements ConstraintValidator<ImageFile, List<MultipartFile>> {
     private String[] allowedTypes;
@@ -25,8 +22,12 @@ public class ImageFileValidator implements ConstraintValidator<ImageFile, List<M
 
         return multipartFiles.stream()
                 .allMatch(file -> {
-                    String type = file.getContentType();
-                    return typeSet.contains(type);
+                    if (file.isEmpty()) {
+                        return true;
+                    }
+
+                    String contentType = file.getContentType();
+                    return contentType != null && typeSet.contains(contentType);
                 });
     }
 }
