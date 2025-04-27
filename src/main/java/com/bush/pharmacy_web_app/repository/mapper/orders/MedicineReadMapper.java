@@ -1,6 +1,6 @@
 package com.bush.pharmacy_web_app.repository.mapper.orders;
 
-import com.bush.pharmacy_web_app.repository.dto.orders.MedicineReadDto;
+import com.bush.pharmacy_web_app.repository.dto.medicine.MedicineReadDto;
 import com.bush.pharmacy_web_app.repository.entity.medicine.Medicine;
 import com.bush.pharmacy_web_app.repository.entity.medicine.MedicineType;
 import com.bush.pharmacy_web_app.repository.mapper.DtoMapper;

@@ -1,5 +1,6 @@
-package com.bush.pharmacy_web_app.repository.dto.catalog;
+package com.bush.pharmacy_web_app.repository.dto.medicine;
 
+import com.bush.pharmacy_web_app.repository.dto.catalog.SupplierCreateDto;
 import com.bush.pharmacy_web_app.repository.dto.manufacturer.ManufacturerCreateDto;
 import com.bush.pharmacy_web_app.repository.mapper.strategy.MergeStrategy;
 import jakarta.validation.Valid;

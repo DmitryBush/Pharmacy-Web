@@ -5,6 +5,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const newImagesContainer = document.querySelector('#imagePreview');
     let newImagesFiles = [];
 
+    document.addEventListener('click', (e) => {
+        if (e.target.classList.contains('delete-image-btn')) {
+            e.preventDefault(); // Предотвращаем действие по умолчанию
+            deleteImage(e.target);
+        }
+    });
+
     document.getElementById('cancel-btn').addEventListener('click', () => {
         window.location.replace('/admin/product');
     })
@@ -19,13 +26,38 @@ document.addEventListener('DOMContentLoaded', () => {
                 imgContainer.className = 'image-item new-image';
                 imgContainer.innerHTML = `
                     <img src="${event.target.result}" width="350px">
-                    <button class="delete-image-btn" onclick="removeNewImage(this)">×</button>
+                    <button class="delete-new-image-btn" onclick="removeNewImage(this)">×</button>
                 `;
                 newImagesContainer.appendChild(imgContainer);
             };
             reader.readAsDataURL(file);
         });
     });
+
+    async function deleteImage(button) {
+        const imageId = button.getAttribute('data-id');
+
+        if (confirm('Удалить изображение?')) {
+            try {
+                const response = await fetch(`/api/product-image/${imageId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (response.ok) {
+                    button.closest('.image-item').remove();
+                } else {
+                    const error = await response.text();
+                    alert(`Ошибка: ${error}`);
+                }
+            } catch (error) {
+                console.error('Ошибка:', error);
+                alert('Не удалось удалить изображение');
+            }
+        }
+    }
 
 
     window.removeNewImage = (button) => {

@@ -4,13 +4,13 @@ import com.bush.pharmacy_web_app.repository.MedicineImageRepository;
 import com.bush.pharmacy_web_app.repository.MedicineRepository;
 import com.bush.pharmacy_web_app.repository.PharmacyBranchRepository;
 import com.bush.pharmacy_web_app.repository.dto.admin.MedicineAdminReadDto;
-import com.bush.pharmacy_web_app.repository.dto.catalog.MedicineCreateDto;
-import com.bush.pharmacy_web_app.repository.dto.catalog.MedicineManufacturer;
-import com.bush.pharmacy_web_app.repository.dto.catalog.MedicineTypeDto;
+import com.bush.pharmacy_web_app.repository.dto.medicine.MedicineCreateDto;
+import com.bush.pharmacy_web_app.repository.dto.medicine.MedicineManufacturer;
+import com.bush.pharmacy_web_app.repository.dto.medicine.MedicineTypeDto;
 import com.bush.pharmacy_web_app.repository.dto.orders.PharmacyBranchReadDto;
 import com.bush.pharmacy_web_app.repository.entity.medicine.MedicineImage;
 import com.bush.pharmacy_web_app.repository.filter.MedicineFilter;
-import com.bush.pharmacy_web_app.repository.dto.orders.MedicineReadDto;
+import com.bush.pharmacy_web_app.repository.dto.medicine.MedicineReadDto;
 import com.bush.pharmacy_web_app.repository.mapper.medicine.MedicineCreateMapper;
 import com.bush.pharmacy_web_app.repository.mapper.admin.MedicineAdminReadMapper;
 import com.bush.pharmacy_web_app.repository.mapper.orders.MedicineReadMapper;
@@ -23,11 +23,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor

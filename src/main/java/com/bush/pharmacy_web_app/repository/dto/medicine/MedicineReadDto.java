@@ -1,4 +1,4 @@
-package com.bush.pharmacy_web_app.repository.dto.orders;
+package com.bush.pharmacy_web_app.repository.dto.medicine;
 
 import com.bush.pharmacy_web_app.repository.dto.manufacturer.ManufacturerReadDto;
 

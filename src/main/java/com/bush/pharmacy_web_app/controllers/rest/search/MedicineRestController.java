@@ -1,6 +1,6 @@
 package com.bush.pharmacy_web_app.controllers.rest.search;
 
-import com.bush.pharmacy_web_app.repository.dto.orders.MedicineReadDto;
+import com.bush.pharmacy_web_app.repository.dto.medicine.MedicineReadDto;
 import com.bush.pharmacy_web_app.service.MedicineService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;

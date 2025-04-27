@@ -2,6 +2,7 @@ package com.bush.pharmacy_web_app.repository.dto.admin;
 
 import com.bush.pharmacy_web_app.repository.dto.catalog.SupplierReadDto;
 import com.bush.pharmacy_web_app.repository.dto.manufacturer.ManufacturerReadDto;
+import com.bush.pharmacy_web_app.repository.dto.medicine.MedicineImageReadDto;
 import lombok.Builder;
 
 import java.math.BigDecimal;
@@ -15,7 +16,7 @@ public record MedicineAdminReadDto(Long id,
                                    String type,
                                    BigDecimal price,
                                    Boolean recipe,
-                                   List<String> imagePaths,
+                                   List<MedicineImageReadDto> imagePaths,
                                    String activeIngredient,
                                    String expirationDate,
                                    String composition,

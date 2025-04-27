@@ -1,7 +1,7 @@
 package com.bush.pharmacy_web_app.repository.mapper.cart;
 
 import com.bush.pharmacy_web_app.repository.dto.cart.CartItemReadDto;
-import com.bush.pharmacy_web_app.repository.dto.orders.MedicineReadDto;
+import com.bush.pharmacy_web_app.repository.dto.medicine.MedicineReadDto;
 import com.bush.pharmacy_web_app.repository.entity.cart.CartItems;
 import com.bush.pharmacy_web_app.repository.mapper.DtoMapper;
 import com.bush.pharmacy_web_app.repository.mapper.orders.MedicineReadMapper;

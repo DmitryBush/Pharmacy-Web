@@ -1,10 +1,11 @@
 package com.bush.pharmacy_web_app.controllers.rest.admin;
 
 import com.bush.pharmacy_web_app.repository.dto.admin.MedicineAdminReadDto;
-import com.bush.pharmacy_web_app.repository.dto.catalog.MedicineCreateDto;
-import com.bush.pharmacy_web_app.repository.dto.orders.MedicineReadDto;
+import com.bush.pharmacy_web_app.repository.dto.medicine.MedicineCreateDto;
+import com.bush.pharmacy_web_app.repository.dto.medicine.MedicineReadDto;
 import com.bush.pharmacy_web_app.repository.filter.MedicineFilter;
 import com.bush.pharmacy_web_app.service.MedicineService;
+import com.bush.pharmacy_web_app.validation.ImageFile;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -64,7 +65,9 @@ public class ProductRestController {
     @ResponseStatus(HttpStatus.CREATED)
     public MedicineReadDto updateProduct(@PathVariable Long id,
                                          @RequestPart("product") @Valid MedicineCreateDto medicineCreateDto,
-                                         @RequestPart(value = "images", required = false) @Valid @NotNull List<MultipartFile> images) {
+                                         @RequestPart(value = "images", required = false)
+                                             @Valid @NotNull @ImageFile({"image/jpeg", "image/png", "image/webm"})
+                                             List<MultipartFile> images) {
         return medicineService.updateMedicine(id, medicineCreateDto, images)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }

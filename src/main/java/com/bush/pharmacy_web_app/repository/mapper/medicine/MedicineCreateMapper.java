@@ -3,9 +3,8 @@ package com.bush.pharmacy_web_app.repository.mapper.medicine;
 import com.bush.pharmacy_web_app.repository.MedicineImageRepository;
 import com.bush.pharmacy_web_app.repository.MedicineRepository;
 import com.bush.pharmacy_web_app.repository.TypeRepository;
-import com.bush.pharmacy_web_app.repository.dto.catalog.MedicineCreateDto;
+import com.bush.pharmacy_web_app.repository.dto.medicine.MedicineCreateDto;
 import com.bush.pharmacy_web_app.repository.entity.medicine.Medicine;
-import com.bush.pharmacy_web_app.repository.entity.medicine.MedicineImage;
 import com.bush.pharmacy_web_app.repository.mapper.DtoMapper;
 import com.bush.pharmacy_web_app.repository.mapper.SupplierCreateMapper;
 import com.bush.pharmacy_web_app.repository.mapper.manufacturer.ManufacturerCreateMapper;
@@ -16,7 +15,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Component
 @RequiredArgsConstructor

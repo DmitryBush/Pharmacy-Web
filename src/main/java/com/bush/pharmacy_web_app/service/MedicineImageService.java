@@ -1,0 +1,53 @@
+package com.bush.pharmacy_web_app.service;
+
+import com.bush.pharmacy_web_app.repository.MedicineImageRepository;
+import com.bush.pharmacy_web_app.repository.entity.medicine.MedicineImage;
+import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.Resource;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Optional;
+
+@Service
+@RequiredArgsConstructor
+@Transactional(readOnly = true)
+public class MedicineImageService {
+    private final MedicineImageRepository imageRepository;
+    private final FileSystemStorageService storageService;
+
+    public List<String> findProductImageList() {
+        return imageRepository.findAll()
+                .stream()
+                .map(MedicineImage::getPath)
+                .toList();
+    }
+
+    private List<String> findProductImageListByMedicineId(Long id) {
+        return imageRepository.findByMedicineId(id)
+                .stream()
+                .map(MedicineImage::getPath)
+                .toList();
+    }
+
+    private Optional<String> findImageByMedicineIdAndPath(Long id, String filename) {
+        return imageRepository.findByMedicineIdAndPath(id, filename)
+                .map(MedicineImage::getPath);
+    }
+
+    @Transactional
+    public boolean deleteImage(Long id) {
+        return imageRepository.findById(id)
+                .map(medicineImage -> {
+                    imageRepository.delete(medicineImage);
+                    return true;
+                })
+                .orElse(false);
+    }
+
+    public Optional<Resource> findProductImageByIdAndName(Long id, String filename) {
+        return findImageByMedicineIdAndPath(id, filename)
+                .map(storageService::loadAsResource);
+    }
+}

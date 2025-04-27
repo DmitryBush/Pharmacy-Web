@@ -1,12 +1,11 @@
 package com.bush.pharmacy_web_app.repository.mapper.admin;
 
 import com.bush.pharmacy_web_app.repository.dto.admin.MedicineAdminReadDto;
+import com.bush.pharmacy_web_app.repository.dto.medicine.MedicineImageReadDto;
 import com.bush.pharmacy_web_app.repository.entity.medicine.Medicine;
-import com.bush.pharmacy_web_app.repository.entity.medicine.MedicineImage;
 import com.bush.pharmacy_web_app.repository.entity.medicine.MedicineType;
 import com.bush.pharmacy_web_app.repository.mapper.DtoMapper;
 import com.bush.pharmacy_web_app.repository.mapper.manufacturer.ManufacturerReadMapper;
-import com.bush.pharmacy_web_app.repository.mapper.repository.SupplierRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -32,7 +31,7 @@ public class MedicineAdminReadMapper implements DtoMapper<Medicine, MedicineAdmi
         var imagePaths = Optional.ofNullable(obj.getImage())
                 .map(list -> list
                         .stream()
-                        .map(MedicineImage::getPath)
+                        .map(image -> new MedicineImageReadDto(image.getId(), image.getPath()))
                         .toList())
                 .orElse(Collections.emptyList());
         return MedicineAdminReadDto.builder()
