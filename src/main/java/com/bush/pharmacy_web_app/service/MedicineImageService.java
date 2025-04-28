@@ -1,6 +1,7 @@
 package com.bush.pharmacy_web_app.service;
 
 import com.bush.pharmacy_web_app.repository.MedicineImageRepository;
+import com.bush.pharmacy_web_app.repository.dto.medicine.MedicineImageReadDto;
 import com.bush.pharmacy_web_app.repository.entity.medicine.MedicineImage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
@@ -35,6 +36,12 @@ public class MedicineImageService {
     private Optional<String> findImageByMedicineIdAndPath(Long id, String filename) {
         return imageRepository.findByMedicineIdAndPath(id, filename)
                 .map(MedicineImage::getPath);
+    }
+
+    public Optional<Resource> findImageById(Long id) {
+        return imageRepository.findById(id)
+                .map(MedicineImage::getPath)
+                .map(storageService::loadAsResource);
     }
 
     public void createImage(MultipartFile file) {

@@ -2,6 +2,9 @@ class ProductManagement {
     constructor() {
         this.tmpDataStore = new Map();
 
+        this.uploadedImages = [];
+        this.newImagesFiles = [];
+
         this.searchUrl = '';
 
         this.currentStep = 1;
@@ -33,6 +36,65 @@ class ProductManagement {
         document.getElementById('createBtn').addEventListener('click', this.handleCreate.bind(this));
         document.getElementById('close-modal').addEventListener('click', this.closeCreateMenu.bind(this));
         document.getElementById('search-field').addEventListener('input', this.handleSearchInput.bind(this));
+
+        document.getElementById('imageInput')?.addEventListener('change', this.handleImageUpload.bind(this));
+        document.querySelector('#imagePreview')?.addEventListener('click', this.handleImageDelete.bind(this));
+    }
+
+    handleImageUpload(e) {
+        const files = Array.from(e.target.files);
+        this.newImagesFiles = [...this.newImagesFiles, ...files];
+
+        files.forEach(file => {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                const imgContainer = document.createElement('div');
+                imgContainer.className = 'image-item new-image';
+                imgContainer.innerHTML = `
+                    <img src="${event.target.result}" width="350px">
+                    <button class="delete-new-image-btn">×</button>
+                `;
+                document.getElementById('imagePreview').appendChild(imgContainer);
+            };
+            reader.readAsDataURL(file);
+        });
+    }
+
+    handleImageDelete(e) {
+        if (e.target.classList.contains('delete-image-btn')) {
+            const imageId = e.target.dataset.id;
+            this.deleteServerImage(imageId);
+        }
+
+        if (e.target.classList.contains('delete-new-image-btn')) {
+            const imgContainer = e.target.closest('.image-item');
+            const index = Array.from(imgContainer.parentNode.children).indexOf(imgContainer);
+            this.newImagesFiles.splice(index, 1);
+            imgContainer.remove();
+        }
+    }
+
+    async deleteServerImage(imageId) {
+        if (!confirm('Удалить изображение?')) return;
+
+        try {
+            const response = await this.fetchData(`/api/product-image/${imageId}`, 'DELETE');
+            if (response.ok) {
+                e.target.closest('.image-item').remove();
+            }
+        } catch (error) {
+            alert('Ошибка удаления: ' + error.message);
+        }
+    }
+
+    updateImagePreview(images) {
+        const container = document.getElementById('imagePreview');
+        container.innerHTML = images.map(img => `
+            <div class="image-item">
+                <img src="/api/product-image/${img.id}" width="350px">
+                <button class="delete-image-btn" data-id="${img.id}">×</button>
+            </div>
+        `).join('');
     }
 
     handleOpenSearch() {
@@ -78,15 +140,14 @@ class ProductManagement {
     }
 
     async fetchData(url, method, body = null) {
-        const headers = {
-            'Content-Type': 'application/json'
-        };
+        // const headers = body instanceof FormData
+        //     ? {}
+        //     : { 'Content-Type': 'application/json' };
 
         try {
             const response = await fetch(url, {
                 method,
-                headers,
-                body: body ? JSON.stringify(body) : null
+                body: body
             });
 
             if (response.status === 403)
@@ -114,7 +175,7 @@ class ProductManagement {
             1: {
                 fields: ['itn', 'supplierName', 'subject', 'settlement', 'street', 'house', 'postalCode'],
                 validate: (formData) => {
-                    if (!/^\d{10}$/.test(formData.itn)) throw new Error('Неверный ИНН');
+                    if (!/^(\d{10}|\d{12})$/.test(formData.itn)) throw new Error('Неверный ИНН');
                     return true;
                 }
             },
@@ -174,6 +235,10 @@ class ProductManagement {
                 throw new Error(response.statusText);
 
             const data = await response.json();
+            if (data.imagePaths) {
+                this.uploadedImages = data.imagePaths;
+                this.updateImagePreview(data.imagePaths);
+            }
 
             this.primaryMedicine = data.id;
 
@@ -189,12 +254,13 @@ class ProductManagement {
         }
     }
 
-    async fillProduct() {
+    fillProduct() {
         return {
             name: document.getElementById('name').value,
             type: document.getElementById('type').value,
             manufacturer: {
-                id: this.primaryManufacturer,
+                id: this.primaryManufacturer != null ? this.primaryManufacturer
+                    : this.tmpDataStore.get(this.primaryMedicine).manufacturer.id,
                 name: document.getElementById('manufacturerName').value,
                 country: {
                     country: document.getElementById('country').value,
@@ -204,7 +270,8 @@ class ProductManagement {
                 itn: document.getElementById('itn').value,
                 name: document.getElementById('supplierName').value,
                 address: {
-                    id: this.primaryAddress,
+                    id: this.primaryAddress != null ? this.primaryAddress
+                        : this.tmpDataStore.get(this.primaryMedicine).supplier.address.id,
                     subject: document.getElementById('subject').value,
                     district: document.getElementById('district').value.trim() || null,
                     settlement: document.getElementById('settlement').value,
@@ -214,8 +281,20 @@ class ProductManagement {
                     postalCode: document.getElementById('postalCode').value
                 }
             },
-            price: document.getElementById('price').value,
-            recipe: document.querySelector('input[name="recipe"]:checked').value === "1"
+            price: parseFloat(document.getElementById('price').value),
+            recipe: document.querySelector('input[name="recipe"]:checked').value === "1",
+            activeIngredient: document.getElementById('activeIngredient').value,
+            expirationDate: document.getElementById('expirationDate').value,
+            composition: document.getElementById('composition').value,
+            indication: document.getElementById('indication').value,
+            contraindication: document.getElementById('contraindication').value,
+            sideEffect: document.getElementById('sideEffect').value,
+            interaction: document.getElementById('interaction').value,
+            admissionCourse: document.getElementById('admissionCourse').value,
+            overdose: document.getElementById('overdose').value,
+            releaseForm: document.getElementById('releaseForm').value,
+            specialInstruction: document.getElementById('specialInstruction').value,
+            storageCondition: document.getElementById('storageCondition').value
         };
     }
 
@@ -388,6 +467,19 @@ class ProductManagement {
                 form.elements.type.value = data.type;
                 form.elements.price.value = data.price;
                 form.elements.recipe.value = data.recipe;
+
+                form.elements.activeIngredient.value = data.activeIngredient;
+                form.elements.expirationDate.value = data.expirationDate;
+                form.elements.composition.value = data.composition;
+                form.elements.indication.value = data.indication;
+                form.elements.contraindication.value = data.contraindication;
+                form.elements.sideEffect.value = data.sideEffect;
+                form.elements.interaction.value = data.interaction;
+                form.elements.admissionCourse.value = data.admissionCourse;
+                form.elements.overdose.value = data.overdose;
+                form.elements.releaseForm.value = data.releaseForm;
+                form.elements.specialInstruction.value = data.specialInstruction;
+                form.elements.storageCondition.value = data.storageCondition;
             }
             if (step === 2) {
                 form.elements.manufacturerName.value = data.manufacturer.name;
@@ -459,12 +551,24 @@ class ProductManagement {
                 }
             } else {
                 if (this.validateStep(this.currentStep)) {
+                    const formData = new FormData();
+                    const productBlob = new Blob(
+                        [JSON.stringify(this.fillProduct())],
+                        { type: 'application/json' }
+                    );
+                    formData.append('product', productBlob, 'product.json');
+
+                    if (this.newImagesFiles.length > 0) {
+                        this.newImagesFiles.forEach(file => formData.append('images', file));
+                    } else {
+                        formData.append('images', new File([], 'empty'));
+                    }
                     if (updateMode) {
                         await this.fetchData(`/api/admin/product/${this.primaryMedicine}`,
-                            'PUT', await this.fillProduct());
+                            'PUT', formData);
                     } else {
                         await this.fetchData(`/api/admin/product`,
-                            'POST', await this.fillProduct());
+                            'POST', formData);
                     }
                     this.closeCreateMenu();
                 } else {

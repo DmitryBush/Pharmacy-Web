@@ -102,6 +102,13 @@
                         </div>
                     </div>
                     <div id="productPart" style="display: none">
+                        <div class="image-preview-container">
+                            <div id="imagePreview" class="preview-container"></div>
+                            <label class="file-input-label">
+                                <input type="file" id="imageInput" accept="image/*" multiple hidden>
+                                + Добавить изображения
+                            </label>
+                        </div>
                         <div>
                             <label class="input-group" for="name">
                                 Название товара
@@ -133,6 +140,58 @@
                                 </label>
                             </fieldset>
                         </div>
+                        <div>
+                            <label class="input-group" for="activeIngredient">
+                                Активный ингредиент
+                                <input class="input-group" type="text" id="activeIngredient" required>
+                            </label>
+                        </div>
+                        <div>
+                            <label class="input-group" for="expirationDate">
+                                Срок годности
+                                <input class="input-group" type="text" id="expirationDate" required>
+                            </label>
+                        </div>
+                        <div>
+                            <label class="input-group" for="composition">Состав</label>
+                            <textarea class="input-group" id="composition"></textarea>
+                        </div>
+                        <div>
+                            <label class="input-group" for="indication">Показания</label>
+                            <textarea class="input-group" id="indication"></textarea>
+                        </div>
+                        <div>
+                            <label class="input-group" for="contraindication">Противопоказания</label>
+                            <textarea class="input-group" id="contraindication"></textarea>
+                        </div>
+                        <div>
+                            <label class="input-group" for="sideEffect">Побочные эффекты</label>
+                            <textarea class="input-group" id="sideEffect"></textarea>
+                        </div>
+                        <div>
+                            <label class="input-group" for="interaction">Взаимодействия</label>
+                            <textarea class="input-group" id="interaction"></textarea>
+                        </div>
+                        <div>
+                            <label class="input-group" for="admissionCourse">Курс приема</label>
+                            <textarea class="input-group" id="admissionCourse"></textarea>
+                        </div>
+                        <div>
+                            <label class="input-group" for="overdose">Передозировка</label>
+                            <textarea class="input-group" id="overdose"></textarea>
+                        </div>
+                        <div>
+                            <label class="input-group" for="releaseForm">Форма выпуска</label>
+                            <textarea class="input-group" id="releaseForm"></textarea>
+                        </div>
+                        <div>
+                            <label class="input-group" for="specialInstruction">Специальные показания</label>
+                            <textarea class="input-group" id="specialInstruction"></textarea>
+                        </div>
+                        <div>
+                            <label class="input-group" for="storageCondition">Условия хранения</label>
+                            <textarea class="input-group" id="storageCondition"></textarea>
+                        </div>
                     </div>
                 </form>
             </div>
@@ -145,9 +204,12 @@
     <div>
         <div class="product-item" th:each="item : ${products.content}">
             <a th:href="@{/admin/product/{id}(id=${item.id})}">
-                <img src="https://cdn.kama-med.ru/images/products/1/6479/373201231/bint-elast.jpg"
-                     width="50px"
-                     th:alt="${item.name}">
+                <div th:unless="${item.imagePaths.isEmpty()}">
+                    <img th:src="@{/api/product-image/{id}(id=${item.imagePaths.get(0).id})}"
+                         width="50px"
+                         th:alt="${item.name}">
+                </div>
+                <div th:if="${item.imagePaths.isEmpty()}" class="image-unavailable"></div>
             </a>
             <div>
                 <a th:href="@{/admin/product/{id}(id=${item.id})}" th:text="${item.name}"></a>

@@ -21,6 +21,12 @@ public class ProductImageRestController {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND)));
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<Resource> findImageById(@PathVariable Long id) {
+        return ResponseEntity.ok(imageService.findImageById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND)));
+    }
+
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
     public void deleteImage(@PathVariable Long id) {

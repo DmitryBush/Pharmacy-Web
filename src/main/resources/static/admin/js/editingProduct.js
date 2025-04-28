@@ -120,7 +120,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (newImagesFiles.length > 0) {
             newImagesFiles.forEach(file => formData.append('images', file));
         } else {
-            // Добавляем пустой файл, если изображений нет
             formData.append('images', new File([], 'empty'));
         }
 

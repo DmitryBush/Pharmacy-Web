@@ -121,20 +121,29 @@
 
 .input-group input {
     width: 100%;
-    padding: 0.75rem 1rem;
-    border: 1px solid #e2e8f0;
-    border-radius: 6px;
+    padding: 0.8rem 1rem;
+    border: 1px solid #e5e5e5;
+    border-radius: 8px;
+    backdrop-filter: blur(4px);
     font-size: 1rem;
-    transition: all 0.2s;
+    box-shadow:
+            0 1.6px 3.6px rgba(0, 0, 0, calc(var(--shadow-intensity) * 0.2)),
+            0 4.4px 10px rgba(0, 0, 0, calc(var(--shadow-intensity) * 0.28));
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
     /* Гарантируем, что padding не увеличивает ширину */
     box-sizing: border-box;
 }
 
 .input-group input:focus {
-    border-color: #4299e1;
-    box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.15);
+    border-color: #0078d4;
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow:
+            0 0 0 2px rgba(0, 120, 212, 0.2),
+            0 6.4px 14.4px rgba(0, 0, 0, 0.03),
+            0 17.6px 40px rgba(0, 0, 0, 0.04);
     outline: none;
+    animation: input-focus 0.4s ease-out;
 }
 
 @media (max-width: 768px) {
@@ -418,4 +427,147 @@ legend {
     margin: 8px 20px 8px 0;
     cursor: pointer;
     user-select: none;
+}
+
+.image-unavailable {
+    width: 50px;
+    height: 50px;
+    background: #f0f0f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px dashed #ccc;
+    color: #666;
+    font-family: Arial, sans-serif;
+}
+
+/* Стили для загрузки изображений */
+.image-preview-container {
+    margin: 1rem 0;
+    padding: 1rem;
+    border: 2px dashed #e2e8f0;
+    border-radius: 8px;
+}
+
+.preview-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin: 1rem 0;
+}
+
+.image-item {
+    position: relative;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 4px;
+}
+
+.image-item img {
+    display: block;
+    max-width: 150px;
+    height: auto;
+    border-radius: 4px;
+}
+
+.delete-image-btn {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    background: #ff4757;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    font-size: 16px;
+    line-height: 1;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.file-input-label {
+    display: inline-block;
+    padding: 8px 16px;
+    background: #3498db;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.file-input-label:hover {
+    background: #2980b9;
+}
+
+.new-image {
+    border-color: #3498db;
+    background: #f8f9fa;
+}
+
+textarea.input-group {
+    width: 95%;
+    min-height: 100px;
+    resize: vertical;
+    padding: 1rem;
+    border: 1px solid #e5e5e5;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(4px);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    font-size: 1rem;
+    line-height: 1.5;
+    box-shadow:
+            0 1.6px 3.6px rgba(0, 0, 0, 0.02),
+            0 4.4px 10px rgba(0, 0, 0, 0.028);
+}
+
+textarea.input-group:focus {
+    border-color: #0078d4;
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow:
+            0 0 0 2px rgba(0, 120, 212, 0.2),
+            0 6.4px 14.4px rgba(0, 0, 0, 0.03),
+            0 17.6px 40px rgba(0, 0, 0, 0.04);
+    outline: none;
+    animation: textarea-focus 0.4s ease-out;
+}
+
+textarea.input-group:active {
+    backdrop-filter: blur(8px);
+    border-color: #0078d4;
+}
+
+textarea.input-group::placeholder {
+    color: #666;
+    opacity: 1;
+    transition: all 0.2s ease;
+}
+
+textarea.input-group:focus::placeholder {
+    color: transparent;
+}
+
+@keyframes textarea-focus {
+    0% {
+        box-shadow:
+                0 0 0 0 rgba(0, 120, 212, 0),
+                0 1.6px 3.6px rgba(0, 0, 0, 0.02),
+                0 3.2px 7.2px rgba(0, 0, 0, 0.028);
+    }
+    50% {
+        box-shadow:
+                0 0 0 6px rgba(0, 120, 212, 0.08),  /* уменьшено с 12px */
+                0 3.2px 7.2px rgba(0, 0, 0, 0.024),
+                0 6.4px 14.4px rgba(0, 0, 0, 0.032);
+    }
+    100% {
+        box-shadow:
+                0 0 0 2px rgba(0, 120, 212, 0.15),  /* уменьшена интенсивность */
+                0 1.6px 3.6px rgba(0, 0, 0, 0.02),
+                0 3.2px 7.2px rgba(0, 0, 0, 0.028);
+    }
 }

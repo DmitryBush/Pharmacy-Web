@@ -58,9 +58,9 @@ public class ProductRestController {
     @PutMapping(value = "/{id}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     @ResponseStatus(HttpStatus.CREATED)
     public MedicineReadDto updateProduct(@PathVariable Long id,
-                                         @RequestPart("product") @Valid MedicineCreateDto medicineCreateDto,
+                                         @RequestPart("product") @Validated MedicineCreateDto medicineCreateDto,
                                          @RequestPart(value = "images", required = false)
-                                             @Valid @NotNull @ImageFile({"image/jpeg", "image/png", "image/webm"})
+                                             @Validated @NotNull @ImageFile({"image/jpeg", "image/png", "image/webm"})
                                              List<MultipartFile> images) {
         return medicineService.updateMedicine(id, medicineCreateDto, images)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
