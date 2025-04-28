@@ -94,11 +94,23 @@ public class MedicineService {
     }
 
     @Transactional
-    public Optional<MedicineReadDto> createMedicine(MedicineCreateDto createDto) {
+    public Optional<MedicineReadDto> createMedicine(MedicineCreateDto createDto, List<MultipartFile> images) {
         return Optional.ofNullable(createDto)
                 .map(dto -> {
-//                    storeMedicineImage(dto.images());
-                    return medicineCreateMapper.map(dto);
+                    TransactionSynchronizationManager.registerSynchronization(
+                            new TransactionSynchronization() {
+                                @Override
+                                public void afterCompletion(int status) {
+                                    if (status == STATUS_COMMITTED)
+                                        images.stream()
+                                                .filter(Predicate.not(MultipartFile::isEmpty))
+                                                .forEach(imageService::createImage);
+                                }
+                            }
+                    );
+                    var mergedDto = MedicineCreateDto.IMAGES_STRATEGY_MERGE
+                            .merge(MedicineCreateDto.builder().images(images).build(), createDto);
+                    return medicineCreateMapper.map(mergedDto);
                 })
                 .map(medicineRepository::save)
                 .map(medicineReadMapper::map);

@@ -8,7 +8,7 @@ class ProductManagement {
         this.searchUrl = '';
 
         this.currentStep = 1;
-        this.primaryAddress = null;
+        this.primaryItn = null;
         this.primaryManufacturer = null;
         this.primaryMedicine = null;
         this.modalOutsideClickListener = null;
@@ -140,10 +140,6 @@ class ProductManagement {
     }
 
     async fetchData(url, method, body = null) {
-        // const headers = body instanceof FormData
-        //     ? {}
-        //     : { 'Content-Type': 'application/json' };
-
         try {
             const response = await fetch(url, {
                 method,
@@ -270,7 +266,7 @@ class ProductManagement {
                 itn: document.getElementById('itn').value,
                 name: document.getElementById('supplierName').value,
                 address: {
-                    id: this.primaryAddress != null ? this.primaryAddress
+                    id: this.primaryItn != null ? this.tmpDataStore.get(this.primaryItn).supplier.address.id
                         : this.tmpDataStore.get(this.primaryMedicine).supplier.address.id,
                     subject: document.getElementById('subject').value,
                     district: document.getElementById('district').value.trim() || null,
@@ -330,7 +326,7 @@ class ProductManagement {
         this.currentStep = 1;
         this.primaryMedicine = null;
         this.primaryManufacturer = null;
-        this.primaryAddress = null;
+        this.primaryItn = null;
         this.tmpDataStore.clear();
 
         for (let i = 1; i < 4; i++) {
@@ -380,7 +376,7 @@ class ProductManagement {
         this.resultsContainer.innerHTML = '';
         if (results.length === 0) {
             this.primaryManufacturer = null;
-            this.primaryAddress = null;
+            this.primaryItn = null;
             return;
         }
 
@@ -443,10 +439,10 @@ class ProductManagement {
                     address: result.address
                 }
             };
-            this.primaryAddress = result.itn;
+            this.primaryItn = result.itn;
 
             // Сохраняем данные через WeakMap
-            this.tmpDataStore.set(this.primaryAddress, dataToStore);
+            this.tmpDataStore.set(this.primaryItn, dataToStore);
 
             // Дополнительно сохраняем в dataset для доступа из CSS/HTML
             parent.dataset.tmpData = JSON.stringify(dataToStore);

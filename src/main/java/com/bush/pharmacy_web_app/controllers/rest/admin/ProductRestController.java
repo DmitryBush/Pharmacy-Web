@@ -48,10 +48,12 @@ public class ProductRestController {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    public MedicineReadDto createProduct(@RequestBody @Validated MedicineCreateDto medicineCreateDto) {
-        return medicineService.createMedicine(medicineCreateDto)
+    public MedicineReadDto createProduct(@RequestPart("product") @Validated MedicineCreateDto medicineCreateDto,
+                                         @RequestPart("images") @Validated @ImageFile({"image/jpeg", "image/png", "image/webm"})
+                                         List<MultipartFile> images) {
+        return medicineService.createMedicine(medicineCreateDto, images)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
