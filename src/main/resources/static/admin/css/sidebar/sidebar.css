@@ -53,7 +53,7 @@
 .return-to-main {
     position: absolute;
     bottom: 50px;
-    width: 100%;
+    width: 80%;
     padding: 0.75rem 1.5rem;
     transition: background 0.3s;
 }
