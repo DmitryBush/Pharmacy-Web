@@ -50,6 +50,36 @@
     filter: invert(1);
 }
 
+.return-to-main {
+    position: absolute;
+    bottom: 50px;
+    width: 100%;
+    padding: 0.75rem 1.5rem;
+    transition: background 0.3s;
+}
+
+.return-to-main a {
+    color: white;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.return-to-main img {
+    width: 20px;
+    height: 20px;
+    filter: invert(1);
+}
+
+.return-to-main:hover {
+    background: #34495e;
+}
+
+.return-to-main.active {
+    background: #3498db;
+}
+
 @media (max-width: 768px) {
     .admin-sidebar {
         width: 60px;
@@ -61,6 +91,11 @@
     }
 
     .menu-item {
+        padding: 0.75rem;
+        justify-content: center;
+    }
+
+    .return-to-main {
         padding: 0.75rem;
         justify-content: center;
     }
