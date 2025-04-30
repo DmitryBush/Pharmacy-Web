@@ -1,7 +1,6 @@
 package com.bush.pharmacy_web_app.service;
 
 import com.bush.pharmacy_web_app.repository.MedicineImageRepository;
-import com.bush.pharmacy_web_app.repository.dto.medicine.MedicineImageReadDto;
 import com.bush.pharmacy_web_app.repository.entity.medicine.MedicineImage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;

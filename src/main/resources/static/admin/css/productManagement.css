@@ -188,6 +188,22 @@
     .product-item {
         flex-wrap: wrap;
     }
+
+    .admin-sidebar {
+        width: 60px;
+    }
+
+    .menu-item span {
+        display: none;
+    }
+
+    .main-content {
+        margin-left: 60px;
+    }
+
+    .menu-header {
+        display: none;
+    }
 }
 
 .modal-backdrop.active {
@@ -598,4 +614,17 @@ textarea.input-group:focus::placeholder {
 .close-modal:focus {
     outline: none;
     box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
+}
+
+.main-content {
+    margin-left: 240px;
+    padding: 2rem;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    font-feature-settings: 'kern' 1;
 }

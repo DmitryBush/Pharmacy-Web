@@ -36,14 +36,12 @@ import java.util.function.Predicate;
 public class MedicineService {
     private final MedicineRepository medicineRepository;
     private final PharmacyBranchRepository branchRepository;
-//    private final MedicineImageRepository imageRepository;
 
     private final MedicineReadMapper medicineReadMapper;
     private final MedicineCreateMapper medicineCreateMapper;
     private final PharmacyBranchReadMapper branchReadMapper;
     private final MedicineAdminReadMapper adminMedicineReadMapper;
 
-//    private final FileSystemStorageService storageService;
     private final MedicineImageService imageService;
 
     public List<MedicineReadDto> findAll() {

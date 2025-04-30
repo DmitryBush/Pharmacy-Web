@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+  <aside th:fragment="sidebar" class="admin-sidebar">
+    <nav>
+      <ul class="sidebar-menu">
+        <li class="menu-header">Аптека</li>
+        <li th:classappend="${currentUri.equals('/admin/dashboard')} ? 'menu-item active' : 'menu-item'">
+          <a href="/admin/dashboard">
+            <img src="/icons/dashboard.svg" alt="Главная">
+            <span>Главная</span>
+          </a>
+        </li>
+        <li th:classappend="${currentUri.equals('/admin/product')} ? 'menu-item active' : 'menu-item'">
+          <a href="/admin/product">
+            <img src="/icons/medication.svg" alt="Товары">
+            <span>Товары</span>
+          </a>
+        </li>
+        <li th:classappend="${currentUri.equals('/admin/orders')} ? 'menu-item active' : 'menu-item'">
+          <a href="/admin/orders">
+            <img src="/icons/orders.svg" alt="Заказы">
+            <span>Заказы</span>
+          </a>
+        </li>
+        <li th:classappend="${currentUri.equals('/admin/categories')} ? 'menu-item active' : 'menu-item'">
+          <a href="/admin/categories">
+            <img src="/icons/category.svg" alt="Категории">
+            <span>Категории</span>
+          </a>
+        </li>
+<!--        <li class="menu-header">Администрирование</li>-->
+<!--        <li class="menu-item">-->
+<!--          <a href="/admin/users">-->
+<!--            <img src="/icons/users.svg" alt="Пользователи">-->
+<!--            <span>Пользователи</span>-->
+<!--          </a>-->
+<!--        </li>-->
+<!--        <li class="menu-item">-->
+<!--          <a href="/admin/settings">-->
+<!--            <img src="/icons/settings.svg" alt="Настройки">-->
+<!--            <span>Настройки</span>-->
+<!--          </a>-->
+<!--        </li>-->
+      </ul>
+    </nav>
+    <link href="/admin/css/sidebar/sidebar.css" rel="stylesheet" type="text/css">
+  </aside>
+</body>
+</html>
