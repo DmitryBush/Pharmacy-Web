@@ -52,19 +52,20 @@ public class FileSystemStorageService {
         }
     }
 
-    public Path load(String filename) {
-        return rootLocation.resolve(filename);
-    }
-
-    public Resource loadAsResource(String filename) {
+    public Resource loadAsResource(String path) {
         try {
-            Path file = load(filename);
+            Path file = load(path);
             Resource resource = new UrlResource(file.toUri());
             if (resource.exists() || resource.isReadable())
                 return resource;
-            throw new StorageException(String.format("Unable to read file. Uri res: %s\n Filepath: %s", resource, file));
+            throw new StorageException(String.format("Unable to read file. Uri res: %s\nFilepath: %s\nRoot: %s",
+                    resource, file, rootLocation.toAbsolutePath()));
         } catch (MalformedURLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private Path load(String path) {
+        return rootLocation.resolve(path);
     }
 }
