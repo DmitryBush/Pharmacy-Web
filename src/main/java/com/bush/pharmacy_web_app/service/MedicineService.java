@@ -95,28 +95,12 @@ public class MedicineService {
     public Optional<MedicineReadDto> createMedicine(MedicineCreateDto createDto, List<MultipartFile> images) {
         return Optional.ofNullable(createDto)
                 .map(dto -> {
-                    TransactionSynchronizationManager.registerSynchronization(
-                            new TransactionSynchronization() {
-                                @Override
-                                public void afterCompletion(int status) {
-                                    if (status == STATUS_COMMITTED)
-                                        images.stream()
-                                                .filter(Predicate.not(MultipartFile::isEmpty))
-                                                .forEach(imageService::createImage);
-                                }
-                            }
-                    );
                     var mergedDto = MedicineCreateDto.IMAGES_STRATEGY_MERGE
                             .merge(MedicineCreateDto.builder().images(images).build(), createDto);
                     return medicineCreateMapper.map(mergedDto);
                 })
                 .map(medicineRepository::save)
-                .map(medicineReadMapper::map);
-    }
-    @Transactional
-    public Optional<MedicineReadDto> updateMedicine(Long id, MedicineCreateDto createDto, List<MultipartFile> images) {
-        return medicineRepository.findById(id)
-                .map(lamb -> {
+                .map(medicine -> {
                     TransactionSynchronizationManager.registerSynchronization(
                             new TransactionSynchronization() {
                                 @Override
@@ -124,16 +108,40 @@ public class MedicineService {
                                     if (status == STATUS_COMMITTED)
                                         images.stream()
                                                 .filter(Predicate.not(MultipartFile::isEmpty))
-                                                .forEach(imageService::createImage);
+                                                .forEach(file ->
+                                                        imageService.createImage(file,
+                                                                String.format("medicine/%d/", medicine.getId())));
                                 }
                             }
                     );
+                    return medicineReadMapper.map(medicine);
+                });
+    }
+    @Transactional
+    public Optional<MedicineReadDto> updateMedicine(Long id, MedicineCreateDto createDto, List<MultipartFile> images) {
+        return medicineRepository.findById(id)
+                .map(lamb -> {
                     var mergedDto = MedicineCreateDto.IMAGES_STRATEGY_MERGE
                             .merge(MedicineCreateDto.builder().images(images).build(), createDto);
                     return medicineCreateMapper.map(mergedDto, lamb);
                 })
                 .map(medicineRepository::saveAndFlush)
-                .map(medicineReadMapper::map);
+                .map(medicine -> {
+                    TransactionSynchronizationManager.registerSynchronization(
+                            new TransactionSynchronization() {
+                                @Override
+                                public void afterCompletion(int status) {
+                                    if (status == STATUS_COMMITTED)
+                                        images.stream()
+                                                .filter(Predicate.not(MultipartFile::isEmpty))
+                                                .forEach(file ->
+                                                        imageService.createImage(file,
+                                                                String.format("medicine/%d/", medicine.getId())));
+                                }
+                            }
+                    );
+                    return medicineReadMapper.map(medicine);
+                });
     }
     @Transactional
     public boolean deleteMedicine(Long id) {
@@ -150,10 +158,10 @@ public class MedicineService {
                                 public void afterCompletion(int status) {
                                     if (status == STATUS_COMMITTED)
                                         images.forEach(imageService::deleteImage);
-
                                 }
                             }
                     );
+
                     medicineRepository.delete(medicine);
                     return true;
                 })

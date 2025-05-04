@@ -132,7 +132,13 @@ class ProductManagement {
         if (confirm('Удалить товар?')) {
             try {
                 await this.fetchData(`/api/admin/product/${productId}`, `DELETE`);
-                event.currentTarget.closest('.product-item').remove();
+                const item = document.querySelector(`[data-product-id="${productId}"]`);
+                if (item) {
+                    item.remove();
+                } else {
+                    console.warn('Элемент не найден');
+                    window.location.reload();
+                }
             } catch (error) {
                 alert('Ошибка при удалении: ' + error.message);
             }
@@ -250,13 +256,14 @@ class ProductManagement {
         }
     }
 
-    fillProduct() {
+    fillProduct(updateMode) {
         return {
             name: document.getElementById('name').value,
             type: document.getElementById('type').value,
             manufacturer: {
-                id: this.primaryManufacturer != null ? this.primaryManufacturer
-                    : this.tmpDataStore.get(this.primaryMedicine).manufacturer.id,
+                id: updateMode
+                    ? this.tmpDataStore.get(this.primaryMedicine)?.manufacturer?.id ?? null
+                    : this.primaryManufacturer ?? null,
                 name: document.getElementById('manufacturerName').value,
                 country: {
                     country: document.getElementById('country').value,
@@ -266,8 +273,9 @@ class ProductManagement {
                 itn: document.getElementById('itn').value,
                 name: document.getElementById('supplierName').value,
                 address: {
-                    id: this.primaryItn != null ? this.tmpDataStore.get(this.primaryItn).supplier.address.id
-                        : this.tmpDataStore.get(this.primaryMedicine).supplier.address.id,
+                    id: updateMode
+                        ? this.tmpDataStore.get(this.primaryMedicine)?.supplier?.address?.id ?? null
+                        : this.tmpDataStore.get(this.primaryItn)?.address?.id ?? null,
                     subject: document.getElementById('subject').value,
                     district: document.getElementById('district').value.trim() || null,
                     settlement: document.getElementById('settlement').value,
@@ -549,7 +557,7 @@ class ProductManagement {
                 if (this.validateStep(this.currentStep)) {
                     const formData = new FormData();
                     const productBlob = new Blob(
-                        [JSON.stringify(this.fillProduct())],
+                        [JSON.stringify(this.fillProduct(updateMode))],
                         { type: 'application/json' }
                     );
                     formData.append('product', productBlob, 'product.json');
@@ -567,6 +575,7 @@ class ProductManagement {
                             'POST', formData);
                     }
                     this.closeCreateMenu();
+                    window.location.reload();
                 } else {
                     alert("Ошибка валидации");
                 }

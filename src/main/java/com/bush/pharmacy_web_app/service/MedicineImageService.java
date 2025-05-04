@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -39,12 +41,13 @@ public class MedicineImageService {
 
     public Optional<Resource> findImageById(Long id) {
         return imageRepository.findById(id)
-                .map(MedicineImage::getPath)
-                .map(storageService::loadAsResource);
+                .map(image ->
+                        storageService.loadAsResource(String.format("medicine/%d/%s",
+                                image.getMedicine().getId(), image.getPath())));
     }
 
-    public void createImage(MultipartFile file) {
-        storageService.store(file);
+    public void createImage(MultipartFile file, String path) {
+        storageService.store(file, path);
     }
 
     @Transactional
@@ -52,7 +55,16 @@ public class MedicineImageService {
         return imageRepository.findById(id)
                 .map(medicineImage -> {
                     imageRepository.delete(medicineImage);
-                    storageService.delete(medicineImage.getPath());
+
+                    TransactionSynchronizationManager.registerSynchronization(
+                            new TransactionSynchronization() {
+                                @Override
+                                public void afterCommit() {
+                                    storageService.delete(String.format("medicine/%d/%s",
+                                            medicineImage.getMedicine().getId(), medicineImage.getPath()));
+                                }
+                            }
+                    );
                     return true;
                 })
                 .orElse(false);
@@ -60,6 +72,6 @@ public class MedicineImageService {
 
     public Optional<Resource> findProductImageByIdAndName(Long id, String filename) {
         return findImageByMedicineIdAndPath(id, filename)
-                .map(storageService::loadAsResource);
+                .map(path -> storageService.loadAsResource(String.format("medicine/%d/%s", id, path)));
     }
 }

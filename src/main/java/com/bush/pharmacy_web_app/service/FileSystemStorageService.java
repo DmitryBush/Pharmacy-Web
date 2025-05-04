@@ -26,29 +26,66 @@ public class FileSystemStorageService {
 
     public void store(MultipartFile file) {
         try {
-            if (file.isEmpty())
-                throw new StorageException("Upload file is empty");
+            checkEmptyFile(file);
             Path dir = Paths.get(rootLocation.toString(), Optional.ofNullable(file.getOriginalFilename()).orElseThrow())
                     .normalize()
                     .toAbsolutePath();
-            if (!dir.getParent().equals(rootLocation.toAbsolutePath())) {
-                throw new StorageException("The file being uploaded cannot be located outside the upload area. " +
-                        String.format("\nRoot location:%s\nCurrent saved location:%s", rootLocation.toAbsolutePath(), dir));
-            }
+            validatePath(dir);
             try(var inputStream = file.getInputStream()) {
                 Files.copy(inputStream, dir, StandardCopyOption.REPLACE_EXISTING);
             }
         } catch (IOException e) {
-            throw new StorageException("An error occurred while saving the file ", e);
+            throw new StorageException("An error occurred while saving the file", e);
         }
     }
 
-    public void delete(String filename) {
+    public void store(MultipartFile file, String path) {
         try {
-            Path file = load(filename);
-            Files.delete(file);
+            checkEmptyFile(file);
+            Path dir = Paths.get(rootLocation.toString(),
+                            path, Optional.ofNullable(file.getOriginalFilename()).orElseThrow())
+                    .normalize()
+                    .toAbsolutePath();
+            validatePath(dir);
+            if (!Files.exists(load(path)))
+                Files.createDirectories(load(path));
+            try(var inputStream = file.getInputStream()) {
+                Files.copy(inputStream, dir, StandardCopyOption.REPLACE_EXISTING);
+            }
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new StorageException("An error occurred while saving the file", e);
+        }
+    }
+
+    private void validatePath(Path dir) {
+        if (!dir.startsWith(rootLocation.normalize().toAbsolutePath())) {
+            throw new StorageException("The file being uploaded cannot be located outside the upload area. " +
+                    String.format("\nRoot location:%s\nCurrent saved location:%s", rootLocation.toAbsolutePath(), dir));
+        }
+    }
+
+    private static void checkEmptyFile(MultipartFile file) {
+        if (file.isEmpty())
+            throw new StorageException("Upload file is empty");
+    }
+
+    public void delete(String path) {
+        try {
+            Path file = load(path);
+            validatePath(file);
+            if (!Files.exists(file))
+                throw new NoSuchFileException(String.format("File with directory %s doesn't exists", file));
+
+            Files.delete(file);
+
+            if (!file.getParent().equals(rootLocation)) {
+                try (var dirStream = Files.newDirectoryStream(file.getParent())) {
+                    if (!dirStream.iterator().hasNext())
+                        Files.delete(file.getParent());
+                }
+            }
+        } catch (IOException e) {
+            throw new StorageException(e.getMessage());
         }
     }
 
@@ -66,6 +103,6 @@ public class FileSystemStorageService {
     }
 
     private Path load(String path) {
-        return rootLocation.resolve(path);
+        return rootLocation.resolve(path).normalize().toAbsolutePath();
     }
 }

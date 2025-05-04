@@ -41,7 +41,7 @@ public class OrderRepositoryTest {
     public void findCustomerOrdersByPhone() {
         var orders = orderRepository.findByUserMobilePhone("+79162345678", page);
         orders.stream()
-                .flatMap(lamb -> lamb.getCartItems().stream())
+                .flatMap(lamb -> lamb.getOrderItemList().stream())
                 .forEach(System.out::println);
 
         Assertions.assertNotNull(orders);
