@@ -21,3 +21,5 @@ databaseChangeLog:
       file: db/changelog/maintenance/changelog-1.1.4.2.sql
   - include:
       file: db/changelog/maintenance/changelog-1.1.5.sql
+  - include:
+      file: db/changelog/maintenance/changelog-1.1.6.sql
