@@ -15,6 +15,8 @@ public class ImageFileValidator implements ConstraintValidator<ImageFile, List<M
 
     @Override
     public boolean isValid(List<MultipartFile> multipartFiles, ConstraintValidatorContext constraintValidatorContext) {
+        if (multipartFiles == null)
+            return true;
         if (multipartFiles.isEmpty())
             return true;
 

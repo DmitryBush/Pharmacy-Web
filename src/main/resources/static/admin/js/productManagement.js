@@ -258,37 +258,37 @@ class ProductManagement {
 
     fillProduct(updateMode) {
         return {
-            name: document.getElementById('name').value,
-            type: document.getElementById('type').value,
+            name: document.getElementById('name').value.trim(),
+            type: document.getElementById('type').value.trim(),
             manufacturer: {
                 id: updateMode
                     ? this.tmpDataStore.get(this.primaryMedicine)?.manufacturer?.id ?? null
                     : this.primaryManufacturer ?? null,
-                name: document.getElementById('manufacturerName').value,
+                name: document.getElementById('manufacturerName').value.trim(),
                 country: {
-                    country: document.getElementById('country').value,
+                    country: document.getElementById('country').value.trim(),
                 }
             },
             supplier: {
-                itn: document.getElementById('itn').value,
-                name: document.getElementById('supplierName').value,
+                itn: document.getElementById('itn').value.trim(),
+                name: document.getElementById('supplierName').value.trim(),
                 address: {
                     id: updateMode
                         ? this.tmpDataStore.get(this.primaryMedicine)?.supplier?.address?.id ?? null
                         : this.tmpDataStore.get(this.primaryItn)?.address?.id ?? null,
-                    subject: document.getElementById('subject').value,
+                    subject: document.getElementById('subject').value.trim(),
                     district: document.getElementById('district').value.trim() || null,
-                    settlement: document.getElementById('settlement').value,
-                    street: document.getElementById('street').value,
-                    house: document.getElementById('house').value,
+                    settlement: document.getElementById('settlement').value.trim(),
+                    street: document.getElementById('street').value.trim(),
+                    house: document.getElementById('house').value.trim(),
                     apartment: document.getElementById('apartment').value.trim() || null,
-                    postalCode: document.getElementById('postalCode').value
+                    postalCode: document.getElementById('postalCode').value.trim()
                 }
             },
             price: parseFloat(document.getElementById('price').value),
             recipe: document.querySelector('input[name="recipe"]:checked').value === "1",
-            activeIngredient: document.getElementById('activeIngredient').value,
-            expirationDate: document.getElementById('expirationDate').value,
+            activeIngredient: document.getElementById('activeIngredient').value.trim(),
+            expirationDate: document.getElementById('expirationDate').value.trim(),
             composition: document.getElementById('composition').value,
             indication: document.getElementById('indication').value,
             contraindication: document.getElementById('contraindication').value,
@@ -564,9 +564,8 @@ class ProductManagement {
 
                     if (this.newImagesFiles.length > 0) {
                         this.newImagesFiles.forEach(file => formData.append('images', file));
-                    } else {
-                        formData.append('images', new File([], 'empty'));
                     }
+
                     if (updateMode) {
                         await this.fetchData(`/api/admin/product/${this.primaryMedicine}`,
                             'PUT', formData);

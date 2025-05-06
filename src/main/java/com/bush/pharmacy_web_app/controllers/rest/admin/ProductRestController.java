@@ -9,6 +9,7 @@ import com.bush.pharmacy_web_app.validation.ImageFile;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -27,6 +28,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/admin/product")
 @RequiredArgsConstructor
@@ -51,7 +53,8 @@ public class ProductRestController {
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public MedicineReadDto createProduct(@RequestPart("product") @Validated MedicineCreateDto medicineCreateDto,
-                                         @RequestPart("images") @Validated @ImageFile({"image/jpeg", "image/png", "image/webm"})
+                                         @RequestPart(value = "images", required = false)
+                                         @Validated @ImageFile({"image/jpeg", "image/png", "image/webp"})
                                          List<MultipartFile> images) {
         return medicineService.createMedicine(medicineCreateDto, images)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));

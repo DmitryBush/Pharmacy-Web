@@ -106,11 +106,12 @@ public class MedicineService {
                                 @Override
                                 public void afterCompletion(int status) {
                                     if (status == STATUS_COMMITTED)
-                                        images.stream()
-                                                .filter(Predicate.not(MultipartFile::isEmpty))
-                                                .forEach(file ->
-                                                        imageService.createImage(file,
-                                                                String.format("medicine/%d/", medicine.getId())));
+                                        Optional.ofNullable(images)
+                                                .ifPresent(image -> image
+                                                        .stream()
+                                                        .filter(Predicate.not(MultipartFile::isEmpty))
+                                                        .forEach(file -> imageService.createImage(file,
+                                                                String.format("medicine/%d/", medicine.getId()))));
                                 }
                             }
                     );
@@ -132,11 +133,12 @@ public class MedicineService {
                                 @Override
                                 public void afterCompletion(int status) {
                                     if (status == STATUS_COMMITTED)
-                                        images.stream()
-                                                .filter(Predicate.not(MultipartFile::isEmpty))
-                                                .forEach(file ->
-                                                        imageService.createImage(file,
-                                                                String.format("medicine/%d/", medicine.getId())));
+                                        Optional.ofNullable(images)
+                                                .ifPresent(image -> image
+                                                        .stream()
+                                                        .filter(Predicate.not(MultipartFile::isEmpty))
+                                                        .forEach(file -> imageService.createImage(file,
+                                                                String.format("medicine/%d/", medicine.getId()))));
                                 }
                             }
                     );
