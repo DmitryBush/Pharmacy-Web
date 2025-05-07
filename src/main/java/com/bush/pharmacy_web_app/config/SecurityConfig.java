@@ -19,7 +19,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.ignoringRequestMatchers("/api/**"))
                 .authorizeHttpRequests(lamb -> lamb
                         .requestMatchers("/login", "/register", "/catalog/**", "/", "/cart", "/error"
-                        ,"/api/**").permitAll()
+                        ,"/api/**", "/css/**", "/js/**").permitAll()
                         .requestMatchers("/admin/**").permitAll()
                         .anyRequest().authenticated())
                 .httpBasic(Customizer.withDefaults())

@@ -1,6 +1,6 @@
 package com.bush.pharmacy_web_app.repository.mapper.admin;
 
-import com.bush.pharmacy_web_app.repository.dto.admin.MedicineAdminReadDto;
+import com.bush.pharmacy_web_app.repository.dto.medicine.MedicineAdminReadDto;
 import com.bush.pharmacy_web_app.repository.dto.medicine.MedicineImageReadDto;
 import com.bush.pharmacy_web_app.repository.entity.medicine.Medicine;
 import com.bush.pharmacy_web_app.repository.entity.medicine.MedicineType;

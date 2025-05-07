@@ -23,7 +23,7 @@ public class CatalogController {
                                   MedicineFilter filter,
                                   @PageableDefault(size = 15, sort = "price", direction = Sort.Direction.ASC)
                                        Pageable pageable) {
-        var page = service.findAll(filter, pageable);
+        var page = service.findAllPreviews(filter, pageable);
 
         model.addAttribute("types", service.findAllTypes());
         model.addAttribute("manufacturers", service.findAllManufacturers());
@@ -34,7 +34,7 @@ public class CatalogController {
     @GetMapping("/{id}")
     public String getProduct(Model model,
                              @PathVariable Long id) {
-        var product = service.findDtoById(id).orElseThrow();
+        var product = service.findMedicineById(id).orElseThrow();
 
         model.addAttribute("product", product);
         return "catalog/product";

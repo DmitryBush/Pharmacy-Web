@@ -1,16 +1,14 @@
 package com.bush.pharmacy_web_app.controllers.rest.admin;
 
-import com.bush.pharmacy_web_app.repository.dto.admin.MedicineAdminReadDto;
+import com.bush.pharmacy_web_app.repository.dto.medicine.MedicineAdminReadDto;
 import com.bush.pharmacy_web_app.repository.dto.medicine.MedicineCreateDto;
-import com.bush.pharmacy_web_app.repository.dto.medicine.MedicineReadDto;
+import com.bush.pharmacy_web_app.repository.dto.medicine.MedicinePreviewReadDto;
 import com.bush.pharmacy_web_app.repository.filter.MedicineFilter;
 import com.bush.pharmacy_web_app.service.MedicineService;
 import com.bush.pharmacy_web_app.validation.ImageFile;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -36,12 +34,12 @@ public class ProductRestController {
     private final MedicineService medicineService;
 
     @GetMapping
-    public HttpEntity<PagedModel<EntityModel<MedicineReadDto>>> findAllProducts(MedicineFilter medicineFilter,
-                                                                                @PageableDefault(size = 15, sort = "price",
+    public HttpEntity<PagedModel<EntityModel<MedicinePreviewReadDto>>> findAllProducts(MedicineFilter medicineFilter,
+                                                                                       @PageableDefault(size = 15, sort = "price",
                                                                                        direction = Sort.Direction.ASC)
                                                                                Pageable pageable,
-                                                                                PagedResourcesAssembler<MedicineReadDto> assembler) {
-        return ResponseEntity.ok(assembler.toModel(medicineService.findAll(medicineFilter, pageable)));
+                                                                                       PagedResourcesAssembler<MedicinePreviewReadDto> assembler) {
+        return ResponseEntity.ok(assembler.toModel(medicineService.findAllPreviews(medicineFilter, pageable)));
     }
 
     @GetMapping("/{id}")
@@ -52,8 +50,8 @@ public class ProductRestController {
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    public MedicineReadDto createProduct(@RequestPart("product") @Validated MedicineCreateDto medicineCreateDto,
-                                         @RequestPart(value = "images", required = false)
+    public MedicinePreviewReadDto createProduct(@RequestPart("product") @Validated MedicineCreateDto medicineCreateDto,
+                                                @RequestPart(value = "images", required = false)
                                          @Validated @ImageFile({"image/jpeg", "image/png", "image/webp"})
                                          List<MultipartFile> images) {
         return medicineService.createMedicine(medicineCreateDto, images)
@@ -62,9 +60,9 @@ public class ProductRestController {
 
     @PutMapping(value = "/{id}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     @ResponseStatus(HttpStatus.CREATED)
-    public MedicineReadDto updateProduct(@PathVariable Long id,
-                                         @RequestPart("product") @Validated MedicineCreateDto medicineCreateDto,
-                                         @RequestPart(value = "images", required = false)
+    public MedicinePreviewReadDto updateProduct(@PathVariable Long id,
+                                                @RequestPart("product") @Validated MedicineCreateDto medicineCreateDto,
+                                                @RequestPart(value = "images", required = false)
                                              @Validated @NotNull @ImageFile({"image/jpeg", "image/png", "image/webm"})
                                              List<MultipartFile> images) {
         return medicineService.updateMedicine(id, medicineCreateDto, images)

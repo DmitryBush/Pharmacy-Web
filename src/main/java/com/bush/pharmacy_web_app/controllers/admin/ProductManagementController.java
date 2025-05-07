@@ -21,7 +21,7 @@ public class ProductManagementController {
                                   MedicineFilter medicineFilter,
                                   @PageableDefault(size = 15, sort = "price", direction = Sort.Direction.ASC) Pageable pageable,
                                   HttpServletRequest request) {
-        var page = medicineService.findAll(medicineFilter, pageable);
+        var page = medicineService.findAllPreviews(medicineFilter, pageable);
 
         model.addAttribute("products", page);
         model.addAttribute("currentUri", request.getRequestURI());

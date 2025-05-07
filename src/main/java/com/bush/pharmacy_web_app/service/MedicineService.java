@@ -1,23 +1,17 @@
 package com.bush.pharmacy_web_app.service;
 
-import com.bush.pharmacy_web_app.repository.MedicineImageRepository;
 import com.bush.pharmacy_web_app.repository.MedicineRepository;
 import com.bush.pharmacy_web_app.repository.PharmacyBranchRepository;
-import com.bush.pharmacy_web_app.repository.dto.admin.MedicineAdminReadDto;
-import com.bush.pharmacy_web_app.repository.dto.medicine.MedicineCreateDto;
-import com.bush.pharmacy_web_app.repository.dto.medicine.MedicineManufacturer;
-import com.bush.pharmacy_web_app.repository.dto.medicine.MedicineTypeDto;
+import com.bush.pharmacy_web_app.repository.dto.medicine.*;
 import com.bush.pharmacy_web_app.repository.dto.orders.PharmacyBranchReadDto;
 import com.bush.pharmacy_web_app.repository.entity.medicine.MedicineImage;
 import com.bush.pharmacy_web_app.repository.filter.MedicineFilter;
-import com.bush.pharmacy_web_app.repository.dto.medicine.MedicineReadDto;
 import com.bush.pharmacy_web_app.repository.mapper.medicine.MedicineCreateMapper;
 import com.bush.pharmacy_web_app.repository.mapper.admin.MedicineAdminReadMapper;
-import com.bush.pharmacy_web_app.repository.mapper.orders.MedicineReadMapper;
+import com.bush.pharmacy_web_app.repository.mapper.medicine.MedicinePreviewReadMapper;
+import com.bush.pharmacy_web_app.repository.mapper.medicine.MedicineReadMapper;
 import com.bush.pharmacy_web_app.repository.mapper.orders.PharmacyBranchReadMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.autoconfigure.pulsar.PulsarProperties;
-import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -37,6 +31,7 @@ public class MedicineService {
     private final MedicineRepository medicineRepository;
     private final PharmacyBranchRepository branchRepository;
 
+    private final MedicinePreviewReadMapper medicinePreviewReadMapper;
     private final MedicineReadMapper medicineReadMapper;
     private final MedicineCreateMapper medicineCreateMapper;
     private final PharmacyBranchReadMapper branchReadMapper;
@@ -44,15 +39,15 @@ public class MedicineService {
 
     private final MedicineImageService imageService;
 
-    public List<MedicineReadDto> findAll() {
+    public List<MedicinePreviewReadDto> findAllPreviews() {
         return medicineRepository.findAll().stream()
-                .map(medicineReadMapper::map)
+                .map(medicinePreviewReadMapper::map)
                 .toList();
     }
 
-    public Page<MedicineReadDto> findAll(MedicineFilter filter, Pageable pageable) {
+    public Page<MedicinePreviewReadDto> findAllPreviews(MedicineFilter filter, Pageable pageable) {
         return medicineRepository.findAllByFilter(filter, pageable)
-                .map(medicineReadMapper::map);
+                .map(medicinePreviewReadMapper::map);
     }
 
     public List<MedicineTypeDto> findAllTypes() {
@@ -67,7 +62,7 @@ public class MedicineService {
                 .toList();
     }
 
-    public Optional<MedicineReadDto> findDtoById(Long id) {
+    public Optional<MedicineReadDto> findMedicineById(Long id) {
         return medicineRepository.findById(id)
                 .map(medicineReadMapper::map);
     }
@@ -77,10 +72,10 @@ public class MedicineService {
                 .map(adminMedicineReadMapper::map);
     }
 
-    public List<MedicineReadDto> findByContainingName(String name) {
+    public List<MedicinePreviewReadDto> findByContainingName(String name) {
         return medicineRepository.findByNameContainingIgnoreCase(name)
                 .stream()
-                .map(medicineReadMapper::map)
+                .map(medicinePreviewReadMapper::map)
                 .toList();
     }
 
@@ -92,7 +87,7 @@ public class MedicineService {
     }
 
     @Transactional
-    public Optional<MedicineReadDto> createMedicine(MedicineCreateDto createDto, List<MultipartFile> images) {
+    public Optional<MedicinePreviewReadDto> createMedicine(MedicineCreateDto createDto, List<MultipartFile> images) {
         return Optional.ofNullable(createDto)
                 .map(dto -> {
                     var mergedDto = MedicineCreateDto.IMAGES_STRATEGY_MERGE
@@ -115,11 +110,11 @@ public class MedicineService {
                                 }
                             }
                     );
-                    return medicineReadMapper.map(medicine);
+                    return medicinePreviewReadMapper.map(medicine);
                 });
     }
     @Transactional
-    public Optional<MedicineReadDto> updateMedicine(Long id, MedicineCreateDto createDto, List<MultipartFile> images) {
+    public Optional<MedicinePreviewReadDto> updateMedicine(Long id, MedicineCreateDto createDto, List<MultipartFile> images) {
         return medicineRepository.findById(id)
                 .map(lamb -> {
                     var mergedDto = MedicineCreateDto.IMAGES_STRATEGY_MERGE
@@ -142,7 +137,7 @@ public class MedicineService {
                                 }
                             }
                     );
-                    return medicineReadMapper.map(medicine);
+                    return medicinePreviewReadMapper.map(medicine);
                 });
     }
     @Transactional

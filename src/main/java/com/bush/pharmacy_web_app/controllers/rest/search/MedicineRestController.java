@@ -1,6 +1,6 @@
 package com.bush.pharmacy_web_app.controllers.rest.search;
 
-import com.bush.pharmacy_web_app.repository.dto.medicine.MedicineReadDto;
+import com.bush.pharmacy_web_app.repository.dto.medicine.MedicinePreviewReadDto;
 import com.bush.pharmacy_web_app.service.MedicineService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,7 +16,7 @@ public class MedicineRestController {
     private final MedicineService medicineService;
 
     @GetMapping
-    public List<MedicineReadDto> findMedicineByName(String name) {
+    public List<MedicinePreviewReadDto> findMedicineByName(String name) {
         return medicineService.findByContainingName(name);
     }
 }
