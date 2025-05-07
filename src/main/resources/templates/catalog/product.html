@@ -10,7 +10,7 @@
         <h1 th:text="${product.name}"></h1>
         <div class="product-main-content">
             <div class="product-image-section">
-                <img src="https://cdn.kama-med.ru/images/products/1/6479/373201231/bint-elast.jpg"
+                <img th:src="@{/api/product-image/{id}/{image}(id=${product.id},image=${product.imagePaths.get(0).path})}"
                      alt="[(${product.name})]"
                      width="350px"
                      class="product-image">

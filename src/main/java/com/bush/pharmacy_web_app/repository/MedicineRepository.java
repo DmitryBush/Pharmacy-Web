@@ -1,6 +1,8 @@
 package com.bush.pharmacy_web_app.repository;
 
+import com.bush.pharmacy_web_app.repository.entity.manufacturer.Manufacturer;
 import com.bush.pharmacy_web_app.repository.entity.medicine.Medicine;
+import com.bush.pharmacy_web_app.repository.entity.medicine.MedicineType;
 import com.bush.pharmacy_web_app.repository.filter.FilterMedicineRepository;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -17,7 +19,7 @@ public interface MedicineRepository extends JpaRepository<Medicine, Long>, Filte
     List<Medicine> findByNameContainingIgnoreCase(String name);
 
     @Query("select distinct m.type from Medicine m ")
-    List<String> findDistinctMedicineType();
+    List<MedicineType> findDistinctMedicineType();
     @Query("select distinct m.manufacturer from Medicine m ")
-    List<String> findDistinctMedicineManufacturer();
+    List<Manufacturer> findDistinctMedicineManufacturer();
 }

@@ -52,13 +52,13 @@ public class MedicineService {
 
     public List<MedicineTypeDto> findAllTypes() {
         return medicineRepository.findDistinctMedicineType().stream()
-                .map(MedicineTypeDto::new)
+                .map(type -> new MedicineTypeDto(type.getType()))
                 .toList();
     }
 
-    public List<MedicineManufacturer> findAllManufacturers() {
+    public List<MedicineManufacturerDto> findAllManufacturers() {
         return medicineRepository.findDistinctMedicineManufacturer().stream()
-                .map(MedicineManufacturer::new)
+                .map(manufacturer -> new MedicineManufacturerDto(manufacturer.getName()))
                 .toList();
     }
 

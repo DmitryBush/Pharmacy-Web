@@ -1,0 +1,230 @@
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    font-feature-settings: 'kern' 1;
+}
+
+.catalog-page {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 30px;
+    align-items: start;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.catalog-page > h1 {
+    grid-column: 1 / -1;
+    margin: 0 0 20px 0;
+}
+
+.filter-container {
+    position: sticky;
+    top: 20px;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+    height: fit-content;
+    gap: 35px;
+}
+
+.filter-section h3 {
+    color: #0078D7;
+    margin: 0 0 20px 0;
+    font-size: 1.1rem;
+}
+
+.price-filter-group {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.price-filter-group input {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.filter-section ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.filter-section li {
+    margin: 10px 0;
+    min-height: 20px;
+}
+
+.filter-section label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    font-size: 0.95rem;
+}
+
+.filter-section input[type="checkbox"],
+.filter-section input[type="radio"] {
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+    accent-color: #3498db;
+}
+
+.filter-actions {
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+}
+
+button[type="submit"] {
+    background: #0078D7;
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+button[type="submit"]:hover {
+    background: #0063B1;
+}
+
+#resetFilters {
+    background: #FF4343;
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+#resetFilters:hover {
+    background: #E81123;
+    padding: 12px 25px;
+}
+
+.product-list-container {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.sort-container {
+    margin-bottom: 15px;
+    text-align: right;
+}
+
+#sortBy {
+    padding: 8px 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 25px;
+}
+
+.product-card {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.product-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: contain;
+    border-radius: 5px;
+}
+
+.product-card a {
+    color: #2c3e50;
+    text-decoration: none;
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+    display: block;
+}
+
+.product-card p {
+    color: #27ae60;
+    font-size: 1.4rem;
+    margin: 15px 0;
+}
+
+.product-card button {
+    background: #27ae60;
+    color: white;
+    padding: 10px 25px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.product-card button:hover {
+    background: #10893E;
+}
+
+.pagination-container {
+    margin-top: 40px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.pagination-container a:hover {
+    background: #2980b9;
+}
+
+.pagination-container span {
+    color: #95a5a6;
+    padding: 8px 15px;
+}
+
+#pageSize {
+    padding: 6px 12px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-left: 10px;
+}
+
+@media (max-width: 768px) {
+    .catalog-page {
+        grid-template-columns: 1fr;
+    }
+
+    .filter-container {
+        position: static;
+        margin-bottom: 30px;
+    }
+
+    .product-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .sort-container {
+        text-align: left;
+    }
+}
