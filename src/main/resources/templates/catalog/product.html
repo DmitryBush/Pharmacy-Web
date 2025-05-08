@@ -10,10 +10,17 @@
         <h1 th:text="${product.name}"></h1>
         <div class="product-main-content">
             <div class="product-image-section">
-                <img th:src="@{/api/product-image/{id}/{image}(id=${product.id},image=${product.imagePaths.get(0).path})}"
-                     alt="[(${product.name})]"
-                     width="350px"
-                     class="product-image">
+                <div class="carousel">
+                    <div class="carousel-container">
+                        <img th:each="image : ${product.imagePaths}"
+                             th:src="@{/api/product-image/{id}/{image}(id=${product.id},image=${image.path})}"
+                             th:alt="${product.name}"
+                             width="350px"
+                             class="product-image">
+                    </div>
+                    <button class="carousel-btn prev">❮</button>
+                    <button class="carousel-btn next">❯</button>
+                </div>
             </div>
             <div class="product-details-section">
                 <div class="product-info">

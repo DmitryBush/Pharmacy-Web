@@ -55,3 +55,20 @@ function showError(error) {
     const container = document.getElementById('availability-stores-container');
     container.innerHTML = `<div class="error">Ошибка загрузки данных: ${error.message}</div>`;
 }
+
+const carousel = document.querySelector(".carousel-container");
+const images = document.querySelectorAll(".product-image");
+
+let imageIndex = 0;
+
+function slideImage(index) {
+    if (index >= images.length)
+        index = 0;
+    else if (index < 0)
+        index = images.length - 1;
+    carousel.style.transform = `translateX(-${index * 100}%)`;
+    imageIndex = index;
+}
+
+document.querySelector('.prev').addEventListener('click', () => slideImage(imageIndex - 1));
+document.querySelector('.next').addEventListener('click', () => slideImage(imageIndex + 1));
