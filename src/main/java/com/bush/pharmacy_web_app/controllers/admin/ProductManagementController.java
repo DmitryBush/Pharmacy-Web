@@ -29,10 +29,11 @@ public class ProductManagementController {
     }
 
     @GetMapping("/{id}")
-    public String getProduct(Model model, @PathVariable Long id) {
+    public String getProduct(Model model, @PathVariable Long id, HttpServletRequest request) {
         var product = medicineService.findAdminDtoById(id)
                         .orElseThrow();
         model.addAttribute("product", product);
+        model.addAttribute("currentUri", request.getRequestURI());
         return "admin/editingProduct";
     }
 }

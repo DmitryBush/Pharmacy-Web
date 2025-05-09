@@ -7,294 +7,297 @@
     <link href="/css/product/product.css" rel="stylesheet" type="text/css">
 </head>
 <body>
-    <a th:href="@{/admin/product}">Назад к списку продуктов</a>
-    <h1>Редактирование продукта</h1>
-    <div class="edit-display">
-        <div class="button-group">
-            <button class="toggle-btn active" id="editBtn">Редактировать</button>
-            <button class="toggle-btn" id="previewBtn">Превью</button>
-        </div>
-        <div class="image-preview-container">
-            <div id="imagePreview" class="preview-container">
-                <!-- existing images -->
-                <div th:each="image : ${product.imagePaths}" class="image-item">
-                    <img th:src="@{/api/product-image/{id}/{image}(id=${product.id},image=${image.path})}"
-                         th:alt="${product.name}"
-                         width="350px">
-                    <button class="delete-image-btn" th:data-id="${image.id}">×</button>
-                </div>
+    <div th:replace="~{/admin/sidebar/sidebar.html :: sidebar}"></div>
+    <main class="main-content">
+        <a class="back-link" th:href="@{/admin/product}">Назад к списку продуктов</a>
+        <h1>Редактирование продукта</h1>
+        <div class="edit-display">
+            <div class="button-group">
+                <button class="toggle-btn active" id="editBtn">Редактировать</button>
+                <button class="toggle-btn" id="previewBtn">Превью</button>
+            </div>
+            <div class="image-preview-container">
+                <div id="imagePreview" class="preview-container">
+                    <!-- existing images -->
+                    <div th:each="image : ${product.imagePaths}" class="image-item">
+                        <img th:src="@{/api/product-image/{id}/{image}(id=${product.id},image=${image.path})}"
+                             th:alt="${product.name}"
+                             width="350px">
+                        <button class="delete-image-btn" th:data-id="${image.id}">×</button>
+                    </div>
 
-                <!-- new images -->
+                    <!-- new images -->
+                </div>
             </div>
-        </div>
-        <div id="product-id" th:data-id="${product.id}">
-            <form id="productCreationForm" name="productCreationForm">
-                <label class="file-input-label">
-                    <input type="file" id="imageInput" accept="image/*" multiple hidden>
-                    + Добавить изображения
-                </label>
-                <div>
-                  <label class="input-group" for="name">
-                    Название товара
-                    <input class="input-group" type="text" id="name" th:value="${product.name}" required>
-                  </label>
-                </div>
-                <div>
-                  <label class="input-group" for="type">
-                    Тип товара
-                    <input class="input-group" type="text" id="type" th:value="${product.type}" required>
-                  </label>
-                </div>
-                <div>
-                  <label class="input-group" for="price">
-                    Цена
-                    <input class="input-group" type="number" id="price" step="0.01" th:value="${product.price}" required>
-                  </label>
-                </div>
-                <div class="form-radio">
-                  <fieldset>
-                    <legend>Требуется рецепт</legend>
-                    <label class="radio-label">
-                      <input type="radio" name="recipe" class="recipe-input" value="1" th:checked="${product.recipe == true}">
-                      Да
+            <div id="product-id" th:data-id="${product.id}">
+                <form id="productCreationForm" name="productCreationForm">
+                    <label class="file-input-label">
+                        <input type="file" id="imageInput" accept="image/*" multiple hidden>
+                        + Добавить изображения
                     </label>
-                    <label class="radio-label">
-                      <input type="radio" name="recipe" class="recipe-input" value="0" th:checked="${product.recipe == false}">
-                      Нет
-                    </label>
-                  </fieldset>
-                </div>
-                <div>
-                    <label class="input-group" for="active-ingredient">
-                        Активный ингредиент
-                        <input class="input-group" type="text" id="active-ingredient"
-                               th:value="${product.activeIngredient}" required>
-                    </label>
-                </div>
-                <div>
-                    <label class="input-group" for="expiration-date">
-                        Срок годности
-                        <input class="input-group" type="text" id="expiration-date"
-                               th:value="${product.expirationDate}" required>
-                    </label>
-                </div>
-                <div>
-                    <label class="input-group" for="composition">Состав</label>
-                    <textarea class="input-group" id="composition" th:text="${product.composition}"></textarea>
-                </div>
-                <div>
-                    <label class="input-group" for="indications">Показания</label>
-                    <textarea class="input-group" id="indications" th:text="${product.indication}"></textarea>
-                </div>
-                <div>
-                    <label class="input-group" for="contraindications">Противопоказания</label>
-                    <textarea class="input-group" id="contraindications" th:text="${product.contraindication}"></textarea>
-                </div>
-                <div>
-                    <label class="input-group" for="side-effects">Побочные эффекты</label>
-                    <textarea class="input-group" id="side-effects" th:text="${product.sideEffect}"></textarea>
-                </div>
-                <div>
-                    <label class="input-group" for="interactions">Взаимодействия</label>
-                    <textarea class="input-group" id="interactions" th:text="${product.interaction}"></textarea>
-                </div>
-                <div>
-                    <label class="input-group" for="admission-course">Курс приема</label>
-                    <textarea class="input-group" id="admission-course" th:text="${product.admissionCourse}"></textarea>
-                </div>
-                <div>
-                    <label class="input-group" for="overdose">Передозировка</label>
-                    <textarea class="input-group" id="overdose" th:text="${product.overdose}"></textarea>
-                </div>
-                <div>
-                    <label class="input-group" for="release-form">Форма выпуска</label>
-                    <textarea class="input-group" id="release-form" th:text="${product.releaseForm}"></textarea>
-                </div>
-                <div>
-                    <label class="input-group" for="special-instructions">Специальные показания</label>
-                    <textarea class="input-group" id="special-instructions" th:text="${product.specialInstruction}"></textarea>
-                </div>
-                <div>
-                    <label class="input-group" for="storage-conditions">Условия хранения</label>
-                    <textarea class="input-group" id="storage-conditions" th:text="${product.storageCondition}"></textarea>
-                </div>
-                <div id="supplierPart" th:data="${product.supplier.itn}">
-                    <details>
-                        <summary class="section-header">
-                            <h2>Поставщик</h2>
-                            <span class="arrow"></span>
-                        </summary>
-                        <div class="input-group">
-                            <label class="input-group" for="itn">
-                                ИНН
-                                <input class="input-group" type="text" id="itn" th:value="${product.supplier.itn}" required>
-                            </label>
-                        </div>
-                        <div class="input-group">
-                            <label class="input-group" for="supplierName">
-                                Название поставщика
-                                <input class="input-group" type="text" id="supplierName"
-                                       th:value="${product.supplier.name}" required>
-                            </label>
-                        </div>
-                        <div class="input-group" id="addressPart" th:data-id="${product.supplier.address.id}">
-                            <details>
-                                <summary class="section-header">
-                                    <h3>Адрес поставщика</h3>
-                                    <span class="arrow"></span>
-                                </summary>
-                                <label class="input-group" for="subject">
-                                    Область
-                                    <input class="input-group" type="text" id="subject"
-                                           th:value="${product.supplier.address.subject}" required>
+                    <div>
+                      <label class="input-group" for="name">
+                        Название товара
+                        <input class="input-group" type="text" id="name" th:value="${product.name}" required>
+                      </label>
+                    </div>
+                    <div>
+                      <label class="input-group" for="type">
+                        Тип товара
+                        <input class="input-group" type="text" id="type" th:value="${product.type}" required>
+                      </label>
+                    </div>
+                    <div>
+                      <label class="input-group" for="price">
+                        Цена
+                        <input class="input-group" type="number" id="price" step="0.01" th:value="${product.price}" required>
+                      </label>
+                    </div>
+                    <div class="form-radio">
+                      <fieldset>
+                        <legend>Требуется рецепт</legend>
+                        <label class="radio-label">
+                          <input type="radio" name="recipe" class="recipe-input" value="1" th:checked="${product.recipe == true}">
+                          Да
+                        </label>
+                        <label class="radio-label">
+                          <input type="radio" name="recipe" class="recipe-input" value="0" th:checked="${product.recipe == false}">
+                          Нет
+                        </label>
+                      </fieldset>
+                    </div>
+                    <div>
+                        <label class="input-group" for="active-ingredient">
+                            Активный ингредиент
+                            <input class="input-group" type="text" id="active-ingredient"
+                                   th:value="${product.activeIngredient}" required>
+                        </label>
+                    </div>
+                    <div>
+                        <label class="input-group" for="expiration-date">
+                            Срок годности
+                            <input class="input-group" type="text" id="expiration-date"
+                                   th:value="${product.expirationDate}" required>
+                        </label>
+                    </div>
+                    <div>
+                        <label class="input-group" for="composition">Состав</label>
+                        <textarea class="input-group" id="composition" th:text="${product.composition}"></textarea>
+                    </div>
+                    <div>
+                        <label class="input-group" for="indications">Показания</label>
+                        <textarea class="input-group" id="indications" th:text="${product.indication}"></textarea>
+                    </div>
+                    <div>
+                        <label class="input-group" for="contraindications">Противопоказания</label>
+                        <textarea class="input-group" id="contraindications" th:text="${product.contraindication}"></textarea>
+                    </div>
+                    <div>
+                        <label class="input-group" for="side-effects">Побочные эффекты</label>
+                        <textarea class="input-group" id="side-effects" th:text="${product.sideEffect}"></textarea>
+                    </div>
+                    <div>
+                        <label class="input-group" for="interactions">Взаимодействия</label>
+                        <textarea class="input-group" id="interactions" th:text="${product.interaction}"></textarea>
+                    </div>
+                    <div>
+                        <label class="input-group" for="admission-course">Курс приема</label>
+                        <textarea class="input-group" id="admission-course" th:text="${product.admissionCourse}"></textarea>
+                    </div>
+                    <div>
+                        <label class="input-group" for="overdose">Передозировка</label>
+                        <textarea class="input-group" id="overdose" th:text="${product.overdose}"></textarea>
+                    </div>
+                    <div>
+                        <label class="input-group" for="release-form">Форма выпуска</label>
+                        <textarea class="input-group" id="release-form" th:text="${product.releaseForm}"></textarea>
+                    </div>
+                    <div>
+                        <label class="input-group" for="special-instructions">Специальные показания</label>
+                        <textarea class="input-group" id="special-instructions" th:text="${product.specialInstruction}"></textarea>
+                    </div>
+                    <div>
+                        <label class="input-group" for="storage-conditions">Условия хранения</label>
+                        <textarea class="input-group" id="storage-conditions" th:text="${product.storageCondition}"></textarea>
+                    </div>
+                    <div id="supplierPart" th:data="${product.supplier.itn}">
+                        <details>
+                            <summary class="section-header">
+                                <h2>Поставщик</h2>
+                                <span class="arrow"></span>
+                            </summary>
+                            <div class="input-group">
+                                <label class="input-group" for="itn">
+                                    ИНН
+                                    <input class="input-group" type="text" id="itn" th:value="${product.supplier.itn}" required>
                                 </label>
-                                <label class="input-group" for="district">
-                                    Район
-                                    <input class="input-group" type="text" id="district"
-                                           th:value="${product.supplier.address.district}">
+                            </div>
+                            <div class="input-group">
+                                <label class="input-group" for="supplierName">
+                                    Название поставщика
+                                    <input class="input-group" type="text" id="supplierName"
+                                           th:value="${product.supplier.name}" required>
                                 </label>
-                                <label class="input-group" for="settlement">
-                                    Город
-                                    <input class="input-group" type="text" id="settlement"
-                                           th:value="${product.supplier.address.settlement}" required>
-                                </label>
-                                <label class="input-group" for="street">
-                                    Улица
-                                    <input class="input-group" type="text" id="street"
-                                           th:value="${product.supplier.address.street}" required>
-                                </label>
-                                <label class="input-group" for="house">
-                                    Дом
-                                    <input class="input-group" type="text" id ="house"
-                                           th:value="${product.supplier.address.house}" required>
-                                </label>
-                                <label class="input-group" for="apartment">
-                                    Квартира
-                                    <input class="input-group" type="text" id="apartment"
-                                           th:value="${product.supplier.address.apartment}">
-                                </label>
-                                <label class="input-group" for="postalCode">
-                                    Почтовый индекс
-                                    <input class="input-group" type="text" id="postalCode"
-                                           th:value="${product.supplier.address.postalCode}" required>
-                                </label>
-                            </details>
-                        </div>
-                    </details>
-                </div>
-                <div id="manufacturerPart" th:data-id="${product.manufacturer.id}">
-                    <details>
-                        <summary class="section-header">
-                            <h2>Производитель</h2>
-                            <span class="arrow"></span>
-                        </summary>
-                        <div>
-                            <label class="input-group" for="manufacturerName">
-                                Название производителя
-                                <input type="text" id="manufacturerName" class="input-group"
-                                       th:value="${product.manufacturer.name}" required>
-                            </label>
-                        </div>
-                        <div>
-                            <details>
-                                <summary class="section-header">
-                                    <h3>Страна производителя</h3>
-                                    <span class="arrow"></span>
-                                </summary>
-                                <div>
-                                    <label class="input-group" for="country">
-                                        Страна
-                                        <input class="input-group" type="text"
-                                               id="country" th:value="${product.manufacturer.country}" required>
+                            </div>
+                            <div class="input-group" id="addressPart" th:data-id="${product.supplier.address.id}">
+                                <details>
+                                    <summary class="section-header">
+                                        <h3>Адрес поставщика</h3>
+                                        <span class="arrow"></span>
+                                    </summary>
+                                    <label class="input-group" for="subject">
+                                        Область
+                                        <input class="input-group" type="text" id="subject"
+                                               th:value="${product.supplier.address.subject}" required>
                                     </label>
-                                </div>
-                            </details>
+                                    <label class="input-group" for="district">
+                                        Район
+                                        <input class="input-group" type="text" id="district"
+                                               th:value="${product.supplier.address.district}">
+                                    </label>
+                                    <label class="input-group" for="settlement">
+                                        Город
+                                        <input class="input-group" type="text" id="settlement"
+                                               th:value="${product.supplier.address.settlement}" required>
+                                    </label>
+                                    <label class="input-group" for="street">
+                                        Улица
+                                        <input class="input-group" type="text" id="street"
+                                               th:value="${product.supplier.address.street}" required>
+                                    </label>
+                                    <label class="input-group" for="house">
+                                        Дом
+                                        <input class="input-group" type="text" id ="house"
+                                               th:value="${product.supplier.address.house}" required>
+                                    </label>
+                                    <label class="input-group" for="apartment">
+                                        Квартира
+                                        <input class="input-group" type="text" id="apartment"
+                                               th:value="${product.supplier.address.apartment}">
+                                    </label>
+                                    <label class="input-group" for="postalCode">
+                                        Почтовый индекс
+                                        <input class="input-group" type="text" id="postalCode"
+                                               th:value="${product.supplier.address.postalCode}" required>
+                                    </label>
+                                </details>
+                            </div>
+                        </details>
+                    </div>
+                    <div id="manufacturerPart" th:data-id="${product.manufacturer.id}">
+                        <details>
+                            <summary class="section-header">
+                                <h2>Производитель</h2>
+                                <span class="arrow"></span>
+                            </summary>
+                            <div>
+                                <label class="input-group" for="manufacturerName">
+                                    Название производителя
+                                    <input type="text" id="manufacturerName" class="input-group"
+                                           th:value="${product.manufacturer.name}" required>
+                                </label>
+                            </div>
+                            <div>
+                                <details>
+                                    <summary class="section-header">
+                                        <h3>Страна производителя</h3>
+                                        <span class="arrow"></span>
+                                    </summary>
+                                    <div>
+                                        <label class="input-group" for="country">
+                                            Страна
+                                            <input class="input-group" type="text"
+                                                   id="country" th:value="${product.manufacturer.country}" required>
+                                        </label>
+                                    </div>
+                                </details>
+                            </div>
+                        </details>
+                    </div>
+                </form>
+                <div>
+                    <button id="save-btn">Сохранить</button>
+                    <button id="cancel-btn">Отмена</button>
+                    <button id="delete-btn">Удалить</button>
+                </div>
+            </div>
+            <div class="product-preview" id="product-preview" style="display: none">
+                <div class="product-details-section">
+                    <div class="product-info">
+                        <ul>
+                            <li>
+                                <span>Производитель: </span>
+                                <span></span>
+                            </li>
+                            <li>
+                                <span>Тип товара: </span>
+                                <span></span>
+                            </li>
+                            <li>
+                                <span>Активное вещество: </span>
+                                <span></span>
+                            </li>
+                            <li>
+                                <span>Срок годности: </span>
+                                <span></span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="price-section">
+                        <p class="price-label">Цена</p>
+                        <p class="price-value"></p>
+                    </div>
+                    <div class="details-section">
+                        <h3>Характеристики</h3>
+                        <div>
+                            <h4>Производитель</h4>
+                            <p></p>
                         </div>
-                    </details>
-                </div>
-            </form>
-            <div>
-                <button id="save-btn">Сохранить</button>
-                <button id="cancel-btn">Отмена</button>
-                <button id="delete-btn">Удалить</button>
-            </div>
-        </div>
-        <div class="product-preview" id="product-preview" style="display: none">
-            <div class="product-details-section">
-                <div class="product-info">
-                    <ul>
-                        <li>
-                            <span>Производитель: </span>
-                            <span></span>
-                        </li>
-                        <li>
-                            <span>Тип товара: </span>
-                            <span></span>
-                        </li>
-                        <li>
-                            <span>Активное вещество: </span>
-                            <span></span>
-                        </li>
-                        <li>
-                            <span>Срок годности: </span>
-                            <span></span>
-                        </li>
-                    </ul>
-                </div>
-                <div class="price-section">
-                    <p class="price-label">Цена</p>
-                    <p class="price-value"></p>
-                </div>
-                <div class="details-section">
-                    <h3>Характеристики</h3>
-                    <div>
-                        <h4>Производитель</h4>
-                        <p></p>
-                    </div>
-                    <div>
-                        <h4>Состав</h4>
-                        <p style="white-space: pre-wrap;"></p>
-                    </div>
-                    <div>
-                        <h4>Показания</h4>
-                        <p style="white-space: pre-wrap;"></p>
-                    </div>
-                    <div>
-                        <h4>Противопоказания</h4>
-                        <p style="white-space: pre-wrap;"></p>
-                    </div>
-                    <div>
-                        <h4>Побочные действия</h4>
-                        <p style="white-space: pre-wrap;"></p>
-                    </div>
-                    <div>
-                        <h4>Взаимодействия</h4>
-                        <p style="white-space: pre-wrap;"></p>
-                    </div>
-                    <div>
-                        <h4>Курс приема</h4>
-                        <p style="white-space: pre-wrap;"></p>
-                    </div>
-                    <div>
-                        <h4>Передозировка</h4>
-                        <p style="white-space: pre-wrap;"></p>
-                    </div>
-                    <div>
-                        <h4>Специальные указания</h4>
-                        <p style="white-space: pre-wrap;"></p>
-                    </div>
-                    <div>
-                        <h4>Условия хранения</h4>
-                        <p style="white-space: pre-wrap;"></p>
-                    </div>
-                    <div>
-                        <h4>Форма выпуска</h4>
-                        <p style="white-space: pre-wrap;"></p>
+                        <div>
+                            <h4>Состав</h4>
+                            <p style="white-space: pre-wrap;"></p>
+                        </div>
+                        <div>
+                            <h4>Показания</h4>
+                            <p style="white-space: pre-wrap;"></p>
+                        </div>
+                        <div>
+                            <h4>Противопоказания</h4>
+                            <p style="white-space: pre-wrap;"></p>
+                        </div>
+                        <div>
+                            <h4>Побочные действия</h4>
+                            <p style="white-space: pre-wrap;"></p>
+                        </div>
+                        <div>
+                            <h4>Взаимодействия</h4>
+                            <p style="white-space: pre-wrap;"></p>
+                        </div>
+                        <div>
+                            <h4>Курс приема</h4>
+                            <p style="white-space: pre-wrap;"></p>
+                        </div>
+                        <div>
+                            <h4>Передозировка</h4>
+                            <p style="white-space: pre-wrap;"></p>
+                        </div>
+                        <div>
+                            <h4>Специальные указания</h4>
+                            <p style="white-space: pre-wrap;"></p>
+                        </div>
+                        <div>
+                            <h4>Условия хранения</h4>
+                            <p style="white-space: pre-wrap;"></p>
+                        </div>
+                        <div>
+                            <h4>Форма выпуска</h4>
+                            <p style="white-space: pre-wrap;"></p>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    </main>
     <script src="/js/admin/editingProduct.js"></script>
 </body>
 </html>
