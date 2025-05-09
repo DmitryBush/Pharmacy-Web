@@ -5,6 +5,62 @@ document.addEventListener('DOMContentLoaded', () => {
     const newImagesContainer = document.querySelector('#imagePreview');
     let newImagesFiles = [];
 
+    const editBtn = document.getElementById('editBtn');
+    const previewBtn = document.getElementById('previewBtn');
+    const editor = document.getElementById('product-id');
+    const preview = document.getElementById('product-preview');
+
+    editBtn.addEventListener('click', () => {
+        editBtn.classList.add('active');
+        previewBtn.classList.remove('active');
+        editor.style.display = 'block';
+        preview.style.display = 'none';
+    });
+
+    previewBtn.addEventListener('click', () => {
+        previewBtn.classList.add('active');
+        editBtn.classList.remove('active');
+        editor.style.display = 'none';
+        preview.style.display = 'block';
+        fillPreview(getFormData());
+    });
+
+    function fillPreview(data) {
+        const infoSpans = document.querySelectorAll('.product-info span:last-child');
+        infoSpans[0].textContent = `${data.manufacturer.name}, ${data.manufacturer.country.country}`;
+        infoSpans[1].textContent = data.type;
+        infoSpans[2].textContent = data.activeIngredient;
+        infoSpans[3].textContent = data.expirationDate;
+
+        document.querySelector('.price-value').textContent = `${data.price} ₽`;
+
+        const details = document.querySelectorAll('.details-section div p');
+
+        const mapping = {
+            0: `${data.manufacturer.name}, ${data.manufacturer.country.country}`,
+            1: data.composition,
+            2: data.indication,
+            3: data.contraindication,
+            4: data.sideEffect,
+            5: data.interaction,
+            6: data.admissionCourse,
+            7: data.overdose,
+            8: data.specialInstruction,
+            9: data.storageCondition,
+            10: data.releaseForm
+        };
+
+        Object.entries(mapping).forEach(([index, value]) => {
+            if (details[index]) {
+                details[index].textContent = value;
+
+                if (details[index].style.whiteSpace === 'pre-wrap') {
+                    details[index].innerHTML = value.replace(/\n/g, '<br>');
+                }
+            }
+        });
+    }
+
     document.addEventListener('click', (e) => {
         if (e.target.classList.contains('delete-image-btn')) {
             e.preventDefault(); // Предотвращаем действие по умолчанию
