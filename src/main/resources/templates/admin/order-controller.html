@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Управление заказами</title>
+</head>
+<body>
+    <div th:replace="~{/admin/sidebar/sidebar.html :: sidebar}"></div>
+    <main class="main-content">
+        <h1>Заказы</h1>
+        <div th:each="order : ${orders.content}" th:if="orders.getTotalElements() > 0">
+            <p>Заказ [(${order.date})]</p>
+        </div>
+        <div th:unless="orders.getTotalElements() > 0">
+            <p>Заказы в данном филиале отсутствуют</p>
+        </div>
+    </main>
+</body>
+</html>

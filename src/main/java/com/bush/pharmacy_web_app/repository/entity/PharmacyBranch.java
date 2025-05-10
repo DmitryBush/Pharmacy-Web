@@ -17,7 +17,7 @@ public class PharmacyBranch {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "branch_id", nullable = false)
-    private Integer id;
+    private Long id;
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "f_key_address_id", nullable = false)
     private Address address;
