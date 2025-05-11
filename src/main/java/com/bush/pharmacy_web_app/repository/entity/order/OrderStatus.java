@@ -28,6 +28,10 @@ public enum OrderStatus {
      */
     ASSEMBLY,
     /**
+     * The order is currently being moved to the pharmacy branch
+     */
+    TRANSIT,
+    /**
      * Order was delivered to branch and awaits customer
      */
     DELIVERED,

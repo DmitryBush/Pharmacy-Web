@@ -25,7 +25,6 @@ public class AdminOrderController {
                             HttpServletRequest httpRequest,
                             @PageableDefault(size = 15) Pageable pageable) {
         var orders = orderService.findAllOrdersByBranch(1L, pageable);
-        System.out.println(orders);
 
         model.addAttribute("orders", orders);
         model.addAttribute("currentUri", httpRequest.getRequestURI());

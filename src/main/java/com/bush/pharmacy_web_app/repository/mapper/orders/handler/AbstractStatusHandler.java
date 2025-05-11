@@ -11,18 +11,19 @@ public abstract class AbstractStatusHandler implements StatusHandler {
     }
 
     @Override
-    public void setNext(StatusHandler handler) {
+    public StatusHandler setNext(StatusHandler handler) {
         this.nextHandler = handler;
+        return handler;
     }
 
     @Override
     public String handle(OrderStatus status) {
-        if (status.equals(this.status))
+        if (this.status.equals(status))
             return getName();
 
         if (nextHandler != null)
-            nextHandler.handle(status);
-        throw new IllegalArgumentException("There is no handler for this status status");
+            return nextHandler.handle(status);
+        throw new IllegalArgumentException("There is no handler for this status: " + status);
     }
 
     protected abstract String getName();
