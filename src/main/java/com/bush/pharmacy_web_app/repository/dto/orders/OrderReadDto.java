@@ -5,7 +5,7 @@ import java.time.Instant;
 import java.util.List;
 
 public record OrderReadDto(Long id,
-                           Short statusOrder,
+                           String statusOrder,
                            Instant date,
                            PharmacyBranchReadDto branch,
                            List<OrderItemReadDto> cartItems,

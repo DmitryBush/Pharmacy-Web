@@ -51,7 +51,7 @@ public class OrderRepositoryTest {
         var pharmacyBranch = pharmacyBranchRepository.findById(1).orElseThrow();
         var customer = userRepository.findById("+79192345678").orElseThrow();
         Order order = Order.builder()
-                .statusOrder((short) 1)
+                .status((short) 1)
                 .date(Instant.now())
                 .branch(pharmacyBranch)
                 .user(customer)
@@ -62,7 +62,7 @@ public class OrderRepositoryTest {
     public void updateOrder() {
         var order = orderRepository.findById(5L).orElseThrow();
 
-        order.setStatusOrder((short) 0);
+        order.setStatus((short) 0);
         Assertions.assertEquals(order, orderRepository.save(order));
     }
 }

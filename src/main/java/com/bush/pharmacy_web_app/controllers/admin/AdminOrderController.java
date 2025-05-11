@@ -3,6 +3,8 @@ package com.bush.pharmacy_web_app.controllers.admin;
 import com.bush.pharmacy_web_app.service.OrderService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -23,6 +25,7 @@ public class AdminOrderController {
                             HttpServletRequest httpRequest,
                             @PageableDefault(size = 15) Pageable pageable) {
         var orders = orderService.findAllOrdersByBranch(1L, pageable);
+        System.out.println(orders);
 
         model.addAttribute("orders", orders);
         model.addAttribute("currentUri", httpRequest.getRequestURI());
