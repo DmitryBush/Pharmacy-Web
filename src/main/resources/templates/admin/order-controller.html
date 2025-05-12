@@ -9,10 +9,12 @@
     <div th:replace="~{/admin/sidebar/sidebar.html :: sidebar}"></div>
     <main class="main-content">
         <h1 class="page-title">Заказы</h1>
-        <div th:each="order : ${orders.content}" th:if="${orders.getTotalElements() > 0}" class="orders-list">
-            <a th:href="@{/admin/orders/{id}(id=${order.id})}">
+        <div class="orders-list">
+            <div th:each="order : ${orders.content}" th:if="${orders.getTotalElements() > 0}" class="order-card">
                 <div class="order-header">
-                    <h4 class="order-title">Заказ - [(${order.id})]</h4>
+                    <a class="order-link" th:href="@{/admin/orders/{id}(id=${order.id})}">
+                        <h4 class="order-title">Заказ - [(${order.id})]</h4>
+                    </a>
                     <p class="order-status">[(${order.statusOrder})]</p>
                 </div>
                 <div class="order-body">
@@ -23,9 +25,9 @@
                         <span>Итоговая стоимость:</span>
                         <p>[(${order.result})] ₽</p>
                     </div>
-                    <button>Подробнее</button>
+                    <button class="fluent-button">Подробнее</button>
                 </div>
-            </a>
+            </div>
         </div>
         <div th:unless="${orders.getTotalElements() > 0}" class="orders-list">
 <!--            <div class="order-header">-->
@@ -34,8 +36,10 @@
 <!--            <div class="order-body">-->
 <!--                <p>Проверьте настройки фильтров или повторите позже</p>-->
 <!--            </div>-->
-            <h3 class="empty-title">Заказы отсутствуют</h3>
-            <p class="empty-description">Проверьте настройки фильтров или повторите позже</p>
+            <div class="order-card">
+                <h3 class="empty-title">Заказы отсутствуют</h3>
+                <p class="empty-description">Проверьте настройки фильтров или повторите позже</p>
+            </div>
         </div>
     </main>
 </body>

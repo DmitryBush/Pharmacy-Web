@@ -1,4 +1,4 @@
-package com.bush.pharmacy_web_app.repository.dto.orders;
+package com.bush.pharmacy_web_app.repository.dto.user;
 
 import com.bush.pharmacy_web_app.validation.MobilePhone;
 import jakarta.validation.constraints.NotBlank;

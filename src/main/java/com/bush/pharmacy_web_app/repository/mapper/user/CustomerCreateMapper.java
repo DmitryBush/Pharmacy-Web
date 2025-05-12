@@ -1,6 +1,6 @@
-package com.bush.pharmacy_web_app.repository.mapper.orders;
+package com.bush.pharmacy_web_app.repository.mapper.user;
 
-import com.bush.pharmacy_web_app.repository.dto.orders.CustomerCreateDto;
+import com.bush.pharmacy_web_app.repository.dto.user.CustomerCreateDto;
 import com.bush.pharmacy_web_app.repository.entity.User;
 import com.bush.pharmacy_web_app.repository.mapper.DtoMapper;
 import org.springframework.stereotype.Component;

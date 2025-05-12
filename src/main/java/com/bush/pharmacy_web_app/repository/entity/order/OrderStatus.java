@@ -8,11 +8,11 @@ package com.bush.pharmacy_web_app.repository.entity.order;
  */
 public enum OrderStatus {
     /**
-     * Status points to customer did not pay for the order or payment did not come from external IP
+     * Status points to user did not pay for the order or payment did not come from external IP
      */
     PAYMENT_AWAIT,
     /**
-     * Order was canceled by customer
+     * Order was canceled by user
      */
     CANCELED,
     /**
@@ -32,7 +32,7 @@ public enum OrderStatus {
      */
     TRANSIT,
     /**
-     * Order was delivered to branch and awaits customer
+     * Order was delivered to branch and awaits user
      */
     DELIVERED,
     /**
