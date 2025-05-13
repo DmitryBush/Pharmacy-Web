@@ -7,7 +7,7 @@ import java.time.Instant;
 import java.util.List;
 
 public record AdminOrderDto(Long id,
-                            String statusOrder,
+                            OrderStatusDto statusOrder,
                             Instant date,
                             AdminCustomerReadDto user,
                             PharmacyBranchReadDto branch,

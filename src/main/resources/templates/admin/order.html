@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Управление заказами</title>
-    <link href="/css/admin/order-controller.css" rel="stylesheet" type="text/css">
+    <link href="/css/admin/order.css" rel="stylesheet" type="text/css">
 </head>
 <body>
     <div th:replace="~{/admin/sidebar/sidebar.html :: sidebar}"></div>
@@ -15,27 +15,21 @@
                     <a class="order-link" th:href="@{/admin/orders/{id}(id=${order.id})}">
                         <h4 class="order-title">Заказ - [(${order.id})]</h4>
                     </a>
-                    <p class="order-status">[(${order.statusOrder})]</p>
+                    <p class="order-status">[(${order.statusOrder.name})]</p>
                 </div>
                 <div class="order-body">
                     <p class="order-customer">
                         Покупатель: [(${order.user.surname})] [(${order.user.name})] [(${order.user.lastName})]
                     </p>
                     <div class="order-price">
-                        <span>Итоговая стоимость:</span>
+                        <span>Итого:</span>
                         <p>[(${order.result})] ₽</p>
                     </div>
-                    <button class="fluent-button">Подробнее</button>
+                    <button class="order-more-det">Подробнее</button>
                 </div>
             </div>
         </div>
         <div th:unless="${orders.getTotalElements() > 0}" class="orders-list">
-<!--            <div class="order-header">-->
-<!--                <h2>Заказы в данном филиале отсутствуют</h2>-->
-<!--            </div>-->
-<!--            <div class="order-body">-->
-<!--                <p>Проверьте настройки фильтров или повторите позже</p>-->
-<!--            </div>-->
             <div class="order-card">
                 <h3 class="empty-title">Заказы отсутствуют</h3>
                 <p class="empty-description">Проверьте настройки фильтров или повторите позже</p>

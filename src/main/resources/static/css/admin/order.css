@@ -1,0 +1,179 @@
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    font-feature-settings: 'kern' 1;
+}
+
+.main-content {
+    margin-left: 240px;
+    padding: 2rem;
+}
+
+/* Базовые настройки */
+:root {
+    --primary: #4361ee;
+    --success: #06d6a0;
+    --warning: #ffd166;
+    --danger: #ef476f;
+    --background: #f8f9fa;
+    --card-bg: #ffffff;
+    --text: #2b2d42;
+    --text-light: #8d99ae;
+}
+
+.page-title {
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+    color: var(--text);
+    font-weight: 700;
+}
+
+/* Список заказов */
+.orders-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.5rem;
+    padding: 0.5rem;
+}
+
+/* Карточка заказа */
+.order-card {
+    background: var(--card-bg);
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.order-card:hover {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
+}
+
+/* Заголовок карточки */
+.order-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #eee;
+}
+
+.order-link {
+    text-decoration: none;
+}
+
+.order-title {
+    margin: 0;
+    font-size: 1.25rem;
+    color: var(--primary);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.order-title:hover {
+    color: #2a4a9e;
+}
+
+.order-status {
+    margin: 0;
+    font-size: 0.9rem;
+    font-weight: 600;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    background: #e9ecef;
+    color: var(--text);
+}
+
+/* Тело карточки */
+.order-body {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.order-customer {
+    margin: 0;
+    color: var(--text-light);
+    font-size: 0.95rem;
+}
+
+.order-price {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 600;
+}
+
+.order-price p {
+    margin: 0;
+    font-size: 1.4rem;
+    color: var(--text);
+}
+
+/* Кнопка */
+.order-more-det {
+    align-self: flex-start;
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    margin-top: 1rem;
+}
+
+.fluent-button:hover {
+    background: #3650b5;
+}
+
+/* Сообщение о пустом списке */
+.empty-title {
+    text-align: center;
+    color: var(--text-light);
+    margin: 2rem 0 0.5rem;
+}
+
+.empty-description {
+    text-align: center;
+    color: var(--text-light);
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+/* Адаптивность */
+@media (max-width: 1024px) {
+    .main-content {
+        margin-left: 0;
+        padding: 1.5rem;
+    }
+
+    .orders-list {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    }
+}
+
+@media (max-width: 768px) {
+    .page-title {
+        font-size: 2rem;
+    }
+
+    .order-card {
+        padding: 1.2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .main-content {
+        padding: 1rem;
+    }
+
+    .order-price p {
+        font-size: 1.2rem;
+    }
+}

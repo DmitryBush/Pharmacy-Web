@@ -7,8 +7,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class FactoryStatusHandler {
     @Bean
-    public StatusHandler getStatusChain() {
-        StatusHandler chainBeginning = new PaymentAwaitStatusHandler();
+    public AbstractStatusHandler getStatusChain() {
+        AbstractStatusHandler chainBeginning = new PaymentAwaitStatusHandler();
 
         var chain = chainBeginning.setNext(new CanceledStatusHandler());
         chain = chain.setNext(new DeferredStatusHandler());
