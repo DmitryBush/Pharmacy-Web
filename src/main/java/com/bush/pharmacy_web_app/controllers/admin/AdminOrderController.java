@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Arrays;
+
 @Controller
 @RequestMapping("/admin/orders")
 @RequiredArgsConstructor
@@ -41,7 +43,7 @@ public class AdminOrderController {
     public String getOrder(@PathVariable Long id, Model model, HttpServletRequest httpRequest) {
         var order = orderService.findOrderById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-
+        
         model.addAttribute("order", order);
         model.addAttribute("OrderStatus", OrderStatus.class);
         model.addAttribute("currentUri", httpRequest.getRequestURI());

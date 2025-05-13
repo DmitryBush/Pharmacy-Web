@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link href="/css/admin/order-management.css" rel="stylesheet" type="text/css">
 </head>
 <body>
     <div th:replace="~{/admin/sidebar/sidebar.html :: sidebar}"></div>
@@ -32,7 +33,7 @@
                                      th:alt="${item.medicine.name}">
                             </a>
                         </div>
-                        <div>
+                        <div class="item-title">
                             <a th:href="@{/catalog/{id}(id=${item.medicine.id})}">
                                 [(${item.medicine.name})]
                             </a>
