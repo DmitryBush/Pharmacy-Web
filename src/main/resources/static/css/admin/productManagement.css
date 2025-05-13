@@ -328,8 +328,8 @@
 
 .search-btn {
     position: absolute;
-    right: 3.5rem; /* Отступ от закрывающего крестика */
-    top: 1.3rem;
+    right: 6.5rem; /* Отступ от закрывающего крестика */
+    top: 5.8rem;
     background: none;
     border: none;
     padding: 6px;
@@ -640,6 +640,17 @@ textarea.input-group:focus::placeholder {
 .main-content {
     margin-left: 240px;
     padding: 2rem;
+}
+
+.main-content h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    color: #2b2d42;
+    font-weight: 700;
+}
+
+.product-list {
+    padding: 0.5rem;
 }
 
 body {

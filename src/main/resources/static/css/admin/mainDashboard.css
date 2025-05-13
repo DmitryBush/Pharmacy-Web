@@ -11,10 +11,11 @@ body {
     padding: 2rem;
 }
 
-.main-content h2 {
-    color: #2c3e50;
+.main-content h1 {
+    font-size: 2.5rem;
     margin-bottom: 2rem;
-    font-size: 1.8rem;
+    color: #2b2d42;
+    font-weight: 700;
 }
 
 .main-content > div {
@@ -22,6 +23,7 @@ body {
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 1.5rem;
     margin-top: 1.5rem;
+    padding: 0.5rem;
 }
 
 .main-content a {
