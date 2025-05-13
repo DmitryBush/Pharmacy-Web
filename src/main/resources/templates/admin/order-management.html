@@ -8,6 +8,7 @@
 <body>
     <div th:replace="~{/admin/sidebar/sidebar.html :: sidebar}"></div>
     <main class="main-content">
+        <a class="back-link" th:href="@{/admin/orders}">Назад к списку продуктов</a>
         <div>
             <div class="order-header">
                 <h1>Заказ - [(${order.id})]</h1>
