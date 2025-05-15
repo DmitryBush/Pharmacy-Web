@@ -1,4 +1,4 @@
-package com.bush.pharmacy_web_app.controllers.security;
+package com.bush.pharmacy_web_app.controllers.http.security;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;

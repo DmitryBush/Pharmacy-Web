@@ -1,4 +1,4 @@
-package com.bush.pharmacy_web_app.controllers.security;
+package com.bush.pharmacy_web_app.controllers.http.security;
 
 import com.bush.pharmacy_web_app.repository.dto.user.CustomerCreateDto;
 import com.bush.pharmacy_web_app.service.UserService;

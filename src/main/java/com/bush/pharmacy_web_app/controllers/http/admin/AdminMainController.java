@@ -1,4 +1,4 @@
-package com.bush.pharmacy_web_app.controllers.admin;
+package com.bush.pharmacy_web_app.controllers.http.admin;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Controller;

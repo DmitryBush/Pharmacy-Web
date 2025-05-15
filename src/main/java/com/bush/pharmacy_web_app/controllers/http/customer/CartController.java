@@ -1,4 +1,4 @@
-package com.bush.pharmacy_web_app.controllers.http;
+package com.bush.pharmacy_web_app.controllers.http.customer;
 
 import com.bush.pharmacy_web_app.service.CartService;
 import lombok.RequiredArgsConstructor;
