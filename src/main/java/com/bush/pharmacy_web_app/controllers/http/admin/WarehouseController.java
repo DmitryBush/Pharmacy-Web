@@ -1,5 +1,6 @@
 package com.bush.pharmacy_web_app.controllers.http.admin;
 
+import com.bush.pharmacy_web_app.repository.dto.warehouse.StorageItemsReadDto;
 import com.bush.pharmacy_web_app.service.PharmacyBranchService;
 import com.bush.pharmacy_web_app.service.StorageService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -26,8 +27,14 @@ public class WarehouseController {
         var branch = pharmacyBranchService.findByBranchId(1L).orElseThrow();
         var items = storageService.findAllItemsByBranchId(1L, pageable);
 
+        var countItems = items.stream()
+                        .mapToInt(StorageItemsReadDto::amount)
+                        .sum();
+        
+
         model.addAttribute("branch", branch);
         model.addAttribute("items", items);
+        model.addAttribute("countItems", countItems);
         model.addAttribute("currentUri", httpServletRequest.getRequestURI());
         return "/admin/warehouse";
     }
