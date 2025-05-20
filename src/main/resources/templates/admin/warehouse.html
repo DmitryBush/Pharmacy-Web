@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Склад</title>
+    <link href="/css/admin/warehouse.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+    <div th:replace="~{/admin/sidebar/sidebar.html :: sidebar}"></div>
+    <main class="main-content">
+        <h1 class="page-title">Склад</h1>
+        <div class="warehouse-info">
+            <h2>Информация о складе <a></a></h2>
+            <span>Подробнее</span>
+            <p>Всего товаров на складе - ?</p>
+            <p>Использовано ?% места</p>
+            <p>Зарезервировано товаров - недоступно</p>
+        </div>
+        <div>
+            <button>Поступление товара</button>
+            <button>Продажа товара</button>
+        </div>
+        <div class="product-list">
+            <div th:each="item : ${items.content}">
+                <a th:href="@{/admin/product/{id}(id=${item.medicine.id})}">
+                    <div th:unless="${item.medicine.imagePaths.isEmpty()}">
+                        <img th:src="@{/api/product-image/{id}(id=${item.medicine.imagePaths.get(0).id})}"
+                             width="50px"
+                             th:alt="${item.medicine.name}">
+                    </div>
+                    <div th:if="${item.medicine.imagePaths.isEmpty()}" class="image-unavailable"></div>
+                </a>
+                <div>
+                    <a th:href="@{/admin/product/{id}(id=${item.medicine.id})}" th:text="${item.medicine.name}"></a>
+                </div>
+                <div>
+                    <p>[(${item.amount})] шт.</p>
+                </div>
+                <div>
+                    <p>[(${item.medicine.price})] ₽</p>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

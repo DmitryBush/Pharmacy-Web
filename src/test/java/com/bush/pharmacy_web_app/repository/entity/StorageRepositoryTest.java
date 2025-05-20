@@ -25,7 +25,7 @@ public class StorageRepositoryTest {
 
     @Test
     public void getItemsByBranch() {
-        var records = storageRepository.findByBranchId(9);
+        var records = storageRepository.findByBranchId(9L);
 
         Assertions.assertFalse(records.isEmpty());
     }

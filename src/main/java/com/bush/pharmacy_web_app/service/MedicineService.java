@@ -3,7 +3,7 @@ package com.bush.pharmacy_web_app.service;
 import com.bush.pharmacy_web_app.repository.MedicineRepository;
 import com.bush.pharmacy_web_app.repository.PharmacyBranchRepository;
 import com.bush.pharmacy_web_app.repository.dto.medicine.*;
-import com.bush.pharmacy_web_app.repository.dto.orders.PharmacyBranchReadDto;
+import com.bush.pharmacy_web_app.repository.dto.warehouse.PharmacyBranchReadDto;
 import com.bush.pharmacy_web_app.repository.entity.medicine.MedicineImage;
 import com.bush.pharmacy_web_app.repository.filter.MedicineFilter;
 import com.bush.pharmacy_web_app.repository.mapper.medicine.MedicineCreateMapper;
@@ -80,7 +80,7 @@ public class MedicineService {
     }
 
     public List<PharmacyBranchReadDto> findBranchesMedicineLocated(Long medicineId) {
-        return branchRepository.findBranchesMedicineLocated(medicineId)
+        return branchRepository.findBranchesWithMedicineLocated(medicineId)
                 .stream()
                 .map(branchReadMapper::map)
                 .toList();

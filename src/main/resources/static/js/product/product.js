@@ -1,42 +1,39 @@
 document.addEventListener('DOMContentLoaded', () => {
     const id = window.location.pathname.split('/').pop();
-    fetch(`/api/v1/catalog/${id}`)
+    fetch(`/api/v1/branches/products/${id}`)
         .then(response => {
             if (!response.ok) throw new Error('Произошла сетевая ошибка. Попробуйте перезагрузить страницу');
             return response.json();
         })
-        .then(stores => renderStores(stores))
+        .then(stores => renderStores(stores, id))
         .catch(error => showError(error));
 });
 
-function renderStores(stores) {
+async function renderStores(stores, id) {
     const container = document.getElementById('availability-stores-container');
     container.innerHTML = '';
+    console.log(stores);
 
     if (stores.length === 0) {
         const messageElement = document.createElement('div');
         messageElement.innerHTML = `<h4>Товара нет в наличии</h4>`;
         container.appendChild(messageElement);
-        return;
     }
     else {
-    stores.forEach(store => {
-        const storeElement = document.createElement('li');
-        storeElement.className = 'store-card';
-        const id = window.location.pathname.split('/').pop();
+        for (const branch of stores) {
+            const storeElement = document.createElement('li');
+            storeElement.className = 'store-card';
 
-        store.items.forEach(item => {
-            if (item.medicine.id == id) {
-                storeElement.innerHTML = `
-                <h4>Аптека</h4>
-                <p>Адрес: ${store.address.subject}, ${store.address.settlement}, ${store.address.street}, ${store.address.house}</p>
-                <span>Наличие: ${renderAvailability(item.amount)}</span>
-                `;
-            }
-        })
-        
-        container.appendChild(storeElement);
-    })};
+            const response = await fetch(`/api/v1/warehouse/branches/${branch.id}/products/${id}/quantity`);
+            const amount = await response.json();
+            storeElement.innerHTML = `
+            <h4>Аптека</h4>
+            <span>${branch.address.settlement}, ${branch.address.street}, ${branch.address.house}</span>
+            <span>Наличие: ${renderAvailability(amount)}</span>
+            `;
+            container.appendChild(storeElement);
+        }
+    }
 }
 
 function renderAvailability(amount) {

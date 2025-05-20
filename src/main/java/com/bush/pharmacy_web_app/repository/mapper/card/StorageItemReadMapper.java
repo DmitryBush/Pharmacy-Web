@@ -1,6 +1,6 @@
 package com.bush.pharmacy_web_app.repository.mapper.card;
 
-import com.bush.pharmacy_web_app.repository.dto.card.StorageItemsReadDto;
+import com.bush.pharmacy_web_app.repository.dto.warehouse.StorageItemsReadDto;
 import com.bush.pharmacy_web_app.repository.entity.StorageItems;
 import com.bush.pharmacy_web_app.repository.mapper.DtoMapper;
 import com.bush.pharmacy_web_app.repository.mapper.medicine.MedicinePreviewReadMapper;
