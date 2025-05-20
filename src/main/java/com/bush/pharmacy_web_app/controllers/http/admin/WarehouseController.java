@@ -39,4 +39,10 @@ public class WarehouseController {
         model.addAttribute("currentUri", httpServletRequest.getRequestURI());
         return "/admin/warehouse";
     }
+
+    @GetMapping("/receiving")
+    public String showReceivingForm(Model model, HttpServletRequest httpServletRequest) {
+        model.addAttribute("currentUri", httpServletRequest.getRequestURI());
+        return "/admin/warehouse-receipt";
+    }
 }
