@@ -5,5 +5,7 @@ import com.bush.pharmacy_web_app.repository.dto.orders.AddressReadDto;
 import java.util.List;
 
 public record PharmacyBranchReadDto(Long id,
-                                    AddressReadDto address) {
+                                    String name,
+                                    AddressReadDto address,
+                                    Integer warehouseLimitations) {
 }

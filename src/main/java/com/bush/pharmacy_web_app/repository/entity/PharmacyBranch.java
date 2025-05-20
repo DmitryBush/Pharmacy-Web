@@ -18,9 +18,13 @@ public class PharmacyBranch {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "branch_id", nullable = false)
     private Long id;
+    @Column(nullable = false)
+    private String name;
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "f_key_address_id", nullable = false)
     private Address address;
+    @Column(name = "warehouse_limitation", nullable = false)
+    private Integer warehouseLimitations;
 
     @OneToMany(mappedBy = "branch", fetch = FetchType.LAZY)
     private List<StorageItems> items = new ArrayList<>();

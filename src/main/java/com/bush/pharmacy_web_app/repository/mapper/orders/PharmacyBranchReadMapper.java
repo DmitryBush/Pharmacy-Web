@@ -19,6 +19,6 @@ public class PharmacyBranchReadMapper implements DtoMapper<PharmacyBranch, Pharm
     public PharmacyBranchReadDto map(PharmacyBranch obj) {
         AddressReadDto address = Optional.ofNullable(obj.getAddress())
                 .map(mapper::map).orElse(null);
-        return new PharmacyBranchReadDto(obj.getId(), address);
+        return new PharmacyBranchReadDto(obj.getId(), obj.getName(), address, obj.getWarehouseLimitations());
     }
 }

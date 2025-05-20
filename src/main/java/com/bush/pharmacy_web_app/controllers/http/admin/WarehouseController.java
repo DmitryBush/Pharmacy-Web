@@ -30,11 +30,12 @@ public class WarehouseController {
         var countItems = items.stream()
                         .mapToInt(StorageItemsReadDto::amount)
                         .sum();
-        
+        var usedSpace = String.format("%.1f",((float) countItems / branch.warehouseLimitations()) * 100.0f);
 
         model.addAttribute("branch", branch);
         model.addAttribute("items", items);
         model.addAttribute("countItems", countItems);
+        model.addAttribute("usedSpace", usedSpace);
         model.addAttribute("currentUri", httpServletRequest.getRequestURI());
         return "/admin/warehouse";
     }
