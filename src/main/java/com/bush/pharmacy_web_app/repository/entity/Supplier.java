@@ -1,5 +1,6 @@
 package com.bush.pharmacy_web_app.repository.entity;
 
+import com.bush.pharmacy_web_app.repository.entity.medicine.Medicine;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -19,7 +20,7 @@ public class Supplier {
     private String itn;
     @Column(name = "supplier_name", nullable = false)
     private String name;
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "f_key_address_id", nullable = false)
     private Address address;
 

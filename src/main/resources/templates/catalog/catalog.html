@@ -3,122 +3,131 @@
 <head>
     <meta charset="UTF-8">
     <title>Каталог</title>
+    <link href="/css/catalog/catalog.css" rel="stylesheet" type="text/css">
 </head>
 <body>
-    <h1>Лекарства [(${medicines.getTotalElements()})] товаров</h1>
-    <div>
-        <form action="/api/v1/catalog">
-            <div>
-                <h3>Цена</h3>
-                <div>
-                    <label for="minPrice">
-                        <input type="number" id="minPrice" name="minPrice" placeholder="От">
+    <div class="catalog-page">
+        <h1>Лекарства [(${medicines.getTotalElements()})] товаров</h1>
+        <div class="filter-container">
+            <form action="/api/v1/catalog">
+                <div class="filter-section">
+                    <h3>Цена</h3>
+                    <div class="price-filter-group">
+                        <label for="minPrice" class="price-filter-group">
+                            <input class="price-input" type="number" id="minPrice" name="minPrice" placeholder="От">
+                        </label>
+                        <label for="maxPrice" class="price-filter-group">
+                            <input class="price-input" type="number" id="maxPrice" name="maxPrice" placeholder="До">
+                        </label>
+                    </div>
+                </div>
+                <div class="filter-section">
+                    <h3>Тип товара</h3>
+                    <ul>
+                        <li th:each="medicineType : ${types}">
+                            <label class="price-filter-group">
+                                <input type="checkbox" name="type" th:value="${medicineType.type}">
+                                [(${medicineType.type})]
+                            </label>
+                        </li>
+                    </ul>
+                </div>
+                <div class="filter-section">
+                    <h3>Производитель</h3>
+                    <ul>
+                        <li th:each="medicineManufacturer : ${manufacturers}">
+                            <label class="price-filter-group">
+                                <input type="checkbox" name="manufacturer" th:value="${medicineManufacturer.name}">
+                                [(${medicineManufacturer.name})]
+                            </label>
+                        </li>
+                    </ul>
+                </div>
+                <div class="filter-section">
+                    <h3>Рецепт</h3>
+                    <label>
+                        <input type="radio" name="recipe" value="0" checked>
+                        <span class="checkmark"></span>
+                        Не важно
                     </label>
-                    <label for="maxPrice">
-                        <input type="number" id="maxPrice" name="maxPrice" placeholder="До">
+                    <label>
+                        <input type="radio" name="recipe" value="1">
+                        <span class="checkmark"></span>
+                        С рецептом
+                    </label>
+                    <label>
+                        <input type="radio" name="recipe" value="2">
+                        <span class="checkmark"></span>
+                        Без рецепта
                     </label>
                 </div>
-            </div>
-            <div>
-                <h3>Тип товара</h3>
-                <ul>
-                    <li th:each="medicineType : ${types}">
-                        <label>
-                            <input type="checkbox" name="type" th:value="${medicineType.type}">
-                            [(${medicineType.type})]
-                        </label>
-                    </li>
-                </ul>
-            </div>
-            <div>
-                <h3>Производитель</h3>
-                <ul>
-                    <li th:each="medicineManufacturer : ${manufacturers}">
-                        <label>
-                            <input type="checkbox" name="manufacturer" th:value="${medicineManufacturer.manufacturer}">
-                            [(${medicineManufacturer.manufacturer})]
-                        </label>
-                    </li>
-                </ul>
-            </div>
-            <div>
-                <h3>Рецепт</h3>
-                <label>
-                    <input type="radio" name="recipe" value="0" checked>
-                    <span class="checkmark"></span>
-                    Не важно
-                </label>
-                <label>
-                    <input type="radio" name="recipe" value="1">
-                    <span class="checkmark"></span>
-                    С рецептом
-                </label>
-                <label>
-                    <input type="radio" name="recipe" value="2">
-                    <span class="checkmark"></span>
-                    Без рецепта
-                </label>
-            </div>
-            <div>
-                <button type="submit">Применить фильтрацию</button>
-                <button type="button" id="resetFilters">Сбросить фильтрацию</button>
-            </div>
-        </form>
-    </div>
-    <div>
-        <label for="sortBy">
-            Сортировать по
-            <select id="sortBy">
-                <option value="price,asc"
-                        th:selected="${#strings.equals(medicines.sort, 'price: ASC')}">По возрастанию цены</option>
-                <option value="price,desc"
-                        th:selected="${#strings.equals(medicines.sort, 'price: DESC')}">По убыванию цены</option>
-            </select>
-        </label>
-    </div>
-    <div th:each="medicine : ${medicines.content}">
-        <img src="https://cdn.kama-med.ru/images/products/1/6479/373201231/bint-elast.jpg"
-             width="200px"
-             alt="[(${medicine.name})]">
-        <div>
-            <a th:href="@{/catalog/{id}(id=${medicine.id})}" th:text="${medicine.name}"></a>
+                <div class="filter-actions">
+                    <button type="submit">Применить фильтрацию</button>
+                    <button type="button" id="resetFilters">Сбросить фильтрацию</button>
+                </div>
+            </form>
         </div>
-        <div>
-            <p>[(${medicine.price})] ₽</p>
-            <button>Купить</button>
+        <div class="product-list-container">
+            <div class="sort-container">
+                <label for="sortBy">
+                    Сортировать по
+                    <select id="sortBy">
+                        <option value="price,asc"
+                                th:selected="${#strings.equals(medicines.sort, 'price: ASC')}">По возрастанию цены</option>
+                        <option value="price,desc"
+                                th:selected="${#strings.equals(medicines.sort, 'price: DESC')}">По убыванию цены</option>
+                    </select>
+                </label>
+            </div>
+            <div class="product-grid">
+                <div class="product-card" th:each="medicine : ${medicines.content}">
+                    <a th:href="@{/catalog/{id}(id=${medicine.id})}">
+                        <img th:src="@{/api/product-image/{id}/{filename}(id=${medicine.id},filename=${medicine.imagePaths.get(0).path})}"
+                             width="200px"
+                             alt="[(${medicine.name})]">
+                    </a>
+                    <div>
+                        <a th:href="@{/catalog/{id}(id=${medicine.id})}" th:text="${medicine.name}"></a>
+                    </div>
+                    <div>
+                        <p>[(${medicine.price})] ₽</p>
+                        <button>Купить</button>
+                    </div>
+                </div>
+            </div>
+            <div class="pagination-container">
+                <a th:if="${medicines.hasPrevious()}"
+                   th:href="@{${baseUrl}(page=${medicines.number - 1}, size=${medicines.size})}">
+                    ←
+                </a>
+                <span th:unless="${medicines.hasPrevious()}">←</span>
+
+                <span th:each="pageNum : ${#numbers.sequence(1, medicines.totalPages)}">
+                    <a th:if="${pageNum - 1 != medicines.number}"
+                       th:href="@{${baseUrl}(page=${pageNum - 1}, size=${medicines.size})}"
+                       th:text="${pageNum}">
+                    </a>
+                    <span th:if="${pageNum - 1 == medicines.number}"
+                          th:text="${pageNum}">
+                    </span>
+                </span>
+
+                <a th:if="${medicines.hasNext()}"
+                   th:href="@{${baseUrl}(page=${medicines.number + 1}, size=${medicines.size})}">
+                    →
+                </a>
+                <span th:unless="${medicines.hasNext()}">→</span>
+
+                <label for="pageSize">Показывать по:</label>
+                <select name="pageSize" id="pageSize">
+                    <option value="15" th:selected="${medicines.size == 15}">15</option>
+                    <option value="30" th:selected="${medicines.size == 30}">30</option>
+                    <option value="50" th:selected="${medicines.size == 50}">50</option>
+                    <option value="75" th:selected="${medicines.size == 75}">75</option>
+                </select>
+            </div>
         </div>
     </div>
-    <div>
-        <a th:if="${medicines.hasPrevious()}"
-           th:href="@{${baseUrl}(page=${medicines.number - 1}, size=${medicines.size})}">
-            ←
-        </a>
-        <span th:unless="${medicines.hasPrevious()}">←</span>
-
-        <span th:each="pageNum : ${#numbers.sequence(1, medicines.totalPages)}">
-            <a th:if="${pageNum - 1 != medicines.number}"
-               th:href="@{${baseUrl}(page=${pageNum - 1}, size=${medicines.size})}"
-               th:text="${pageNum}">
-            </a>
-            <span th:if="${pageNum - 1 == medicines.number}"
-                  th:text="${pageNum}">
-            </span>
-        </span>
-
-        <a th:if="${medicines.hasNext()}"
-           th:href="@{${baseUrl}(page=${medicines.number + 1}, size=${medicines.size})}">
-            →
-        </a>
-        <span th:unless="${medicines.hasNext()}">→</span>
-
-        <label for="pageSize">Показывать по:</label>
-        <select name="pageSize" id="pageSize">
-            <option value="15" th:selected="${medicines.size == 15}">15</option>
-            <option value="30" th:selected="${medicines.size == 30}">30</option>
-            <option value="50" th:selected="${medicines.size == 50}">50</option>
-            <option value="75" th:selected="${medicines.size == 75}">75</option>
-        </select>
-    </div>
-    <script src="/catalog/js/catalog.js"></script>
+    <script src="/js/catalog/catalog.js"></script>
 </body>
 </html>

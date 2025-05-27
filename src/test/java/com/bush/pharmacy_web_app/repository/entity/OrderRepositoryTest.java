@@ -1,8 +1,9 @@
 package com.bush.pharmacy_web_app.repository.entity;
 
-import com.bush.pharmacy_web_app.repository.CustomerRepository;
+import com.bush.pharmacy_web_app.repository.UserRepository;
 import com.bush.pharmacy_web_app.repository.OrderRepository;
 import com.bush.pharmacy_web_app.repository.PharmacyBranchRepository;
+import com.bush.pharmacy_web_app.repository.entity.order.Order;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Tag;
@@ -24,7 +25,7 @@ public class OrderRepositoryTest {
     @Autowired
     private PharmacyBranchRepository pharmacyBranchRepository;
     @Autowired
-    private CustomerRepository customerRepository;
+    private UserRepository userRepository;
 
     private final Pageable page = PageRequest.of(0, 2);
 
@@ -38,9 +39,9 @@ public class OrderRepositoryTest {
     }
     @Test
     public void findCustomerOrdersByPhone() {
-        var orders = orderRepository.findByCustomerMobilePhone("+79162345678", page);
+        var orders = orderRepository.findByUserMobilePhone("+79162345678", page);
         orders.stream()
-                .flatMap(lamb -> lamb.getCartItems().stream())
+                .flatMap(lamb -> lamb.getOrderItemList().stream())
                 .forEach(System.out::println);
 
         Assertions.assertNotNull(orders);
@@ -48,12 +49,12 @@ public class OrderRepositoryTest {
     @Test
     public void createOrder() {
         var pharmacyBranch = pharmacyBranchRepository.findById(1).orElseThrow();
-        var customer = customerRepository.findById("+79192345678").orElseThrow();
+        var customer = userRepository.findById("+79192345678").orElseThrow();
         Order order = Order.builder()
-                .statusOrder((short) 1)
+                .status((short) 1)
                 .date(Instant.now())
                 .branch(pharmacyBranch)
-                .customer(customer)
+                .user(customer)
                 .build();
         Assertions.assertEquals(orderRepository.save(order), order);
     }
@@ -61,7 +62,7 @@ public class OrderRepositoryTest {
     public void updateOrder() {
         var order = orderRepository.findById(5L).orElseThrow();
 
-        order.setStatusOrder((short) 0);
+        order.setStatus((short) 0);
         Assertions.assertEquals(order, orderRepository.save(order));
     }
 }

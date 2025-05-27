@@ -15,9 +15,9 @@ public class Manufacturer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "manufacturer_id", nullable = false)
     private Long id;
-    @Column(name = "manufacturer_name", nullable = false)
+    @Column(name = "manufacturer_name", nullable = false, length = 64)
     private String name;
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "f_key_country_id", nullable = false)
     private Country country;
 }

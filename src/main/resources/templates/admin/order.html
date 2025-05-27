@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Управление заказами</title>
+    <link href="/css/admin/order.css" rel="stylesheet" type="text/css">
+    <script src="/js/admin/order.js" rel="script" type="text/javascript"></script>
+</head>
+<body>
+    <div th:replace="~{/admin/sidebar/sidebar.html :: sidebar}"></div>
+    <main class="main-content">
+        <h1 class="page-title">Заказы</h1>
+        <div class="orders-list">
+            <div th:each="order : ${orders.content}" th:if="${orders.getTotalElements() > 0}" class="order-card">
+                <div class="order-header">
+                    <a class="order-link" th:href="@{/admin/orders/{id}(id=${order.id})}">
+                        <h4 class="order-title">Заказ - [(${order.id})]</h4>
+                    </a>
+                    <p class="order-status">[(${order.statusOrder.name})]</p>
+                </div>
+                <div class="order-body">
+                    <p class="order-customer">
+                        Покупатель: [(${order.user.surname})] [(${order.user.name})] [(${order.user.lastName})]
+                    </p>
+                    <div class="order-price">
+                        <span>Итого:</span>
+                        <p>[(${order.result})] ₽</p>
+                    </div>
+                    <button class="order-more-det" id="order-more-det" th:data-id="${order.id}">Подробнее</button>
+                </div>
+            </div>
+        </div>
+        <div th:unless="${orders.getTotalElements() > 0}" class="orders-list">
+            <div class="order-card">
+                <h3 class="empty-title">Заказы отсутствуют</h3>
+                <p class="empty-description">Проверьте настройки фильтров или повторите позже</p>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

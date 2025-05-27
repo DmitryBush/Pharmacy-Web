@@ -1,6 +1,6 @@
 package com.bush.pharmacy_web_app.repository.filter;
 
-import com.bush.pharmacy_web_app.repository.entity.Medicine;
+import com.bush.pharmacy_web_app.repository.entity.medicine.Medicine;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
@@ -58,16 +58,18 @@ public class FilterMedicineRepositoryImpl implements FilterMedicineRepository {
         List<Predicate> predicates = new ArrayList<>();
 
         if (filter.type() != null) {
+            var typeJoin = medicine.join("type");
             List<Predicate> typesPredicates = new ArrayList<>();
             for (var type : filter.type()) {
-                typesPredicates.add(criteriaBuilder.like(medicine.get("type"), type));
+                typesPredicates.add(criteriaBuilder.like(typeJoin.get("type"), type));
             }
             predicates.add(criteriaBuilder.or(typesPredicates.toArray(Predicate[]::new)));
         }
         if (filter.manufacturer() != null) {
             List<Predicate> manufacturerPredicates = new ArrayList<>();
+            var manufacturerJoin = medicine.join("manufacturer");
             for (var manufacturer : filter.manufacturer()) {
-                manufacturerPredicates.add(criteriaBuilder.like(medicine.get("manufacturer"), manufacturer));
+                manufacturerPredicates.add(criteriaBuilder.like(manufacturerJoin.get("name"), manufacturer));
             }
             predicates.add(criteriaBuilder.or(manufacturerPredicates.toArray(Predicate[]::new)));
         }

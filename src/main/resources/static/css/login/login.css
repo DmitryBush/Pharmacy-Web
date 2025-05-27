@@ -1,0 +1,169 @@
+/* Fluent Design System */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: #f3f2f1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    color: #201f1e;
+}
+
+.main-content {
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 16px 32px rgba(0, 0, 0, 0.08);
+    width: 440px;
+    max-height: 80vh;
+    padding: 40px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@supports (scrollbar-width: thin) {
+    .main-content {
+        scrollbar-width: thin;
+        scrollbar-color: #0078d4 transparent;
+    }
+}
+
+.main-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+.main-content::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.main-content::-webkit-scrollbar-thumb {
+    background-color: #0078d4;
+    border-radius: 4px;
+}
+
+.login-header {
+    text-align: center;
+    margin-bottom: 32px;
+}
+
+.login-header h1 {
+    font-size: 24px;
+    font-weight: 600;
+    color: #242424;
+    margin: 0 0 8px 0;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.login-form label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #605e5c;
+}
+
+.login-form input {
+    width: 90%;
+    padding: 12px;
+    border: 1px solid #edebe9;
+    border-radius: 4px;
+    font-size: 14px;
+    transition: all 0.2s ease;
+    background: #faf9f8;
+}
+
+.login-form input:focus {
+    outline: none;
+    border-color: #0078d4;
+    box-shadow: 0 0 0 2px rgba(0, 120, 212, 0.3);
+}
+
+.login-form input::placeholder {
+    color: #a19f9d;
+}
+
+.login-form button[type="submit"] {
+    background: #0078d4;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition:
+            background 0.2s ease,
+            transform 0.1s ease;
+}
+
+.login-form button[type="submit"]:hover {
+    background: #106ebe;
+}
+
+.login-form button[type="submit"]:active {
+    transform: scale(0.98);
+}
+
+.login-form a {
+    color: #0078d4;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.2s ease;
+}
+
+.login-form a:hover {
+    color: #004578;
+    text-decoration: underline;
+}
+
+.login-form > div[th\\:if] p {
+                               background: #fed9cc;
+                               color: #bc2f26;
+                               padding: 12px;
+                               border-radius: 4px;
+                               font-size: 14px;
+                               margin: 0;
+                               border: 1px solid #f4c7b8;
+                               display: flex;
+                               align-items: center;
+                               gap: 8px;
+                           }
+
+/* Адаптивный дизайн */
+@media (max-width: 480px) {
+    .main-content {
+        width: 100%;
+        margin: 16px;
+        padding: 24px;
+        max-height: 80vh;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+    }
+
+    .login-form input {
+        padding: 10px;
+    }
+}
+
+/* Fluent Motion */
+@keyframes fluentEnter {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.main-content {
+    animation: fluentEnter 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}

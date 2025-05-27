@@ -2,13 +2,16 @@ package com.bush.pharmacy_web_app.repository.dto.catalog;
 
 import lombok.*;
 
+import java.math.BigInteger;
 import java.util.Optional;
 
 @Setter
 @Getter
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
 public class AddressCreateDto {
+    private Long id;
     private String subject;
     private String district;
     private String settlement;
