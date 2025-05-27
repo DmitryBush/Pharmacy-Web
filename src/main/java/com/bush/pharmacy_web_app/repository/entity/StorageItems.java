@@ -19,8 +19,8 @@ public class StorageItems {
     @Column(name = "record_id", nullable = false)
     private Long id;
     private Integer amount;
-    @ManyToOne
-    @JoinColumn(name = "f_key_medicine_id", nullable = false)
+    @OneToOne
+    @JoinColumn(name = "f_key_medicine_id", nullable = false, unique = true)
     private Medicine medicine;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "f_key_branch_id", nullable = false)

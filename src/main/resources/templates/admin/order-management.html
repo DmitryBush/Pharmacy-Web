@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="/css/admin/order-management.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+    <div th:replace="~{/admin/sidebar/sidebar.html :: sidebar}"></div>
+    <main class="main-content">
+        <a class="back-link" th:href="@{/admin/orders}">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left-circle" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-4.5-.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5z"/>
+            </svg>
+            Назад к списку заказов
+        </a>
+        <div>
+            <div class="order-header">
+                <h1>Заказ - [(${order.id})]</h1>
+            </div>
+            <div class="order-content">
+                <div class="order-info">
+                    <h3>Информация о заказе</h3>
+                    <p>Статус заказа: [(${order.statusOrder.name})]</p>
+                    <p>Дата оформления заказа: [(${order.date})]</p>
+                </div>
+                <div class="order-customer">
+                    <h3>Информация о покупателе</h3>
+                    <p>[(${order.user.surname})] [(${order.user.name})] [(${order.user.lastName})]</p>
+                    <p>Телефон: [(${order.user.mobilePhone})]</p>
+                </div>
+                <div class="items-container">
+                    <h3>Корзина заказа</h3>
+                    <div class="item" th:each="item : ${order.cartItems}">
+                        <div class="item-image">
+                            <a th:href="@{/catalog/{id}(id=${item.medicine.id})}">
+                                <img th:src="@{/api/product-image/{id}(id=${item.medicine.imagePaths.get(0).id})}"
+                                     width="100px"
+                                     th:alt="${item.medicine.name}">
+                            </a>
+                        </div>
+                        <div class="item-title">
+                            <a th:href="@{/catalog/{id}(id=${item.medicine.id})}">
+                                [(${item.medicine.name})]
+                            </a>
+                            <p>Производитель: [(${item.medicine.manufacturer.name})]</p>
+                        </div>
+                        <div class="item-price">
+                            <div class="item-price-value">
+                                <p>Цена: [(${item.price})] ₽</p>
+                            </div>
+                            <div class="item-price-amount">
+                                <p>[(${item.amount})] шт. x [(${item.medicine.price})] ₽</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="order-price">
+                        <span>Итого:</span>
+                        <p>[(${order.result})] ₽</p>
+                    </div>
+                    <div>
+                        <button th:if="${order.statusOrder.id == OrderStatus.DELIVERED.ordinal()}">
+                            Завершить заказ
+                        </button>
+                        <button th:if="${order.statusOrder.id == OrderStatus.DELIVERED.ordinal()}">
+                            Вернуть заказ
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

@@ -19,6 +19,6 @@ public class ManufacturerReadMapper implements DtoMapper<Manufacturer, Manufactu
                 .map(readMapper::map)
                 .map(CountryReadDto::country)
                 .orElse(null);
-        return new ManufacturerReadDto(obj.getName(), country);
+        return new ManufacturerReadDto(obj.getId(), obj.getName(), country);
     }
 }

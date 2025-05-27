@@ -20,8 +20,9 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "order_id", nullable = false)
     private Long id;
+    @Enumerated
     @Column(name = "status_order")
-    private Short statusOrder;
+    private OrderStatus status;
     @Column(nullable = false)
     private Instant date;
 
@@ -29,7 +30,7 @@ public class Order {
     @JoinColumn(name = "f_key_customer_id", nullable = false)
     private User user;
     @ManyToOne
-    @JoinColumn(name = "f_key_branch_id")
+    @JoinColumn(name = "f_key_branch_id", nullable = false)
     private PharmacyBranch branch;
     @Builder.Default
     @OneToMany(mappedBy = "order")

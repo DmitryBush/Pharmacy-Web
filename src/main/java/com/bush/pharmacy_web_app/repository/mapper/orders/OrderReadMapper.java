@@ -14,8 +14,12 @@ import java.util.Optional;
 public class OrderReadMapper implements DtoMapper<Order, OrderReadDto> {
     private final PharmacyBranchReadMapper branchReadMapper;
     private final OrderItemReadMapper orderReadMapper;
+    private final OrderStatusReadMapper orderStatusReadMapper;
     @Override
     public OrderReadDto map(Order obj) {
+        var status = Optional.ofNullable(obj.getStatus())
+                .map(orderStatusReadMapper::map)
+                .orElseThrow();
         var branch = Optional.ofNullable(obj.getBranch())
                 .map(branchReadMapper::map)
                 .orElse(null);
@@ -26,7 +30,7 @@ public class OrderReadMapper implements DtoMapper<Order, OrderReadDto> {
                 .map(lamb -> lamb.medicine().price().multiply(BigDecimal.valueOf(lamb.amount())))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-        return new OrderReadDto(obj.getId(), obj.getStatusOrder(), obj.getDate(),
+        return new OrderReadDto(obj.getId(), status, obj.getDate(),
                 branch, cart, result);
     }
 }

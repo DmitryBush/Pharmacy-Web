@@ -2,23 +2,27 @@ package com.bush.pharmacy_web_app.service;
 
 import com.bush.pharmacy_web_app.repository.MedicineRepository;
 import com.bush.pharmacy_web_app.repository.PharmacyBranchRepository;
-import com.bush.pharmacy_web_app.repository.dto.catalog.MedicineCreateDto;
-import com.bush.pharmacy_web_app.repository.dto.catalog.MedicineManufacturer;
-import com.bush.pharmacy_web_app.repository.dto.catalog.MedicineTypeDto;
-import com.bush.pharmacy_web_app.repository.dto.orders.PharmacyBranchReadDto;
+import com.bush.pharmacy_web_app.repository.dto.medicine.*;
+import com.bush.pharmacy_web_app.repository.dto.warehouse.PharmacyBranchReadDto;
+import com.bush.pharmacy_web_app.repository.entity.medicine.MedicineImage;
 import com.bush.pharmacy_web_app.repository.filter.MedicineFilter;
-import com.bush.pharmacy_web_app.repository.dto.orders.MedicineReadDto;
-import com.bush.pharmacy_web_app.repository.mapper.MedicineCreateMapper;
-import com.bush.pharmacy_web_app.repository.mapper.orders.MedicineReadMapper;
+import com.bush.pharmacy_web_app.repository.mapper.medicine.MedicineCreateMapper;
+import com.bush.pharmacy_web_app.repository.mapper.admin.MedicineAdminReadMapper;
+import com.bush.pharmacy_web_app.repository.mapper.medicine.MedicinePreviewReadMapper;
+import com.bush.pharmacy_web_app.repository.mapper.medicine.MedicineReadMapper;
 import com.bush.pharmacy_web_app.repository.mapper.orders.PharmacyBranchReadMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
 
 @Service
 @RequiredArgsConstructor
@@ -26,64 +30,136 @@ import java.util.Optional;
 public class MedicineService {
     private final MedicineRepository medicineRepository;
     private final PharmacyBranchRepository branchRepository;
-    private final MedicineReadMapper readMapper;
-    private final MedicineCreateMapper createMapper;
-    private final PharmacyBranchReadMapper branchReadMapper;
 
-    public List<MedicineReadDto> findAll() {
+    private final MedicinePreviewReadMapper medicinePreviewReadMapper;
+    private final MedicineReadMapper medicineReadMapper;
+    private final MedicineCreateMapper medicineCreateMapper;
+    private final PharmacyBranchReadMapper branchReadMapper;
+    private final MedicineAdminReadMapper adminMedicineReadMapper;
+
+    private final MedicineImageService imageService;
+
+    public List<MedicinePreviewReadDto> findAllPreviews() {
         return medicineRepository.findAll().stream()
-                .map(readMapper::map)
+                .map(medicinePreviewReadMapper::map)
                 .toList();
     }
 
-    public Page<MedicineReadDto> findAll(MedicineFilter filter, Pageable pageable) {
+    public Page<MedicinePreviewReadDto> findAllPreviews(MedicineFilter filter, Pageable pageable) {
         return medicineRepository.findAllByFilter(filter, pageable)
-                .map(readMapper::map);
+                .map(medicinePreviewReadMapper::map);
     }
 
     public List<MedicineTypeDto> findAllTypes() {
         return medicineRepository.findDistinctMedicineType().stream()
-                .map(MedicineTypeDto::new)
+                .map(type -> new MedicineTypeDto(type.getType()))
                 .toList();
     }
 
-    public List<MedicineManufacturer> findAllManufacturers() {
+    public List<MedicineManufacturerDto> findAllManufacturers() {
         return medicineRepository.findDistinctMedicineManufacturer().stream()
-                .map(MedicineManufacturer::new)
+                .map(manufacturer -> new MedicineManufacturerDto(manufacturer.getName()))
                 .toList();
     }
 
-    public Optional<MedicineReadDto> findById(Long id) {
+    public Optional<MedicineReadDto> findMedicineById(Long id) {
         return medicineRepository.findById(id)
-                .map(readMapper::map);
+                .map(medicineReadMapper::map);
+    }
+
+    public Optional<MedicineAdminReadDto> findAdminDtoById(Long id) {
+        return medicineRepository.findById(id)
+                .map(adminMedicineReadMapper::map);
+    }
+
+    public List<MedicinePreviewReadDto> findByContainingName(String name) {
+        return medicineRepository.findByNameContainingIgnoreCase(name)
+                .stream()
+                .map(medicinePreviewReadMapper::map)
+                .toList();
     }
 
     public List<PharmacyBranchReadDto> findBranchesMedicineLocated(Long medicineId) {
-        return branchRepository.findBranchesMedicineLocated(medicineId)
+        return branchRepository.findBranchesWithMedicineLocated(medicineId)
                 .stream()
                 .map(branchReadMapper::map)
                 .toList();
     }
 
-    public Optional<MedicineReadDto> createMedicine(MedicineCreateDto createDto) {
+    @Transactional
+    public Optional<MedicinePreviewReadDto> createMedicine(MedicineCreateDto createDto, List<MultipartFile> images) {
         return Optional.ofNullable(createDto)
-                .map(createMapper::map)
+                .map(dto -> {
+                    var mergedDto = MedicineCreateDto.IMAGES_STRATEGY_MERGE
+                            .merge(MedicineCreateDto.builder().images(images).build(), createDto);
+                    return medicineCreateMapper.map(mergedDto);
+                })
                 .map(medicineRepository::save)
-                .map(readMapper::map);
+                .map(medicine -> {
+                    TransactionSynchronizationManager.registerSynchronization(
+                            new TransactionSynchronization() {
+                                @Override
+                                public void afterCompletion(int status) {
+                                    if (status == STATUS_COMMITTED)
+                                        Optional.ofNullable(images)
+                                                .ifPresent(image -> image
+                                                        .stream()
+                                                        .filter(Predicate.not(MultipartFile::isEmpty))
+                                                        .forEach(file -> imageService.createImage(file,
+                                                                String.format("medicine/%d/", medicine.getId()))));
+                                }
+                            }
+                    );
+                    return medicinePreviewReadMapper.map(medicine);
+                });
     }
     @Transactional
-    public Optional<MedicineReadDto> updateMedicine(Long id, MedicineCreateDto createDto) {
+    public Optional<MedicinePreviewReadDto> updateMedicine(Long id, MedicineCreateDto createDto, List<MultipartFile> images) {
         return medicineRepository.findById(id)
-                .map(lamb -> createMapper.map(createDto, lamb))
+                .map(lamb -> {
+                    var mergedDto = MedicineCreateDto.IMAGES_STRATEGY_MERGE
+                            .merge(MedicineCreateDto.builder().images(images).build(), createDto);
+                    return medicineCreateMapper.map(mergedDto, lamb);
+                })
                 .map(medicineRepository::saveAndFlush)
-                .map(readMapper::map);
+                .map(medicine -> {
+                    TransactionSynchronizationManager.registerSynchronization(
+                            new TransactionSynchronization() {
+                                @Override
+                                public void afterCompletion(int status) {
+                                    if (status == STATUS_COMMITTED)
+                                        Optional.ofNullable(images)
+                                                .ifPresent(image -> image
+                                                        .stream()
+                                                        .filter(Predicate.not(MultipartFile::isEmpty))
+                                                        .forEach(file -> imageService.createImage(file,
+                                                                String.format("medicine/%d/", medicine.getId()))));
+                                }
+                            }
+                    );
+                    return medicinePreviewReadMapper.map(medicine);
+                });
     }
     @Transactional
     public boolean deleteMedicine(Long id) {
         return medicineRepository.findById(id)
-                .map(lamb -> {
-                    medicineRepository.deleteById(id);
-                    medicineRepository.flush();
+                .map(medicine -> {
+                    var images = medicine
+                            .getImage()
+                            .stream()
+                            .map(MedicineImage::getId)
+                            .toList();
+                    TransactionSynchronizationManager.registerSynchronization(
+                            new TransactionSynchronization() {
+                                @Override
+                                public void afterCompletion(int status) {
+                                    if (status == STATUS_COMMITTED)
+                                        images.forEach(imageService::deleteImage);
+                                }
+                            }
+                    );
+
+                    medicineRepository.delete(medicine);
                     return true;
                 })
                 .orElse(false);

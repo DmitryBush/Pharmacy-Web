@@ -3,52 +3,111 @@
 <head>
     <meta charset="UTF-8">
     <title th:text="${product.name}"></title>
+    <link href="/css/product/product.css" rel="stylesheet" type="text/css">
 </head>
 <body>
-    <h1 th:text="${product.name}"></h1>
+    <div class="product-container">
+        <h1 th:text="${product.name}"></h1>
+        <div class="product-main-content">
+            <div class="product-image-section">
+                <div class="carousel">
+                    <div class="carousel-container">
+                        <img th:each="image : ${product.imagePaths}"
+                             th:src="@{/api/product-image/{id}/{image}(id=${product.id},image=${image.path})}"
+                             th:alt="${product.name}"
+                             width="350px"
+                             class="product-image">
+                    </div>
+                    <button class="carousel-btn prev">❮</button>
+                    <button class="carousel-btn next">❯</button>
+                </div>
+            </div>
+            <div class="product-details-section">
+                <div class="product-info">
+                    <ul>
+                        <li>
+                            <span>Производитель: </span>
+                            <span>
+                                [(${product.manufacturer.name})], [(${product.manufacturer.country})]
+                            </span>
+                        </li>
+                        <li>
+                            <span>Тип товара: </span>
+                            <span th:text="${product.type}"></span>
+                        </li>
+                        <li>
+                            <span>Активное вещество: </span>
+                            <span th:text="${product.activeIngredient}"></span>
+                        </li>
+                        <li>
+                            <span>Срок годности: </span>
+                            <span th:text="${product.expirationDate}"></span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="price-section">
+                    <p class="price-label">Цена</p>
+                    <p class="price-value" th:text="${product.price}+ ' ₽'"></p>
+                    <button class="cart-button" type="button">В корзину</button>
+                </div>
+                <div class="details-section">
+                    <h3>Характеристики</h3>
+                    <div>
+                        <h4>Производитель</h4>
+                        <p>
+                            [(${product.manufacturer.name})], [(${product.manufacturer.country})]
+                        </p>
+                    </div>
+                    <div>
+                        <h4>Состав</h4>
+                        <p style="white-space: pre-wrap;" th:text="${product.composition}"></p>
+                    </div>
+                    <div>
+                        <h4>Показания</h4>
+                        <p style="white-space: pre-wrap;" th:text="${product.indication}"></p>
+                    </div>
+                    <div>
+                        <h4>Противопоказания</h4>
+                        <p style="white-space: pre-wrap;" th:text="${product.contraindication}"></p>
+                    </div>
+                    <div>
+                        <h4>Побочные действия</h4>
+                        <p style="white-space: pre-wrap;" th:text="${product.sideEffect}"></p>
+                    </div>
+                    <div>
+                        <h4>Взаимодействия</h4>
+                        <p style="white-space: pre-wrap;" th:text="${product.interaction}"></p>
+                    </div>
+                    <div>
+                        <h4>Курс приема</h4>
+                        <p style="white-space: pre-wrap;" th:text="${product.admissionCourse}"></p>
+                    </div>
+                    <div>
+                        <h4>Передозировка</h4>
+                        <p style="white-space: pre-wrap;" th:text="${product.overdose}"></p>
+                    </div>
+                    <div>
+                        <h4>Специальные указания</h4>
+                        <p style="white-space: pre-wrap;" th:text="${product.specialInstruction}"></p>
+                    </div>
+                    <div>
+                        <h4>Условия хранения</h4>
+                        <p style="white-space: pre-wrap;" th:text="${product.storageCondition}"></p>
+                    </div>
+                    <div>
+                        <h4>Форма выпуска</h4>
+                        <p style="white-space: pre-wrap;" th:text="${product.releaseForm}"></p>
+                    </div>
+                </div>
+                <div>
+                    <h3>Наличие в аптеках</h3>
+                    <ul id="availability-stores-container">
 
-    <div>
-        <img src="https://cdn.kama-med.ru/images/products/1/6479/373201231/bint-elast.jpg"
-             alt="[(${product.name})]"
-             width="400px">
+                    </ul>
+                </div>
+            </div>
+        </div>
     </div>
-    <div>
-        <ul>
-            <li>
-                <span>Производитель: </span>
-                <span th:text="${product.manufacturer.name}"></span>
-            </li>
-            <li>
-                <span>Тип товара: </span>
-                <span th:text="${product.type}"></span>
-            </li>
-        </ul>
-    </div>
-    <div>
-        <p>Цена</p>
-        <p th:text="${product.price}+ ' ₽'"></p>
-        <button type="button">В корзину</button>
-    </div>
-    <div>
-        <h3>Характеристики</h3>
-        <ul>
-            <li>
-                <span>Производитель: </span>
-                <span th:text="${product.manufacturer}"></span>
-            </li>
-            <li>
-                <span>Тип товара: </span>
-                <span th:text="${product.type}"></span>
-            </li>
-        </ul>
-    </div>
-
-    <div>
-        <h3>Наличие в аптеках</h3>
-        <ul id="availability-stores-container">
-
-        </ul>
-    </div>
-    <script src="/product/js/product.js"></script>
+    <script src="/js/product/product.js"></script>
 </body>
 </html>

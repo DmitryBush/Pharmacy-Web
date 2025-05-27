@@ -19,11 +19,11 @@ public class CatalogController {
     private final MedicineService service;
 
     @GetMapping
-    public String findAllProducts(Model model,
+    public String showAllProducts(Model model,
                                   MedicineFilter filter,
                                   @PageableDefault(size = 15, sort = "price", direction = Sort.Direction.ASC)
                                        Pageable pageable) {
-        var page = service.findAll(filter, pageable);
+        var page = service.findAllPreviews(filter, pageable);
 
         model.addAttribute("types", service.findAllTypes());
         model.addAttribute("manufacturers", service.findAllManufacturers());
@@ -34,7 +34,7 @@ public class CatalogController {
     @GetMapping("/{id}")
     public String getProduct(Model model,
                              @PathVariable Long id) {
-        var product = service.findById(id).orElseThrow();
+        var product = service.findMedicineById(id).orElseThrow();
 
         model.addAttribute("product", product);
         return "catalog/product";
