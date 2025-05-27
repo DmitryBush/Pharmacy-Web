@@ -78,7 +78,7 @@
 
 .modal-scroll-container {
     height: 100%;
-    max-height: calc(80vh - 150px);
+    max-height: 55vh;
     overflow-y: auto;
     padding: 1rem 0 1.2rem;
 }
@@ -86,7 +86,7 @@
 .modal-footer {
     padding: 1.5rem;
     border-top: 1px solid #f0f0f0;
-    margin-top: auto;
+    margin-top: 0;
 }
 
 .modal-header h2 {
@@ -328,7 +328,7 @@
 
 .search-btn {
     position: absolute;
-    right: 6.5rem; /* Отступ от закрывающего крестика */
+    right: 6.5rem;
     top: 5.8rem;
     background: none;
     border: none;
@@ -341,21 +341,36 @@
     justify-content: center;
 }
 
-.search-btn:hover {
+.search-modal-btn {
+    position: absolute;
+    right: 3.5rem;
+    top: 0.9rem;
+    background: none;
+    border: none;
+    padding: 6px;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.search-btn:hover,.search-modal-btn:hover {
     background: rgba(0, 0, 0, 0.05);
 }
 
-.search-btn:active {
+.search-btn:active,.search-modal-btn:active {
     background: rgba(0, 0, 0, 0.08);
 }
 
-.search-btn svg {
-    pointer-events: none; /* Запрещаем события для SVG */
+.search-btn svg, .search-modal-btn svg {
+    pointer-events: none;
     transition: stroke 0.2s ease;
 }
 
-.search-btn:hover svg {
-    stroke: #3498db; /* Цвет при наведении */
+.search-btn:hover svg,.search-modal-btn:hover svg {
+    stroke: #3498db;
 }
 
 h1 {

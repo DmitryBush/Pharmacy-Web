@@ -14,6 +14,7 @@ class ProductManagement {
         this.modalOutsideClickListener = null;
 
         this.resultsContainer = document.getElementById('search-result-container');
+        this.searchField = document.getElementById('search-field');
         this.searchOutsideClick = null;
 
         this.DEBOUNCE_DELAY = 300;
@@ -29,7 +30,7 @@ class ProductManagement {
             button.addEventListener('click',
                 this.handleUpdate.bind(this, button.getAttribute('data-id')));
         });
-        document.querySelectorAll('.search-btn').forEach(button => {
+        document.querySelectorAll('.search-btn,  .search-modal-btn').forEach(button => {
             button.addEventListener('click', this.handleOpenSearch.bind(this));
         });
 
@@ -51,7 +52,7 @@ class ProductManagement {
                 const imgContainer = document.createElement('div');
                 imgContainer.className = 'image-item new-image';
                 imgContainer.innerHTML = `
-                    <img src="${event.target.result}" width="350px">
+                    <img src="${event.target.result}" width="100px" height="100px">
                     <button class="delete-new-image-btn">×</button>
                 `;
                 document.getElementById('imagePreview').appendChild(imgContainer);
@@ -102,6 +103,13 @@ class ProductManagement {
         const searchResults = document.getElementById('search-result-container');
         searchContainer.style.display = 'block';
         document.getElementById('search-backdrop').style.display = 'block';
+
+        if (this.searchUrl === 'supplierPart')
+            this.searchField.placeholder = "Найти в поставщиках";
+        else if (this.searchUrl === 'manufacturerPart')
+            this.searchField.placeholder = "Найти в производителях";
+        else
+            this.searchField.placeholder = "Найти в продуктах";
 
         this.searchOutsideClick = (event) => {
             if (searchContainer && !searchContainer.contains(event.target) && !searchResults.contains(event.target)) {
@@ -335,6 +343,7 @@ class ProductManagement {
         this.primaryMedicine = null;
         this.primaryManufacturer = null;
         this.primaryItn = null;
+        this.searchUrl = '';
         this.tmpDataStore.clear();
 
         for (let i = 1; i < 4; i++) {
@@ -362,14 +371,17 @@ class ProductManagement {
     async fetchResults(searchTerm) {
         try {
             if (this.searchUrl === 'supplierPart') {
+                this.searchField.placeholder = "Найти в поставщиках";
                 const data =
                     await (await this.fetchData(`/api/search/supplier?name=${searchTerm}`, 'GET')).json();
                 this.displayResults(data);
             } else if (this.searchUrl === 'manufacturerPart') {
+                this.searchField.placeholder = "Найти в производителях";
                 const data =
                     await (await this.fetchData(`/api/search/manufacturer?name=${searchTerm}`, 'GET')).json();
                 this.displayResults(data);
             } else {
+                this.searchField.placeholder = "Найти в продуктах";
                 const data =
                     await (await this.fetchData(`/api/search/medicine?name=${searchTerm}`, 'GET')).json();
                 this.displayResults(data);

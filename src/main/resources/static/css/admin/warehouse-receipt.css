@@ -72,7 +72,7 @@ body {
     border-color: #0078d4;
 }
 
-.input-group button {
+.add-btn {
     color: white;
     background-color: #2196F3;
     padding: 0.8rem 3.5rem;
@@ -82,11 +82,11 @@ body {
     transition: 0.3s;
 }
 
-.input-group button:hover {
+.add-btn:hover {
     background-color: #1976D2;
 }
 
-.add-btn, .cancel-btn {
+.save-btn, .cancel-btn {
     padding: 0.8rem 2rem;
     border: none;
     border-radius: 5px;
@@ -95,7 +95,7 @@ body {
     transition: 0.3s;
 }
 
-.add-btn {
+.save-btn {
     background-color: #27ae60;
     color: white;
     margin-right: 1rem;
@@ -106,7 +106,7 @@ body {
     color: white;
 }
 
-.add-btn:hover {
+.save-btn:hover {
     background-color: #43A047;
 }
 
