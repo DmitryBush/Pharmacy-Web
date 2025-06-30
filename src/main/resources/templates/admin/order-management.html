@@ -2,7 +2,7 @@
 <html lang="ru" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Заказ № [(${order.id})]</title>
     <link href="/css/admin/order-management.css" rel="stylesheet" type="text/css">
 </head>
 <body>
@@ -16,7 +16,7 @@
         </a>
         <div>
             <div class="order-header">
-                <h1>Заказ - [(${order.id})]</h1>
+                <h1>Заказ - № [(${order.id})]</h1>
             </div>
             <div class="order-content">
                 <div class="order-info">

@@ -1,6 +1,6 @@
 package com.bush.pharmacy_web_app.repository.mapper.orders.handler;
 
-import com.bush.pharmacy_web_app.repository.entity.order.OrderStatus;
+import com.bush.pharmacy_web_app.repository.entity.order.state.OrderStatus;
 
 public class TransitStatusHandler extends AbstractStatusHandler {
     public TransitStatusHandler() {

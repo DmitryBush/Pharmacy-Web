@@ -1,7 +1,7 @@
 package com.bush.pharmacy_web_app.repository.mapper.orders;
 
 import com.bush.pharmacy_web_app.repository.dto.orders.OrderStatusDto;
-import com.bush.pharmacy_web_app.repository.entity.order.OrderStatus;
+import com.bush.pharmacy_web_app.repository.entity.order.state.OrderStatus;
 import com.bush.pharmacy_web_app.repository.mapper.DtoMapper;
 import com.bush.pharmacy_web_app.repository.mapper.orders.handler.AbstractStatusHandler;
 import lombok.RequiredArgsConstructor;

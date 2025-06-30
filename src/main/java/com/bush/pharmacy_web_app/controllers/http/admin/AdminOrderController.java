@@ -1,6 +1,6 @@
 package com.bush.pharmacy_web_app.controllers.http.admin;
 
-import com.bush.pharmacy_web_app.repository.entity.order.OrderStatus;
+import com.bush.pharmacy_web_app.repository.entity.order.state.OrderStatus;
 import com.bush.pharmacy_web_app.service.OrderService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;

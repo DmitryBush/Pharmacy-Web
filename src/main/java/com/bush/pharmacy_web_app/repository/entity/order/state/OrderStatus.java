@@ -1,4 +1,4 @@
-package com.bush.pharmacy_web_app.repository.entity.order;
+package com.bush.pharmacy_web_app.repository.entity.order.state;
 
 /**
  * These are all the order statuses used in the system.

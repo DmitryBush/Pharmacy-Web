@@ -4,6 +4,7 @@ import com.bush.pharmacy_web_app.repository.UserRepository;
 import com.bush.pharmacy_web_app.repository.OrderRepository;
 import com.bush.pharmacy_web_app.repository.PharmacyBranchRepository;
 import com.bush.pharmacy_web_app.repository.entity.order.Order;
+import com.bush.pharmacy_web_app.repository.entity.order.state.OrderStatus;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Tag;
@@ -48,10 +49,10 @@ public class OrderRepositoryTest {
     }
     @Test
     public void createOrder() {
-        var pharmacyBranch = pharmacyBranchRepository.findById(1).orElseThrow();
+        var pharmacyBranch = pharmacyBranchRepository.findById(1L).orElseThrow();
         var customer = userRepository.findById("+79192345678").orElseThrow();
         Order order = Order.builder()
-                .status((short) 1)
+                .status(OrderStatus.DECORATED)
                 .date(Instant.now())
                 .branch(pharmacyBranch)
                 .user(customer)
@@ -62,7 +63,7 @@ public class OrderRepositoryTest {
     public void updateOrder() {
         var order = orderRepository.findById(5L).orElseThrow();
 
-        order.setStatus((short) 0);
+        order.setStatus(OrderStatus.PAYMENT_AWAIT);
         Assertions.assertEquals(order, orderRepository.save(order));
     }
 }
