@@ -1,6 +1,6 @@
 package com.bush.pharmacy_web_app.controllers.http.admin;
 
-import com.bush.pharmacy_web_app.repository.entity.order.state.OrderStatus;
+import com.bush.pharmacy_web_app.repository.entity.order.state.OrderState;
 import com.bush.pharmacy_web_app.service.OrderService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +27,7 @@ public class AdminOrderController {
         var orders = orderService.findAllOrdersByBranch(1L, pageable);
 
         model.addAttribute("orders", orders);
-        model.addAttribute("OrderStatus", OrderStatus.class);
+        model.addAttribute("OrderStatus", OrderState.class);
         model.addAttribute("currentUri", httpRequest.getRequestURI());
         return "/admin/order";
     }
@@ -38,7 +38,7 @@ public class AdminOrderController {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
         model.addAttribute("order", order);
-        model.addAttribute("OrderStatus", OrderStatus.class);
+        model.addAttribute("OrderStatus", OrderState.class);
         model.addAttribute("currentUri", httpRequest.getRequestURI());
         return "/admin/order-management";
     }
