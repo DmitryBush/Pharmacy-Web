@@ -16,7 +16,7 @@ public enum OrderState {
      */
     CANCELLED,
     /**
-     * Assembly was frozen due to independent reason
+     * Decor, assembly or transit was frozen due to independent reason
      */
     DEFERRED,
     /**
@@ -44,13 +44,33 @@ public enum OrderState {
      */
     NOT_DEMAND,
     /**
-     *
+     * The buyer has requested a return of the product, and this request is pending approval from the seller
      */
     RETURN_REQUESTED,
+    /**
+     * The return request has been reviewed and rejected by the seller.
+     */
     RETURN_REJECTED,
+    /**
+     * The order is in a state where the seller has approved the return request, and the customer is expected
+     * to ship the returned goods back to the seller. This state signifies that the return process has begun,
+     * but the physical movement of goods is still pending.
+     */
     AWAITING_CUSTOMER_SHIPMENT,
+    /**
+     * The buyer returned the order
+     */
     RETURN_SHIPPED_BY_CUSTOMER,
+    /**
+     * The order is currently being moved to the seller
+     */
     RETURN_TRANSIT,
+    /**
+     * The returned order has been received by the seller, finalizing the return transaction.
+     */
     RETURN_CLOSED,
+    /**
+     * Transit was frozen due to independent reason
+     */
     RETURN_DEFERRED
 }
