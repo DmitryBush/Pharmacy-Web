@@ -2,6 +2,7 @@ package com.bush.pharmacy_web_app.service;
 
 import com.bush.pharmacy_web_app.repository.OrderRepository;
 import com.bush.pharmacy_web_app.repository.dto.orders.AdminOrderDto;
+import com.bush.pharmacy_web_app.repository.entity.order.Order;
 import com.bush.pharmacy_web_app.repository.entity.order.state.OrderEvent;
 import com.bush.pharmacy_web_app.repository.entity.order.state.OrderState;
 import com.bush.pharmacy_web_app.repository.mapper.orders.AdminOrderReadMapper;
@@ -39,6 +40,11 @@ public class OrderService {
     public Optional<AdminOrderDto> findOrderById(Long id) {
         return orderRepository.findById(id)
                 .map(adminOrderReadMapper::map);
+    }
+
+    public Optional<OrderState> findOrderStateById(Long id) {
+        return orderRepository.findById(id)
+                .map(Order::getStatus);
     }
 
     /**
