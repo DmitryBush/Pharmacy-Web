@@ -19,7 +19,6 @@ public class OrderStateMachineConfig extends StateMachineConfigurerAdapter<Order
                 .initial(OrderState.PAYMENT_AWAIT)
                 .states(EnumSet.allOf(OrderState.class))
                 .end(OrderState.CANCELLED)
-                .end(OrderState.COMPLETED)
                 .end(OrderState.NOT_DEMAND)
                 .end(OrderState.RETURN_CLOSED)
                 .end(OrderState.RETURN_REJECTED);

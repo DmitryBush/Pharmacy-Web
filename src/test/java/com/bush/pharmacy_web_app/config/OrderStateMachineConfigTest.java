@@ -27,10 +27,9 @@ public class OrderStateMachineConfigTest {
                 .thenMany(sm.sendEvent(Mono.just(MessageBuilder.withPayload(OrderEvent.SHIPPED_ORDER).build())))
                 .thenMany(sm.sendEvent(Mono.just(MessageBuilder.withPayload(OrderEvent.DELIVERED_ORDER).build())))
                 .thenMany(sm.sendEvent(Mono.just(MessageBuilder.withPayload(OrderEvent.OPERATOR_COMPLETES_ORDER).build())))
-                .subscribe(result ->
-                                Assertions.assertEquals(OrderState.COMPLETED, sm.getState().getId()),
-                        System.out::println
-                );
+                .then().block();
+
+        Assertions.assertEquals(OrderState.COMPLETED, sm.getState().getId());
     }
 
     @Test
@@ -41,9 +40,24 @@ public class OrderStateMachineConfigTest {
                 .thenMany(sm.sendEvent(Mono.just(MessageBuilder.withPayload(OrderEvent.PAYMENT_RECEIVED).build())))
                 .thenMany(sm.sendEvent(Mono.just(MessageBuilder.withPayload(OrderEvent.DECORATED_ORDER).build())))
                 .thenMany(sm.sendEvent(Mono.just(MessageBuilder.withPayload(OrderEvent.ORDER_CANCELLED_BY_USER).build())))
-                .subscribe(result ->
-                                Assertions.assertEquals(OrderState.CANCELLED, sm.getState().getId()),
-                        System.out::println
-                );
+                .then().block();
+
+        Assertions.assertEquals(OrderState.CANCELLED, sm.getState().getId());
+    }
+    @Test
+    void testOpeningReturn() {
+        var sm = factory.getStateMachine(UUID.randomUUID());
+
+        sm.startReactively()
+                .thenMany(sm.sendEvent(Mono.just(MessageBuilder.withPayload(OrderEvent.PAYMENT_RECEIVED).build())))
+                .thenMany(sm.sendEvent(Mono.just(MessageBuilder.withPayload(OrderEvent.DECORATED_ORDER).build())))
+                .thenMany(sm.sendEvent(Mono.just(MessageBuilder.withPayload(OrderEvent.SHIPPED_ORDER).build())))
+                .thenMany(sm.sendEvent(Mono.just(MessageBuilder.withPayload(OrderEvent.DELIVERED_ORDER).build())))
+                .thenMany(sm.sendEvent(Mono.just(MessageBuilder.withPayload(OrderEvent.OPERATOR_COMPLETES_ORDER).build())))
+                .thenMany(sm.sendEvent(Mono.just(MessageBuilder.withPayload(OrderEvent.RETURN_REQUESTED_BY_USER).build())))
+                .then().block();
+
+        System.out.println(sm.getState().getStates());
+        Assertions.assertEquals(OrderState.RETURN_REQUESTED, sm.getState().getId());
     }
 }
