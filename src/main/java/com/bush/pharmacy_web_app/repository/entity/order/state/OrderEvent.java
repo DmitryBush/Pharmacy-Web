@@ -48,7 +48,12 @@ public enum OrderEvent {
      * <p>Occurs when a buyer does not come to the branch to pick up the order.</p>
      * <p>Moving to the {@link OrderState#NOT_DEMAND} state</p>
      */
-    OPERATOR_RETURNS_ORDER,
+    OPERATOR_CANCELS_ORDER,
+    /**
+     * <p>the buyer refuses the delivered order, after which the order return is initiated</p>
+     * <p>Moving to the {@link OrderState#RETURN_SHIPPED_BY_CUSTOMER} state</p>
+     */
+    OPERATOR_REFUNDS_ORDER,
     /**
      * <p>The buyer independently cancels the order. This event stops further processing</p>
      * <p>Moving to the {@link OrderState#CANCELLED} state</p>

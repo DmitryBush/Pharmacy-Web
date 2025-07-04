@@ -1,0 +1,97 @@
+#notification-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.notification {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    min-width: 300px;
+    min-height: 50px;
+    padding: 16px 25px 16px 25px;
+    border-radius: 16px;
+    color: #202020;
+    background: rgba(246, 246, 246, 0.84);
+    box-shadow: 4px 4px 9px rgba(0, 0, 0, 0.125), -4px -4px 9px rgba(0, 0, 0, 0.125), inset 0 0 0 1px rgba(0, 0, 0, 0.03);
+    backdrop-filter: blur(5px) saturate(180%);
+    -webkit-backdrop-filter: blur(5px) saturate(180%);
+    opacity: 0;
+    transform: translateX(100%);
+    animation: slideIn 0.3s forwards, fadeOut 0.5s forwards 2.5s;
+}
+
+.notification::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 16px;
+    background: linear-gradient(
+            to bottom right,
+            rgba(246, 246, 246, 0.4) 0%,
+            rgba(246, 246, 246, 0.1) 100%
+    );
+    pointer-events: none;
+    z-index: -1;
+}
+
+.notification-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.notification-title {
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 16px;
+    max-width: 250px;
+    margin-bottom: 2px;
+    letter-spacing: -0.2px;
+}
+
+.notification-description {
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 16px;
+    max-width: 250px;
+    margin-top: 6px;
+    letter-spacing: -0.2px;
+}
+
+.notification-icon {
+    width: 32px;
+    height: 32px;
+    margin-top: 9px;
+    border-radius: 6px;
+}
+
+@keyframes slideIn {
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeOut {
+    to { opacity: 0 }
+}
+
+.notification-close {
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    background: transparent;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+}

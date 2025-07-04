@@ -12,7 +12,7 @@ public class IconRestController {
     private final IconService iconService;
 
     @GetMapping(value = "/{folder}/{name}")
-    public Resource findIconByName(@PathVariable String folder, @RequestParam String name) {
+    public Resource findIconByName(@PathVariable String folder, @PathVariable String name) {
         return iconService.findIconByName(name, folder);
     }
 }

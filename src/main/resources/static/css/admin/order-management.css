@@ -127,7 +127,7 @@ body {
 
 .order-price p {
     margin: 0;
-    color: #d32f2f;
+    color: #107C10;
 }
 
 /* Кнопки действий */
@@ -138,16 +138,19 @@ button {
     border-radius: 4px;
     cursor: pointer;
     transition: 0.3s;
+    color: white;
 }
 
-button:first-child {
+#complete-order-btn {
     background: #4CAF50;
-    color: white;
 }
 
-button:last-child {
+#cancel-order-btn {
     background: #f44336;
-    color: white;
+}
+
+#refund-order-btn {
+    background: #757575;
 }
 
 button:hover {

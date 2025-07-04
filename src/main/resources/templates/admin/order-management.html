@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <title>Заказ № [(${order.id})]</title>
     <link href="/css/admin/order-management.css" rel="stylesheet" type="text/css">
+    <link href="/css/notification/notification.css" rel="stylesheet" type="text/css">
+    <script type="module" src="/js/admin/order-management.js"></script>
 </head>
 <body>
     <div th:replace="~{/admin/sidebar/sidebar.html :: sidebar}"></div>
@@ -58,17 +60,23 @@
                         <span>Итого:</span>
                         <p>[(${order.result})] ₽</p>
                     </div>
-                    <div>
-                        <button th:if="${order.statusOrder.id == OrderStatus.DELIVERED.ordinal()}">
+                    <div th:if="${order.statusOrder.id == OrderStatus.DELIVERED.ordinal()}"
+                         th:data-id="${order.id}">
+                        <button id="complete-order-btn">
                             Завершить заказ
                         </button>
-                        <button th:if="${order.statusOrder.id == OrderStatus.DELIVERED.ordinal()}">
+                        <button id="cancel-order-btn">
+                            Отменить заказ
+                        </button>
+                        <button id="refund-order-btn">
                             Вернуть заказ
                         </button>
                     </div>
                 </div>
             </div>
         </div>
+<!--        <div th:replace="~{/notification/notification.html}"></div>-->
+        <div id="notification-container"></div>
     </main>
 </body>
 </html>

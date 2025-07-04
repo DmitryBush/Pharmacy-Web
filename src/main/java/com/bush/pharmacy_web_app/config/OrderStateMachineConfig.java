@@ -115,7 +115,12 @@ public class OrderStateMachineConfig extends StateMachineConfigurerAdapter<Order
                 .withExternal()
                     .source(OrderState.DELIVERED)
                     .target(OrderState.NOT_DEMAND)
-                    .event(OrderEvent.OPERATOR_RETURNS_ORDER)
+                    .event(OrderEvent.OPERATOR_CANCELS_ORDER)
+                .and()
+                .withExternal()
+                    .source(OrderState.DELIVERED)
+                    .target(OrderState.AWAITING_CUSTOMER_SHIPMENT)
+                    .event(OrderEvent.OPERATOR_REFUNDS_ORDER)
                 .and()
 
                 .withExternal()
