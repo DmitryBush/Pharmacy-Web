@@ -32,10 +32,11 @@ export default class Notification {
         this.container.append(notification);
 
         setTimeout(() => {
-            if (notification.parentNode) {
-                notification.style.animation = 'fadeOut 0.5s forwards';
-                setTimeout(() => notification.remove(), 500);
-            }
-        }, 3000);
+            notification.style.animation = 'fadeOut 0.5s forwards';
+
+            notification.addEventListener('animationend', () => {
+                notification.remove();
+            }, { once: true });
+        }, 5000);
     }
 }

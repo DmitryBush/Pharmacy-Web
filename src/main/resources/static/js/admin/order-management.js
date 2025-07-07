@@ -1,15 +1,20 @@
 import Notification from '../notification/notification.js'
 
 document.addEventListener('DOMContentLoaded', () => {
-    const notification = new Notification('/api/icons/admin/escape.png');
+    const notification = new Notification('/api/icons/admin/orders.png');
     document.getElementById('complete-order-btn').addEventListener('click',
         (e) => {
         const id = e.target.closest('div[data-id]').dataset.id;
-        notification.showNotification('Управление заказами', 'Заказ успешно завершен');
-        // fetchData(id, 'POST', 6)
-        //     .then(r => {
-        //         notification.showNotification('Заказ успешно завершен');
-        //     });
+
+        fetchData(id, 'POST', 6)
+            .then(r => {
+                notification.showNotification('Управление заказами', 'Заказ успешно завершен');
+                e.target.parentElement.remove();
+            })
+            .catch(error => {
+                notification.showNotification('Управление заказами',
+                    `Во время завершения заказа произошла ошибка. Ошибка: ${error.message}`);
+            });
     });
 
     document.getElementById('cancel-order-btn').addEventListener('click',
@@ -36,22 +41,14 @@ async function fetchData(id, method, body = null) {
             body: body
         });
 
-        if (response.status === 403)
-            throw new Error('Требуется авторизация');
         if (!response.ok) {
-            const errorText = await response.text();
-            try {
-                const errorJson = JSON.parse(errorText);
-                throw new Error(errorJson.message || errorText);
-            } catch {
-                throw new Error(errorText);
-            }
+            const errorText = await response.json();
+            throw new Error(errorText.error);
         }
 
         return response;
     } catch (error) {
         console.error(`${method} error:`, error);
-        alert(`${method} ошибка:` + error);
         throw error;
     }
 }

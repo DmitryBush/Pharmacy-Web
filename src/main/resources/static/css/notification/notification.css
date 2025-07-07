@@ -24,7 +24,7 @@
     -webkit-backdrop-filter: blur(5px) saturate(180%);
     opacity: 0;
     transform: translateX(100%);
-    animation: slideIn 0.3s forwards, fadeOut 0.5s forwards 2.5s;
+    animation: slideIn 0.3s forwards;
 }
 
 .notification::before {
@@ -82,7 +82,14 @@
 }
 
 @keyframes fadeOut {
-    to { opacity: 0 }
+    0% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    100% {
+        opacity: 0;
+        transform: translateX(0);
+    }
 }
 
 .notification-close {

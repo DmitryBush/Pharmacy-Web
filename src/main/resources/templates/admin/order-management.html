@@ -61,7 +61,8 @@
                         <p>[(${order.result})] ₽</p>
                     </div>
                     <div th:if="${order.statusOrder.id == OrderStatus.DELIVERED.ordinal()}"
-                         th:data-id="${order.id}">
+                         th:data-id="${order.id}"
+                         id="order-interaction-container">
                         <button id="complete-order-btn">
                             Завершить заказ
                         </button>
