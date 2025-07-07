@@ -1,5 +1,6 @@
 package com.bush.pharmacy_web_app.controllers.rest.order;
 
+import com.bush.pharmacy_web_app.repository.dto.orders.OrderStateChangeDto;
 import com.bush.pharmacy_web_app.repository.entity.order.state.OrderEvent;
 import com.bush.pharmacy_web_app.repository.entity.order.state.OrderState;
 import com.bush.pharmacy_web_app.service.OrderService;
@@ -22,9 +23,9 @@ public class OrderRestController {
     }
 
     @PostMapping("/{id}/state")
-    public ResponseEntity<Void> requestStateChange(@PathVariable Long id, @RequestBody OrderEvent event) {
+    public ResponseEntity<Void> requestStateChange(@PathVariable Long id, @RequestBody OrderStateChangeDto dto) {
         try {
-            if (orderService.processEvent(id, event))
+            if (orderService.processEvent(id, dto.event()))
                 return ResponseEntity.accepted().build();
             else
                 return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();

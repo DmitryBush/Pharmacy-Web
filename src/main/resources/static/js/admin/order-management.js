@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
         (e) => {
         const id = e.target.closest('div[data-id]').dataset.id;
 
-        fetchData(id, 'POST', 6)
+        fetchData(id, 'POST', { event: 'OPERATOR_COMPLETES_ORDER'})
             .then(r => {
                 notification.showNotification('Управление заказами', 'Заказ успешно завершен');
                 e.target.parentElement.remove();
@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const id = e.target.closest('div[data-id]').dataset.id;
         notification.showNotification('Заказ отменен');
 
-        fetchData(id, 'POST', 7);
+        fetchData(id, 'POST', { event: "OPERATOR_CANCELS_ORDER" });
     });
 
     document.getElementById('refund-order-btn').addEventListener('click',
@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const id = e.target.closest('div[data-id]').dataset.id;
         notification.showNotification('Начата процедура возврата');
 
-        fetchData(id, 'POST', 8);
+        fetchData(id, 'POST', { event: "OPERATOR_REFUNDS_ORDER" });
     });
 });
 
@@ -38,7 +38,10 @@ async function fetchData(id, method, body = null) {
     try {
         const response = await fetch(`/api/v1/order/${id}/state`, {
             method,
-            body: body
+            body: JSON.stringify(body),
+            headers: {
+                'Content-Type': 'application/json'
+            }
         });
 
         if (!response.ok) {
