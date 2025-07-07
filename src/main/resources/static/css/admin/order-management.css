@@ -135,10 +135,15 @@ button {
     padding: 10px 20px;
     margin: 20px 10px 0 0;
     border: none;
-    border-radius: 4px;
+    border-radius: 6px;
     cursor: pointer;
     transition: 0.3s;
     color: white;
+}
+
+button svg {
+    vertical-align: middle; 
+    margin-bottom: 2px;
 }
 
 #complete-order-btn {
