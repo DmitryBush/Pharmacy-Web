@@ -79,14 +79,14 @@ document.addEventListener("DOMContentLoaded", function() {
         const productItem = document.createElement("div");
         productItem.className = "product-item";
         productItem.innerHTML = `
-            <a href="@{/admin/product/${e.id}">
+            <a href="/admin/product/${e.id}">
                 <img src="/api/product-image/${e.imagePaths[0].id}"
                      width="50px"
                      height="50px"
                      alt="${e.name}">
             </a>
             <div>
-                <a href="@{/admin/product/${e.id}">${e.name}</a>
+                <a href="/admin/product/${e.id}">${e.name}</a>
             </div>
             <div>
                 <p>1 шт.</p>
