@@ -1,67 +1,33 @@
+import RestClient from "../RestClient.js";
+
 document.addEventListener("DOMContentLoaded", function() {
     let DEBOUNCE_DELAY = 300;
     const map = new Map();
-    const name = document.getElementById("name");
-    const quantity = document.getElementById("quantity");
-    const productList = document.getElementById("productList");
+    const restClient = new RestClient();
+
+    const productList = document.getElementById("product-list");
+
+    const searchContainer = document.getElementById("search-container");
+    const searchField = document.getElementById("search-field");
     const resultsContainer = document.getElementById("search-result-container");
+    const searchBackdrop = document.getElementById('search-backdrop');
+    let searchOutsideClick = null;
 
-    document.getElementById("add-btn").addEventListener("click", function() {
-        addRecord();
-    })
+    document.getElementById("search-field").addEventListener('input', handleSearchInput);
+    document.getElementById("search-btn").addEventListener('click', handleOpenSearch);
 
-    document.getElementById("name").addEventListener('input', handleSearchInput.bind(this))
+    function handleOpenSearch() {
+        searchContainer.style.display = 'block';
+        searchBackdrop.style.display = 'block';
 
-    async function fetchData(url, body = null) {
-        try {
-            const response = await fetch(url, {
-                method: "GET",
-                body: body
-            });
-
-            if (!response.ok)
-                throw new Error("Произошла ошибка при загрузке данных с сервера: Код " + response.status);
-
-            return response;
-        } catch (error) {
-            alert(error);
-        }
-    }
-
-    async function addRecord() {
-        try {
-            if (name.value.trim() === "" || quantity.value.trim() === "")
-                throw new Error("Не введено значений в поля");
-
-            const id = name.getAttribute("data-id");
-
-            if (id === null)
-                throw new Error("Произошла системная ошибка при получении идентификатора")
-
-            const data = await (await fetchData(`/api/admin/product/${id}`, null)).json();
-
-            map.set(id, data);
-
-            const productItem = document.createElement("div");
-            productItem.className = "product-item";
-            productItem.innerHTML = `
-            <a href="@{/admin/product/{id}(id=${data.id})}">
-                <img src="/api/product-image/${data.imagePaths.get(0).id}"
-                     width="50px"
-                     height="50px"
-                     alt="${data.name}">
-            </a>
-            <div>
-                <a href="@{/admin/product/{id}(id=${data.id})}">${data.name}</a>
-            </div>
-            <div>
-                <p>${quantity.value.trim()} шт.</p>
-            </div>
-            `;
-            productList.append(productItem);
-        } catch (e) {
-            alert(e);
-        }
+        searchOutsideClick = (event) => {
+            if (searchContainer && !searchContainer.contains(event.target) && !resultsContainer.contains(event.target)) {
+                closeSearch();
+                document.removeEventListener('click', searchOutsideClick);
+                searchOutsideClick = null;
+            }
+        };
+        setTimeout(() => document.addEventListener('click', searchOutsideClick), 10);
     }
 
     function handleSearchInput(e) {
@@ -70,37 +36,77 @@ document.addEventListener("DOMContentLoaded", function() {
 
         if (searchTerm.length < 2) {
             resultsContainer.innerHTML = '';
+            map.clear();
             return;
         }
 
         DEBOUNCE_DELAY = setTimeout(() => {
-            fetchSearchResults(searchTerm);
+            fetchResults(searchTerm);
         }, DEBOUNCE_DELAY);
     }
 
-    async function fetchSearchResults(searchTerm) {
+    async function fetchResults(searchTerm) {
         try {
-            const data = await (await this.fetchData(`/api/search/medicine?name=${searchTerm}`, 'GET')).json();
-            showResults(data);
-        } catch (e) {
-
+            const data = await
+                (await restClient.fetchData(`/api/search/medicine?name=${searchTerm}`, 'GET')).json();
+            displayResults(data);
+        } catch (error) {
+            console.error(error);
         }
     }
 
-    function showResults(data) {
+    function displayResults(results) {
         resultsContainer.innerHTML = '';
-        if (data.length === 0)
-            return null;
+        map.clear();
+        if (results.length === 0) {
+            return;
+        }
 
         results.forEach(result => {
             const div = document.createElement('div');
             div.className = 'result-item';
             div.textContent = result.name;
-            div.onclick = () => this.handleSearchClick(result);
-            this.saveTMPData(result, div);
+            div.dataset.id = result.id;
+            map.set(result.id, result);
 
-            this.resultsContainer.appendChild(div);
+            div.onclick = () => handleSearchClick(result);
+
+            resultsContainer.appendChild(div);
         });
+    }
+
+    function handleSearchClick(e) {
+        const productItem = document.createElement("div");
+        productItem.className = "product-item";
+        productItem.innerHTML = `
+            <a href="@{/admin/product/${e.id}">
+                <img src="/api/product-image/${e.imagePaths[0].id}"
+                     width="50px"
+                     height="50px"
+                     alt="${e.name}">
+            </a>
+            <div>
+                <a href="@{/admin/product/${e.id}">${e.name}</a>
+            </div>
+            <div>
+                <p>1 шт.</p>
+            </div>
+            `;
+        productList.append(productItem);
+        setTimeout(() => closeSearch(), 10);
+    }
+
+    function closeSearch() {
+        searchContainer.style.display = 'none';
+        searchBackdrop.style.display = 'none';
+
+        searchField.value = '';
+        resultsContainer.innerHTML = '';
+
+        if (searchOutsideClick !== null) {
+            document.removeEventListener('click', searchOutsideClick);
+            searchOutsideClick = null;
+        }
     }
 })
 

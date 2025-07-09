@@ -4,29 +4,25 @@
     <meta charset="UTF-8">
     <title>Поступление товара</title>
     <link href="/css/admin/warehouse-receipt.css" rel="stylesheet" type="text/css">
+    <script src="/js/admin/warehouse-receipt.js" type="module"></script>
 </head>
 <body>
     <div th:replace="~{/admin/sidebar/sidebar.html :: sidebar}"></div>
     <main class="main-content">
+        <div class="search-backdrop" style="display: none" id="search-backdrop"></div>
+        <div id="search-container" class="search-container" style="display: none">
+            <label for="search-field">
+                <input id="search-field" class="search-field" type="text" placeholder="Поиск">
+            </label>
+            <div id="search-result-container" class="search-result-container"></div>
+        </div>
         <h1 class="page-title">Оформление поступления на склад</h1>
         <div class="page-container">
-            <div class="input-group">
-                <label for="name">
-                    Название продукта
-                    <input type="text" id="name" placeholder="Название продукта">
-                </label>
-                <div class="search-result-container">
-
-                </div>
-                <label for="quantity">
-                    Количество товара
-                    <input type="number" id="quantity" placeholder="1 шт.">
-                </label>
-                <button id="add-btn">
-                    Добавить
-                </button>
+            <div>
+                <button id="search-btn">Добавить продукт из базы данных</button>
+                <button>Импортировать из файла</button>
             </div>
-            <div class="product-list"></div>
+            <div class="product-list" id="product-list"></div>
             <div>
                 <button class="save-btn">Сохранить</button>
                 <button class="cancel-btn">Отменить</button>
