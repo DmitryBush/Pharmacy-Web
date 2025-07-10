@@ -2,7 +2,7 @@ import RestClient from "../RestClient.js";
 
 document.addEventListener("DOMContentLoaded", function() {
     let DEBOUNCE_DELAY = 300;
-    const map = new Map();
+    const receiptMap = new Map();
     const restClient = new RestClient();
 
     const productList = document.getElementById("product-list");
@@ -10,6 +10,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     const actionFooter = document.getElementById("action-footer");
 
+    const searchMap = new Map();
     const searchContainer = document.getElementById("search-container");
     const searchField = document.getElementById("search-field");
     const resultsContainer = document.getElementById("search-result-container");
@@ -61,7 +62,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
         if (searchTerm.length < 2) {
             resultsContainer.innerHTML = '';
-            map.clear();
+            searchMap.clear();
             return;
         }
 
@@ -82,7 +83,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     function displayResults(results) {
         resultsContainer.innerHTML = '';
-        map.clear();
+        searchMap.clear();
         if (results.length === 0) {
             return;
         }
@@ -92,7 +93,7 @@ document.addEventListener("DOMContentLoaded", function() {
             div.className = 'result-item';
             div.textContent = result.name;
             div.dataset.id = result.id;
-            map.set(result.id, result);
+            searchMap.set(result.id, result);
 
             div.onclick = () => handleSearchClick(result);
 
@@ -101,9 +102,20 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     function handleSearchClick(e) {
-        const productItem = document.createElement("div");
-        productItem.className = "product-item";
-        productItem.innerHTML = `
+        try {
+            if (receiptMap.has(e.id)) {
+                const productItem = document.getElementById(e.id);
+                if (productItem)
+                    productItem.querySelector('.quantity-input').value =
+                        parseInt(productItem.querySelector('.quantity-input').value) + 1;
+                else
+                    throw new Error("Произошла критическая ошибка при обновлении контента формы");
+            } else {
+                receiptMap.set(e.id, 1);
+                const productItem = document.createElement("div");
+                productItem.id = e.id;
+                productItem.className = "product-item";
+                productItem.innerHTML = `
             <a href="/admin/product/${e.id}">
                 <img src="/api/product-image/${e.imagePaths[0].id}"
                      width="50px"
@@ -117,20 +129,31 @@ document.addEventListener("DOMContentLoaded", function() {
                 <input type="number" min="1" value="1" class="quantity-input">
             </div>
             `;
-        productList.append(productItem);
-        updateItemsCounter();
-        setTimeout(() => closeSearch(), 10);
+                productList.append(productItem);
+                updateItemsCounter();
+            }
+            setTimeout(() => closeSearch(), 10);
+        } catch (e) {
+            console.error(e);
+        }
     }
 
     function updateItemsCounter() {
-        itemsCounter.textContent = String(document.querySelectorAll('.product-item').length);
-        if (actionFooter.style.display === 'none') {
+        const itemsCount = document.querySelectorAll('.product-item').length;
+        itemsCounter.textContent = String(itemsCount);
+
+        if (actionFooter.style.display === 'none' && itemsCount > 0)
             showFooter();
-        }
+        else if (actionFooter.style.display === 'flex' && itemsCount === 0)
+            closeFooter();
     }
 
     function showFooter() {
         actionFooter.style.display = 'flex';
+    }
+
+    function closeFooter() {
+        actionFooter.style.display = 'none';
     }
 
     function closeSearch() {
