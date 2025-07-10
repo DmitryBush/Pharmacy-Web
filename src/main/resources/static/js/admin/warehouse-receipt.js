@@ -1,9 +1,11 @@
 import RestClient from "../RestClient.js";
+import Notification from "../notification/notification.js";
 
 document.addEventListener("DOMContentLoaded", function() {
     let DEBOUNCE_DELAY = 300;
     const receiptMap = new Map();
     const restClient = new RestClient();
+    const notification = new Notification('/api/icons/admin/box-fill.png');
 
     const productList = document.getElementById("product-list");
     const itemsCounter = document.getElementById("items-counter");
@@ -31,8 +33,11 @@ document.addEventListener("DOMContentLoaded", function() {
         restClient.fetchData(`/api/v1/warehouse/branches/1/receipts`, 'POST',
             {'Content-Type': 'application/json'}, JSON.stringify({productList: body}))
             .then(r => {
-
-            });
+                notification.showNotification('Управление складом',
+                    `Оформление товара успешно завершено`);
+            })
+            .catch(e => notification.showNotification('Управление складом',
+                `Во время завершения заказа произошла ошибка. Ошибка: ${e.message}`));
     }
 
     function getReceiptData(item) {
@@ -67,7 +72,10 @@ document.addEventListener("DOMContentLoaded", function() {
         }
 
         DEBOUNCE_DELAY = setTimeout(() => {
-            fetchResults(searchTerm);
+            fetchResults(searchTerm)
+                .catch(error =>
+                    notification.showNotification('Управление складом',
+                        `Произошла ошибка при поиске продукта: ${error}`));
         }, DEBOUNCE_DELAY);
     }
 
@@ -78,6 +86,7 @@ document.addEventListener("DOMContentLoaded", function() {
             displayResults(data);
         } catch (error) {
             console.error(error);
+            throw error;
         }
     }
 
@@ -135,6 +144,7 @@ document.addEventListener("DOMContentLoaded", function() {
             setTimeout(() => closeSearch(), 10);
         } catch (e) {
             console.error(e);
+            notification.showNotification('Управление складом', e);
         }
     }
 
