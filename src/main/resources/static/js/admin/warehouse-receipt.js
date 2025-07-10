@@ -6,6 +6,9 @@ document.addEventListener("DOMContentLoaded", function() {
     const restClient = new RestClient();
 
     const productList = document.getElementById("product-list");
+    const itemsCounter = document.getElementById("items-counter");
+
+    const actionFooter = document.getElementById("action-footer");
 
     const searchContainer = document.getElementById("search-container");
     const searchField = document.getElementById("search-field");
@@ -15,6 +18,28 @@ document.addEventListener("DOMContentLoaded", function() {
 
     document.getElementById("search-field").addEventListener('input', handleSearchInput);
     document.getElementById("search-btn").addEventListener('click', handleOpenSearch);
+
+    document.getElementById('save-btn').addEventListener('click', saveReceipt);
+    document.getElementById('cancel-btn').addEventListener('click',
+        () => window.location.href = '/admin/warehouse');
+
+    function saveReceipt() {
+        const body = Array.from(document.querySelectorAll('.product-item'))
+            .map(item => getReceiptData(item));
+
+        restClient.fetchData(`/api/v1/warehouse/branches/1/receipts`, 'POST',
+            {'Content-Type': 'application/json'}, JSON.stringify({productList: body}))
+            .then(r => {
+
+            });
+    }
+
+    function getReceiptData(item) {
+        return {
+            id: item.dataset.id,
+            quantity: item.querySelector('.quantity-input').value
+        };
+    }
 
     function handleOpenSearch() {
         searchContainer.style.display = 'block';
@@ -88,12 +113,24 @@ document.addEventListener("DOMContentLoaded", function() {
             <div>
                 <a href="/admin/product/${e.id}">${e.name}</a>
             </div>
-            <div>
-                <p>1 шт.</p>
+            <div class="quantity-control">
+                <input type="number" min="1" value="1" class="quantity-input">
             </div>
             `;
         productList.append(productItem);
+        updateItemsCounter();
         setTimeout(() => closeSearch(), 10);
+    }
+
+    function updateItemsCounter() {
+        itemsCounter.textContent = String(document.querySelectorAll('.product-item').length);
+        if (actionFooter.style.display === 'none') {
+            showFooter();
+        }
+    }
+
+    function showFooter() {
+        actionFooter.style.display = 'flex';
     }
 
     function closeSearch() {
