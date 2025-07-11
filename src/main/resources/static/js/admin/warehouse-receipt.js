@@ -125,26 +125,45 @@ document.addEventListener("DOMContentLoaded", function() {
                 productItem.id = e.id;
                 productItem.className = "product-item";
                 productItem.innerHTML = `
-            <a href="/admin/product/${e.id}">
-                <img src="/api/product-image/${e.imagePaths[0].id}"
-                     width="50px"
-                     height="50px"
-                     alt="${e.name}">
-            </a>
-            <div>
-                <a href="/admin/product/${e.id}">${e.name}</a>
-            </div>
-            <div class="quantity-control">
-                <input type="number" min="1" value="1" class="quantity-input">
-            </div>
-            `;
+                <a href="/admin/product/${e.id}">
+                    <img src="/api/product-image/${e.imagePaths[0].id}"
+                         width="50px"
+                         height="50px"
+                         alt="${e.name}">
+                </a>
+                <div>
+                    <a href="/admin/product/${e.id}">${e.name}</a>
+                </div>
+                <div class="quantity-control">
+                    <div class="quantity-container">
+                        <button class="quantity-btn decrement">-</button>
+                        <input type="number" min="1" value="1" class="quantity-input">
+                        <button class="quantity-btn increment">+</button>
+                    </div>
+                </div>
+                `;
+                productItem.querySelector('.increment').addEventListener('click',
+                    (e) => updateQuantityCount(e));
+                productItem.querySelector('.decrement').addEventListener('click',
+                    (e) => updateQuantityCount(e));
+
                 productList.append(productItem);
                 updateItemsCounter();
             }
             setTimeout(() => closeSearch(), 10);
         } catch (e) {
             console.error(e);
+            closeSearch();
             notification.showNotification('Управление складом', e);
+        }
+    }
+
+    function updateQuantityCount(e) {
+        const quantityInput = e.target.parentElement.querySelector('.quantity-input');
+        if (e.target.className.includes('increment')) {
+            quantityInput.value = parseInt(quantityInput.value) + 1;
+        } else if (parseInt(quantityInput.value) > 1) {
+            quantityInput.value = parseInt(quantityInput.value) - 1;
         }
     }
 

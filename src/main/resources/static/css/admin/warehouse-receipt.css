@@ -232,3 +232,54 @@ body {
 .product-item div {
     flex: 1;
 }
+
+.quantity-control {
+    width: 80%;
+}
+
+.quantity-container {
+    display: inline-flex;
+    height: 40px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    overflow: hidden;
+    background: white;
+}
+
+.quantity-input {
+    width: 36px;
+    border: none;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+}
+
+.quantity-btn {
+    width: 32px;
+    background: #EEEEEE;
+    font-size: 16px;
+    border: none;
+    color: #555;
+    cursor: pointer;
+    transition: background 0.15s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.quantity-btn:hover {
+    background: #E0E0E0;
+}
+
+.quantity-btn:active {
+    background: #e8e8e8;
+}
+
+.decrement {
+    border-right: 1px solid #eee;
+}
+
+.increment {
+    border-left: 1px solid #eee;
+}
