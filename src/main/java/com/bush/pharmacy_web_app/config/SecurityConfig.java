@@ -16,7 +16,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
-                .csrf(csrf -> csrf.ignoringRequestMatchers("/api/**"))
+                .csrf(Customizer.withDefaults())
                 .authorizeHttpRequests(lamb -> lamb
                         .requestMatchers("/login", "/register", "/catalog/**", "/", "/cart", "/error"
                         ,"/api/**", "/css/**", "/js/**").permitAll()
