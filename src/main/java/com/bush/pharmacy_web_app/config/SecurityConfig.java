@@ -20,9 +20,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(lamb -> lamb
                         .requestMatchers("/login", "/register", "/catalog/**", "/", "/cart", "/error"
                         ,"/api/**", "/css/**", "/js/**").permitAll()
-                        .requestMatchers("/admin/**").permitAll()
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated())
-                .httpBasic(Customizer.withDefaults())
                 .formLogin(login -> login.loginPage("/login")
                         .defaultSuccessUrl("/").permitAll())
                 .logout(logout -> logout.logoutUrl("/logout")
