@@ -7,6 +7,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,22 +26,34 @@ public class AdminOrderController {
     @GetMapping
     public String getOrders(Model model,
                             HttpServletRequest httpRequest,
-                            @PageableDefault(size = 15) Pageable pageable) {
+                            @PageableDefault(size = 15) Pageable pageable,
+                            @AuthenticationPrincipal UserDetails userDetails) {
         var orders = orderService.findAllOrdersByBranch(1L, pageable);
+        var authorities = userDetails.getAuthorities()
+                .stream()
+                .map(GrantedAuthority::getAuthority)
+                .toList();
 
         model.addAttribute("orders", orders);
         model.addAttribute("OrderStatus", OrderState.class);
+        model.addAttribute("authorities", authorities);
         model.addAttribute("currentUri", httpRequest.getRequestURI());
         return "/admin/order";
     }
 
     @GetMapping("/{id}")
-    public String getOrder(@PathVariable Long id, Model model, HttpServletRequest httpRequest) {
+    public String getOrder(@PathVariable Long id, Model model, HttpServletRequest httpRequest,
+                           @AuthenticationPrincipal UserDetails userDetails) {
         var order = orderService.findOrderById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        var authorities = userDetails.getAuthorities()
+                .stream()
+                .map(GrantedAuthority::getAuthority)
+                .toList();
 
         model.addAttribute("order", order);
         model.addAttribute("OrderStatus", OrderState.class);
+        model.addAttribute("authorities", authorities);
         model.addAttribute("currentUri", httpRequest.getRequestURI());
         return "/admin/order-management";
     }
