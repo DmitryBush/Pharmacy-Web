@@ -1,14 +1,14 @@
 package com.bush.pharmacy_web_app.repository.mapper.user;
 
 import com.bush.pharmacy_web_app.repository.dto.user.CustomerCreateDto;
-import com.bush.pharmacy_web_app.repository.entity.User;
+import com.bush.pharmacy_web_app.repository.entity.user.User;
 import com.bush.pharmacy_web_app.repository.mapper.DtoMapper;
 import org.springframework.stereotype.Component;
 
 import java.util.Collections;
 
 @Component
-public class CustomerCreateMapper implements DtoMapper<CustomerCreateDto, User> {
+public class UserCreateMapper implements DtoMapper<CustomerCreateDto, User> {
 
     @Override
     public User map(CustomerCreateDto obj) {

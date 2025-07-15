@@ -1,7 +1,7 @@
 package com.bush.pharmacy_web_app.repository.mapper.user;
 
 import com.bush.pharmacy_web_app.repository.dto.user.CustomerReadDto;
-import com.bush.pharmacy_web_app.repository.entity.User;
+import com.bush.pharmacy_web_app.repository.entity.user.User;
 import com.bush.pharmacy_web_app.repository.mapper.DtoMapper;
 import com.bush.pharmacy_web_app.repository.mapper.orders.OrderReadMapper;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +12,7 @@ import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
-public class CustomerReadMapper implements DtoMapper<User, CustomerReadDto> {
+public class UserReadMapper implements DtoMapper<User, CustomerReadDto> {
     private final OrderReadMapper orderReadMapper;
 
     @Override
