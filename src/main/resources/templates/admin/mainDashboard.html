@@ -8,7 +8,8 @@
 <body>
     <div th:replace="~{/admin/sidebar/sidebar.html :: sidebar}"></div>
     <main class="main-content">
-        <h1>Добро пожаловать в панель администрирования</h1>
+        <h2>[(${user.name})] [(${user.lastName})],</h2>
+        <h1>Здравствуйте</h1>
         <div class="dashboard-cards">
             <!-- Карточка товаров -->
             <a href="/admin/product" class="card">
