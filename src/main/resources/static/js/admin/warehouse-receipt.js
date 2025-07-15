@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", function() {
     let DEBOUNCE_DELAY = 300;
     const receiptMap = new Map();
     const restClient = new RestClient();
-    const notification = new Notification('/api/icons/admin/box-fill.png');
+    const notification = new Notification('/api/v1/icons/admin/box-fill.png');
 
     const productList = document.getElementById("product-list");
     const itemsCounter = document.getElementById("items-counter");
