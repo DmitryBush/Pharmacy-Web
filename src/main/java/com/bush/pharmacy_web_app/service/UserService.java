@@ -3,8 +3,8 @@ package com.bush.pharmacy_web_app.service;
 import com.bush.pharmacy_web_app.repository.UserRepository;
 import com.bush.pharmacy_web_app.repository.dto.user.CustomerCreateDto;
 import com.bush.pharmacy_web_app.repository.dto.user.CustomerReadDto;
-import com.bush.pharmacy_web_app.repository.mapper.user.CustomerCreateMapper;
-import com.bush.pharmacy_web_app.repository.mapper.user.CustomerReadMapper;
+import com.bush.pharmacy_web_app.repository.mapper.user.UserCreateMapper;
+import com.bush.pharmacy_web_app.repository.mapper.user.UserReadMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,8 +24,8 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
-    private final CustomerReadMapper readMapper;
-    private final CustomerCreateMapper createMapper;
+    private final UserReadMapper readMapper;
+    private final UserCreateMapper createMapper;
 
     public List<CustomerReadDto> findAll() {
         return userRepository.findAll().stream().map(readMapper::map).toList();
@@ -76,7 +76,7 @@ public class UserService implements UserDetailsService {
                         customer.getPassword(),
                         customer.getRoles()
                                 .stream()
-                                .map(role -> new SimpleGrantedAuthority("ROLE_"+ role.getType()))
+                                .map(role -> new SimpleGrantedAuthority("ROLE_"+ role.getType().name()))
                                 .toList()))
                 .orElseThrow(() -> new UsernameNotFoundException("Mistake in username or password"));
     }

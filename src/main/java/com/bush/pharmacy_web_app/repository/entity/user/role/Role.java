@@ -1,4 +1,4 @@
-package com.bush.pharmacy_web_app.repository.entity.role;
+package com.bush.pharmacy_web_app.repository.entity.user.role;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -15,6 +15,7 @@ public class Role {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "role_id", nullable = false)
     private Integer id;
+    @Enumerated(value = EnumType.STRING)
     @Column(name = "role_name", nullable = false, unique = true)
-    private String type;
+    private RoleType type;
 }

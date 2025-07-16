@@ -139,7 +139,7 @@ class ProductManagement {
         const productId = event.currentTarget.getAttribute('data-id');
         if (confirm('Удалить товар?')) {
             try {
-                await this.fetchData(`/api/admin/product/${productId}`, `DELETE`);
+                await this.fetchData(`/api/v1/admin/products/${productId}`, `DELETE`);
                 const item = document.querySelector(`[data-product-id="${productId}"]`);
                 if (item) {
                     item.remove();
@@ -239,7 +239,7 @@ class ProductManagement {
 
     async handleUpdate(id) {
         try {
-            const response = await this.fetchData(`/api/admin/product/${id}`, 'GET');
+            const response = await this.fetchData(`/api/v1/admin/products/${id}`, 'GET');
 
             if (!response.ok)
                 throw new Error(response.statusText);
@@ -579,10 +579,10 @@ class ProductManagement {
                     }
 
                     if (updateMode) {
-                        await this.fetchData(`/api/admin/product/${this.primaryMedicine}`,
+                        await this.fetchData(`/api/v1/admin/products/${this.primaryMedicine}`,
                             'PUT', formData);
                     } else {
-                        await this.fetchData(`/api/admin/product`,
+                        await this.fetchData(`/api/v1/admin/products`,
                             'POST', formData);
                     }
                     this.closeCreateMenu();

@@ -8,10 +8,12 @@
 <body>
     <div th:replace="~{/admin/sidebar/sidebar.html :: sidebar}"></div>
     <main class="main-content">
-        <h1>Добро пожаловать в панель администрирования</h1>
+        <h2>[(${user.name})] [(${user.lastName})],</h2>
+        <h1>Здравствуйте</h1>
         <div class="dashboard-cards">
             <!-- Карточка товаров -->
-            <a href="/admin/product" class="card">
+            <a th:if="${authorities.contains('ROLE_' + T(com.bush.pharmacy_web_app.repository.entity.user.role.RoleType).ADMIN.name())}"
+               href="/admin/product" class="card">
                 <div class="card-icon">
                     <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#3498db" stroke-width="1.5">
                         <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
@@ -41,6 +43,18 @@
                 </div>
                 <h3>Управление складом</h3>
                 <p>Добавление и удаление товаров со склада</p>
+            </a>
+
+            <!-- Карточка категорий -->
+            <a th:if="${authorities.contains('ROLE_' + T(com.bush.pharmacy_web_app.repository.entity.user.role.RoleType).ADMIN.name())}"
+               href="/admin/categories" class="card">
+                <div class="card-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="#FFB900" viewBox="0 0 24 24">
+                        <path d="M9.828 3h3.982a2 2 0 0 1 1.992 2.181l-.637 7A2 2 0 0 1 13.174 14H2.825a2 2 0 0 1-1.991-1.819l-.637-7a2 2 0 0 1 .342-1.31L.5 3a2 2 0 0 1 2-2h3.672a2 2 0 0 1 1.414.586l.828.828A2 2 0 0 0 9.828 3m-8.322.12q.322-.119.684-.12h5.396l-.707-.707A1 1 0 0 0 6.172 2H2.5a1 1 0 0 0-1 .981z"/>
+                    </svg>
+                </div>
+                <h3>Управление категориями товаров</h3>
+                <p>Добавление и удаление категорий</p>
             </a>
         </div>
     </main>

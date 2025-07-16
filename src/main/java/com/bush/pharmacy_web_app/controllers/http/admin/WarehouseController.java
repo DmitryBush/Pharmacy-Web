@@ -7,6 +7,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,8 +25,8 @@ public class WarehouseController {
     @GetMapping
     public String getWarehouseInfo(Model model,
                                    HttpServletRequest httpServletRequest,
-                                   @PageableDefault
-                                   Pageable pageable) {
+                                   @PageableDefault Pageable pageable,
+                                   @AuthenticationPrincipal UserDetails userDetails) {
         var branch = pharmacyBranchService.findByBranchId(1L).orElseThrow();
         var items = storageService.findAllItemsByBranchId(1L, pageable);
 
@@ -31,18 +34,30 @@ public class WarehouseController {
                         .mapToInt(StorageItemsReadDto::amount)
                         .sum();
         var usedSpace = String.format("%.1f",((float) countItems / branch.warehouseLimitations()) * 100.0f);
+        var authorities = userDetails.getAuthorities()
+                .stream()
+                .map(GrantedAuthority::getAuthority)
+                .toList();
 
         model.addAttribute("branch", branch);
         model.addAttribute("items", items);
         model.addAttribute("countItems", countItems);
         model.addAttribute("usedSpace", usedSpace);
+        model.addAttribute("authorities", authorities);
         model.addAttribute("currentUri", httpServletRequest.getRequestURI());
         return "/admin/warehouse";
     }
 
     @GetMapping("/receiving")
-    public String showReceivingForm(Model model, HttpServletRequest httpServletRequest) {
+    public String showReceivingForm(Model model, HttpServletRequest httpServletRequest,
+                                    @AuthenticationPrincipal UserDetails userDetails) {
+        var authorities = userDetails.getAuthorities()
+                .stream()
+                .map(GrantedAuthority::getAuthority)
+                .toList();
+
         model.addAttribute("currentUri", httpServletRequest.getRequestURI());
+        model.addAttribute("authorities", authorities);
         return "/admin/warehouse-receipt";
     }
 }

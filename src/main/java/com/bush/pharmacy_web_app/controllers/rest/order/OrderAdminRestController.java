@@ -1,19 +1,19 @@
 package com.bush.pharmacy_web_app.controllers.rest.order;
 
 import com.bush.pharmacy_web_app.repository.dto.orders.OrderStateChangeDto;
-import com.bush.pharmacy_web_app.repository.entity.order.state.OrderEvent;
 import com.bush.pharmacy_web_app.repository.entity.order.state.OrderState;
 import com.bush.pharmacy_web_app.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 @RestController
-@RequestMapping("/api/v1/order")
+@RequestMapping("/api/v1/management/orders")
 @RequiredArgsConstructor
-public class OrderRestController {
+public class OrderAdminRestController {
     private final OrderService orderService;
 
     @GetMapping("/{id}/state")
@@ -22,6 +22,7 @@ public class OrderRestController {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
+    @PreAuthorize("hasAnyRole('OPERATOR', 'ADMIN')")
     @PostMapping("/{id}/state")
     public ResponseEntity<Void> requestStateChange(@PathVariable Long id, @RequestBody OrderStateChangeDto dto) {
         try {

@@ -180,7 +180,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         try {
-            const response = await fetch(`/api/admin/product/${productId}`, {
+            const response = await fetch(`/api/v1/admin/products/${productId}`, {
                 method: 'PUT',
                 body: formData
             });
@@ -201,7 +201,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!confirm('Удалить продукт?')) return;
 
         try {
-            const response = await fetch(`/api/admin/product/${productId}`, {
+            const response = await fetch(`/api/v1/admin/products/${productId}`, {
                 method: 'DELETE'
             });
 

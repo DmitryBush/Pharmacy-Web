@@ -1,7 +1,7 @@
 package com.bush.pharmacy_web_app.repository.entity.order;
 
 import com.bush.pharmacy_web_app.repository.entity.PharmacyBranch;
-import com.bush.pharmacy_web_app.repository.entity.User;
+import com.bush.pharmacy_web_app.repository.entity.user.User;
 import com.bush.pharmacy_web_app.repository.entity.order.state.OrderState;
 import jakarta.persistence.*;
 import lombok.*;

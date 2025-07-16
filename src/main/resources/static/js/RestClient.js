@@ -4,7 +4,8 @@ export default class RestClient {
             const response = await fetch(url, {
                 method: method,
                 body: body,
-                headers: headers,
+                headers: /^[gG][eE][tT]$/.test(method) ? headers : {...headers,
+                    ...(await this.getCsrfToken())},
             });
 
             if (!response.ok) {
@@ -17,5 +18,12 @@ export default class RestClient {
             console.error(`${method} error:`, error);
             throw error;
         }
+    }
+
+    async getCsrfToken() {
+        const response = await this.fetchData('/api/v1/csrf', 'GET');
+        const csrf = await response.json();
+
+        return { 'X-CSRF-TOKEN': csrf.token };
     }
 }
