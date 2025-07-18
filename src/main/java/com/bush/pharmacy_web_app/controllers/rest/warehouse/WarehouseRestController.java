@@ -1,14 +1,18 @@
 package com.bush.pharmacy_web_app.controllers.rest.warehouse;
 
+import com.bush.pharmacy_web_app.repository.dto.warehouse.InventoryReceiptRequestDto;
+import com.bush.pharmacy_web_app.repository.dto.warehouse.StorageItemsReadDto;
 import com.bush.pharmacy_web_app.service.StorageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/warehouse")
@@ -20,5 +24,13 @@ public class WarehouseRestController {
     public ResponseEntity<Integer> getProductQuantityAtBranch(@PathVariable Long branchId, @PathVariable Long productId) {
         return ResponseEntity.ok(storageService.getItemQuantityByBranchId(branchId, productId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND)));
+    }
+
+    @PreAuthorize("hasAnyRole('ADMIN', 'OPERATOR') and " +
+            "@SecurityValidation.checkUserBranchAccess(#userDetails, #productList.branchId)")
+    @PostMapping("/inventory-receipts")
+    public ResponseEntity<List<StorageItemsReadDto>> createInventoryReceipt(@AuthenticationPrincipal UserDetails userDetails,
+                                                                            @RequestBody InventoryReceiptRequestDto productList) {
+        return ResponseEntity.ok(storageService.createInventoryReceiptByBranchId(productList));
     }
 }

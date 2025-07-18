@@ -1,11 +1,16 @@
-package com.bush.pharmacy_web_app.repository.entity;
+package com.bush.pharmacy_web_app.repository.entity.branch;
 
+import com.bush.pharmacy_web_app.repository.entity.Address;
+import com.bush.pharmacy_web_app.repository.entity.StorageItems;
 import com.bush.pharmacy_web_app.repository.entity.order.Order;
+import com.bush.pharmacy_web_app.repository.entity.user.User;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -30,4 +35,6 @@ public class PharmacyBranch {
     private List<StorageItems> items = new ArrayList<>();
     @OneToMany(mappedBy = "branch", fetch = FetchType.LAZY)
     private List<Order> orders = new ArrayList<>();
+    @ManyToMany(mappedBy = "branchUserAssignments")
+    private Set<User> userBranchAssigned = new HashSet<>();
 }

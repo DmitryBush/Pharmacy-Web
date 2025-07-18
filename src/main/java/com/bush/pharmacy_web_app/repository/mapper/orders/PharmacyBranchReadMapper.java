@@ -2,13 +2,11 @@ package com.bush.pharmacy_web_app.repository.mapper.orders;
 
 import com.bush.pharmacy_web_app.repository.dto.orders.AddressReadDto;
 import com.bush.pharmacy_web_app.repository.dto.warehouse.PharmacyBranchReadDto;
-import com.bush.pharmacy_web_app.repository.entity.PharmacyBranch;
+import com.bush.pharmacy_web_app.repository.entity.branch.PharmacyBranch;
 import com.bush.pharmacy_web_app.repository.mapper.DtoMapper;
-import com.bush.pharmacy_web_app.repository.mapper.card.StorageItemReadMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
 import java.util.Optional;
 
 @Component

@@ -1,6 +1,6 @@
 package com.bush.pharmacy_web_app.repository;
 
-import com.bush.pharmacy_web_app.repository.entity.PharmacyBranch;
+import com.bush.pharmacy_web_app.repository.entity.branch.PharmacyBranch;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
