@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -42,6 +43,7 @@ public class WarehouseController {
         return "/admin/warehouse";
     }
 
+    @PreAuthorize("@SecurityValidation.checkUserBranchAccess(#userDetails, #id)")
     @GetMapping("/{id}")
     public String getWarehouseInfo(Model model,
                                    HttpServletRequest httpServletRequest,
@@ -69,6 +71,7 @@ public class WarehouseController {
         return "/admin/warehouse-info";
     }
 
+    @PreAuthorize("@SecurityValidation.checkUserBranchAccess(#userDetails, #id)")
     @GetMapping("/{id}/receiving")
     public String showReceivingForm(Model model,
                                     HttpServletRequest httpServletRequest,
@@ -85,6 +88,7 @@ public class WarehouseController {
         return "/admin/warehouse-receipt";
     }
 
+    @PreAuthorize("@SecurityValidation.checkUserBranchAccess(#userDetails, #id)")
     @GetMapping("/{id}/sale")
     public String showSaleForm(Model model,
                                HttpServletRequest httpServletRequest,

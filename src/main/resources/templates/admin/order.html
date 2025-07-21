@@ -14,7 +14,7 @@
             <div class="branches-container" id="branches-list">
                 <div class="branch-card" th:each="branch : ${branches}">
                     <div class="branch-header">
-                        <a class="branch-link" th:href="@{/admin/warehouse/{id}(id=${branch.id})}">
+                        <a class="branch-link" th:href="@{/admin/orders/branch/{id}(id=${branch.id})}">
                             <h4 class="branch-title">[(${branch.name})]</h4>
                         </a>
                         <p class="branch-status-active" th:if="${branch.isActive}">Активен</p>

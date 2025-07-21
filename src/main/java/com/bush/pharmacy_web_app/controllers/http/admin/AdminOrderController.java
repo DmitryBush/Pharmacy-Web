@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -44,6 +45,7 @@ public class AdminOrderController {
         return "/admin/order";
     }
 
+    @PreAuthorize("@SecurityValidation.checkUserBranchAccess(#userDetails, #branchId)")
     @GetMapping("branch/{branchId}")
     public String getOrdersList(Model model,
                             HttpServletRequest httpRequest,
@@ -57,14 +59,19 @@ public class AdminOrderController {
                 .toList();
 
         model.addAttribute("orders", orders);
+        model.addAttribute("branchId", branchId);
         model.addAttribute("OrderStatus", OrderState.class);
         model.addAttribute("authorities", authorities);
         model.addAttribute("currentUri", httpRequest.getRequestURI());
         return "/admin/order-list";
     }
 
-    @GetMapping("/{id}")
-    public String getOrder(@PathVariable Long id, Model model, HttpServletRequest httpRequest,
+    @PreAuthorize("@SecurityValidation.checkUserBranchAccess(#userDetails, #branchId)")
+    @GetMapping("branch/{branchId}/order/{id}")
+    public String getOrder(@PathVariable Long id,
+                           @PathVariable Long branchId,
+                           Model model,
+                           HttpServletRequest httpRequest,
                            @AuthenticationPrincipal UserDetails userDetails) {
         var order = orderService.findOrderById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
