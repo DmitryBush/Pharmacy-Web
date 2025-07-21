@@ -8,6 +8,7 @@
     <script src="/js/admin/warehouse-receipt.js" type="module"></script>
 </head>
 <body>
+    <div id="branch-id" typeof="hidden" th:data-branchid="${branchId}"></div>
     <div th:replace="~{/admin/sidebar/sidebar.html :: sidebar}"></div>
     <main class="main-content">
         <div class="search-backdrop" style="display: none" id="search-backdrop"></div>

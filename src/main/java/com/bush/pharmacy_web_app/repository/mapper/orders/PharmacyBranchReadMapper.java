@@ -4,6 +4,8 @@ import com.bush.pharmacy_web_app.repository.dto.orders.AddressReadDto;
 import com.bush.pharmacy_web_app.repository.dto.warehouse.PharmacyBranchReadDto;
 import com.bush.pharmacy_web_app.repository.entity.branch.PharmacyBranch;
 import com.bush.pharmacy_web_app.repository.mapper.DtoMapper;
+import com.bush.pharmacy_web_app.repository.mapper.admin.OpeningHoursMapper;
+import com.bush.pharmacy_web_app.repository.mapper.user.UserInfoMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -12,11 +14,27 @@ import java.util.Optional;
 @Component
 @RequiredArgsConstructor
 public class PharmacyBranchReadMapper implements DtoMapper<PharmacyBranch, PharmacyBranchReadDto> {
-    private final AddressReadMapper mapper;
+    private final AddressReadMapper addressReadMapper;
+    private final UserInfoMapper userInfoMapper;
+    private final OpeningHoursMapper openingHoursMapper;
     @Override
     public PharmacyBranchReadDto map(PharmacyBranch obj) {
         AddressReadDto address = Optional.ofNullable(obj.getAddress())
-                .map(mapper::map).orElse(null);
-        return new PharmacyBranchReadDto(obj.getId(), obj.getName(), address, obj.getWarehouseLimitations());
+                .map(addressReadMapper::map).orElse(null);
+        var supervisor = Optional.ofNullable(obj.getSupervisor())
+                .map(userInfoMapper::map).orElseThrow();
+        var openingHours = Optional.ofNullable(obj.getOpeningHours())
+                .map(openingHoursMapper::map).orElseThrow();
+
+        return PharmacyBranchReadDto.builder()
+                .id(obj.getId())
+                .name(obj.getName())
+                .address(address)
+                .warehouseLimitations(obj.getWarehouseLimitations())
+                .branchPhone(obj.getBranchPhone())
+                .supervisor(supervisor)
+                .openingHours(openingHours)
+                .isActive(obj.getIsActive())
+                .build();
     }
 }

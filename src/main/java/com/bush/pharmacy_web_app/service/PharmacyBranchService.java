@@ -28,4 +28,11 @@ public class PharmacyBranchService {
                 .map(branchReadMapper::map)
                 .toList();
     }
+
+    public List<PharmacyBranchReadDto> findUserAssignedBranches(String userId) {
+        return branchRepository.findUserAssignedBranches(userId)
+                .stream()
+                .map(branchReadMapper::map)
+                .toList();
+    }
 }

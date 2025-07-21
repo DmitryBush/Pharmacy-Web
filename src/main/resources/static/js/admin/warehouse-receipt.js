@@ -8,6 +8,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const notification = new Notification('/api/v1/icons/admin/box-fill.png');
 
     const productList = document.getElementById("product-list");
+    const branchId = document.getElementById("branch-id").dataset.branchid;
     const itemsCounter = document.getElementById("items-counter");
 
     const actionFooter = document.getElementById("action-footer");
@@ -31,7 +32,7 @@ document.addEventListener("DOMContentLoaded", function() {
             .map(item => getReceiptData(item));
 
         restClient.fetchData(`/api/v1/warehouse/inventory-receipts`, 'POST',
-            {'Content-Type': 'application/json'}, JSON.stringify({ productList: body }))
+            {'Content-Type': 'application/json'}, JSON.stringify({ productList: body, branchId: branchId }))
             .then(r => {
                 notification.showNotification('Управление складом',
                     `Оформление товара успешно завершено`);

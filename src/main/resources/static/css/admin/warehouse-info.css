@@ -1,0 +1,148 @@
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    font-feature-settings: 'kern' 1;
+    background-color: #f5f5f5;
+}
+
+.main-content {
+    margin-left: 240px;
+    padding: 2rem;
+}
+
+.page-title {
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+    color: #2b2d42;
+    font-weight: 700;
+}
+
+.page-container {
+    padding-left: 0.5rem;
+}
+
+.warehouse-info {
+    margin-bottom: 1.5rem;
+}
+
+.warehouse-info a {
+    text-decoration: none;
+}
+
+.warehouse-info h2 {
+    color: #2c3e50;
+    margin-bottom: 1.2rem;
+    font-size: 1.3rem;
+}
+
+.warehouse-info p {
+    color: #4a5568;
+    margin: 0.8rem 0;
+    font-size: 1rem;
+}
+
+.product-list {
+    margin-top: 1.5rem;
+}
+
+.btn {
+    color: white;
+    margin-bottom: 20px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-right: 0.5rem;
+    transition: 0.3s;
+}
+
+.product-receipt-btn {
+    background-color: #4CAF50;
+}
+
+.product-receipt-btn:hover {
+    background-color: #43A047;
+}
+
+.product-sale-btn {
+    background-color: #E53935;
+}
+
+.product-sale-btn:hover {
+    background-color: #D32F2F;
+}
+
+.branch-transaction-history {
+    background-color: #757575;
+}
+
+.branch-transaction-history:hover {
+    background-color: #616161;
+}
+
+.image-unavailable {
+    height: 120px;
+    background: #f0f0f0;
+    border: 2px dashed #ddd;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #666;
+}
+
+.product-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px;
+    margin-bottom: 15px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.product-item a {
+    text-decoration: none;
+}
+
+.product-item img {
+    border-radius: 4px;
+    object-fit: cover;
+}
+
+.product-item div {
+    flex: 1;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .main-content {
+        margin-left: 60px;
+        padding: 1rem;
+    }
+
+    .product-list {
+        grid-template-columns: 1fr;
+    }
+
+    .warehouse-info {
+        padding: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .page-title {
+        font-size: 2rem;
+    }
+
+    button {
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+}

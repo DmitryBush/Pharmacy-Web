@@ -30,6 +30,15 @@ public class PharmacyBranch {
     private Address address;
     @Column(name = "warehouse_limitation", nullable = false)
     private Integer warehouseLimitations;
+    @Column(name = "is_active")
+    private Boolean isActive;
+    @OneToOne
+    @JoinColumn(name = "user_supervisor")
+    private User supervisor;
+    @Column(name = "branch_phone")
+    private String branchPhone;
+    @OneToMany(mappedBy = "branch", fetch = FetchType.LAZY)
+    private List<BranchOpeningHours> openingHours = new ArrayList<>();
 
     @OneToMany(mappedBy = "branch", fetch = FetchType.LAZY)
     private List<StorageItems> items = new ArrayList<>();

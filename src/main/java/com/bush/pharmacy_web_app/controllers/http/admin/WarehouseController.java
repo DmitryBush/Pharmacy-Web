@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
@@ -23,12 +24,32 @@ public class WarehouseController {
     private final StorageService storageService;
 
     @GetMapping
-    public String getWarehouseInfo(Model model,
+    public String getWarehouseList(Model model,
                                    HttpServletRequest httpServletRequest,
                                    @PageableDefault Pageable pageable,
                                    @AuthenticationPrincipal UserDetails userDetails) {
-        var branch = pharmacyBranchService.findByBranchId(1L).orElseThrow();
-        var items = storageService.findAllItemsByBranchId(1L, pageable);
+        var branches = pharmacyBranchService.findUserAssignedBranches(userDetails.getUsername());
+
+        var authorities = userDetails.getAuthorities()
+                .stream()
+                .map(GrantedAuthority::getAuthority)
+                .toList();
+
+        model.addAttribute("branches", branches);
+
+        model.addAttribute("authorities", authorities);
+        model.addAttribute("currentUri", httpServletRequest.getRequestURI());
+        return "/admin/warehouse";
+    }
+
+    @GetMapping("/{id}")
+    public String getWarehouseInfo(Model model,
+                                   HttpServletRequest httpServletRequest,
+                                   @PageableDefault Pageable pageable,
+                                   @AuthenticationPrincipal UserDetails userDetails,
+                                   @PathVariable Long id) {
+        var branch = pharmacyBranchService.findByBranchId(id).orElseThrow();
+        var items = storageService.findAllItemsByBranchId(id, pageable);
 
         var countItems = items.stream()
                         .mapToInt(StorageItemsReadDto::amount)
@@ -45,18 +66,21 @@ public class WarehouseController {
         model.addAttribute("usedSpace", usedSpace);
         model.addAttribute("authorities", authorities);
         model.addAttribute("currentUri", httpServletRequest.getRequestURI());
-        return "/admin/warehouse";
+        return "/admin/warehouse-info";
     }
 
-    @GetMapping("/receiving")
-    public String showReceivingForm(Model model, HttpServletRequest httpServletRequest,
-                                    @AuthenticationPrincipal UserDetails userDetails) {
+    @GetMapping("/{id}/receiving")
+    public String showReceivingForm(Model model,
+                                    HttpServletRequest httpServletRequest,
+                                    @AuthenticationPrincipal UserDetails userDetails,
+                                    @PathVariable Long id) {
         var authorities = userDetails.getAuthorities()
                 .stream()
                 .map(GrantedAuthority::getAuthority)
                 .toList();
 
         model.addAttribute("currentUri", httpServletRequest.getRequestURI());
+        model.addAttribute("branchId", id);
         model.addAttribute("authorities", authorities);
         return "/admin/warehouse-receipt";
     }
