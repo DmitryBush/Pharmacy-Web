@@ -36,7 +36,7 @@
                     <div class="item" th:each="item : ${order.cartItems}">
                         <div class="item-image">
                             <a th:href="@{/catalog/{id}(id=${item.medicine.id})}">
-                                <img th:src="@{/api/product-image/{id}(id=${item.medicine.imagePaths.get(0).id})}"
+                                <img th:src="@{/api/v1/product-image/{id}(id=${item.medicine.imagePaths.get(0).id})}"
                                      width="100px"
                                      th:alt="${item.medicine.name}">
                             </a>

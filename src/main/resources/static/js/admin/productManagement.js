@@ -79,7 +79,7 @@ class ProductManagement {
         if (!confirm('Удалить изображение?')) return;
 
         try {
-            const response = await this.fetchData(`/api/product-image/${imageId}`, 'DELETE');
+            const response = await this.fetchData(`/api/v1/product-image/${imageId}`, 'DELETE');
             if (response.ok) {
                 e.target.closest('.image-item').remove();
             }
@@ -92,7 +92,7 @@ class ProductManagement {
         const container = document.getElementById('imagePreview');
         container.innerHTML = images.map(img => `
             <div class="image-item">
-                <img src="/api/product-image/${img.id}" width="350px">
+                <img src="/api/v1/product-image/${img.id}" width="350px">
                 <button class="delete-image-btn" data-id="${img.id}">×</button>
             </div>
         `).join('');
