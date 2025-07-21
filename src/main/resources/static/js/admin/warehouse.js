@@ -4,4 +4,4 @@ document.addEventListener("DOMContentLoaded", () => {
             window.location.replace(`/admin/warehouse/${e.target.getAttribute('data-id')}`);
         })
     })
-})
+});

@@ -2,6 +2,7 @@ package com.bush.pharmacy_web_app.controllers.http.admin;
 
 import com.bush.pharmacy_web_app.repository.entity.order.state.OrderState;
 import com.bush.pharmacy_web_app.service.OrderService;
+import com.bush.pharmacy_web_app.service.PharmacyBranchService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -22,13 +23,34 @@ import org.springframework.web.server.ResponseStatusException;
 @RequiredArgsConstructor
 public class AdminOrderController {
     private final OrderService orderService;
+    private final PharmacyBranchService pharmacyBranchService;
 
     @GetMapping
-    public String getOrders(Model model,
+    public String getWarehouseList(Model model,
+                                   HttpServletRequest httpServletRequest,
+                                   @PageableDefault Pageable pageable,
+                                   @AuthenticationPrincipal UserDetails userDetails) {
+        var branches = pharmacyBranchService.findUserAssignedBranches(userDetails.getUsername());
+
+        var authorities = userDetails.getAuthorities()
+                .stream()
+                .map(GrantedAuthority::getAuthority)
+                .toList();
+
+        model.addAttribute("branches", branches);
+
+        model.addAttribute("authorities", authorities);
+        model.addAttribute("currentUri", httpServletRequest.getRequestURI());
+        return "/admin/order";
+    }
+
+    @GetMapping("branch/{branchId}")
+    public String getOrdersList(Model model,
                             HttpServletRequest httpRequest,
                             @PageableDefault(size = 15) Pageable pageable,
+                            @PathVariable Long branchId,
                             @AuthenticationPrincipal UserDetails userDetails) {
-        var orders = orderService.findAllOrdersByBranch(1L, pageable);
+        var orders = orderService.findAllOrdersByBranch(branchId, pageable);
         var authorities = userDetails.getAuthorities()
                 .stream()
                 .map(GrantedAuthority::getAuthority)
@@ -38,7 +60,7 @@ public class AdminOrderController {
         model.addAttribute("OrderStatus", OrderState.class);
         model.addAttribute("authorities", authorities);
         model.addAttribute("currentUri", httpRequest.getRequestURI());
-        return "/admin/order";
+        return "/admin/order-list";
     }
 
     @GetMapping("/{id}")
