@@ -31,6 +31,10 @@ public class WarehouseRestController {
     @PostMapping("/inventory-receipts")
     public ResponseEntity<List<StorageItemsReadDto>> createInventoryReceipt(@AuthenticationPrincipal UserDetails userDetails,
                                                                             @RequestBody InventoryReceiptRequestDto productList) {
-        return ResponseEntity.ok(storageService.createInventoryReceiptByBranchId(productList));
+        try {
+            return ResponseEntity.ok(storageService.createInventoryReceiptByBranchId(productList));
+        } catch (IllegalArgumentException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
     }
 }
