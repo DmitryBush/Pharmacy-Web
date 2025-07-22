@@ -37,3 +37,5 @@ databaseChangeLog:
       file: db/changelog/minor/changelog-2.0.3.sql
   - include:
       file: db/changelog/minor/changelog-2.0.4.sql
+  - include:
+      file: db/changelog/major/changelog-3.0.sql
