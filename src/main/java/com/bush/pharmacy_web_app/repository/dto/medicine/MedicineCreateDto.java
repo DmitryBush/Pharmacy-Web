@@ -15,7 +15,7 @@ import java.util.List;
 @Builder
 public record MedicineCreateDto(Long id,
                                 @NotNull @NotBlank @Length(max = 128) String name,
-                                @NotNull String type,
+                                @NotNull @Valid List<ProductCategoryDto> type,
                                 @NotNull @Valid ManufacturerCreateDto manufacturer,
                                 @NotNull @Positive @Digits(integer = 10, fraction = 2) BigDecimal price,
                                 @NotNull Boolean recipe,

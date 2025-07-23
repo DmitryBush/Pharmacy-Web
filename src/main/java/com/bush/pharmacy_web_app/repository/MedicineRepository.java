@@ -19,8 +19,6 @@ public interface MedicineRepository extends JpaRepository<Medicine, Long>, Filte
 
     List<Medicine> findByNameContainingIgnoreCase(String name);
 
-    @Query("select distinct m.type from Medicine m ")
-    List<MedicineType> findDistinctMedicineType();
     @Query("select distinct m.manufacturer from Medicine m ")
     List<Manufacturer> findDistinctMedicineManufacturer();
 }

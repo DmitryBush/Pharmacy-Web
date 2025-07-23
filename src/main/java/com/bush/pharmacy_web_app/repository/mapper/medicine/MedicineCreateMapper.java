@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 public class MedicineCreateMapper implements DtoMapper<MedicineCreateDto, Medicine> {
     private final SupplierCreateMapper supplierCreateMapper;
     private final ManufacturerCreateMapper manufacturerCreateMapper;
-    private final MedicineTypeCreateMapper typeCreateMapper;
+    private final ProductCategoryMapper categoryMapper;
     private final MedicineImageCreateMapper imageCreateMapper;
 
     private final TypeRepository typeRepository;
@@ -44,9 +44,8 @@ public class MedicineCreateMapper implements DtoMapper<MedicineCreateDto, Medici
         var manufacturer = Optional.ofNullable(fromObj.manufacturer())
                 .map(manufacturerCreateMapper::map)
                 .orElseThrow();
-        var medicineType = Optional.ofNullable(fromObj.type())
-                .map(type -> typeRepository.findByType(type)
-                        .orElseGet(() -> typeCreateMapper.map(type)))
+        var categories = Optional.ofNullable(fromObj.type())
+                .map(categoryMapper::map)
                 .orElseThrow();
         var images = Optional.ofNullable(fromObj.id())
                 .map(imageRepository::findByMedicineId)
@@ -86,7 +85,16 @@ public class MedicineCreateMapper implements DtoMapper<MedicineCreateDto, Medici
                 .flatMap(medicineRepository::findById)
                 .map(medicine -> {
                     toObj.setName(fromObj.name());
-                    toObj.setType(medicineType);
+
+                    toObj.setType(categories.stream()
+                            .peek(productCategories -> {
+                                var id = productCategories.getId();
+                                id.setMedicine(medicine);
+
+                                productCategories.setId(id);
+                            })
+                            .collect(Collectors.toCollection(ArrayList::new)));
+
                     toObj.setManufacturer(manufacturer);
                     toObj.setPrice(fromObj.price());
                     toObj.setRecipe(fromObj.recipe());
@@ -109,7 +117,17 @@ public class MedicineCreateMapper implements DtoMapper<MedicineCreateDto, Medici
                 })
                 .orElseGet(() -> {
                     toObj.setName(fromObj.name());
-                    toObj.setType(medicineType);
+
+                    toObj.setType(categories.stream()
+                            .peek(productCategories -> {
+                                var id = productCategories.getId();
+                                id.setMedicine(toObj);
+
+                                productCategories.setId(id);
+                            })
+                            .collect(Collectors.toCollection(ArrayList::new)));
+
+
                     toObj.setManufacturer(manufacturer);
                     toObj.setPrice(fromObj.price());
                     toObj.setRecipe(fromObj.recipe());

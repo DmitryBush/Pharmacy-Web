@@ -7,27 +7,27 @@ import com.bush.pharmacy_web_app.repository.mapper.DtoMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
-public class MedicineTypeCreateMapper implements DtoMapper<MedicineTypeDto, MedicineType> {
+public class ListMedicineTypeCreateMapper implements DtoMapper<List<MedicineTypeDto>, List<MedicineType>> {
     private final MedicineTypeRepository medicineTypeRepository;
     @Override
-    public MedicineType map(MedicineTypeDto obj) {
-        return copyObj(obj, new MedicineType());
-    }
-
-    @Override
-    public MedicineType map(MedicineTypeDto fromObj, MedicineType toObj) {
-        return copyObj(fromObj, toObj);
+    public List<MedicineType> map(List<MedicineTypeDto> obj) {
+        return obj.stream()
+                .map(medicineTypeDto -> copyObj(medicineTypeDto, new MedicineType()))
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 
     private MedicineType copyObj(MedicineTypeDto fromObj, MedicineType toObj) {
         return medicineTypeRepository.findByType(fromObj.typeName())
                 .orElseGet(() -> {
                     var parent = medicineTypeRepository.findById(fromObj.parent())
-                            .orElseThrow();
+                                    .orElseThrow();
 
                     toObj.setType(fromObj.typeName());
                     toObj.setParentId(parent);
