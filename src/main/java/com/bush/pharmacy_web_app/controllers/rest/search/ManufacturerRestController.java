@@ -11,13 +11,13 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/search/manufacturer")
+@RequestMapping("/api/v1/search/manufacturer")
 @RequiredArgsConstructor
 public class ManufacturerRestController {
     private final ManufacturerService manufacturerService;
 
     @GetMapping
-    public List<ManufacturerReadDto> findManufacturers(ManufacturerFilter filter) {
-        return manufacturerService.findAll(filter);
+    public List<ManufacturerReadDto> findManufacturers(String searchTerm) {
+        return manufacturerService.findByNameContaining(searchTerm);
     }
 }

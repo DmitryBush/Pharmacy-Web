@@ -23,9 +23,8 @@ public class Medicine {
     private Long id;
     @Column(name = "medicine_name", nullable = false)
     private String name;
-    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    @JoinColumn(name = "f_key_medicine_type", nullable = false)
-    private MedicineType type;
+    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, mappedBy = "id.medicine")
+    private List<ProductCategories> type;
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "fk_medicine_manufacturer")
     private Manufacturer manufacturer;

@@ -3,7 +3,7 @@ package com.bush.pharmacy_web_app.repository.mapper.orders;
 import com.bush.pharmacy_web_app.repository.dto.orders.AdminOrderDto;
 import com.bush.pharmacy_web_app.repository.entity.order.Order;
 import com.bush.pharmacy_web_app.repository.mapper.DtoMapper;
-import com.bush.pharmacy_web_app.repository.mapper.user.AdminCustomerReadMapper;
+import com.bush.pharmacy_web_app.repository.mapper.user.AdminUserReadMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -16,7 +16,7 @@ public class AdminOrderReadMapper implements DtoMapper<Order, AdminOrderDto> {
     private final PharmacyBranchReadMapper branchReadMapper;
     private final OrderItemReadMapper orderReadMapper;
     private final OrderStatusReadMapper orderStatusReadMapper;
-    private final AdminCustomerReadMapper adminCustomerReadMapper;
+    private final AdminUserReadMapper adminUserReadMapper;
     @Override
     public AdminOrderDto map(Order obj) {
         var status = Optional.ofNullable(obj.getStatus())
@@ -29,7 +29,7 @@ public class AdminOrderReadMapper implements DtoMapper<Order, AdminOrderDto> {
                 .map(itemList -> itemList.stream().map(orderReadMapper::map).toList())
                 .orElseThrow();
         var customer = Optional.ofNullable(obj.getUser())
-                .map(adminCustomerReadMapper::map)
+                .map(adminUserReadMapper::map)
                 .orElseThrow();
         BigDecimal result = cart.stream()
                 .map(lamb -> lamb.medicine().price().multiply(BigDecimal.valueOf(lamb.amount())))

@@ -1,4 +1,4 @@
-package com.bush.pharmacy_web_app.controllers.rest.admin;
+package com.bush.pharmacy_web_app.controllers.rest.product;
 
 import com.bush.pharmacy_web_app.service.MedicineImageService;
 import lombok.RequiredArgsConstructor;
@@ -6,11 +6,12 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 @RestController
-@RequestMapping("/api/product-image")
+@RequestMapping("/api/v1/product-image")
 @RequiredArgsConstructor
 public class ProductImageRestController {
     private final MedicineImageService imageService;
@@ -27,6 +28,7 @@ public class ProductImageRestController {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND)));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
     public void deleteImage(@PathVariable Long id) {

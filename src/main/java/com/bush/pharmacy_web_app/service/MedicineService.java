@@ -50,12 +50,6 @@ public class MedicineService {
                 .map(medicinePreviewReadMapper::map);
     }
 
-    public List<MedicineTypeDto> findAllTypes() {
-        return medicineRepository.findDistinctMedicineType().stream()
-                .map(type -> new MedicineTypeDto(type.getType()))
-                .toList();
-    }
-
     public List<MedicineManufacturerDto> findAllManufacturers() {
         return medicineRepository.findDistinctMedicineManufacturer().stream()
                 .map(manufacturer -> new MedicineManufacturerDto(manufacturer.getName()))

@@ -1,10 +1,10 @@
 package com.bush.pharmacy_web_app.repository.mapper.orders.handler;
 
-import com.bush.pharmacy_web_app.repository.entity.order.OrderStatus;
+import com.bush.pharmacy_web_app.repository.entity.order.state.OrderState;
 
 public class CanceledStatusHandler extends AbstractStatusHandler {
     public CanceledStatusHandler() {
-        super(OrderStatus.CANCELED);
+        super(OrderState.CANCELLED);
     }
 
     @Override

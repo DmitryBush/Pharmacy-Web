@@ -1,7 +1,9 @@
 package com.bush.pharmacy_web_app.controllers.http;
 
+import com.bush.pharmacy_web_app.repository.entity.medicine.MedicineType;
 import com.bush.pharmacy_web_app.repository.filter.MedicineFilter;
 import com.bush.pharmacy_web_app.service.MedicineService;
+import com.bush.pharmacy_web_app.service.MedicineTypeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/catalog")
 @RequiredArgsConstructor
 public class CatalogController {
+    private final MedicineTypeService typeService;
     private final MedicineService service;
 
     @GetMapping
@@ -25,7 +28,7 @@ public class CatalogController {
                                        Pageable pageable) {
         var page = service.findAllPreviews(filter, pageable);
 
-        model.addAttribute("types", service.findAllTypes());
+        model.addAttribute("types", typeService.findAllTypes());
         model.addAttribute("manufacturers", service.findAllManufacturers());
         model.addAttribute("medicines", page);
         return "catalog/catalog";

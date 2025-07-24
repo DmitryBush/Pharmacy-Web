@@ -82,7 +82,7 @@
             <div class="product-grid">
                 <div class="product-card" th:each="medicine : ${medicines.content}">
                     <a th:href="@{/catalog/{id}(id=${medicine.id})}">
-                        <img th:src="@{/api/product-image/{id}/{filename}(id=${medicine.id},filename=${medicine.imagePaths.get(0).path})}"
+                        <img th:src="@{/api/v1/product-image/{id}/{filename}(id=${medicine.id},filename=${medicine.imagePaths.get(0).path})}"
                              width="200px"
                              alt="[(${medicine.name})]">
                     </a>

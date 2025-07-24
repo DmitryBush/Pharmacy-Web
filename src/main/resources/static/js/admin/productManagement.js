@@ -33,8 +33,7 @@ class ProductManagement {
         document.querySelectorAll('.search-btn,  .search-modal-btn').forEach(button => {
             button.addEventListener('click', this.handleOpenSearch.bind(this));
         });
-
-        document.getElementById('createBtn').addEventListener('click', this.handleCreate.bind(this));
+        
         document.getElementById('close-modal').addEventListener('click', this.closeCreateMenu.bind(this));
         document.getElementById('search-field').addEventListener('input', this.handleSearchInput.bind(this));
 
@@ -79,7 +78,7 @@ class ProductManagement {
         if (!confirm('Удалить изображение?')) return;
 
         try {
-            const response = await this.fetchData(`/api/product-image/${imageId}`, 'DELETE');
+            const response = await this.fetchData(`/api/v1/product-image/${imageId}`, 'DELETE');
             if (response.ok) {
                 e.target.closest('.image-item').remove();
             }
@@ -92,7 +91,7 @@ class ProductManagement {
         const container = document.getElementById('imagePreview');
         container.innerHTML = images.map(img => `
             <div class="image-item">
-                <img src="/api/product-image/${img.id}" width="350px">
+                <img src="/api/v1/product-image/${img.id}" width="350px">
                 <button class="delete-image-btn" data-id="${img.id}">×</button>
             </div>
         `).join('');
@@ -139,7 +138,7 @@ class ProductManagement {
         const productId = event.currentTarget.getAttribute('data-id');
         if (confirm('Удалить товар?')) {
             try {
-                await this.fetchData(`/api/admin/product/${productId}`, `DELETE`);
+                await this.fetchData(`/api/v1/admin/products/${productId}`, `DELETE`);
                 const item = document.querySelector(`[data-product-id="${productId}"]`);
                 if (item) {
                     item.remove();
@@ -239,7 +238,7 @@ class ProductManagement {
 
     async handleUpdate(id) {
         try {
-            const response = await this.fetchData(`/api/admin/product/${id}`, 'GET');
+            const response = await this.fetchData(`/api/v1/admin/products/${id}`, 'GET');
 
             if (!response.ok)
                 throw new Error(response.statusText);
@@ -579,10 +578,10 @@ class ProductManagement {
                     }
 
                     if (updateMode) {
-                        await this.fetchData(`/api/admin/product/${this.primaryMedicine}`,
+                        await this.fetchData(`/api/v1/admin/products/${this.primaryMedicine}`,
                             'PUT', formData);
                     } else {
-                        await this.fetchData(`/api/admin/product`,
+                        await this.fetchData(`/api/v1/admin/products`,
                             'POST', formData);
                     }
                     this.closeCreateMenu();
@@ -597,4 +596,7 @@ class ProductManagement {
 
 document.addEventListener('DOMContentLoaded', () => {
     const productManager = new ProductManagement();
+
+    document.getElementById('createBtn').addEventListener('click',
+        () => window.location.replace('/admin/product/creation'));
 });

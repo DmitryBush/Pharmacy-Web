@@ -4,6 +4,8 @@ import com.bush.pharmacy_web_app.repository.dto.medicine.MedicineAdminReadDto;
 import com.bush.pharmacy_web_app.repository.dto.medicine.MedicineImageReadDto;
 import com.bush.pharmacy_web_app.repository.entity.medicine.Medicine;
 import com.bush.pharmacy_web_app.repository.entity.medicine.MedicineType;
+import com.bush.pharmacy_web_app.repository.entity.medicine.ProductCategories;
+import com.bush.pharmacy_web_app.repository.entity.medicine.ProductCategoriesId;
 import com.bush.pharmacy_web_app.repository.mapper.DtoMapper;
 import com.bush.pharmacy_web_app.repository.mapper.manufacturer.ManufacturerReadMapper;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +28,13 @@ public class MedicineAdminReadMapper implements DtoMapper<Medicine, MedicineAdmi
                 .map(manufacturerReadMapper::map)
                 .orElseThrow();
         var type = Optional.ofNullable(obj.getType())
-                .map(MedicineType::getType)
+                .map(productCategories -> productCategories.stream()
+                        .filter(ProductCategories::getIsMain)
+                        .map(ProductCategories::getId)
+                        .map(ProductCategoriesId::getType)
+                        .map(MedicineType::getType)
+                        .findFirst()
+                        .orElseThrow())
                 .orElseThrow();
         var imagePaths = Optional.ofNullable(obj.getImage())
                 .map(list -> list

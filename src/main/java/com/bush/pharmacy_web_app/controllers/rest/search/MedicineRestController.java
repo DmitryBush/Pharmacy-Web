@@ -10,13 +10,13 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/search/medicine")
+@RequestMapping("/api/v1/search/medicine")
 @RequiredArgsConstructor
 public class MedicineRestController {
     private final MedicineService medicineService;
 
     @GetMapping
-    public List<MedicinePreviewReadDto> findMedicineByName(String name) {
-        return medicineService.findByContainingName(name);
+    public List<MedicinePreviewReadDto> findMedicineByName(String searchTerm) {
+        return medicineService.findByContainingName(searchTerm);
     }
 }

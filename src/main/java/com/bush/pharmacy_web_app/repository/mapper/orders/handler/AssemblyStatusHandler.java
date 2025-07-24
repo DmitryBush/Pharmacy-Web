@@ -1,10 +1,10 @@
 package com.bush.pharmacy_web_app.repository.mapper.orders.handler;
 
-import com.bush.pharmacy_web_app.repository.entity.order.OrderStatus;
+import com.bush.pharmacy_web_app.repository.entity.order.state.OrderState;
 
 public class AssemblyStatusHandler extends AbstractStatusHandler {
     public AssemblyStatusHandler() {
-        super(OrderStatus.ASSEMBLY);
+        super(OrderState.ASSEMBLY);
     }
 
     @Override

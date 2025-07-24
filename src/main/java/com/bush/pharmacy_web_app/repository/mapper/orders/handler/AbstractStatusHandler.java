@@ -1,12 +1,12 @@
 package com.bush.pharmacy_web_app.repository.mapper.orders.handler;
 
-import com.bush.pharmacy_web_app.repository.entity.order.OrderStatus;
+import com.bush.pharmacy_web_app.repository.entity.order.state.OrderState;
 
 public abstract class AbstractStatusHandler implements StatusHandler {
-    private final OrderStatus status;
+    private final OrderState status;
     private StatusHandler nextHandler;
 
-    public AbstractStatusHandler(OrderStatus status) {
+    public AbstractStatusHandler(OrderState status) {
         this.status = status;
     }
 
@@ -17,7 +17,7 @@ public abstract class AbstractStatusHandler implements StatusHandler {
     }
 
     @Override
-    public String handle(OrderStatus status) {
+    public String handle(OrderState status) {
         if (this.status.equals(status))
             return getName();
 

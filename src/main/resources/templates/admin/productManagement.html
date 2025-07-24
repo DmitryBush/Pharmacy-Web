@@ -212,7 +212,7 @@
             <div class="product-item" th:data-product-id="${item.id}" th:each="item : ${products.content}">
                 <a th:href="@{/admin/product/{id}(id=${item.id})}">
                     <div th:unless="${item.imagePaths.isEmpty()}">
-                        <img th:src="@{/api/product-image/{id}(id=${item.imagePaths.get(0).id})}"
+                        <img th:src="@{/api/v1/product-image/{id}(id=${item.imagePaths.get(0).id})}"
                              width="50px"
                              height="50px"
                              th:alt="${item.name}">
