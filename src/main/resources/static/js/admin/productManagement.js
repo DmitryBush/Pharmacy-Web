@@ -33,8 +33,7 @@ class ProductManagement {
         document.querySelectorAll('.search-btn,  .search-modal-btn').forEach(button => {
             button.addEventListener('click', this.handleOpenSearch.bind(this));
         });
-
-        document.getElementById('createBtn').addEventListener('click', this.handleCreate.bind(this));
+        
         document.getElementById('close-modal').addEventListener('click', this.closeCreateMenu.bind(this));
         document.getElementById('search-field').addEventListener('input', this.handleSearchInput.bind(this));
 
@@ -597,4 +596,7 @@ class ProductManagement {
 
 document.addEventListener('DOMContentLoaded', () => {
     const productManager = new ProductManagement();
+
+    document.getElementById('createBtn').addEventListener('click',
+        () => window.location.replace('/admin/product/creation'));
 });

@@ -23,4 +23,9 @@ public class ManufacturerService {
                 .map(manufacturerReadMapper::map)
                 .toList();
     }
+
+    public List<ManufacturerReadDto> findByNameContaining(String name) {
+        return manufacturerRepository.findByNameContainingIgnoreCase(name)
+                .stream().map(manufacturerReadMapper::map).toList();
+    }
 }

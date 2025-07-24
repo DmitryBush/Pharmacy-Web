@@ -24,13 +24,13 @@ public class MedicineTypeCreateMapper implements DtoMapper<MedicineTypeDto, Medi
     }
 
     private MedicineType copyObj(MedicineTypeDto fromObj, MedicineType toObj) {
-        return medicineTypeRepository.findByType(fromObj.typeName())
+        return medicineTypeRepository.findByType(fromObj.name())
                 .orElseGet(() -> {
-                    var parent = medicineTypeRepository.findById(fromObj.parent())
+                    var parent = medicineTypeRepository.findByType(fromObj.parent())
                             .orElseThrow();
 
-                    toObj.setType(fromObj.typeName());
-                    toObj.setParentId(parent);
+                    toObj.setType(fromObj.name());
+                    toObj.setParent(parent);
                     toObj.setChildTypes(Collections.emptyList());
                     return toObj;
                 });

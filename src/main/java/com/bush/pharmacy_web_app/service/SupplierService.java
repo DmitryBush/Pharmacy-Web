@@ -21,4 +21,9 @@ public class SupplierService {
         return supplierRepository.findAllByFilter(filter)
                 .stream().map(supplierReadMapper::map).toList();
     }
+
+    public List<SupplierReadDto> findByNameContaining(String name) {
+        return supplierRepository.findByNameContainingIgnoreCase(name)
+                .stream().map(supplierReadMapper::map).toList();
+    }
 }

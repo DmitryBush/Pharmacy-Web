@@ -27,4 +27,8 @@ public interface MedicineTypeRepository extends JpaRepository<MedicineType, Inte
             SELECT * FROM category_path;
             """, nativeQuery = true)
     List<MedicineType> getTypeHierarchyPath(@PathVariable Integer typeId);
+
+    List<MedicineType> findByTypeContainingIgnoreCaseAndParentIsNotNull(String type);
+
+    List<MedicineType> findByTypeContainingIgnoreCase(String type);
 }

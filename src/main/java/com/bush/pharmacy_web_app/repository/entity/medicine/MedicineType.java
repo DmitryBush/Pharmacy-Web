@@ -21,8 +21,8 @@ public class MedicineType {
     private String type;
     @OneToOne
     @JoinColumn(name = "parent_id")
-    private MedicineType parentId;
+    private MedicineType parent;
 
-    @OneToMany(mappedBy = "parentId")
+    @OneToMany(mappedBy = "parent")
     private List<MedicineType> childTypes;
 }
