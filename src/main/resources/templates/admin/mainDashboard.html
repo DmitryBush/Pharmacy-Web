@@ -12,7 +12,7 @@
         <h1>Здравствуйте</h1>
         <div class="dashboard-cards">
             <!-- Карточка товаров -->
-            <a th:if="${authorities.contains('ROLE_' + T(com.bush.pharmacy_web_app.repository.entity.user.role.RoleType).ADMIN.name())}"
+            <a th:if="${authorities.contains('ROLE_' + T(com.bush.pharmacy_web_app.model.entity.user.role.RoleType).ADMIN.name())}"
                href="/admin/product" class="card">
                 <div class="card-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="#3498db" viewBox="0 0 24 24">
@@ -46,7 +46,7 @@
             </a>
 
             <!-- Карточка категорий -->
-            <a th:if="${authorities.contains('ROLE_' + T(com.bush.pharmacy_web_app.repository.entity.user.role.RoleType).ADMIN.name())}"
+            <a th:if="${authorities.contains('ROLE_' + T(com.bush.pharmacy_web_app.model.entity.user.role.RoleType).ADMIN.name())}"
                href="/admin/categories" class="card">
                 <div class="card-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="#FFB900" viewBox="0 0 24 24">

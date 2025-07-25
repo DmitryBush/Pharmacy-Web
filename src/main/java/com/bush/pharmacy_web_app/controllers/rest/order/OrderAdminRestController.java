@@ -1,8 +1,8 @@
 package com.bush.pharmacy_web_app.controllers.rest.order;
 
-import com.bush.pharmacy_web_app.repository.dto.orders.OrderStateChangeDto;
-import com.bush.pharmacy_web_app.repository.entity.order.state.OrderState;
-import com.bush.pharmacy_web_app.service.OrderService;
+import com.bush.pharmacy_web_app.model.dto.orders.OrderStateChangeDto;
+import com.bush.pharmacy_web_app.model.entity.order.state.OrderState;
+import com.bush.pharmacy_web_app.service.order.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

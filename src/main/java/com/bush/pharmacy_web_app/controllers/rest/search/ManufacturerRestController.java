@@ -1,8 +1,7 @@
 package com.bush.pharmacy_web_app.controllers.rest.search;
 
-import com.bush.pharmacy_web_app.repository.dto.manufacturer.ManufacturerReadDto;
-import com.bush.pharmacy_web_app.repository.filter.ManufacturerFilter;
-import com.bush.pharmacy_web_app.service.ManufacturerService;
+import com.bush.pharmacy_web_app.model.dto.manufacturer.ManufacturerReadDto;
+import com.bush.pharmacy_web_app.service.manufacturer.ManufacturerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

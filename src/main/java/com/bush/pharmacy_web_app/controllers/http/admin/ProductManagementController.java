@@ -1,7 +1,7 @@
 package com.bush.pharmacy_web_app.controllers.http.admin;
 
-import com.bush.pharmacy_web_app.repository.filter.MedicineFilter;
-import com.bush.pharmacy_web_app.service.MedicineService;
+import com.bush.pharmacy_web_app.repository.medicine.filter.MedicineFilter;
+import com.bush.pharmacy_web_app.service.medicine.MedicineService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;

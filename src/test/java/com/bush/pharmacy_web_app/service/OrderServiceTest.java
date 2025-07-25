@@ -1,6 +1,7 @@
 package com.bush.pharmacy_web_app.service;
 
-import com.bush.pharmacy_web_app.repository.entity.order.state.OrderEvent;
+import com.bush.pharmacy_web_app.model.entity.order.state.OrderEvent;
+import com.bush.pharmacy_web_app.service.order.OrderService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

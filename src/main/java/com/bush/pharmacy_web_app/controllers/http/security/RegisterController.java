@@ -1,7 +1,7 @@
 package com.bush.pharmacy_web_app.controllers.http.security;
 
-import com.bush.pharmacy_web_app.repository.dto.user.CustomerCreateDto;
-import com.bush.pharmacy_web_app.service.UserService;
+import com.bush.pharmacy_web_app.model.dto.user.CustomerCreateDto;
+import com.bush.pharmacy_web_app.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;

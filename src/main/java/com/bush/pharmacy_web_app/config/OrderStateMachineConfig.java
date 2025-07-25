@@ -1,7 +1,7 @@
 package com.bush.pharmacy_web_app.config;
 
-import com.bush.pharmacy_web_app.repository.entity.order.state.OrderEvent;
-import com.bush.pharmacy_web_app.repository.entity.order.state.OrderState;
+import com.bush.pharmacy_web_app.model.entity.order.state.OrderEvent;
+import com.bush.pharmacy_web_app.model.entity.order.state.OrderState;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.statemachine.config.EnableStateMachineFactory;
 import org.springframework.statemachine.config.StateMachineConfigurerAdapter;

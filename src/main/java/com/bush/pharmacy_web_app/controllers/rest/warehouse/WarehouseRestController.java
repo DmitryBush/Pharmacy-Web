@@ -1,8 +1,8 @@
 package com.bush.pharmacy_web_app.controllers.rest.warehouse;
 
-import com.bush.pharmacy_web_app.repository.dto.warehouse.InventoryReceiptRequestDto;
-import com.bush.pharmacy_web_app.repository.dto.warehouse.StorageItemsReadDto;
-import com.bush.pharmacy_web_app.service.StorageService;
+import com.bush.pharmacy_web_app.model.dto.warehouse.InventoryReceiptRequestDto;
+import com.bush.pharmacy_web_app.model.dto.warehouse.StorageItemsReadDto;
+import com.bush.pharmacy_web_app.service.branch.StorageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

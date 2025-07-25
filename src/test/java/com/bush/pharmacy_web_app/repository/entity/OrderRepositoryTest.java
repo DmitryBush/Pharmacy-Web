@@ -1,10 +1,10 @@
 package com.bush.pharmacy_web_app.repository.entity;
 
-import com.bush.pharmacy_web_app.repository.UserRepository;
-import com.bush.pharmacy_web_app.repository.OrderRepository;
-import com.bush.pharmacy_web_app.repository.PharmacyBranchRepository;
-import com.bush.pharmacy_web_app.repository.entity.order.Order;
-import com.bush.pharmacy_web_app.repository.entity.order.state.OrderState;
+import com.bush.pharmacy_web_app.repository.user.UserRepository;
+import com.bush.pharmacy_web_app.repository.order.OrderRepository;
+import com.bush.pharmacy_web_app.repository.branch.PharmacyBranchRepository;
+import com.bush.pharmacy_web_app.model.entity.order.Order;
+import com.bush.pharmacy_web_app.model.entity.order.state.OrderState;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Tag;

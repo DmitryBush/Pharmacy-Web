@@ -1,7 +1,7 @@
 package com.bush.pharmacy_web_app.controllers.rest.search;
 
-import com.bush.pharmacy_web_app.repository.dto.medicine.MedicineTypeDto;
-import com.bush.pharmacy_web_app.service.MedicineTypeService;
+import com.bush.pharmacy_web_app.model.dto.medicine.MedicineTypeDto;
+import com.bush.pharmacy_web_app.service.medicine.MedicineTypeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

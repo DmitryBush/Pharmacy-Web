@@ -1,9 +1,8 @@
 package com.bush.pharmacy_web_app.controllers.http;
 
-import com.bush.pharmacy_web_app.repository.entity.medicine.MedicineType;
-import com.bush.pharmacy_web_app.repository.filter.MedicineFilter;
-import com.bush.pharmacy_web_app.service.MedicineService;
-import com.bush.pharmacy_web_app.service.MedicineTypeService;
+import com.bush.pharmacy_web_app.repository.medicine.filter.MedicineFilter;
+import com.bush.pharmacy_web_app.service.medicine.MedicineService;
+import com.bush.pharmacy_web_app.service.medicine.MedicineTypeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;

@@ -1,10 +1,10 @@
 package com.bush.pharmacy_web_app.controllers.rest.admin;
 
-import com.bush.pharmacy_web_app.repository.dto.medicine.MedicineAdminReadDto;
-import com.bush.pharmacy_web_app.repository.dto.medicine.MedicineCreateDto;
-import com.bush.pharmacy_web_app.repository.dto.medicine.MedicinePreviewReadDto;
-import com.bush.pharmacy_web_app.repository.filter.MedicineFilter;
-import com.bush.pharmacy_web_app.service.MedicineService;
+import com.bush.pharmacy_web_app.model.dto.medicine.MedicineAdminReadDto;
+import com.bush.pharmacy_web_app.model.dto.medicine.MedicineCreateDto;
+import com.bush.pharmacy_web_app.model.dto.medicine.MedicinePreviewReadDto;
+import com.bush.pharmacy_web_app.repository.medicine.filter.MedicineFilter;
+import com.bush.pharmacy_web_app.service.medicine.MedicineService;
 import com.bush.pharmacy_web_app.validation.ImageFile;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +19,6 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;

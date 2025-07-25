@@ -1,6 +1,6 @@
 package com.bush.pharmacy_web_app.controllers.rest.security;
 
-import com.bush.pharmacy_web_app.repository.dto.security.CsrfDto;
+import com.bush.pharmacy_web_app.model.dto.security.CsrfDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.web.bind.annotation.GetMapping;
