@@ -1,12 +1,9 @@
 package com.bush.pharmacy_web_app.validation;
 
-import com.bush.pharmacy_web_app.repository.BranchUserAssignmentRepository;
-import com.bush.pharmacy_web_app.repository.UserRepository;
-import com.bush.pharmacy_web_app.repository.dto.warehouse.InventoryReceiptRequestDto;
+import com.bush.pharmacy_web_app.repository.branch.BranchUserAssignmentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service("SecurityValidation")
 @RequiredArgsConstructor

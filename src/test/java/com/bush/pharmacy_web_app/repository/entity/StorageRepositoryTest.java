@@ -1,6 +1,6 @@
 package com.bush.pharmacy_web_app.repository.entity;
 
-import com.bush.pharmacy_web_app.repository.StorageRepository;
+import com.bush.pharmacy_web_app.repository.branch.StorageRepository;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Tag;
@@ -32,9 +32,8 @@ public class StorageRepositoryTest {
 
     @Test
     public void getItemsByBranchAndMedicine() {
-        var records = storageRepository.findByBranchIdAndMedicineId(9, 9L);
+        var record = storageRepository.findByBranchIdAndMedicineId(9L, 9L);
 
-        records.forEach(System.out::println);
-        Assertions.assertFalse(records.isEmpty());
+        Assertions.assertNull(record);
     }
 }

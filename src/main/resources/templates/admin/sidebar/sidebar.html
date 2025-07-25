@@ -13,7 +13,7 @@
             <span>Главная</span>
           </a>
         </li>
-        <li th:if="${authorities.contains('ROLE_' + T(com.bush.pharmacy_web_app.repository.entity.user.role.RoleType).ADMIN.name())}"
+        <li th:if="${authorities.contains('ROLE_' + T(com.bush.pharmacy_web_app.model.entity.user.role.RoleType).ADMIN.name())}"
             th:classappend="${currentUri.matches('^/admin/product/?(\\?.*)?$')} ? 'menu-item active' : 'menu-item'">
           <a href="/admin/product">
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-medical-fill" viewBox="0 0 16 16">
@@ -38,7 +38,7 @@
               <span>Склад</span>
           </a>
         </li>
-        <li th:if="${authorities.contains('ROLE_' + T(com.bush.pharmacy_web_app.repository.entity.user.role.RoleType).ADMIN.name())}"
+        <li th:if="${authorities.contains('ROLE_' + T(com.bush.pharmacy_web_app.model.entity.user.role.RoleType).ADMIN.name())}"
             th:classappend="${currentUri.matches('^/admin/categories/?(\\?.*)?$')} ? 'menu-item active' : 'menu-item'">
           <a href="/admin/categories">
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-folder-fill" viewBox="0 0 16 16">

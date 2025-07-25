@@ -1,8 +1,8 @@
 package com.bush.pharmacy_web_app.controllers.http.admin;
 
-import com.bush.pharmacy_web_app.repository.entity.order.state.OrderState;
-import com.bush.pharmacy_web_app.service.OrderService;
-import com.bush.pharmacy_web_app.service.PharmacyBranchService;
+import com.bush.pharmacy_web_app.model.entity.order.state.OrderState;
+import com.bush.pharmacy_web_app.service.order.OrderService;
+import com.bush.pharmacy_web_app.service.branch.PharmacyBranchService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;

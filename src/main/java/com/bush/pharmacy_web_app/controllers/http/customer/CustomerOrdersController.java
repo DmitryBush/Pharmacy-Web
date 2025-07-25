@@ -1,6 +1,6 @@
 package com.bush.pharmacy_web_app.controllers.http.customer;
 
-import com.bush.pharmacy_web_app.service.UserService;
+import com.bush.pharmacy_web_app.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;

@@ -1,6 +1,6 @@
 package com.bush.pharmacy_web_app.controllers.http.admin;
 
-import com.bush.pharmacy_web_app.service.UserService;
+import com.bush.pharmacy_web_app.service.user.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
