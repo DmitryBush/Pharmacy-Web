@@ -29,6 +29,6 @@ public class AdminMainController {
         model.addAttribute("user", user);
         model.addAttribute("authorities", authorities);
         model.addAttribute("currentUri", request.getRequestURI());
-        return "admin/mainDashboard";
+        return "admin/main-dashboard";
     }
 }

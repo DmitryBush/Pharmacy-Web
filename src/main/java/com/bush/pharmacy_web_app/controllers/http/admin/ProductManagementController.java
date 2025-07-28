@@ -34,7 +34,7 @@ public class ProductManagementController {
         model.addAttribute("products", page);
         model.addAttribute("authorities", authorities);
         model.addAttribute("currentUri", request.getRequestURI());
-        return "admin/productManagement";
+        return "admin/product-management";
     }
 
     @GetMapping("/creation")
@@ -63,6 +63,6 @@ public class ProductManagementController {
         model.addAttribute("product", product);
         model.addAttribute("authorities", authorities);
         model.addAttribute("currentUri", request.getRequestURI());
-        return "admin/editingProduct";
+        return "admin/editing-product";
     }
 }
