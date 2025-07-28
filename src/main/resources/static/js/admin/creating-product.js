@@ -35,23 +35,11 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll(".search-btn").forEach(btn =>
         btn.addEventListener('click', e => {
             e.preventDefault();
-            if (btn.closest('span').classList.contains('type')) {
-                searchEndpoint = 'type';
-            } else if (btn.closest('span').classList.contains('parent-type')) {
-                searchEndpoint = 'type/parent';
-            } else if (btn.closest('div').classList.contains('manufacturerPart')) {
-                searchEndpoint = 'manufacturer';
-            } else if (btn.closest('div').classList.contains('supplierPart')) {
-                searchEndpoint = 'supplier';
-            } else if (btn.closest('div').classList.contains('countryPart')) {
-                searchEndpoint = 'country';
-            }
-
-            searchElement = btn.closest('div');
-            handleOpenSearch();
+            searchButtonClick(btn);
         }));
 
     document.getElementById('add-type-btn').addEventListener('click', (e) => {
+        e.preventDefault();
         const newType = document.createElement('div');
         newType.className = 'type';
         newType.innerHTML = `<label class="input-group" for="type">
@@ -76,9 +64,32 @@ document.addEventListener('DOMContentLoaded', () => {
                                     </button>
                                 </span>
                             </label>`;
-
+        newType.querySelectorAll('button')
+            .forEach(btn =>
+                btn.addEventListener('click', e => {
+                    e.preventDefault();
+                    searchButtonClick(btn);
+                }));
         typeContainer.insertBefore(newType,e.target);
     });
+
+    function searchButtonClick(btn) {
+        if (btn.closest('span')) {
+            if (btn.closest('span').classList.contains('type'))
+                searchEndpoint = 'type';
+            else
+                searchEndpoint = 'type/parent';
+        } else if (btn.closest('div').classList.contains('manufacturerPart')) {
+            searchEndpoint = 'manufacturer';
+        } else if (btn.closest('div').classList.contains('supplierPart')) {
+            searchEndpoint = 'supplier';
+        } else if (btn.closest('div').classList.contains('countryPart')) {
+            searchEndpoint = 'country';
+        }
+
+        searchElement = btn.closest('div');
+        handleOpenSearch();
+    }
 
     document.getElementById('save-btn').addEventListener('click',
         () => createProduct()
@@ -390,6 +401,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function unblockInput(inputElement) {
         inputElement.readOnly = false;
         inputElement.classList.remove('locked-input');
+        idMap.delete(searchEndpoint);
     }
 
     function closeSearch() {

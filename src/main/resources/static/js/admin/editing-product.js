@@ -6,12 +6,22 @@ document.addEventListener('DOMContentLoaded', () => {
     const notification = new Notification('/api/v1/icons/admin/file-earmark-medical-fill.png');
 
     const productId = document.getElementById('product-id').dataset.id;
-    const mapId = new Map();
+    const idMap = new Map();
     const newImagesContainer = document.querySelector('#imagePreview');
     let newImagesFiles = [];
 
     const typeContainer = document.getElementById('type-container');
     let typeCounter = 0;
+
+    let DEBOUNCE_DELAY = 300;
+    const searchContainer = document.getElementById("search-container");
+    const searchField = document.getElementById("search-field");
+    const resultsContainer = document.getElementById("search-result-container");
+    const searchBackdrop = document.getElementById('search-backdrop');
+
+    let searchOutsideClick = null;
+    let searchEndpoint = null;
+    let searchElement= null;
 
     const editBtn = document.getElementById('editBtn');
     const previewBtn = document.getElementById('previewBtn');
@@ -26,6 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
             (await restClient.fetchData(`/api/v1/admin/products/${productId}`, 'GET')).json();
 
         fillForm(response);
+        addInputEvent();
     }
 
     function fillForm(data) {
@@ -56,7 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('itn').value = data.supplier.itn;
         document.getElementById('supplierName').value = data.supplier.name;
 
-        mapId.set('address', data.supplier.address.id);
+        idMap.set('address', data.supplier.address.id);
         document.getElementById('subject').value = data.supplier.address.subject;
         document.getElementById('district').value = data.supplier.address.district;
         document.getElementById('settlement').value = data.supplier.address.settlement;
@@ -65,7 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('apartment').value = data.supplier.address.apartment;
         document.getElementById('postalCode').value = data.supplier.address.postalCode;
 
-        mapId.set('manufacturer', data.manufacturer.id);
+        idMap.set('manufacturer', data.manufacturer.id);
         document.getElementById('manufacturerName').value = data.manufacturer.name;
 
         document.getElementById('country').value = data.manufacturer.country;
@@ -110,7 +121,11 @@ document.addEventListener('DOMContentLoaded', () => {
                                     </button>
                                 </span>
                             </label>`;
-
+            typeElement.querySelectorAll('button').forEach(btn =>
+                btn.addEventListener('click', e => {
+                    e.preventDefault();
+                    searchButtonClick(btn);
+                }));
             typeContainer.insertBefore(typeElement, addTypeButton);
         })
     }
@@ -126,6 +141,99 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
             newImagesContainer.appendChild(imageItem);
         })
+    }
+
+    function addInputEvent() {
+        typeContainer.querySelectorAll('.type').forEach(type => {
+            type.querySelector('#type').addEventListener('input', (e) => {
+                const parentInput = type.querySelector('#parent-type');
+                parentInput.classList.remove('locked-input');
+                parentInput.readOnly = false;
+            });
+        });
+
+        document.getElementById('supplierPart').querySelectorAll('input')
+            .forEach(input => {
+                input.addEventListener('input', (e) => {
+                    document.getElementById('addressPart').querySelectorAll('input')
+                        .forEach(input => {
+                            input.classList.remove('locked-input');
+                            input.readOnly = false;
+                        });
+                    idMap.delete('address');
+                });
+            });
+
+        document.getElementById('manufacturerPart').querySelectorAll('input')
+            .forEach(input => {
+                input.addEventListener('input', (e) => {
+                    document.getElementById('countryPart').querySelectorAll('input')
+                        .forEach(input => {
+                            input.classList.remove('locked-input');
+                            input.readOnly = false;
+                        });
+                    idMap.delete('manufacturer');
+                });
+            });
+
+        document.querySelectorAll(".search-btn").forEach(btn =>
+            btn.addEventListener('click', e => {
+                e.preventDefault();
+                searchButtonClick(btn);
+            }));
+    }
+
+    document.getElementById("search-field").addEventListener('input', handleSearchInput);
+
+    document.getElementById('add-type-btn').addEventListener('click', (e) => {
+        const newType = document.createElement('div');
+        newType.className = 'type';
+        newType.innerHTML = `<label class="input-group" for="type">
+                                Тип товара ${++typeCounter}
+                                <span class="input-with-button type">
+                                    <input class="input-group type" type="text" id="type">
+                                    <button class="search-btn search-icon">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                                            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+                                        </svg>
+                                    </button>
+                                </span>
+                            </label>
+                            <label class="input-group" for="parent-type">
+                                Родительский тип
+                                <span class="input-with-button parent-type">
+                                    <input class="input-group parent-type" type="text" id="parent-type">
+                                    <button class="search-btn search-icon">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                                            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+                                        </svg>
+                                    </button>
+                                </span>
+                            </label>`;
+        newType.querySelectorAll('button').forEach(btn =>
+            btn.addEventListener('click', e => {
+                e.preventDefault();
+                searchButtonClick(btn);
+            }));
+        typeContainer.insertBefore(newType,e.target);
+    });
+
+    function searchButtonClick(btn) {
+        if (btn.closest('span')) {
+            if (btn.closest('span').classList.contains('type'))
+                searchEndpoint = 'type';
+            else
+                searchEndpoint = 'type/parent';
+        } else if (btn.closest('div').classList.contains('manufacturerPart')) {
+            searchEndpoint = 'manufacturer';
+        } else if (btn.closest('div').classList.contains('supplierPart')) {
+            searchEndpoint = 'supplier';
+        } else if (btn.closest('div').classList.contains('countryPart')) {
+            searchEndpoint = 'country';
+        }
+
+        searchElement = btn.closest('div');
+        handleOpenSearch();
     }
 
     document.getElementById('save-btn').addEventListener('click', () => updateProduct);
@@ -239,7 +347,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const getFormData = () => ({
         name: document.getElementById('name').value,
-        type: document.getElementById('type').value,
+        type: getTypeData(),
         price: parseFloat(document.getElementById('price').value),
         recipe: document.querySelector('input[name="recipe"]:checked').value === '1',
         activeIngredient: document.getElementById('active-ingredient').value,
@@ -258,7 +366,7 @@ document.addEventListener('DOMContentLoaded', () => {
             itn: document.getElementById('itn').value,
             name: document.getElementById('supplierName').value,
             address: {
-                id: document.getElementById('addressPart').getAttribute('data-id'),
+                id: idMap.get('address') ?? null,
                 subject: document.getElementById('subject').value,
                 district: document.getElementById('district').value,
                 settlement: document.getElementById('settlement').value,
@@ -269,7 +377,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         },
         manufacturer: {
-            id: document.getElementById('manufacturerPart').getAttribute('data-id'),
+            id: idMap.get('manufacturer') ?? null,
             name: document.getElementById('manufacturerName').value,
             country: {
                 country: document.getElementById('country').value
@@ -277,6 +385,184 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    function getTypeData() {
+        let types = [];
+        typeContainer.querySelectorAll('.type').forEach((item) => {
+            if (item.querySelector('#type').classList.contains('type')) {
+                types.push({
+                    type: {
+                        name: item.querySelector('#type').value,
+                        parent: item.querySelector('#parent-type').value
+                    },
+                    isMain : false
+                });
+            } else if (item.querySelector('#type').classList.contains('main-type')) {
+                types.push({
+                    type: {
+                        name: item.querySelector('#type').value,
+                        parent: item.querySelector('#parent-type').value
+                    },
+                    isMain : true
+                });
+            }
+        });
+        return types;
+    }
+
+    function handleOpenSearch() {
+        searchContainer.style.display = 'block';
+        searchBackdrop.style.display = 'block';
+
+        searchOutsideClick = (event) => {
+            if (searchContainer && !searchContainer.contains(event.target) && !resultsContainer.contains(event.target)) {
+                closeSearch();
+                document.removeEventListener('click', searchOutsideClick);
+                searchOutsideClick = null;
+            }
+        };
+        setTimeout(() => document.addEventListener('click', searchOutsideClick), 10);
+    }
+
+    function handleSearchInput(e) {
+        clearTimeout(DEBOUNCE_DELAY);
+        const searchTerm = e.target.value.trim();
+
+        if (searchTerm.length < 2) {
+            resultsContainer.innerHTML = '';
+            return;
+        }
+
+        DEBOUNCE_DELAY = setTimeout(() => {
+            fetchResults(searchTerm)
+                .catch(error =>
+                    notification.showNotification('Управление продуктами',
+                        `Произошла ошибка при поиске продукта: ${error}`));
+        }, DEBOUNCE_DELAY);
+    }
+
+    async function fetchResults(searchTerm) {
+        try {
+            const data = await
+                (await restClient.fetchData(`/api/v1/search/${searchEndpoint}?searchTerm=${searchTerm}`,
+                    'GET')).json();
+            displayResults(data);
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    }
+
+    function displayResults(results) {
+        resultsContainer.innerHTML = '';
+        if (results.length === 0) {
+            return;
+        }
+
+        results.forEach(result => {
+            const div = document.createElement('div');
+            div.className = 'result-item';
+            div.textContent = searchEndpoint === 'country' ? result.country : result.name;
+
+            div.onclick = () => handleSearchClick(result);
+
+            resultsContainer.appendChild(div);
+        });
+    }
+
+    function handleSearchClick(result) {
+        try {
+            if (searchEndpoint === 'type') {
+                searchElement.querySelector('#type').value = result.name;
+                searchElement.querySelector('#parent-type').value = result.parent;
+            } else if (searchEndpoint === 'type/parent') {
+                searchElement.querySelector('#parent-type').value = result.name;
+            } else if (searchEndpoint === 'manufacturer') {
+                idMap.set('manufacturer', result.id);
+
+                searchElement.querySelector('#manufacturerName').value = result.name;
+                searchElement.querySelector('#country').value = result.country;
+            } else if (searchEndpoint === 'supplier') {
+                idMap.set('address', result.id);
+
+                searchElement.querySelector('#itn').value = result.itn;
+                searchElement.querySelector('#supplierName').value = result.name;
+
+                searchElement.querySelector('#subject').value = result.address.subject;
+
+                if (result.district !== null)
+                    searchElement.querySelector('#district').value = result.address.district;
+
+                searchElement.querySelector('#settlement').value = result.address.settlement;
+                searchElement.querySelector('#street').value = result.address.street;
+                searchElement.querySelector('#house').value = result.address.house;
+
+                if (result.apartment !== null)
+                    searchElement.querySelector('#apartment').value = result.address.apartment;
+
+                searchElement.querySelector('#postalCode').value = result.address.postalCode;
+            } else if (searchEndpoint === 'country') {
+                searchElement.querySelector('#county').value = result.country;
+            }
+            blockInput(searchElement);
+        } catch (error) {
+            console.error(error);
+            notification.showNotification('Управление продуктами',
+                `Произошла ошибка в модуле поиска: ${error.message}`);
+        } finally {
+            closeSearch();
+        }
+    }
+
+    function blockInput(element) {
+        let blockedInputs = [];
+        let inputContainer = null;
+
+        if (searchEndpoint === 'manufacturer') {
+            inputContainer = element.querySelector('.countryPart');
+            idMap.delete('manufacturer');
+        } else if (searchEndpoint === 'supplier') {
+            inputContainer = element.querySelector('.addressPart');
+            idMap.delete('address');
+        } else if (searchEndpoint === 'type') {
+            inputContainer = element.querySelector('.parent-type');
+        }
+
+        if (inputContainer !== null)
+            inputContainer.querySelectorAll('input')
+                .forEach((input) => {
+                    input.readOnly = true;
+                    input.classList.add('locked-input');
+                    blockedInputs.push(input);
+                });
+
+        element.querySelectorAll('input').forEach((input) => {
+            input.addEventListener('input', () => {
+                blockedInputs.forEach(blockedInput => unblockInput(blockedInput));
+            });
+        });
+    }
+
+    function unblockInput(inputElement) {
+        inputElement.readOnly = false;
+        inputElement.classList.remove('locked-input');
+        idMap.delete(searchEndpoint);
+    }
+
+    function closeSearch() {
+        searchContainer.style.display = 'none';
+        searchBackdrop.style.display = 'none';
+
+        searchField.value = '';
+        resultsContainer.innerHTML = '';
+
+        searchElement = null;
+        searchEndpoint = null;
+
+        if (searchOutsideClick !== null) {
+            document.removeEventListener('click', searchOutsideClick);
+            searchOutsideClick = null;
+        }
+    }
 
     function updateProduct() {
         const formData = new FormData();
