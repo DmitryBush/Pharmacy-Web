@@ -5,7 +5,7 @@
     <title>Редактирование продукта</title>
     <link href="/css/admin/editing-product.css" rel="stylesheet" type="text/css">
     <link href="/css/product/product.css" rel="stylesheet" type="text/css">
-    <script src="/js/admin/editing-product.js"></script>
+    <script src="/js/admin/editing-product.js" type="module"></script>
 </head>
 <body>
     <div th:replace="~{/admin/sidebar/sidebar.html :: sidebar}"></div>
@@ -23,17 +23,7 @@
                 <button class="toggle-btn" id="previewBtn">Превью</button>
             </div>
             <div class="image-preview-container">
-                <div id="imagePreview" class="preview-container">
-                    <!-- existing images -->
-                    <div th:each="image : ${product.imagePaths}" class="image-item">
-                        <img th:src="@{/api/v1/product-image/{id}/{image}(id=${product.id},image=${image.path})}"
-                             th:alt="${product.name}"
-                             width="350px">
-                        <button class="delete-image-btn" th:data-id="${image.id}">×</button>
-                    </div>
-
-                    <!-- new images -->
-                </div>
+                <div id="imagePreview" class="preview-container"></div>
             </div>
             <div id="product-id" th:data-id="${product.id}">
                 <form id="productCreationForm" name="productCreationForm">
@@ -44,30 +34,27 @@
                     <div>
                       <label class="input-group" for="name">
                         Название товара
-                        <input class="input-group" type="text" id="name" th:value="${product.name}" required>
+                        <input class="input-group" type="text" id="name">
                       </label>
                     </div>
-                    <div>
-                      <label class="input-group" for="type">
-                        Тип товара
-                        <input class="input-group" type="text" id="type" th:value="${product.type}" required>
-                      </label>
+                    <div id="type-container">
+                        <button id="add-type-btn" class="add-type-btn">+ Добавить тип</button>
                     </div>
                     <div>
                       <label class="input-group" for="price">
                         Цена
-                        <input class="input-group" type="number" id="price" step="0.01" th:value="${product.price}" required>
+                        <input class="input-group" type="number" id="price" step="0.01">
                       </label>
                     </div>
                     <div class="form-radio">
                       <fieldset>
                         <legend>Требуется рецепт</legend>
                         <label class="radio-label">
-                          <input type="radio" name="recipe" class="recipe-input" value="1" th:checked="${product.recipe == true}">
+                          <input type="radio" name="recipe" class="recipe-input" value="1">
                           Да
                         </label>
                         <label class="radio-label">
-                          <input type="radio" name="recipe" class="recipe-input" value="0" th:checked="${product.recipe == false}">
+                          <input type="radio" name="recipe" class="recipe-input" value="0">
                           Нет
                         </label>
                       </fieldset>
@@ -75,58 +62,56 @@
                     <div>
                         <label class="input-group" for="active-ingredient">
                             Активный ингредиент
-                            <input class="input-group" type="text" id="active-ingredient"
-                                   th:value="${product.activeIngredient}" required>
+                            <input class="input-group" type="text" id="active-ingredient">
                         </label>
                     </div>
                     <div>
                         <label class="input-group" for="expiration-date">
                             Срок годности
-                            <input class="input-group" type="text" id="expiration-date"
-                                   th:value="${product.expirationDate}" required>
+                            <input class="input-group" type="text" id="expiration-date">
                         </label>
                     </div>
                     <div>
                         <label class="input-group" for="composition">Состав</label>
-                        <textarea class="input-group" id="composition" th:text="${product.composition}"></textarea>
+                        <textarea class="input-group" id="composition"></textarea>
                     </div>
                     <div>
                         <label class="input-group" for="indications">Показания</label>
-                        <textarea class="input-group" id="indications" th:text="${product.indication}"></textarea>
+                        <textarea class="input-group" id="indications"></textarea>
                     </div>
                     <div>
                         <label class="input-group" for="contraindications">Противопоказания</label>
-                        <textarea class="input-group" id="contraindications" th:text="${product.contraindication}"></textarea>
+                        <textarea class="input-group" id="contraindications"></textarea>
                     </div>
                     <div>
                         <label class="input-group" for="side-effects">Побочные эффекты</label>
-                        <textarea class="input-group" id="side-effects" th:text="${product.sideEffect}"></textarea>
+                        <textarea class="input-group" id="side-effects"></textarea>
                     </div>
                     <div>
                         <label class="input-group" for="interactions">Взаимодействия</label>
-                        <textarea class="input-group" id="interactions" th:text="${product.interaction}"></textarea>
+                        <textarea class="input-group" id="interactions"></textarea>
                     </div>
                     <div>
                         <label class="input-group" for="admission-course">Курс приема</label>
-                        <textarea class="input-group" id="admission-course" th:text="${product.admissionCourse}"></textarea>
+                        <textarea class="input-group" id="admission-course"></textarea>
                     </div>
                     <div>
                         <label class="input-group" for="overdose">Передозировка</label>
-                        <textarea class="input-group" id="overdose" th:text="${product.overdose}"></textarea>
+                        <textarea class="input-group" id="overdose"></textarea>
                     </div>
                     <div>
                         <label class="input-group" for="release-form">Форма выпуска</label>
-                        <textarea class="input-group" id="release-form" th:text="${product.releaseForm}"></textarea>
+                        <textarea class="input-group" id="release-form"></textarea>
                     </div>
                     <div>
                         <label class="input-group" for="special-instructions">Специальные показания</label>
-                        <textarea class="input-group" id="special-instructions" th:text="${product.specialInstruction}"></textarea>
+                        <textarea class="input-group" id="special-instructions"></textarea>
                     </div>
                     <div>
                         <label class="input-group" for="storage-conditions">Условия хранения</label>
-                        <textarea class="input-group" id="storage-conditions" th:text="${product.storageCondition}"></textarea>
+                        <textarea class="input-group" id="storage-conditions"></textarea>
                     </div>
-                    <div id="supplierPart" th:data="${product.supplier.itn}">
+                    <div id="supplierPart">
                         <details>
                             <summary class="section-header">
                                 <h2>Поставщик</h2>
@@ -135,17 +120,16 @@
                             <div class="input-group">
                                 <label class="input-group" for="itn">
                                     ИНН
-                                    <input class="input-group" type="text" id="itn" th:value="${product.supplier.itn}" required>
+                                    <input class="input-group" type="text" id="itn">
                                 </label>
                             </div>
                             <div class="input-group">
                                 <label class="input-group" for="supplierName">
                                     Название поставщика
-                                    <input class="input-group" type="text" id="supplierName"
-                                           th:value="${product.supplier.name}" required>
+                                    <input class="input-group" type="text" id="supplierName">
                                 </label>
                             </div>
-                            <div class="input-group" id="addressPart" th:data-id="${product.supplier.address.id}">
+                            <div class="input-group" id="addressPart">
                                 <details>
                                     <summary class="section-header">
                                         <h3>Адрес поставщика</h3>
@@ -153,44 +137,37 @@
                                     </summary>
                                     <label class="input-group" for="subject">
                                         Область
-                                        <input class="input-group" type="text" id="subject"
-                                               th:value="${product.supplier.address.subject}" required>
+                                        <input class="input-group locked-input" type="text" id="subject" readonly>
                                     </label>
                                     <label class="input-group" for="district">
                                         Район
-                                        <input class="input-group" type="text" id="district"
-                                               th:value="${product.supplier.address.district}">
+                                        <input class="input-group locked-input" type="text" id="district" readonly>
                                     </label>
                                     <label class="input-group" for="settlement">
                                         Город
-                                        <input class="input-group" type="text" id="settlement"
-                                               th:value="${product.supplier.address.settlement}" required>
+                                        <input class="input-group locked-input" type="text" id="settlement" readonly>
                                     </label>
                                     <label class="input-group" for="street">
                                         Улица
-                                        <input class="input-group" type="text" id="street"
-                                               th:value="${product.supplier.address.street}" required>
+                                        <input class="input-group locked-input" type="text" id="street" readonly>
                                     </label>
                                     <label class="input-group" for="house">
                                         Дом
-                                        <input class="input-group" type="text" id ="house"
-                                               th:value="${product.supplier.address.house}" required>
+                                        <input class="input-group locked-input" type="text" id ="house" readonly>
                                     </label>
                                     <label class="input-group" for="apartment">
                                         Квартира
-                                        <input class="input-group" type="text" id="apartment"
-                                               th:value="${product.supplier.address.apartment}">
+                                        <input class="input-group locked-input" type="text" id="apartment" readonly>
                                     </label>
                                     <label class="input-group" for="postalCode">
                                         Почтовый индекс
-                                        <input class="input-group" type="text" id="postalCode"
-                                               th:value="${product.supplier.address.postalCode}" required>
+                                        <input class="input-group locked-input" type="text" id="postalCode" readonly>
                                     </label>
                                 </details>
                             </div>
                         </details>
                     </div>
-                    <div id="manufacturerPart" th:data-id="${product.manufacturer.id}">
+                    <div id="manufacturerPart">
                         <details>
                             <summary class="section-header">
                                 <h2>Производитель</h2>
@@ -199,8 +176,7 @@
                             <div>
                                 <label class="input-group" for="manufacturerName">
                                     Название производителя
-                                    <input type="text" id="manufacturerName" class="input-group"
-                                           th:value="${product.manufacturer.name}" required>
+                                    <input type="text" id="manufacturerName" class="input-group">
                                 </label>
                             </div>
                             <div>
@@ -212,8 +188,7 @@
                                     <div>
                                         <label class="input-group" for="country">
                                             Страна
-                                            <input class="input-group" type="text"
-                                                   id="country" th:value="${product.manufacturer.country}" required>
+                                            <input class="input-group locked-input" type="text" id="country" readonly>
                                         </label>
                                     </div>
                                 </details>

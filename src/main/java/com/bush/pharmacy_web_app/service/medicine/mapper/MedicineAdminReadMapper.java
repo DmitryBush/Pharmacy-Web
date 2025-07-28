@@ -3,9 +3,6 @@ package com.bush.pharmacy_web_app.service.medicine.mapper;
 import com.bush.pharmacy_web_app.model.dto.medicine.MedicineAdminReadDto;
 import com.bush.pharmacy_web_app.model.dto.medicine.MedicineImageReadDto;
 import com.bush.pharmacy_web_app.model.entity.medicine.Medicine;
-import com.bush.pharmacy_web_app.model.entity.medicine.MedicineType;
-import com.bush.pharmacy_web_app.model.entity.medicine.ProductCategories;
-import com.bush.pharmacy_web_app.model.entity.medicine.ProductCategoriesId;
 import com.bush.pharmacy_web_app.shared.mapper.DtoMapper;
 import com.bush.pharmacy_web_app.service.supplier.mapper.SupplierReadMapper;
 import com.bush.pharmacy_web_app.service.manufacturer.mapper.ManufacturerReadMapper;
@@ -20,6 +17,7 @@ import java.util.Optional;
 public class MedicineAdminReadMapper implements DtoMapper<Medicine, MedicineAdminReadDto> {
     private final ManufacturerReadMapper manufacturerReadMapper;
     private final SupplierReadMapper supplierReadMapper;
+    private final ListProductCategoryReadMapper listProductCategoryReadMapper;
     @Override
     public MedicineAdminReadDto map(Medicine obj) {
         var supplier = Optional.ofNullable(obj.getSupplier())
@@ -29,13 +27,7 @@ public class MedicineAdminReadMapper implements DtoMapper<Medicine, MedicineAdmi
                 .map(manufacturerReadMapper::map)
                 .orElseThrow();
         var type = Optional.ofNullable(obj.getType())
-                .map(productCategories -> productCategories.stream()
-                        .filter(ProductCategories::getIsMain)
-                        .map(ProductCategories::getId)
-                        .map(ProductCategoriesId::getType)
-                        .map(MedicineType::getType)
-                        .findFirst()
-                        .orElseThrow())
+                .map(listProductCategoryReadMapper::map)
                 .orElseThrow();
         var imagePaths = Optional.ofNullable(obj.getImage())
                 .map(list -> list
@@ -48,7 +40,7 @@ public class MedicineAdminReadMapper implements DtoMapper<Medicine, MedicineAdmi
                 .name(obj.getName())
                 .supplier(supplier)
                 .manufacturer(manufacturer)
-                .type(type)
+                .types(type)
                 .price(obj.getPrice())
                 .recipe(obj.getRecipe())
                 .imagePaths(imagePaths)

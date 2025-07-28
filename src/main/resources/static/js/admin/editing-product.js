@@ -1,14 +1,135 @@
+import RestClient from "../RestClient.js";
+import Notification from "../notification/notification.js";
+
 document.addEventListener('DOMContentLoaded', () => {
+    const restClient = new RestClient();
+    const notification = new Notification('/api/v1/icons/admin/file-earmark-medical-fill.png');
+
     const productId = document.getElementById('product-id').dataset.id;
-    const saveBtn = document.getElementById('save-btn');
-    const imageInput = document.getElementById('imageInput');
+    const mapId = new Map();
     const newImagesContainer = document.querySelector('#imagePreview');
     let newImagesFiles = [];
+
+    const typeContainer = document.getElementById('type-container');
+    let typeCounter = 0;
 
     const editBtn = document.getElementById('editBtn');
     const previewBtn = document.getElementById('previewBtn');
     const editor = document.getElementById('product-id');
     const preview = document.getElementById('product-preview');
+
+    init().catch(() => notification.showNotification('Управление товарами',
+        `Во время загрузки данных произошла ошибка`));
+
+    async function init() {
+        const response = await
+            (await restClient.fetchData(`/api/v1/admin/products/${productId}`, 'GET')).json();
+
+        fillForm(response);
+    }
+
+    function fillForm(data) {
+        fillTypes(data.types);
+        fillImages(data.imagePaths);
+
+        document.getElementById('name').value = data.name;
+        document.getElementById('price').value = parseFloat(data.price);
+
+        if (data.recipe)
+            document.querySelector('input[name="recipe"][value="1"]').checked = true;
+        else
+            document.querySelector('input[name="recipe"][value="0"]').checked = true;
+
+        document.getElementById('active-ingredient').value = data.activeIngredient;
+        document.getElementById('expiration-date').value = data.expirationDate;
+        document.getElementById('composition').value = data.composition;
+        document.getElementById('indications').value = data.indication;
+        document.getElementById('contraindications').value = data.contraindication;
+        document.getElementById('side-effects').value = data.sideEffect;
+        document.getElementById('interactions').value = data.interaction;
+        document.getElementById('admission-course').value = data.admissionCourse;
+        document.getElementById('overdose').value = data.overdose;
+        document.getElementById('release-form').value = data.releaseForm;
+        document.getElementById('special-instructions').value = data.specialInstruction;
+        document.getElementById('storage-conditions').value = data.storageCondition;
+
+        document.getElementById('itn').value = data.supplier.itn;
+        document.getElementById('supplierName').value = data.supplier.name;
+
+        mapId.set('address', data.supplier.address.id);
+        document.getElementById('subject').value = data.supplier.address.subject;
+        document.getElementById('district').value = data.supplier.address.district;
+        document.getElementById('settlement').value = data.supplier.address.settlement;
+        document.getElementById('street').value = data.supplier.address.street;
+        document.getElementById('house').value = data.supplier.address.house;
+        document.getElementById('apartment').value = data.supplier.address.apartment;
+        document.getElementById('postalCode').value = data.supplier.address.postalCode;
+
+        mapId.set('manufacturer', data.manufacturer.id);
+        document.getElementById('manufacturerName').value = data.manufacturer.name;
+
+        document.getElementById('country').value = data.manufacturer.country;
+    }
+
+    function fillTypes(types) {
+        const addTypeButton = document.getElementById('add-type-btn');
+        types.forEach(type => {
+            let className;
+            let typeDescription;
+            if (type.isMain) {
+                className = 'main-type';
+                typeDescription = 'Основной тип товара';
+            } else {
+                className = 'type';
+                typeDescription = 'Тип товара';
+            }
+            const typeElement = document.createElement('div');
+            typeElement.className = 'type';
+            typeElement.innerHTML = `
+                            <label class="input-group" for="type">
+                                ${typeDescription} ${++typeCounter}
+                                <span class="input-with-button type">
+                                    <input class="input-group ${className}" type="text" id="type" 
+                                        value="${type.type.name}">
+                                    <button class="search-btn search-icon">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                                            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+                                        </svg>
+                                    </button>
+                                </span>
+                            </label>
+                            <label class="input-group" for="parent-type">
+                                Родительский тип
+                                <span class="input-with-button parent-type">
+                                    <input class="input-group parent-type locked-input" type="text" id="parent-type" 
+                                        value="${type.type.parent}" readonly>
+                                    <button class="search-btn search-icon">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                                            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+                                        </svg>
+                                    </button>
+                                </span>
+                            </label>`;
+
+            typeContainer.insertBefore(typeElement, addTypeButton);
+        })
+    }
+
+    function fillImages(images) {
+        images.forEach(image => {
+            const imageItem = document.createElement('div');
+            imageItem.classList.add('image-item');
+            imageItem.innerHTML = `
+                <img src='/api/v1/product-image/${productId}/${image.path}'
+                                 width="350px">
+                <button class="delete-image-btn" data-id="${image.id}">×</button>
+            `;
+            newImagesContainer.appendChild(imageItem);
+        })
+    }
+
+    document.getElementById('save-btn').addEventListener('click', () => updateProduct);
+    document.getElementById('delete-btn').addEventListener('click', deleteProduct);
 
     editBtn.addEventListener('click', () => {
         editBtn.classList.add('active');
@@ -72,7 +193,7 @@ document.addEventListener('DOMContentLoaded', () => {
         window.location.replace('/admin/product');
     })
 
-    imageInput.addEventListener('change', (e) => {
+    document.getElementById('imageInput').addEventListener('change', (e) => {
         const files = Array.from(e.target.files);
         newImagesFiles = [...newImagesFiles, ...files];
         files.forEach(file => {
@@ -90,28 +211,20 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    async function deleteImage(button) {
+     function deleteImage(button) {
         const imageId = button.getAttribute('data-id');
 
         if (confirm('Удалить изображение?')) {
-            try {
-                const response = await fetch(`/api/product-image/${imageId}`, {
-                    method: 'DELETE',
-                    headers: {
-                        'Content-Type': 'application/json'
+            restClient.fetchData(`/api/product-image/${imageId}`, 'DELETE')
+                .then(response => {
+                    if (response.ok) {
+                        notification.showNotification('Управление товарами',
+                            'Товар успешно обновлен');
+                        setTimeout(() => window.location.replace('/admin/product'), 1000);
                     }
-                });
-
-                if (response.ok) {
-                    button.closest('.image-item').remove();
-                } else {
-                    const error = await response.text();
-                    alert(`Ошибка: ${error}`);
-                }
-            } catch (error) {
-                console.error('Ошибка:', error);
-                alert('Не удалось удалить изображение');
-            }
+                })
+                .catch(e => notification.showNotification('Управление товарами',
+                    `Во время завершения заказа произошла ошибка. Ошибка: ${e.message}`));
         }
     }
 
@@ -165,7 +278,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
 
-    const updateProduct = async () => {
+    function updateProduct() {
         const formData = new FormData();
         const productBlob = new Blob(
             [JSON.stringify(getFormData())],
@@ -179,42 +292,28 @@ document.addEventListener('DOMContentLoaded', () => {
             formData.append('images', new File([], 'empty'));
         }
 
-        try {
-            const response = await fetch(`/api/v1/admin/products/${productId}`, {
-                method: 'PUT',
-                body: formData
-            });
+        restClient.fetchData(`/api/v1/admin/products/${productId}`, 'PUT', {}, formData)
+            .then(response => {
+                if (response.ok) {
+                    notification.showNotification('Управление товарами',
+                        'Товар успешно обновлен');
+                    setTimeout(() => window.location.replace('/admin/product'), 1000);
+                }
+            })
+            .catch(e => notification.showNotification('Управление товарами',
+                `Во время завершения заказа произошла ошибка. Ошибка: ${e.message}`));
+    }
 
-            if (response.ok) {
-                window.location.replace('/admin/product');
-            } else {
-                const error = await response.text();
-                alert(`Ошибка: ${error}`);
-            }
-        } catch (error) {
-            console.error('Ошибка:', error);
-            alert('Сетевая ошибка. Проверьте подключение.');
-        }
-    };
-
-    const deleteProduct = async () => {
+    function deleteProduct() {
         if (!confirm('Удалить продукт?')) return;
 
-        try {
-            const response = await fetch(`/api/v1/admin/products/${productId}`, {
-                method: 'DELETE'
-            });
-
-            if (response.ok) {
-                window.location.replace('/admin/product');
-            } else {
-                alert('Ошибка удаления');
-            }
-        } catch (error) {
-            console.error('Ошибка:', error);
-        }
-    };
-
-    saveBtn.addEventListener('click', updateProduct);
-    document.getElementById('delete-btn').addEventListener('click', deleteProduct);
+        restClient.fetchData(`/api/v1/admin/products/${productId}`, 'DELETE')
+            .then(() => {
+                notification.showNotification('Управление товарами',
+                    'Удаление товара завершено успешно');
+                setTimeout(() => window.location.replace('/admin/product'), 1000);
+            })
+            .catch(e => notification.showNotification('Управление товарами',
+                `Во время завершения заказа произошла ошибка. Ошибка: ${e.message}`));
+    }
 });
