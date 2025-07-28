@@ -51,7 +51,7 @@
                         <div class="type">
                             <label class="input-group" for="type">
                                 Основной тип товара
-                                <span class="input-with-button">
+                                <span class="input-with-button type">
                                     <input class="input-group main-type" type="text" id="type">
                                     <button class="search-btn search-icon">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
@@ -62,7 +62,7 @@
                             </label>
                             <label class="input-group" for="parent-type">
                                 Родительский тип
-                                <span class="input-with-button">
+                                <span class="input-with-button parent-type">
                                     <input class="input-group parent-type" type="text" id="parent-type">
                                     <button class="search-btn search-icon">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
@@ -227,12 +227,18 @@
                                     <input type="text" id="manufacturerName" class="input-group">
                                 </label>
                             </div>
-                            <div>
+                            <div id="countryPart" class="countryPart">
                                 <details>
                                     <summary class="section-header">
                                         <h3>Страна производителя</h3>
                                         <span class="arrow"></span>
                                     </summary>
+                                    <button class="action-btn search-btn">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                                            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+                                        </svg>
+                                        Найти страну
+                                    </button>
                                     <div>
                                         <label class="input-group" for="country">
                                             Страна

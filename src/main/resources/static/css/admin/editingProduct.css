@@ -526,3 +526,10 @@ details[open] .arrow {
 .search-btn:hover {
     color: #000;
 }
+
+.locked-input {
+    background-color: #f8f8f8;
+    border-color: #e0e0e0;
+    color: #888;
+    cursor: not-allowed;
+}

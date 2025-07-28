@@ -35,17 +35,16 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll(".search-btn").forEach(btn =>
         btn.addEventListener('click', e => {
             e.preventDefault();
-            if (btn.closest('div').classList.contains('type')) {
-                const element =  btn.parentNode;
-                if (element.querySelector('input').classList.contains('type')
-                    || element.querySelector('input').classList.contains('main-type'))
-                    searchEndpoint = 'type';
-                else
-                    searchEndpoint = 'type/parent';
+            if (btn.closest('span').classList.contains('type')) {
+                searchEndpoint = 'type';
+            } else if (btn.closest('span').classList.contains('parent-type')) {
+                searchEndpoint = 'type/parent';
             } else if (btn.closest('div').classList.contains('manufacturerPart')) {
                 searchEndpoint = 'manufacturer';
             } else if (btn.closest('div').classList.contains('supplierPart')) {
                 searchEndpoint = 'supplier';
+            } else if (btn.closest('div').classList.contains('countryPart')) {
+                searchEndpoint = 'country';
             }
 
             searchElement = btn.closest('div');
@@ -57,7 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
         newType.className = 'type';
         newType.innerHTML = `<label class="input-group" for="type">
                                 Тип товара ${++typeCounter}
-                                <span class="input-with-button">
+                                <span class="input-with-button type">
                                     <input class="input-group type" type="text" id="type">
                                     <button class="search-btn search-icon">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
@@ -68,7 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             </label>
                             <label class="input-group" for="parent-type">
                                 Родительский тип
-                                <span class="input-with-button">
+                                <span class="input-with-button parent-type">
                                     <input class="input-group parent-type" type="text" id="parent-type">
                                     <button class="search-btn search-icon">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
@@ -211,7 +210,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 itn: document.getElementById('itn').value,
                 name: document.getElementById('supplierName').value,
                 address: {
-                    id: idMap.get('address'),
+                    id: idMap.get('address') ?? null,
                     subject: document.getElementById('subject').value,
                     district: document.getElementById('district').value,
                     settlement: document.getElementById('settlement').value,
@@ -222,7 +221,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             },
             manufacturer: {
-                id: idMap.get('manufacturer'),
+                id: idMap.get('manufacturer') ?? null,
                 name: document.getElementById('manufacturerName').value,
                 country: {
                     country: document.getElementById('country').value
@@ -281,7 +280,7 @@ document.addEventListener('DOMContentLoaded', () => {
         DEBOUNCE_DELAY = setTimeout(() => {
             fetchResults(searchTerm)
                 .catch(error =>
-                    notification.showNotification('Управление складом',
+                    notification.showNotification('Управление продуктами',
                         `Произошла ошибка при поиске продукта: ${error}`));
         }, DEBOUNCE_DELAY);
     }
@@ -307,7 +306,7 @@ document.addEventListener('DOMContentLoaded', () => {
         results.forEach(result => {
             const div = document.createElement('div');
             div.className = 'result-item';
-            div.textContent = result.name;
+            div.textContent = searchEndpoint === 'country' ? result.country : result.name;
 
             div.onclick = () => handleSearchClick(result);
 
@@ -316,35 +315,81 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function handleSearchClick(result) {
-        if (searchEndpoint === 'type') {
-            searchElement.querySelector('#type').value = result.name;
-            searchElement.querySelector('#parent-type').value = result.parent;
-        } else if (searchEndpoint === 'manufacturer') {
-            idMap.set('manufacturer', result.id);
+        try {
+            if (searchEndpoint === 'type') {
+                searchElement.querySelector('#type').value = result.name;
+                searchElement.querySelector('#parent-type').value = result.parent;
+            } else if (searchEndpoint === 'type/parent') {
+                searchElement.querySelector('#parent-type').value = result.name;
+            } else if (searchEndpoint === 'manufacturer') {
+                idMap.set('manufacturer', result.id);
 
-            searchElement.querySelector('#manufacturerName').value = result.name;
-            searchElement.querySelector('#country').value = result.country;
-        } else if (searchEndpoint === 'supplier') {
-            idMap.set('address', result.id);
+                searchElement.querySelector('#manufacturerName').value = result.name;
+                searchElement.querySelector('#country').value = result.country;
+            } else if (searchEndpoint === 'supplier') {
+                idMap.set('address', result.id);
 
-            searchElement.querySelector('#itn').value = result.itn;
-            searchElement.querySelector('#supplierName').value = result.name;
+                searchElement.querySelector('#itn').value = result.itn;
+                searchElement.querySelector('#supplierName').value = result.name;
 
-            searchElement.querySelector('#subject').value = result.address.subject;
+                searchElement.querySelector('#subject').value = result.address.subject;
 
-            if (result.district !== null)
-                searchElement.querySelector('#district').value = result.address.district;
+                if (result.district !== null)
+                    searchElement.querySelector('#district').value = result.address.district;
 
-            searchElement.querySelector('#settlement').value = result.address.settlement;
-            searchElement.querySelector('#street').value = result.address.street;
-            searchElement.querySelector('#house').value = result.address.house;
+                searchElement.querySelector('#settlement').value = result.address.settlement;
+                searchElement.querySelector('#street').value = result.address.street;
+                searchElement.querySelector('#house').value = result.address.house;
 
-            if (result.apartment !== null)
-                searchElement.querySelector('#apartment').value = result.address.apartment;
+                if (result.apartment !== null)
+                    searchElement.querySelector('#apartment').value = result.address.apartment;
 
-            searchElement.querySelector('#postalCode').value = result.address.postalCode;
+                searchElement.querySelector('#postalCode').value = result.address.postalCode;
+            } else if (searchEndpoint === 'country') {
+                searchElement.querySelector('#county').value = result.country;
+            }
+            blockInput(searchElement);
+        } catch (error) {
+            console.error(error);
+            notification.showNotification('Управление продуктами',
+                `Произошла ошибка в модуле поиска: ${error.message}`);
+        } finally {
+            closeSearch();
         }
-        closeSearch();
+    }
+
+    function blockInput(element) {
+        let blockedInputs = [];
+        let inputContainer = null;
+
+        if (searchEndpoint === 'manufacturer') {
+            inputContainer = element.querySelector('.countryPart');
+            idMap.delete('manufacturer');
+        } else if (searchEndpoint === 'supplier') {
+            inputContainer = element.querySelector('.addressPart');
+            idMap.delete('address');
+        } else if (searchEndpoint === 'type') {
+            inputContainer = element.querySelector('.parent-type');
+        }
+
+        if (inputContainer !== null)
+            inputContainer.querySelectorAll('input')
+                .forEach((input) => {
+                    input.readOnly = true;
+                    input.classList.add('locked-input');
+                    blockedInputs.push(input);
+                });
+
+        element.querySelectorAll('input').forEach((input) => {
+            input.addEventListener('input', () => {
+                blockedInputs.forEach(blockedInput => unblockInput(blockedInput));
+            });
+        });
+    }
+
+    function unblockInput(inputElement) {
+        inputElement.readOnly = false;
+        inputElement.classList.remove('locked-input');
     }
 
     function closeSearch() {
