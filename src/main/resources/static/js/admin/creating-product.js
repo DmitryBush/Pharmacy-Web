@@ -147,9 +147,16 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     function fillPreview(data) {
+        let mainType;
         const infoSpans = document.querySelectorAll('.product-info span:last-child');
         infoSpans[0].textContent = `${data.manufacturer.name}, ${data.manufacturer.country.country}`;
-        infoSpans[1].textContent = data.type;
+
+        data.type.forEach(type => {
+            if (type.isMain)
+                mainType = type.type.name;
+        });
+
+        infoSpans[1].textContent = mainType;
         infoSpans[2].textContent = data.activeIngredient;
         infoSpans[3].textContent = data.expirationDate;
 
@@ -243,20 +250,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function getTypeData() {
         let types = [];
-        typeContainer.querySelectorAll('.type').forEach((item) => {
-            if (item.querySelector('#type').classList.contains('type')) {
+        typeContainer.querySelectorAll('div[class=type]').forEach((item) => {
+            if (item.querySelector('input[id=type]').classList.contains('type')) {
                 types.push({
                     type: {
-                        name: item.querySelector('#type').value,
-                        parent: item.querySelector('#parent-type').value
+                        name: item.querySelector('input[id=type]').value,
+                        parent: item.querySelector('input[id=parent-type]').value
                     },
                     isMain : false
                 });
-            } else if (item.querySelector('#type').classList.contains('main-type')) {
+            } else if (item.querySelector('input[id=type]').classList.contains('main-type')) {
                 types.push({
                     type: {
-                        name: item.querySelector('#type').value,
-                        parent: item.querySelector('#parent-type').value
+                        name: item.querySelector('input[id=type]').value,
+                        parent: item.querySelector('input[id=parent-type]').value
                     },
                     isMain : true
                 });
