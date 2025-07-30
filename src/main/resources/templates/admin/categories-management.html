@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Категории</title>
+    <link href="/css/admin/categories-management.css" rel="stylesheet">
+    <link href="/css/notification/notification.css" rel="stylesheet" type="text/css">
+    <script src="/js/admin/categories-management.js" type="module"></script>
+</head>
+<body>
+    <div th:replace="~{/admin/sidebar/sidebar.html :: sidebar}"></div>
+    <main class="main-content">
+        <h1 class="page-title">Управление категориями</h1>
+        <div class="page-container">
+            <div class="categories-list"></div>
+        </div>
+        <div id="notification-container"></div>
+    </main>
+</body>
+</html>
