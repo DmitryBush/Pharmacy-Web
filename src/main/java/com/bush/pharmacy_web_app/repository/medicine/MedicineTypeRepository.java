@@ -31,4 +31,6 @@ public interface MedicineTypeRepository extends JpaRepository<MedicineType, Inte
     List<MedicineType> findByTypeContainingIgnoreCaseAndParentIsNotNull(String type);
 
     List<MedicineType> findByTypeContainingIgnoreCase(String type);
+
+    List<MedicineType> findByParentType(String parent);
 }

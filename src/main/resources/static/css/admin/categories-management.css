@@ -20,10 +20,7 @@ body {
 }
 
 .page-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 1.5rem;
-    padding: 0.5rem;
+    padding-left: 0.5rem;
 }
 
 .category-item {
@@ -35,30 +32,49 @@ body {
     background-color: white;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.category-item a {
-    text-decoration: none;
-}
-
-.category-item img {
-    border-radius: 4px;
-    object-fit: cover;
+    cursor: pointer;
 }
 
 .category-item div {
     flex: 1;
 }
 
-.delete-btn {
-    background-color: #f44336;
+.item-actions {
+    display: flex;
+    align-items: center;
+    margin-left: 15vh;
+}
+
+.item-btn {
+    cursor: pointer;
+}
+
+.item-actions button {
     color: white;
     display: inline-flex;
     align-items: center;
-    margin-left: 30vh;
+    margin: 1vh 5vh;
+    white-space: nowrap;
     gap: 8px;
     padding: 8px 12px;
     border: none;
     border-radius: 6px;
     cursor: pointer;
+}
+
+.edit-btn {
+    background-color: #0078D7;
+}
+
+.move-btn {
+    background-color: #FFB900;
+}
+
+.delete-btn {
+    background-color: #f44336;
+}
+
+.fake-btn {
+    display: flex;
+    justify-content: flex-end;
 }

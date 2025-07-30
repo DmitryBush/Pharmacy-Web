@@ -32,4 +32,11 @@ public class MedicineTypeService {
                 .map(typeReadMapper::map)
                 .toList();
     }
+
+    public List<MedicineTypeDto> findAllTypesByParent(String parent) {
+        return medicineTypeRepository.findByParentType(parent)
+                .stream()
+                .map(typeReadMapper::map)
+                .toList();
+    }
 }
