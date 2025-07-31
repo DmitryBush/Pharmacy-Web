@@ -5,7 +5,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const restClient = new RestClient();
     const notification = new Notification('/api/v1/icons/admin/folder-fill.png');
 
+    const CHARACTER_REM_SIZE = 2.5;
+
     const categoriesList = document.getElementById('categories-list');
+
+    const titleContainer = document.getElementById('title-container');
+    const titleStack = ['Управление категориями'];
 
     initialize()
         .catch(e => {
@@ -15,14 +20,20 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
     async function initialize() {
-        await getCategories(null);
+        await createListCategories(null);
     }
 
-    async function getCategories(parent) {
+    async function createListCategories(parent) {
         const data = await (await restClient.fetchData(resolveUrl(parent), 'GET'))
             .json();
 
-        data.forEach((category) => createCategoryElement(category));
+        if (data.length > 0) {
+            data.forEach((category) => createCategoryElement(category));
+        } else {
+            categoriesList.innerHTML = `
+                <h2 class="missing-types">В данном подтипе отсутствуют типы товаров</h2>
+            `;
+        }
     }
 
     function resolveUrl(parent) {
@@ -64,6 +75,59 @@ document.addEventListener("DOMContentLoaded", () => {
                     </svg>
                 </div>
         `;
+        categoryElement.addEventListener('click', () => changeCategory(category.name));
         categoriesList.appendChild(categoryElement);
+    }
+
+    async function changeCategory(category) {
+        categoriesList.innerHTML = '';
+        changeTitle(category);
+
+        await createListCategories(category);
+    }
+
+    function changeTitle(category) {
+        const titleElement = titleContainer.querySelector('.page-title');
+        titleElement.textContent = '';
+        titleStack.push(category);
+
+        let tmpTitle = [];
+        for (let i = titleStack.length - 1; i >= 0; i--) {
+            let currentLength = 0;
+            tmpTitle.forEach((type) => currentLength += type.length);
+
+            if (titleStack[i].length * parseToPx(CHARACTER_REM_SIZE)
+                + currentLength * parseToPx(CHARACTER_REM_SIZE) > getAvailableTitleWidth() && tmpTitle.length > 0)
+                break;
+            tmpTitle.push(titleStack[i]);
+        }
+
+        tmpTitle = tmpTitle.reverse();
+        if (tmpTitle.length < titleStack.length) {
+            titleElement.textContent = '... ';
+            tmpTitle.forEach((type) =>
+                titleElement.textContent = `${titleElement.textContent} > ${type}`);
+        } else {
+            for (let i = 0; i < tmpTitle.length; i++) {
+                if (i === 0)
+                    titleElement.textContent = `${tmpTitle[i]}`;
+                else
+                    titleElement.textContent = `${titleElement.textContent} > ${tmpTitle[i]}`;
+            }
+        }
+    }
+
+    function parseToPx(rem) {
+        return 16.0 * parseFloat(rem);
+    }
+
+    function getAvailableTitleWidth() {
+        const button = titleContainer.querySelector('.item-btn');
+
+        const containerWidth = titleContainer.offsetWidth;
+        const buttonWidth = button.offsetWidth;
+        const gap = parseFloat(getComputedStyle(titleContainer).gap);
+
+        return containerWidth - buttonWidth - gap;
     }
 });

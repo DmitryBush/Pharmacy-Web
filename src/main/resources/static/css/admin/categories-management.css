@@ -12,11 +12,50 @@ body {
     padding: 2rem;
 }
 
+.title-container {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
 .page-title {
     font-size: 2.5rem;
-    margin-bottom: 2rem;
     color: #2b2d42;
     font-weight: 700;
+}
+
+.bi-arrow-left-short {
+    fill: #9E9E9E;
+    width: 2.5rem;
+    height: 2.5rem;
+}
+
+.active-btn {
+    fill: #2b2d42;
+}
+
+.item-btn {
+    color: transparent;
+    background: none;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    cursor: pointer;
+    border-radius: 16px;
+    width: 2.5rem;
+    height: 2.5rem;
+    flex-shrink: 0;
+}
+
+.item-btn:hover {
+    background-color: #EEEEEE;
+}
+
+.item-btn:active {
+    background-color: #E0E0E0;
 }
 
 .page-container {
@@ -32,7 +71,6 @@ body {
     background-color: white;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    cursor: pointer;
 }
 
 .category-item div {
@@ -43,10 +81,6 @@ body {
     display: flex;
     align-items: center;
     margin-left: 15vh;
-}
-
-.item-btn {
-    cursor: pointer;
 }
 
 .item-actions button {
@@ -60,21 +94,40 @@ body {
     border: none;
     border-radius: 6px;
     cursor: pointer;
+    transition: stroke 0.2s ease;
 }
 
 .edit-btn {
     background-color: #0078D7;
 }
 
+.edit-btn:hover {
+    background-color: #0063B1;
+}
+
 .move-btn {
     background-color: #FFB900;
+}
+
+.move-btn:hover {
+    background-color: #F9A825;
 }
 
 .delete-btn {
     background-color: #f44336;
 }
 
+.delete-btn:hover {
+    background-color: #D32F2F;
+}
+
 .fake-btn {
     display: flex;
     justify-content: flex-end;
+}
+
+.missing-types {
+    font-size: 1.5rem;
+    color: #2b2d42;
+    font-weight: 700;
 }
