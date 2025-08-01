@@ -8,9 +8,34 @@ document.addEventListener("DOMContentLoaded", () => {
     const CHARACTER_REM_SIZE = 2.5;
 
     const categoriesList = document.getElementById('categories-list');
+    const backButton = document.getElementById('back-btn');
+    let backButtonPressed = false;
 
     const titleContainer = document.getElementById('title-container');
     const titleStack = ['Управление категориями'];
+
+    backButton.addEventListener('click', (e) => {
+        e.preventDefault();
+
+        backButtonPressed = true;
+        if (titleStack.length === 2) {
+            titleStack.pop();
+            changeCategory(null)
+                .catch((e) => {
+                    console.error(e);
+                    notification.showNotification('Управление категориями',
+                        'При переходе на предыдущую страницу, возникла ошибка');
+                });
+            backButton.querySelector('svg').classList.remove('active-btn');
+        } else if (titleStack.length > 2) {
+            changeCategory(titleStack.pop())
+                .catch((e) => {
+                    console.error(e);
+                    notification.showNotification('Управление категориями',
+                        'При переходе на предыдущую страницу, возникла ошибка');
+                });
+        }
+    })
 
     initialize()
         .catch(e => {
@@ -20,7 +45,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
     async function initialize() {
-        await createListCategories(null);
+        await changeCategory(null);
     }
 
     async function createListCategories(parent) {
@@ -81,6 +106,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     async function changeCategory(category) {
         categoriesList.innerHTML = '';
+        if (category !== null && !backButton.querySelector('svg').classList.contains('active-btn')) {
+            backButton.querySelector('svg').classList.add('active-btn');
+        }
         changeTitle(category);
 
         await createListCategories(category);
@@ -89,7 +117,8 @@ document.addEventListener("DOMContentLoaded", () => {
     function changeTitle(category) {
         const titleElement = titleContainer.querySelector('.page-title');
         titleElement.textContent = '';
-        titleStack.push(category);
+        if (category !== null && !backButtonPressed)
+            titleStack.push(category);
 
         let tmpTitle = [];
         for (let i = titleStack.length - 1; i >= 0; i--) {
@@ -122,10 +151,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function getAvailableTitleWidth() {
-        const button = titleContainer.querySelector('.item-btn');
-
         const containerWidth = titleContainer.offsetWidth;
-        const buttonWidth = button.offsetWidth;
+        const buttonWidth = backButton.offsetWidth;
         const gap = parseFloat(getComputedStyle(titleContainer).gap);
 
         return containerWidth - buttonWidth - gap;
