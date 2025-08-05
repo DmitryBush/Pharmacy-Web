@@ -13,7 +13,7 @@ export default class PopupManager {
         this._cancelAction = null;
     }
 
-    createPopup() {
+    async createPopup() {
         this.validatePopup();
 
         this.popup = document.createElement('div');
@@ -22,11 +22,7 @@ export default class PopupManager {
 
         const rect = this._target.getBoundingClientRect();
 
-        this.popup.innerHTML = `
-                ${this._popupContent}
-                ${this._submitAction ? '<button id="submitButton">Применить</button>' : ''}
-                <button id="cancelButton">Отменить</button>
-        `;
+        this.popup.innerHTML = '<div class="loader-container"><div class="loader"></div></div>';
         document.body.appendChild(this.popup);
 
         this.popup.style.width = `${rect.width}px`;
@@ -48,20 +44,26 @@ export default class PopupManager {
                     this.closePopup(rect);
             }
             document.addEventListener('click', this.popupOutsideClick);
-
-            if (this._submitAction) {
-                this.popup.querySelector('#submitButton').addEventListener('click', () => {
-                    this._submitAction();
-                    this.closePopup(rect);
-                });
-            }
-            this.popup.querySelector('#cancelButton')
-                .addEventListener('click', () => {
-                    if (this._cancelAction)
-                        this._cancelAction();
-                    this.closePopup(rect);
-                });
         }, 10);
+
+        this.popup.innerHTML = `
+                ${await this._popupContent}
+                ${this._submitAction ? '<button id="submitButton">Применить</button>' : ''}
+                <button id="cancelButton">Отменить</button>
+        `;
+
+        if (this._submitAction) {
+            this.popup.querySelector('#submitButton').addEventListener('click', () => {
+                this._submitAction();
+                this.closePopup(rect);
+            });
+        }
+        this.popup.querySelector('#cancelButton')
+            .addEventListener('click', () => {
+                if (this._cancelAction)
+                    this._cancelAction();
+                this.closePopup(rect);
+            });
     }
 
     validatePopup() {
@@ -75,7 +77,8 @@ export default class PopupManager {
     }
 
     closePopup(rect) {
-        this.popup.style.transition = 'all 0.3s ease';
+        this.popup.innerHTML = '';
+        this.popup.style.transition = 'all 0.4s ease';
         this.popup.style.width = `${rect.width}px`;
         this.popup.style.height = `${rect.height}px`;
         this.popup.style.opacity = '0';

@@ -9,6 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const CHARACTER_REM_SIZE = 2.5;
 
     const categoriesList = document.getElementById('categories-list');
+    const loader = document.querySelector('.loader');
     const backButton = document.getElementById('back-btn');
     let backButtonPressed = false;
 
@@ -92,6 +93,7 @@ document.addEventListener("DOMContentLoaded", () => {
     async function createListCategories(parent) {
         const data = await (await restClient.fetchData(resolveUrl(parent), 'GET'))
             .json();
+        loader.style.display = 'none';
 
         if (data.length > 0) {
             data.forEach((category) => createCategoryElement(category));
@@ -147,6 +149,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     async function changeCategory(category) {
         categoriesList.innerHTML = '';
+        loader.style.display = 'block';
         if (category !== null && !backButton.querySelector('svg').classList.contains('active-btn')) {
             backButton.querySelector('svg').classList.add('active-btn');
         }
