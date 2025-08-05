@@ -62,12 +62,14 @@ document.addEventListener("DOMContentLoaded", () => {
                     parent: parentCategory
                 }))
                     .then(() => {
+                        notification.showNotification('Управление категориями',
+                            'Создание категории успешно завершено');
                         updateList();
                     })
                     .catch((err) => {
                         console.error(err);
                         notification.showNotification('Управление категориями',
-                            'Во время отправки данных произошла ошибка');
+                            'Во время создания категории произошла ошибка');
                     });
             })
             .createPopup();
@@ -144,6 +146,70 @@ document.addEventListener("DOMContentLoaded", () => {
                 </div>
         `;
         categoryElement.addEventListener('click', () => changeCategory(category.name));
+
+        categoryElement.querySelector('.edit-btn').addEventListener('click', (e) => {
+            e.stopPropagation();
+            const popupContent = `<div class="popup-title"><h4>Редактировать категорию</h4></div>
+                                        <label for="categoryInput">
+                                            Название категории
+                                            <input type="text" id="categoryInput" placeholder="Введите название">
+                                        </label>`;
+
+            new PopupManager()
+                .setTarget(e.target)
+                .setPopupContent(popupContent)
+                .setSubmitAction(() => {
+                    const newCategoryName = categoryElement.querySelector('#categoryInput').value;
+
+                    restClient.fetchData('', 'PATCH', {}, JSON.stringify({
+                        oldCategoryName: category.name,
+                        newCategoryName: newCategoryName
+                    }))
+                        .then(() => {
+                            notification.showNotification('Управление категориями',
+                                'Изменение названия категории успешно завершено');
+                            updateList();
+                        })
+                        .catch((error) => {
+                            console.error(error);
+                            notification.showNotification('Управление категориями',
+                                'Во время изменения категории произошла ошибка');
+                        });
+                })
+                .createPopup();
+        });
+        categoryElement.querySelector('.move-btn').addEventListener('click', (e) => {
+            e.stopPropagation();
+            const popupContent = `<div class="popup-title"><h4>Переместить категорию</h4></div>
+                                        <span></span>
+                                        <select></select>`;
+            new PopupManager()
+                .setTarget(e.target)
+                .setPopupContent('')
+                .createPopup();
+        });
+        categoryElement.querySelector('.delete-btn').addEventListener('click', (e) => {
+            e.stopPropagation();
+            new PopupManager()
+                .setTarget(e.target)
+                .setPopupContent('<span>Вы уверены, что хотите удалить категорию. Изменение необратимо</span>')
+                .setSubmitAction(() => {
+                    restClient.fetchData('', 'DELETE',
+                        {}, JSON.stringify({typeName: category.name}))
+                        .then(() => {
+                            notification.showNotification('Управление категориями',
+                                'Категории успешно удалена');
+                            updateList();
+                        })
+                        .catch((error) => {
+                            console.error(error);
+                            notification.showNotification('Управление категориями',
+                                'Во время удаления категории произошла ошибка');
+                        });
+                })
+                .createPopup();
+        });
+
         categoriesList.appendChild(categoryElement);
     }
 
