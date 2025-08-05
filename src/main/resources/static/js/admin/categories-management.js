@@ -1,5 +1,6 @@
 import RestClient from "../RestClient.js";
 import Notification from "../notification/notification.js";
+import PopupManager from "../popup/popup.js";
 
 document.addEventListener("DOMContentLoaded", () => {
     const restClient = new RestClient();
@@ -10,6 +11,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const categoriesList = document.getElementById('categories-list');
     const backButton = document.getElementById('back-btn');
     let backButtonPressed = false;
+
+    const addButton = document.getElementById('category-add-btn');
 
     const titleContainer = document.getElementById('title-container');
     const titleStack = ['Управление категориями'];
@@ -35,7 +38,45 @@ document.addEventListener("DOMContentLoaded", () => {
                         'При переходе на предыдущую страницу, возникла ошибка');
                 });
         }
-    })
+        backButtonPressed = false;
+    });
+
+    addButton.addEventListener('click', (e) => {
+        e.preventDefault();
+        const popupContent = `<label for="categoryInput">
+                                        Название категории
+                                        <input type="text" id="categoryInput" placeholder="Введите название">
+                                    </label>`;
+        new PopupManager()
+            .setTarget(e.target)
+            .setPopupContent(popupContent)
+            .setSubmitAction(() => {
+                const categoryName = document.querySelector('#categoryInput').value;
+                const parentCategory = titleStack.length > 1
+                    ? titleStack[titleStack.length - 1]
+                    : null;
+
+                restClient.fetchData(`/api/v1/categories`, 'POST', {}, JSON.stringify({
+                    name: categoryName,
+                    parent: parentCategory
+                }))
+                    .then(() => {
+                        updateList();
+                    })
+                    .catch((err) => {
+                        console.error(err);
+                        notification.showNotification('Управление категориями',
+                            'Во время отправки данных произошла ошибка');
+                    });
+            })
+            .createPopup();
+    });
+
+    function updateList() {
+        titleStack.length > 1
+            ? changeCategory(titleStack[titleStack.length - 1])
+            : changeCategory(null);
+    }
 
     initialize()
         .catch(e => {

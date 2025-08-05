@@ -131,3 +131,25 @@ body {
     color: #2b2d42;
     font-weight: 700;
 }
+
+.btn {
+    color: white;
+    margin-bottom: 20px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-right: 0.5rem;
+    transition: 0.3s;
+}
+
+.category-add-btn {
+    background-color: #4CAF50;
+}
+
+.category-add-btn:hover {
+    background-color: #43A047;
+}

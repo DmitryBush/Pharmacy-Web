@@ -1,0 +1,100 @@
+.popup {
+    position: absolute;
+    align-items: stretch;
+    background-color: rgba(246, 246, 246, 0.84);
+    border-radius: 6px;
+    box-shadow: 4px 4px 9px rgba(0, 0, 0, 0.125), -4px -4px 9px rgba(0, 0, 0, 0.125), inset 0 0 0 1px rgba(0, 0, 0, 0.03);
+    backdrop-filter: blur(80px) saturate(180%);
+    padding: 20px;
+    z-index: 10;
+    overflow: hidden;
+    transform-origin: top left;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 300px;
+}
+
+.popup:before {
+    border-radius: 6px;
+    background: linear-gradient(
+            to bottom right,
+            rgba(255, 255, 255, 1) 0%,
+            rgba(0, 0, 0, 0) 100%
+    );
+    pointer-events: none;
+    z-index: -1;
+}
+
+.popup label {
+    margin-bottom: 0.2rem;
+    font-weight: 500;
+    line-height: 1.4;
+}
+
+.popup input {
+    --focus-color: #0078d4;
+    --shadow-intensity: 0.1;
+    width: 100%;
+    padding: 0.8rem 3rem;
+    border: 1px solid #e5e5e5;
+    box-sizing: border-box;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(4px);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    font-size: 1rem;
+    line-height: 1.5;
+    box-shadow:
+            0 1.6px 3.6px rgba(0, 0, 0, calc(var(--shadow-intensity) * 0.2)),
+            0 4.4px 10px rgba(0, 0, 0, calc(var(--shadow-intensity) * 0.28));
+}
+
+.popup input:focus {
+    border-color: var(--focus-color);
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow:
+            0 0 0 2px rgba(0, 120, 212, 0.2),
+            0 6.4px 14.4px rgba(0, 0, 0, 0.03),
+            0 17.6px 40px rgba(0, 0, 0, 0.04);
+    outline: none;
+    animation: input-focus 0.4s ease-out;
+}
+
+.popup input:active {
+    backdrop-filter: blur(8px);
+    border-color: var(--focus-color);
+}
+
+.popup button {
+    padding: 10px;
+    width: 100%;
+    box-sizing: border-box;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+#submitButton {
+    background-color: #2196F3;
+    color: white;
+}
+
+#submitButton:hover {
+    background-color: #0b7dda;
+}
+
+#cancelButton {
+    background-color: #0000001a;
+    color: black;
+}
+
+#cancelButton:hover {
+    background-color: #00000033;
+}
+
+.hidden {
+    display: none;
+}
