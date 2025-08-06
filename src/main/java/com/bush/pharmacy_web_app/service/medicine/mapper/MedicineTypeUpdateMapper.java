@@ -28,8 +28,8 @@ public class MedicineTypeUpdateMapper implements DtoMapper<MedicineTypeUpdateDto
                 .ifPresent(toObj::setType);
         Optional.ofNullable(fromObj.parent())
                 .map(medicineTypeRepository::findByType)
-                .ifPresent(parent ->
-                        parent.ifPresentOrElse(toObj::setParent, parent::orElseThrow));
+                .ifPresentOrElse(parent ->
+                        parent.ifPresentOrElse(toObj::setParent, parent::orElseThrow), () -> toObj.setParent(null));
         return toObj;
     }
 }

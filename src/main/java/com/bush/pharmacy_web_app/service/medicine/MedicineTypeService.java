@@ -68,4 +68,14 @@ public class MedicineTypeService {
                 .map(medicineTypeRepository::saveAndFlush)
                 .map(typeReadMapper::map);
     }
+
+    @Transactional
+    public Boolean deleteType(Integer id) {
+        return medicineTypeRepository.findById(id)
+                .map(type -> {
+                    medicineTypeRepository.delete(type);
+                    return true;
+                })
+                .orElse(false);
+    }
 }

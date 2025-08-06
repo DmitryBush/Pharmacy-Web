@@ -67,7 +67,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         : null;
 
                     restClient.fetchData(`/api/v1/admin/categories`, 'POST',
-                        {'Content-Type': 'application/json'}, JSON.stringify({
+                        { 'Content-Type': 'application/json' }, JSON.stringify({
                             name: categoryName,
                             parent: parentCategory
                         })).then(() => {
@@ -96,35 +96,23 @@ document.addEventListener("DOMContentLoaded", () => {
     changeParentButton.addEventListener('click', (e) => {
         e.preventDefault();
 
-        if (titleStack.length > 1) {
-            restClient.fetchData('', 'PATCH', {}, {
-                typeNames: moveCategoryList,
-                parent: titleStack[titleStack.length - 1]
-            })
+        moveCategoryList.forEach((id) => {
+            restClient.fetchData(`/api/v1/admin/categories/${id}`, 'PATCH',
+                { 'Content-Type': 'application/json' },
+                JSON.stringify({ parent: titleStack.length > 1 ? titleStack[titleStack.length - 1] : null}))
                 .then(() => {
                     changeParentButton.style.display = 'none';
                     moveCategoryList.splice(0, moveCategoryList.length);
+                    notification.showNotification('Управление категориями',
+                        'Перемещение элементов выполнено успешно');
+                    updateList();
                 })
                 .catch((err) => {
                     console.error(err);
                     notification.showNotification('Управление категориями',
                         'При перемещении категории возникла ошибка');
                 });
-        } else {
-            restClient.fetchData('', 'PATCH', {}, {
-                typeNames: moveCategoryList,
-                parent: null
-            })
-                .then(() => {
-                    changeParentButton.style.display = 'none';
-                    moveCategoryList.splice(0, moveCategoryList.length);
-                })
-                .catch((err) => {
-                    console.error(err);
-                    notification.showNotification('Управление категориями',
-                        'При перемещении категории возникла ошибка');
-                });
-        }
+        });
     });
 
     initialize()
@@ -227,12 +215,20 @@ document.addEventListener("DOMContentLoaded", () => {
             e.stopPropagation();
 
             if (e.target.classList.contains('disabled-btn')) {
-                moveCategoryList.splice(moveCategoryList.findIndex(type => type === category.name), 1);
+                moveCategoryList.splice(moveCategoryList.findIndex(type => type === category.id), 1);
+
+                if (moveCategoryList.length < 1) {
+                    changeParentButton.style.display = 'none';
+                }
                 e.target.classList.remove('disabled-btn');
                 notification.showNotification('Управление категориями',
                     `"${category.name}" удален из списка для перемещения`);
             } else {
-                moveCategoryList.push(category.name);
+                moveCategoryList.push(category.id);
+
+                if (changeParentButton.style.display === 'none') {
+                    changeParentButton.style.display = 'inline-flex';
+                }
                 e.target.classList.add('disabled-btn');
                 notification.showNotification('Управление категориями',
                     `"${category.name}" добавлен в список для перемещения`);
@@ -244,7 +240,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 .setTarget(e.target)
                 .setPopupContent('<span>Вы уверены, что хотите удалить категорию. Изменение необратимо</span>')
                 .setSubmitAction(() => {
-                    restClient.fetchData(`/api/v1/admin/categories/${category.id}`, 'DELETE', {}, {})
+                    restClient.fetchData(`/api/v1/admin/categories/${category.id}`, 'DELETE',
+                        {}, {})
                         .then(() => {
                             notification.showNotification('Управление категориями',
                                 'Категории успешно удалена');
