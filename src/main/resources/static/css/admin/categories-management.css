@@ -94,7 +94,7 @@ body {
     border: none;
     border-radius: 6px;
     cursor: pointer;
-    transition: stroke 0.2s ease;
+    transition: 0.3s;
 }
 
 .edit-btn {
@@ -105,11 +105,15 @@ body {
     background-color: #0063B1;
 }
 
-.move-btn {
+.move-btn, .change-parent-btn {
     background-color: #FFB900;
 }
 
-.move-btn:hover {
+.disabled-btn {
+    background-color: #9E9E9E;
+}
+
+.move-btn:hover,.change-parent-btn:hover {
     background-color: #F9A825;
 }
 
@@ -119,6 +123,10 @@ body {
 
 .delete-btn:hover {
     background-color: #D32F2F;
+}
+
+.disabled-btn:hover {
+    background-color: #757575;
 }
 
 .fake-btn {

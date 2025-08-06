@@ -15,6 +15,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const addButton = document.getElementById('category-add-btn');
 
+    const changeParentButton = document.getElementById('change-parent-btn');
+    const moveCategoryList = [];
+
     const titleContainer = document.getElementById('title-container');
     const titleStack = ['Управление категориями'];
 
@@ -80,6 +83,40 @@ document.addEventListener("DOMContentLoaded", () => {
             ? changeCategory(titleStack[titleStack.length - 1])
             : changeCategory(null);
     }
+
+    changeParentButton.addEventListener('click', (e) => {
+        e.preventDefault();
+
+        if (titleStack.length > 1) {
+            restClient.fetchData('', 'PATCH', {}, {
+                typeNames: moveCategoryList,
+                parent: titleStack[titleStack.length - 1]
+            })
+                .then(() => {
+                    changeParentButton.style.display = 'none';
+                    moveCategoryList.splice(0, moveCategoryList.length);
+                })
+                .catch((err) => {
+                    console.error(err);
+                    notification.showNotification('Управление категориями',
+                        'При перемещении категории возникла ошибка');
+                });
+        } else {
+            restClient.fetchData('', 'PATCH', {}, {
+                typeNames: moveCategoryList,
+                parent: null
+            })
+                .then(() => {
+                    changeParentButton.style.display = 'none';
+                    moveCategoryList.splice(0, moveCategoryList.length);
+                })
+                .catch((err) => {
+                    console.error(err);
+                    notification.showNotification('Управление категориями',
+                        'При перемещении категории возникла ошибка');
+                });
+        }
+    });
 
     initialize()
         .catch(e => {
@@ -180,13 +217,18 @@ document.addEventListener("DOMContentLoaded", () => {
         });
         categoryElement.querySelector('.move-btn').addEventListener('click', (e) => {
             e.stopPropagation();
-            const popupContent = `<div class="popup-title"><h4>Переместить категорию</h4></div>
-                                        <span></span>
-                                        <select></select>`;
-            new PopupManager()
-                .setTarget(e.target)
-                .setPopupContent('')
-                .createPopup();
+
+            if (e.target.classList.contains('disabled-btn')) {
+                moveCategoryList.splice(moveCategoryList.findIndex(type => type === category.name), 1);
+                e.target.classList.remove('disabled-btn');
+                notification.showNotification('Управление категориями',
+                    `"${category.name}" удален из списка для перемещения`);
+            } else {
+                moveCategoryList.push(category.name);
+                e.target.classList.add('disabled-btn');
+                notification.showNotification('Управление категориями',
+                    `"${category.name}" добавлен в список для перемещения`);
+            }
         });
         categoryElement.querySelector('.delete-btn').addEventListener('click', (e) => {
             e.stopPropagation();
