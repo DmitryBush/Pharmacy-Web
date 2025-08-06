@@ -60,16 +60,15 @@ document.addEventListener("DOMContentLoaded", () => {
                     ? titleStack[titleStack.length - 1]
                     : null;
 
-                restClient.fetchData(`/api/v1/categories`, 'POST', {}, JSON.stringify({
-                    name: categoryName,
-                    parent: parentCategory
-                }))
-                    .then(() => {
+                restClient.fetchData(`/api/v1/categories`, 'POST',
+                    {'Content-Type': 'application/json'}, JSON.stringify({
+                        name: categoryName,
+                        parent: parentCategory
+                    })).then(() => {
                         notification.showNotification('Управление категориями',
                             'Создание категории успешно завершено');
                         updateList();
-                    })
-                    .catch((err) => {
+                    }).catch((err) => {
                         console.error(err);
                         notification.showNotification('Управление категориями',
                             'Во время создания категории произошла ошибка');
@@ -80,8 +79,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function updateList() {
         titleStack.length > 1
-            ? changeCategory(titleStack[titleStack.length - 1])
-            : changeCategory(null);
+            ? createListCategories(titleStack[titleStack.length - 1])
+            : createListCategories(null);
     }
 
     changeParentButton.addEventListener('click', (e) => {
@@ -130,6 +129,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     async function createListCategories(parent) {
+        categoriesList.innerHTML = '';
         const data = await (await restClient.fetchData(resolveUrl(parent), 'GET'))
             .json();
         loader.style.display = 'none';
@@ -256,7 +256,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     async function changeCategory(category) {
-        categoriesList.innerHTML = '';
         loader.style.display = 'block';
         if (category !== null && !backButton.querySelector('svg').classList.contains('active-btn')) {
             backButton.querySelector('svg').classList.add('active-btn');

@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 public class ListProductCategoryCreateMapper implements DtoMapper<List<ProductCategoryDto>, List<ProductCategories>> {
-    private final MedicineTypeCreateMapper typeCreateMapper;
+    private final MedicineTypeMapper typeCreateMapper;
     @Override
     public List<ProductCategories> map(List<ProductCategoryDto> obj) {
         return obj.stream()
