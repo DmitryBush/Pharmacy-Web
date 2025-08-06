@@ -20,7 +20,7 @@ public class MedicineTypeUpdateMapper implements DtoMapper<MedicineTypeUpdateDto
 
     @Override
     public MedicineType map(MedicineTypeUpdateDto fromObj, MedicineType toObj) {
-        return DtoMapper.super.map(fromObj, toObj);
+        return copyObj(fromObj, toObj);
     }
 
     private MedicineType copyObj(MedicineTypeUpdateDto fromObj, MedicineType toObj) {

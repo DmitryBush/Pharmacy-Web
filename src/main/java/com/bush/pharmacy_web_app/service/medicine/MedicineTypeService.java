@@ -48,6 +48,11 @@ public class MedicineTypeService {
                 .toList();
     }
 
+    public Optional<MedicineTypeDto> findByType(String type) {
+        return medicineTypeRepository.findByType(type)
+                .map(typeReadMapper::map);
+    }
+
     @Transactional
     public Optional<MedicineTypeDto> createDto(MedicineTypeDto createDto) {
         return Optional.ofNullable(createDto)

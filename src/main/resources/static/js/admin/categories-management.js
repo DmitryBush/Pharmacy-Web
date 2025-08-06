@@ -54,17 +54,23 @@ document.addEventListener("DOMContentLoaded", () => {
         new PopupManager()
             .setTarget(e.target)
             .setPopupContent(popupContent)
-            .setSubmitAction(() => {
-                const categoryName = document.querySelector('#categoryInput').value;
-                const parentCategory = titleStack.length > 1
-                    ? titleStack[titleStack.length - 1]
-                    : null;
+            .setSubmitAction(async () => {
+                try {
+                    const categoryName = document.querySelector('#categoryInput').value;
+                    await restClient.fetchData(`/api/v1/search/type/by-name?type=${categoryName}`, 'GET')
+                        .then(() => {
+                            throw new Error('Во время создания категории произошла ошибка. ' +
+                                'Укажите уникальное название типа')
+                        });
+                    const parentCategory = titleStack.length > 1
+                        ? titleStack[titleStack.length - 1]
+                        : null;
 
-                restClient.fetchData(`/api/v1/categories`, 'POST',
-                    {'Content-Type': 'application/json'}, JSON.stringify({
-                        name: categoryName,
-                        parent: parentCategory
-                    })).then(() => {
+                    restClient.fetchData(`/api/v1/admin/categories`, 'POST',
+                        {'Content-Type': 'application/json'}, JSON.stringify({
+                            name: categoryName,
+                            parent: parentCategory
+                        })).then(() => {
                         notification.showNotification('Управление категориями',
                             'Создание категории успешно завершено');
                         updateList();
@@ -73,6 +79,10 @@ document.addEventListener("DOMContentLoaded", () => {
                         notification.showNotification('Управление категориями',
                             'Во время создания категории произошла ошибка');
                     });
+                } catch (error) {
+                    notification.showNotification('Управление категориями',
+                        `${error.message}`);
+                }
             })
             .createPopup();
     });
@@ -145,8 +155,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function resolveUrl(parent) {
         if (parent)
-            return `/api/v1/categories?parent=${parent}`;
-        return `/api/v1/categories`;
+            return `/api/v1/admin/categories?parent=${parent}`;
+        return `/api/v1/admin/categories`;
     }
 
     function createCategoryElement(category) {
@@ -196,12 +206,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 .setTarget(e.target)
                 .setPopupContent(popupContent)
                 .setSubmitAction(() => {
-                    const newCategoryName = categoryElement.querySelector('#categoryInput').value;
+                    const newCategoryName = document.querySelector('#categoryInput').value;
 
-                    restClient.fetchData('', 'PATCH', {}, JSON.stringify({
-                        oldCategoryName: category.name,
-                        newCategoryName: newCategoryName
-                    }))
+                    restClient.fetchData(`/api/v1/admin/categories/${category.id}`, 'PATCH',
+                        {'Content-Type': 'application/json'}, JSON.stringify({ type: newCategoryName }))
                         .then(() => {
                             notification.showNotification('Управление категориями',
                                 'Изменение названия категории успешно завершено');
@@ -210,7 +218,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         .catch((error) => {
                             console.error(error);
                             notification.showNotification('Управление категориями',
-                                'Во время изменения категории произошла ошибка');
+                                'Во время изменения названия категории произошла ошибка');
                         });
                 })
                 .createPopup();
@@ -236,8 +244,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 .setTarget(e.target)
                 .setPopupContent('<span>Вы уверены, что хотите удалить категорию. Изменение необратимо</span>')
                 .setSubmitAction(() => {
-                    restClient.fetchData('', 'DELETE',
-                        {}, JSON.stringify({typeName: category.name}))
+                    restClient.fetchData(`/api/v1/admin/categories/${category.id}`, 'DELETE', {}, {})
                         .then(() => {
                             notification.showNotification('Управление категориями',
                                 'Категории успешно удалена');

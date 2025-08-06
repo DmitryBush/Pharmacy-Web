@@ -53,8 +53,8 @@ export default class PopupManager {
         `;
 
         if (this._submitAction) {
-            this.popup.querySelector('#submitButton').addEventListener('click', () => {
-                this._submitAction();
+            this.popup.querySelector('#submitButton').addEventListener('click', async () => {
+                await this._submitAction();
                 this.closePopup(rect);
             });
         }
