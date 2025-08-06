@@ -1,12 +1,14 @@
 package com.bush.pharmacy_web_app.controllers.rest.product;
 
 import com.bush.pharmacy_web_app.model.dto.medicine.MedicineTypeDto;
+import com.bush.pharmacy_web_app.model.dto.medicine.MedicineTypeUpdateDto;
 import com.bush.pharmacy_web_app.service.medicine.MedicineTypeService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -19,5 +21,18 @@ public class ProductCategoryRestController {
     @GetMapping
     public ResponseEntity<List<MedicineTypeDto>> getCategoriesList(String parent) {
         return ResponseEntity.ok(medicineTypeService.findAllTypesByParent(parent));
+    }
+
+    @PostMapping
+    public ResponseEntity<MedicineTypeDto> createCategory(@RequestBody @Validated MedicineTypeDto createDto) {
+        return ResponseEntity.ok(medicineTypeService.createDto(createDto)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST)));
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<MedicineTypeDto> updateCategory(@PathVariable Integer id,
+                                                          @RequestBody @Validated MedicineTypeUpdateDto updateDto) {
+        return ResponseEntity.ok(medicineTypeService.updatePartlyType(id, updateDto)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST)));
     }
 }
