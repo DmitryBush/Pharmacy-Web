@@ -1,0 +1,1 @@
+ALTER TABLE customers ALTER COLUMN mobile_phone TYPE VARCHAR(18);

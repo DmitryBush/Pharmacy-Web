@@ -2,38 +2,47 @@
 <html lang="ru" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Управление заказами</title>
-    <link href="/css/admin/order.css" rel="stylesheet" type="text/css">
-    <script src="/js/admin/order.js" rel="script" type="text/javascript"></script>
+    <title>Выбор филиала</title>
+    <link href="/css/admin/warehouse.css" rel="stylesheet">
+    <script src="/js/admin/order.js" type="module"></script>
 </head>
 <body>
     <div th:replace="~{/admin/sidebar/sidebar.html :: sidebar}"></div>
     <main class="main-content">
-        <h1 class="page-title">Заказы</h1>
-        <div class="orders-list">
-            <div th:each="order : ${orders.content}" th:if="${orders.getTotalElements() > 0}" class="order-card">
-                <div class="order-header">
-                    <a class="order-link" th:href="@{/admin/orders/{id}(id=${order.id})}">
-                        <h4 class="order-title">Заказ - [(${order.id})]</h4>
-                    </a>
-                    <p class="order-status">[(${order.statusOrder.name})]</p>
-                </div>
-                <div class="order-body">
-                    <p class="order-customer">
-                        Покупатель: [(${order.user.surname})] [(${order.user.name})] [(${order.user.lastName})]
-                    </p>
-                    <div class="order-price">
-                        <span>Итого:</span>
-                        <p>[(${order.result})] ₽</p>
+        <h1 class="page-title">Выбор склада</h1>
+        <div class="page-container">
+            <div class="branches-container" id="branches-list">
+                <div class="branch-card" th:each="branch : ${branches}">
+                    <div class="branch-header">
+                        <a class="branch-link" th:href="@{/admin/orders/branch/{id}(id=${branch.id})}">
+                            <h4 class="branch-title">[(${branch.name})]</h4>
+                        </a>
+                        <p class="branch-status-active" th:if="${branch.isActive}">Активен</p>
+                        <p class="branch-status-deactivated" th:unless="${branch.isActive}">Не активен</p>
+                        <p class="branch-city" th:text="${branch.address.settlement}"></p>
                     </div>
-                    <button class="order-more-det" id="order-more-det" th:data-id="${order.id}">Подробнее</button>
+                    <div class="branch-body">
+                        <p>
+                            <strong>Адрес:</strong> [(${branch.address.subject})], [(${branch.address.settlement})],
+                            [(${branch.address.street})], [(${branch.address.house})]
+                        </p>
+                        <div class="working-hours">
+                            <strong>Часы работы:</strong>
+                            <ul class="hours-list">
+                                <li th:each="hours : ${branch.openingHours}"
+                                    th:text="${hours}"></li>
+                            </ul>
+                        </div>
+                        <p>
+                            <strong>Контактный номер:</strong> [(${branch.branchPhone})]
+                        </p>
+                        <p>
+                            <strong>Директор филиала:</strong> [(${branch.supervisor.surname})] [(${branch.supervisor.name})]
+                            [(${branch.supervisor.lastName})]
+                        </p>
+                        <button class="branch-more-det" th:data-id="${branch.id}">Выбрать</button>
+                    </div>
                 </div>
-            </div>
-        </div>
-        <div th:unless="${orders.getTotalElements() > 0}" class="orders-list">
-            <div class="order-card">
-                <h3 class="empty-title">Заказы отсутствуют</h3>
-                <p class="empty-description">Проверьте настройки фильтров или повторите позже</p>
             </div>
         </div>
     </main>

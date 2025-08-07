@@ -4,34 +4,46 @@
     <meta charset="UTF-8">
     <title>Поступление товара</title>
     <link href="/css/admin/warehouse-receipt.css" rel="stylesheet" type="text/css">
+    <link href="/css/notification/notification.css" rel="stylesheet" type="text/css">
+    <script src="/js/admin/warehouse-receipt.js" type="module"></script>
 </head>
 <body>
+    <div id="branch-id" typeof="hidden" th:data-branchid="${branchId}"></div>
     <div th:replace="~{/admin/sidebar/sidebar.html :: sidebar}"></div>
     <main class="main-content">
+        <div class="search-backdrop" style="display: none" id="search-backdrop"></div>
+        <div id="search-container" class="search-container" style="display: none">
+            <label for="search-field">
+                <input id="search-field" class="search-field" type="text" placeholder="Поиск">
+            </label>
+            <div id="search-result-container" class="search-result-container"></div>
+        </div>
         <h1 class="page-title">Оформление поступления на склад</h1>
         <div class="page-container">
-            <div class="input-group">
-                <label for="name">
-                    Название продукта
-                    <input type="text" id="name" placeholder="Название продукта">
-                </label>
-                <div class="search-result-container">
-
-                </div>
-                <label for="quantity">
-                    Количество товара
-                    <input type="number" id="quantity" placeholder="1 шт.">
-                </label>
-                <button id="add-btn">
-                    Добавить
+            <div>
+                <button id="search-btn" class="action-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+                    </svg>
+                    Добавить продукт из базы данных
+                </button>
+                <button class="action-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-file-earmark-spreadsheet" viewBox="0 0 16 16">
+                        <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2M9.5 3A1.5 1.5 0 0 0 11 4.5h2V9H3V2a1 1 0 0 1 1-1h5.5zM3 12v-2h2v2zm0 1h2v2H4a1 1 0 0 1-1-1zm3 2v-2h3v2zm4 0v-2h3v1a1 1 0 0 1-1 1zm3-3h-3v-2h3zm-7 0v-2h3v2z"/>
+                    </svg>
+                    Импортировать из файла
                 </button>
             </div>
-            <div class="product-list"></div>
-            <div>
-                <button class="save-btn">Сохранить</button>
-                <button class="cancel-btn">Отменить</button>
+            <div class="product-list" id="product-list"></div>
+            <div class="action-footer" id="action-footer" style="display: none">
+                <div class="items-count">Оформление товаров: <span id="items-counter">0</span> изменений</div>
+                <div class="footer-actions">
+                    <button class="save-btn" id="save-btn">Сохранить</button>
+                    <button class="cancel-btn" id="cancel-btn">Отменить</button>
+                </div>
             </div>
         </div>
+        <div id="notification-container"></div>
     </main>
 </body>
 </html>

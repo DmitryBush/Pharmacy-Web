@@ -1,7 +1,7 @@
 package com.bush.pharmacy_web_app.controllers.rest;
 
-import com.bush.pharmacy_web_app.repository.dto.warehouse.PharmacyBranchReadDto;
-import com.bush.pharmacy_web_app.service.MedicineService;
+import com.bush.pharmacy_web_app.model.dto.warehouse.PharmacyBranchReadDto;
+import com.bush.pharmacy_web_app.service.medicine.MedicineService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

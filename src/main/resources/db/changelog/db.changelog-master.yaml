@@ -29,3 +29,15 @@ databaseChangeLog:
       file: db/changelog/major/changelog-2.0.sql
   - include:
       file: db/changelog/maintenance/changelog-2.0.1.sql
+  - include:
+      file: db/changelog/minor/changelog-2.0.2.sql
+  - include:
+      file: db/changelog/minor/changelog-2.0.2.1.sql
+  - include:
+      file: db/changelog/minor/changelog-2.0.3.sql
+  - include:
+      file: db/changelog/minor/changelog-2.0.4.sql
+  - include:
+      file: db/changelog/major/changelog-3.0.sql
+  - include:
+      file: db/changelog/minor/changelog-3.0.1.sql

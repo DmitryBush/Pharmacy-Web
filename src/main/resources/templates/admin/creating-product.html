@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Создание продукта</title>
+    <link href="/css/admin/editing-product.css" rel="stylesheet" type="text/css">
+    <link href="/css/product/product.css" rel="stylesheet" type="text/css">
+    <link href="/css/notification/notification.css" rel="stylesheet" type="text/css">
+    <script src="/js/admin/creating-product.js" type="module"></script>
+</head>
+<body>
+    <div th:replace="~{/admin/sidebar/sidebar.html :: sidebar}"></div>
+    <main class="main-content">
+        <div class="search-backdrop" style="display: none" id="search-backdrop"></div>
+        <div id="search-container" class="search-container" style="display: none">
+            <label for="search-field">
+                <input id="search-field" class="search-field" type="text" placeholder="Поиск">
+            </label>
+            <div id="search-result-container" class="search-result-container"></div>
+        </div>
+        <a class="back-link" th:href="@{/admin/product}">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left-circle" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-4.5-.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5z"/>
+            </svg>
+            Назад к списку продуктов
+        </a>
+        <h1>Создание продукта</h1>
+        <div class="edit-display">
+            <div class="button-group">
+                <button class="toggle-btn active" id="editBtn">Редактировать</button>
+                <button class="toggle-btn" id="previewBtn">Превью</button>
+            </div>
+            <div class="image-preview-container">
+                <div id="imagePreview" class="preview-container">
+                    <!-- new images -->
+                </div>
+            </div>
+            <div id="product-id">
+                <form id="productCreationForm" name="productCreationForm">
+                    <label class="file-input-label">
+                        <input type="file" id="imageInput" accept="image/*" multiple hidden>
+                        + Добавить изображения
+                    </label>
+                    <div>
+                        <label class="input-group" for="name">
+                            Название товара
+                            <input class="input-group" type="text" id="name">
+                        </label>
+                    </div>
+                    <div id="type-container">
+                        <div class="type">
+                            <label class="input-group" for="type">
+                                Основной тип товара
+                                <span class="input-with-button type">
+                                    <input class="input-group main-type" type="text" id="type">
+                                    <button class="search-btn search-icon">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                                            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+                                        </svg>
+                                    </button>
+                                </span>
+                            </label>
+                            <label class="input-group" for="parent-type">
+                                Родительский тип
+                                <span class="input-with-button parent-type">
+                                    <input class="input-group parent-type" type="text" id="parent-type">
+                                    <button class="search-btn search-icon">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                                            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+                                        </svg>
+                                    </button>
+                                </span>
+                            </label>
+                        </div>
+                        <button id="add-type-btn" class="add-type-btn">+ Добавить тип</button>
+                    </div>
+                    <div>
+                        <label class="input-group" for="price">
+                            Цена
+                            <input class="input-group" type="number" id="price" step="0.01">
+                        </label>
+                    </div>
+                    <div class="form-radio">
+                        <fieldset>
+                            <legend>Требуется рецепт</legend>
+                            <label class="radio-label">
+                                <input type="radio" name="recipe" class="recipe-input" value="1"
+                                       th:checked="${false}">
+                                Да
+                            </label>
+                            <label class="radio-label">
+                                <input type="radio" name="recipe" class="recipe-input" value="0"
+                                       th:checked="${true}">
+                                Нет
+                            </label>
+                        </fieldset>
+                    </div>
+                    <div>
+                        <label class="input-group" for="active-ingredient">
+                            Активный ингредиент
+                            <input class="input-group" type="text" id="active-ingredient">
+                        </label>
+                    </div>
+                    <div>
+                        <label class="input-group" for="expiration-date">
+                            Срок годности
+                            <input class="input-group" type="text" id="expiration-date" >
+                        </label>
+                    </div>
+                    <div>
+                        <label class="input-group" for="composition">Состав</label>
+                        <textarea class="input-group" id="composition"></textarea>
+                    </div>
+                    <div>
+                        <label class="input-group" for="indications">Показания</label>
+                        <textarea class="input-group" id="indications"></textarea>
+                    </div>
+                    <div>
+                        <label class="input-group" for="contraindications">Противопоказания</label>
+                        <textarea class="input-group" id="contraindications"></textarea>
+                    </div>
+                    <div>
+                        <label class="input-group" for="side-effects">Побочные эффекты</label>
+                        <textarea class="input-group" id="side-effects"></textarea>
+                    </div>
+                    <div>
+                        <label class="input-group" for="interactions">Взаимодействия</label>
+                        <textarea class="input-group" id="interactions"></textarea>
+                    </div>
+                    <div>
+                        <label class="input-group" for="admission-course">Курс приема</label>
+                        <textarea class="input-group" id="admission-course"></textarea>
+                    </div>
+                    <div>
+                        <label class="input-group" for="overdose">Передозировка</label>
+                        <textarea class="input-group" id="overdose"></textarea>
+                    </div>
+                    <div>
+                        <label class="input-group" for="release-form">Форма выпуска</label>
+                        <textarea class="input-group" id="release-form"></textarea>
+                    </div>
+                    <div>
+                        <label class="input-group" for="special-instructions">Специальные показания</label>
+                        <textarea class="input-group" id="special-instructions"></textarea>
+                    </div>
+                    <div>
+                        <label class="input-group" for="storage-conditions">Условия хранения</label>
+                        <textarea class="input-group" id="storage-conditions"></textarea>
+                    </div>
+                    <div id="supplierPart" class="supplierPart">
+                        <details>
+                            <summary class="section-header">
+                                <h2>Поставщик</h2>
+                                <span class="arrow"></span>
+                            </summary>
+                            <button class="action-btn search-btn">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+                                </svg>
+                                Найти поставщика
+                            </button>
+                            <div class="input-group">
+                                <label class="input-group" for="itn">
+                                    ИНН
+                                    <input class="input-group" type="text" id="itn">
+                                </label>
+                            </div>
+                            <div class="input-group">
+                                <label class="input-group" for="supplierName">
+                                    Название поставщика
+                                    <input class="input-group" type="text" id="supplierName">
+                                </label>
+                            </div>
+                            <div class="input-group" id="addressPart">
+                                <details>
+                                    <summary class="section-header">
+                                        <h3>Адрес поставщика</h3>
+                                        <span class="arrow"></span>
+                                    </summary>
+                                    <label class="input-group" for="subject">
+                                        Область
+                                        <input class="input-group" type="text" id="subject">
+                                    </label>
+                                    <label class="input-group" for="district">
+                                        Район
+                                        <input class="input-group" type="text" id="district">
+                                    </label>
+                                    <label class="input-group" for="settlement">
+                                        Город
+                                        <input class="input-group" type="text" id="settlement">
+                                    </label>
+                                    <label class="input-group" for="street">
+                                        Улица
+                                        <input class="input-group" type="text" id="street">
+                                    </label>
+                                    <label class="input-group" for="house">
+                                        Дом
+                                        <input class="input-group" type="text" id ="house">
+                                    </label>
+                                    <label class="input-group" for="apartment">
+                                        Квартира
+                                        <input class="input-group" type="text" id="apartment">
+                                    </label>
+                                    <label class="input-group" for="postalCode">
+                                        Почтовый индекс
+                                        <input class="input-group" type="text" id="postalCode">
+                                    </label>
+                                </details>
+                            </div>
+                        </details>
+                    </div>
+                    <div id="manufacturerPart" class="manufacturerPart">
+                        <details>
+                            <summary class="section-header">
+                                <h2>Производитель</h2>
+                                <span class="arrow"></span>
+                            </summary>
+                            <button class="action-btn search-btn">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+                                </svg>
+                                Найти производителя
+                            </button>
+                            <div>
+                                <label class="input-group" for="manufacturerName">
+                                    Название производителя
+                                    <input type="text" id="manufacturerName" class="input-group">
+                                </label>
+                            </div>
+                            <div id="countryPart" class="countryPart">
+                                <details>
+                                    <summary class="section-header">
+                                        <h3>Страна производителя</h3>
+                                        <span class="arrow"></span>
+                                    </summary>
+                                    <button class="action-btn search-btn">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                                            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+                                        </svg>
+                                        Найти страну
+                                    </button>
+                                    <div>
+                                        <label class="input-group" for="country">
+                                            Страна
+                                            <input class="input-group" type="text" id="country">
+                                        </label>
+                                    </div>
+                                </details>
+                            </div>
+                        </details>
+                    </div>
+                </form>
+                <div>
+                    <button id="save-btn">Сохранить</button>
+                    <button id="cancel-btn">Отмена</button>
+                </div>
+            </div>
+            <div class="product-preview" id="product-preview" style="display: none">
+                <div class="product-details-section">
+                    <div class="product-info">
+                        <ul>
+                            <li>
+                                <span>Производитель: </span>
+                                <span></span>
+                            </li>
+                            <li>
+                                <span>Тип товара: </span>
+                                <span></span>
+                            </li>
+                            <li>
+                                <span>Активное вещество: </span>
+                                <span></span>
+                            </li>
+                            <li>
+                                <span>Срок годности: </span>
+                                <span></span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="price-section">
+                        <p class="price-label">Цена</p>
+                        <p class="price-value"></p>
+                    </div>
+                    <div class="details-section">
+                        <h3>Характеристики</h3>
+                        <div>
+                            <h4>Производитель</h4>
+                            <p></p>
+                        </div>
+                        <div>
+                            <h4>Состав</h4>
+                            <p style="white-space: pre-wrap;"></p>
+                        </div>
+                        <div>
+                            <h4>Показания</h4>
+                            <p style="white-space: pre-wrap;"></p>
+                        </div>
+                        <div>
+                            <h4>Противопоказания</h4>
+                            <p style="white-space: pre-wrap;"></p>
+                        </div>
+                        <div>
+                            <h4>Побочные действия</h4>
+                            <p style="white-space: pre-wrap;"></p>
+                        </div>
+                        <div>
+                            <h4>Взаимодействия</h4>
+                            <p style="white-space: pre-wrap;"></p>
+                        </div>
+                        <div>
+                            <h4>Курс приема</h4>
+                            <p style="white-space: pre-wrap;"></p>
+                        </div>
+                        <div>
+                            <h4>Передозировка</h4>
+                            <p style="white-space: pre-wrap;"></p>
+                        </div>
+                        <div>
+                            <h4>Специальные указания</h4>
+                            <p style="white-space: pre-wrap;"></p>
+                        </div>
+                        <div>
+                            <h4>Условия хранения</h4>
+                            <p style="white-space: pre-wrap;"></p>
+                        </div>
+                        <div>
+                            <h4>Форма выпуска</h4>
+                            <p style="white-space: pre-wrap;"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="notification-container"></div>
+    </main>
+</body>
+</html>

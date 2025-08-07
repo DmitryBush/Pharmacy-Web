@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Категории</title>
+    <link href="/css/admin/categories-management.css" rel="stylesheet">
+    <script src="/js/admin/categories-management.js" type="module"></script>
+</head>
+<body>
+    <div th:replace="~{/admin/sidebar/sidebar.html :: sidebar}"></div>
+    <main class="main-content">
+        <div class="title-container" id="title-container">
+            <button class="item-btn" id="back-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" class="bi-arrow-left-short" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5"/>
+                </svg>
+            </button>
+            <h1 class="page-title">
+                Управление категориями
+            </h1>
+        </div>
+        <div class="page-container">
+            <button class="btn category-add-btn" id="category-add-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-square-fill" viewBox="0 0 16 16">
+                    <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm6.5 4.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3a.5.5 0 0 1 1 0"/>
+                </svg>
+                Добавить
+            </button>
+            <button class="btn change-parent-btn" id="change-parent-btn" style="display: none">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-folder-fill" viewBox="0 0 16 16">
+                    <path d="M9.828 3h3.982a2 2 0 0 1 1.992 2.181l-.637 7A2 2 0 0 1 13.174 14H2.825a2 2 0 0 1-1.991-1.819l-.637-7a2 2 0 0 1 .342-1.31L.5 3a2 2 0 0 1 2-2h3.672a2 2 0 0 1 1.414.586l.828.828A2 2 0 0 0 9.828 3m-8.322.12q.322-.119.684-.12h5.396l-.707-.707A1 1 0 0 0 6.172 2H2.5a1 1 0 0 0-1 .981z"/>
+                </svg>
+                Переместить в выбранную категорию
+            </button>
+            <div class="loader-container"><div class="loader"></div></div>
+            <div class="categories-list" id="categories-list"></div>
+        </div>
+    </main>
+</body>
+</html>
