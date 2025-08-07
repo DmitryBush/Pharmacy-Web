@@ -411,6 +411,7 @@ details[open] .arrow {
 
 .search-field {
     width: 100%;
+    box-sizing: border-box;
     padding: 18px 24px;
     font-size: 1.2rem;
     border: none;
@@ -434,7 +435,8 @@ details[open] .arrow {
 }
 
 .search-result-container {
-    padding: 0;
+    width: 100%;
+    box-sizing: border-box;
     margin-top: 8px;
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(20px) saturate(180%);
@@ -445,6 +447,8 @@ details[open] .arrow {
 }
 
 .result-item {
+    width: 100%;
+    box-sizing: border-box;
     padding: 18px 24px;
     font-size: 1.1rem;
     color: #333;
