@@ -18,21 +18,43 @@ document.addEventListener('DOMContentLoaded', () => {
         () => window.location.replace('/admin/product/creation'));
 
     document.querySelectorAll('.btn-update').forEach((item) => {
-        item.addEventListener('click', e =>
-            window.location.replace(`/admin/product/${e.target.getAttribute('data-id')}`));
+        item.addEventListener('click', e => {
+                try {
+                    const productId = e.target.dataset.id;
+                    if (!/^\d+$/.test(productId))
+                        throw new Error('Произошла критическая ошибка при подготовке ресурсов. ' +
+                            'Обратитесь к вашему администратору');
+                    window.location.replace(`/admin/product/${encodeURIComponent(productId)}`);
+                } catch (e) {
+                    console.error(e);
+                    notification.showNotification('Управление заказами', e.message);
+                }
+            }
+        );
     });
 
     document.querySelectorAll('.btn-delete').forEach(button => {
         button.addEventListener('click', e => {
             e.preventDefault();
-            deleteProduct(e.target.getAttribute('data-id'));
+            const productId = e.target.dataset.id;
+
+            deleteProduct(productId);
         });
     });
 
     function deleteProduct(productId) {
         if (!confirm('Удалить продукт?')) return;
 
-        restClient.fetchData(`/api/v1/admin/products/${productId}`, 'DELETE')
+        try {
+            if (!/^\d+$/.test(productId))
+                throw new Error('Произошла критическая ошибка при подготовке ресурсов. ' +
+                    'Обратитесь к вашему администратору');
+        } catch (e) {
+            console.error(e);
+            notification.showNotification('Управление заказами', e.message);
+        }
+
+        restClient.fetchData(`/api/v1/admin/products/${encodeURIComponent(productId)}`, 'DELETE')
             .then(() => {
                 notification.showNotification('Управление товарами',
                     'Удаление товара завершено успешно');
@@ -82,7 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
     async function fetchResults(searchTerm) {
         try {
             const data = await
-                (await restClient.fetchData(`/api/v1/search/medicine?searchTerm=${searchTerm}`,
+                (await restClient.fetchData(`/api/v1/search/medicine?searchTerm=${encodeURIComponent(searchTerm)}`,
                     'GET')).json();
             displayResults(data);
         } catch (error) {
@@ -102,7 +124,10 @@ document.addEventListener('DOMContentLoaded', () => {
             div.className = 'result-item';
             div.textContent = result.name;
 
-            div.onclick = () => window.location.replace(`/admin/product/${result.id}`);
+            if (!/^\d+$/.test(result.id))
+                throw new Error('Произошла критическая ошибка при подготовке ресурсов. ' +
+                    'Обратитесь к вашему администратору');
+            div.onclick = () => window.location.replace(`/admin/product/${encodeURIComponent(result.id)}`);
 
             resultsContainer.appendChild(div);
         });

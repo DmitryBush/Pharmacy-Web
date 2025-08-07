@@ -25,7 +25,19 @@ document.addEventListener("DOMContentLoaded", function() {
 
     document.getElementById('save-btn').addEventListener('click', saveReceipt);
     document.getElementById('cancel-btn').addEventListener('click',
-        () => window.location.href = `/admin/warehouse/${branchId}`);
+        () => returnToMainPage(branchId));
+
+    function returnToMainPage(branchId) {
+        if (!isNumber(branchId))
+            throw new Error('Произошла критическая ошибка при подготовке ресурсов. ' +
+                'Обратитесь к вашему администратору');
+        window.location.replace(`/admin/warehouse/${encodeURIComponent(branchId)}`);
+    }
+
+    function isNumber(number) {
+        console.log(/^\d+$/.test(number));
+        return /^\d+$/.test(number);
+    }
 
     function saveReceipt() {
         const body = Array.from(document.querySelectorAll('.product-item'))
@@ -37,8 +49,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 notification.showNotification('Управление складом',
                     `Оформление товара успешно завершено`);
                 closeFooter();
-                setTimeout(() => window.location.href = `/admin/warehouse/${branchId}`,
-                    1000);
+                setTimeout(() => returnToMainPage(branchId), 1000);
             })
             .catch(e => notification.showNotification('Управление складом',
                 `Во время завершения заказа произошла ошибка. Ошибка: ${e.message}`));
@@ -86,7 +97,8 @@ document.addEventListener("DOMContentLoaded", function() {
     async function fetchResults(searchTerm) {
         try {
             const data = await
-                (await restClient.fetchData(`/api/v1/search/medicine?searchTerm=${searchTerm}`, 'GET')).json();
+                (await restClient.fetchData(`/api/v1/search/medicine?searchTerm=${encodeURIComponent(searchTerm)}`,
+                    'GET')).json();
             displayResults(data);
         } catch (error) {
             console.error(error);
@@ -116,6 +128,9 @@ document.addEventListener("DOMContentLoaded", function() {
 
     function handleSearchClick(e) {
         try {
+            if (!isNumber(e.id) || !isNumber(e.imagePaths[0].id))
+                throw new Error('Произошла критическая ошибка при подготовке ресурсов. ' +
+                    'Обратитесь к вашему администратору');
             if (receiptMap.has(e.id)) {
                 const productItem = document.getElementById(e.id);
                 if (productItem)
@@ -126,17 +141,18 @@ document.addEventListener("DOMContentLoaded", function() {
             } else {
                 receiptMap.set(e.id, 1);
                 const productItem = document.createElement("div");
+                productItem.id = e.id;
                 productItem.dataset.id = e.id;
                 productItem.className = "product-item";
                 productItem.innerHTML = `
-                <a href="/admin/product/${e.id}">
-                    <img src="/api/v1/product-image/${e.imagePaths[0].id}"
+                <a href="/admin/product/${encodeURIComponent(e.id)}">
+                    <img src="/api/v1/product-image/${encodeURIComponent(e.imagePaths[0].id)}"
                          width="50px"
                          height="50px"
                          alt="${e.name}">
                 </a>
                 <div>
-                    <a href="/admin/product/${e.id}">${e.name}</a>
+                    <a href="/admin/product/${encodeURIComponent(e.id)}">${e.name}</a>
                 </div>
                 <div class="quantity-control">
                     <div class="quantity-container">

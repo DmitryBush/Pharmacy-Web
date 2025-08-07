@@ -23,11 +23,22 @@ document.addEventListener("DOMContentLoaded", function() {
     document.getElementById("search-field").addEventListener('input', handleSearchInput);
     document.getElementById("search-btn").addEventListener('click', handleOpenSearch);
 
-    document.getElementById('save-btn').addEventListener('click', saveReceipt);
+    document.getElementById('save-btn').addEventListener('click', saveSale);
     document.getElementById('cancel-btn').addEventListener('click',
-        () => window.location.href = `/admin/warehouse/${branchId}`);
+        () => returnToMainPage(branchId));
 
-    function saveReceipt() {
+    function returnToMainPage(branchId) {
+        if (!isNumber(branchId))
+            throw new Error('Произошла критическая ошибка при подготовке ресурсов. ' +
+                'Обратитесь к вашему администратору');
+        window.location.replace(`/admin/warehouse/${encodeURIComponent(branchId)}`);
+    }
+
+    function isNumber(number) {
+        return /^\d+$/.test(number);
+    }
+
+    function saveSale() {
         const body = Array.from(document.querySelectorAll('.product-item'))
             .map(item => getReceiptData(item));
 
@@ -37,8 +48,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 notification.showNotification('Управление складом',
                     `Продажа товара успешно завершено`);
                 closeFooter();
-                setTimeout(() =>
-                    window.location.href = `/admin/warehouse/${branchId}`, 500);
+                setTimeout(() => returnToMainPage(branchId), 500);
             })
             .catch(e => notification.showNotification('Управление складом',
                 `Во время оформления транзакции продажи произошла ошибка. Ошибка: ${e.message}`));
@@ -86,7 +96,8 @@ document.addEventListener("DOMContentLoaded", function() {
     async function fetchResults(searchTerm) {
         try {
             const data = await
-                (await restClient.fetchData(`/api/v1/search/medicine?searchTerm=${searchTerm}`, 'GET')).json();
+                (await restClient.fetchData(`/api/v1/search/medicine?searchTerm=${encodeURIComponent(searchTerm)}`,
+                    'GET')).json();
             displayResults(data);
         } catch (error) {
             console.error(error);
@@ -116,6 +127,9 @@ document.addEventListener("DOMContentLoaded", function() {
 
     async function handleSearchClick(e) {
         try {
+            if (!isNumber(e.id) || !isNumber(e.imagePaths[0].id))
+                throw new Error('Произошла критическая ошибка при подготовке ресурсов. ' +
+                    'Обратитесь к вашему администратору');
             if (receiptMap.has(e.id)) {
                 const productItem = document.getElementById(e.id);
                 if (productItem)
@@ -125,24 +139,26 @@ document.addEventListener("DOMContentLoaded", function() {
                     throw new Error("Произошла критическая ошибка при обновлении контента формы");
             } else {
                 const quantity = await (await restClient.fetchData(
-                    `/api/v1/warehouse/branches/${branchId}/products/${e.id}/quantity`, 'GET')).json();
+                    `/api/v1/warehouse/branches/${encodeURIComponent(branchId)}` +
+                        `/products/${encodeURIComponent(e.id)}/quantity`, 'GET')).json();
                 if (quantity <= 0)
                     throw new Error("Была произведена попытка добавления отсутствующего товара на складе. " +
                         "Авторизуетесь через аккаунт супервайзера");
 
                 receiptMap.set(e.id, 1);
                 const productItem = document.createElement("div");
+                productItem.id = e.id;
                 productItem.dataset.id = e.id;
                 productItem.className = "product-item";
                 productItem.innerHTML = `
-                <a href="/admin/product/${e.id}">
-                    <img src="/api/v1/product-image/${e.imagePaths[0].id}"
+                <a href="/admin/product/${encodeURIComponent(e.id)}">
+                    <img src="/api/v1/product-image/${encodeURIComponent(e.imagePaths[0].id)}"
                          width="50px"
                          height="50px"
                          alt="${e.name}">
                 </a>
                 <div>
-                    <a href="/admin/product/${e.id}">${e.name}</a>
+                    <a href="/admin/product/${encodeURIComponent(e.id)}">${e.name}</a>
                 </div>
                 <div class="quantity-control">
                     <div class="quantity-container">
