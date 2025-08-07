@@ -1,7 +1,7 @@
-document.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('.order-more-det').forEach(el => {
+document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll('.branch-more-det').forEach(el => {
         el.addEventListener('click', (e) => {
-            window.location.replace(`/admin/orders/${e.target.getAttribute('data-id')}`);
-        })
+            window.location.replace(`/admin/orders/branch/${e.target.getAttribute('data-id')}`);
+        });
     });
 });

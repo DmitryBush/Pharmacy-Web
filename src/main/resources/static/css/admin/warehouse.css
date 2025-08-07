@@ -12,137 +12,135 @@ body {
     padding: 2rem;
 }
 
+:root {
+    --primary: #4361ee;
+    --success: #4CAF50;
+    --warning: #ffd166;
+    --danger: #ef476f;
+    --background: #f8f9fa;
+    --card-bg: #ffffff;
+    --text: #2b2d42;
+    --text-light: #8d99ae;
+}
+
 .page-title {
     font-size: 2.5rem;
     margin-bottom: 2rem;
-    color: #2b2d42;
+    color: var(--text);
     font-weight: 700;
 }
 
 .page-container {
-    padding-left: 0.5rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.5rem;
+    padding: 0.5rem;
 }
 
-.warehouse-info {
-    margin-bottom: 1.5rem;
+/* Карточка заказа */
+.branch-card {
+    background: var(--card-bg);
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
-.warehouse-info a {
-    text-decoration: none;
+.branch-card:hover {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
 }
 
-.warehouse-info h2 {
-    color: #2c3e50;
+/* Заголовок карточки */
+.branch-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     margin-bottom: 1.2rem;
-    font-size: 1.3rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #eee;
 }
 
-.warehouse-info p {
-    color: #4a5568;
-    margin: 0.8rem 0;
-    font-size: 1rem;
-}
-
-.product-list {
-    margin-top: 1.5rem;
-}
-
-.btn {
-    color: white;
-    margin-bottom: 20px;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 8px 16px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    margin-right: 0.5rem;
-    transition: 0.3s;
-}
-
-.product-receipt-btn {
-    background-color: #4CAF50;
-}
-
-.product-receipt-btn:hover {
-    background-color: #43A047;
-}
-
-.product-sale-btn {
-    background-color: #E53935;
-}
-
-.product-sale-btn:hover {
-    background-color: #D32F2F;
-}
-
-.branch-transaction-history {
-    background-color: #757575;
-}
-
-.branch-transaction-history:hover {
-    background-color: #616161;
-}
-
-.image-unavailable {
-    height: 120px;
-    background: #f0f0f0;
-    border: 2px dashed #ddd;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #666;
-}
-
-.product-item {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    padding: 15px;
-    margin-bottom: 15px;
-    background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.product-item a {
+.branch-link {
     text-decoration: none;
 }
 
-.product-item img {
-    border-radius: 4px;
-    object-fit: cover;
+.branch-title {
+    margin: 0;
+    font-size: 1.25rem;
+    color: var(--primary);
+    text-decoration: none;
+    transition: color 0.2s ease;
 }
 
-.product-item div {
-    flex: 1;
+.branch-title:hover {
+    color: #2a4a9e;
 }
 
-/* Адаптивность */
-@media (max-width: 768px) {
-    .main-content {
-        margin-left: 60px;
-        padding: 1rem;
-    }
-
-    .product-list {
-        grid-template-columns: 1fr;
-    }
-
-    .warehouse-info {
-        padding: 1.5rem;
-    }
+.branch-status-active {
+    margin: 0;
+    font-size: 0.9rem;
+    font-weight: 600;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    background: var(--success);
+    color: var(--background);
 }
 
-@media (max-width: 480px) {
-    .page-title {
-        font-size: 2rem;
-    }
+.branch-status-deactivated {
+    margin: 0;
+    font-size: 0.9rem;
+    font-weight: 600;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    background: var(--danger);
+    color: var(--background);
+}
 
-    button {
-        width: 100%;
-        margin-bottom: 0.5rem;
-    }
+.branch-city {
+    margin-left: 0.5rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    background: #e9ecef;
+    color: var(--text);
+}
+
+/* Тело карточки */
+.branch-body {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.branch-body p {
+    margin: 0.1rem;
+}
+
+/* Кнопка */
+.branch-more-det {
+    align-self: flex-start;
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    margin-top: 1rem;
+}
+
+.branch-more-det:hover {
+    background: #3650b5;
+}
+
+.hours-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 5px 0 0 0;
+}
+.hours-list li {
+    padding: 2px 0;
 }

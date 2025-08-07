@@ -6,13 +6,13 @@ import org.springframework.core.io.Resource;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/icons")
+@RequestMapping("/api/v1/icons")
 @RequiredArgsConstructor
 public class IconRestController {
     private final IconService iconService;
 
     @GetMapping(value = "/{folder}/{name}")
-    public Resource findIconByName(@PathVariable String folder, @RequestParam String name) {
+    public Resource findIconByName(@PathVariable String folder, @PathVariable String name) {
         return iconService.findIconByName(name, folder);
     }
 }

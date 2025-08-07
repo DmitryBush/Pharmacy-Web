@@ -1,6 +1,6 @@
 package com.bush.pharmacy_web_app.controllers.http.customer;
 
-import com.bush.pharmacy_web_app.service.CartService;
+import com.bush.pharmacy_web_app.service.user.CartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;

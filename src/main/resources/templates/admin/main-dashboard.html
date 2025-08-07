@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Админ-панель</title>
+    <link href="/css/admin/main-dashboard.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+    <div th:replace="~{/admin/sidebar/sidebar.html :: sidebar}"></div>
+    <main class="main-content">
+        <h2>[(${user.name})] [(${user.lastName})],</h2>
+        <h1>Здравствуйте</h1>
+        <div class="dashboard-cards">
+            <!-- Карточка товаров -->
+            <a th:if="${authorities.contains('ROLE_' + T(com.bush.pharmacy_web_app.model.entity.user.role.RoleType).ADMIN.name())}"
+               href="/admin/product" class="card">
+                <div class="card-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="#3498db" viewBox="0 0 24 24">
+                        <path d="M9.293 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.707A1 1 0 0 0 13.707 4L10 .293A1 1 0 0 0 9.293 0M9.5 3.5v-2l3 3h-2a1 1 0 0 1-1-1m-3 2v.634l.549-.317a.5.5 0 1 1 .5.866L7 7l.549.317a.5.5 0 1 1-.5.866L6.5 7.866V8.5a.5.5 0 0 1-1 0v-.634l-.549.317a.5.5 0 1 1-.5-.866L5 7l-.549-.317a.5.5 0 0 1 .5-.866l.549.317V5.5a.5.5 0 1 1 1 0m-2 4.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1 0-1m0 2h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1 0-1"/>
+                    </svg>
+                </div>
+                <h3>Управление товарами</h3>
+                <p>Добавление, изменение и удаление товаров</p>
+            </a>
+
+            <!-- Карточка заказов -->
+            <a href="/admin/orders" class="card">
+                <div class="card-icon">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#e74c3c" stroke-width="1.5">
+                        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4H6zM3 6h18M16 10a4 4 0 0 1-8 0"/>
+                    </svg>
+                </div>
+                <h3>Управление заказами</h3>
+                <p>Список и история заказов филиалов</p>
+            </a>
+
+            <!-- Карточка склада -->
+            <a href="/admin/warehouse" class="card">
+                <div class="card-icon">
+                    <svg width="48" height="48" fill="#4CAF50"  class="bi bi-box2" viewBox="0 0 24 24">
+                        <path d="M2.95.4a1 1 0 0 1 .8-.4h8.5a1 1 0 0 1 .8.4l2.85 3.8a.5.5 0 0 1 .1.3V15a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1V4.5a.5.5 0 0 1 .1-.3zM7.5 1H3.75L1.5 4h6zm1 0v3h6l-2.25-3zM15 5H1v10h14z"/>
+                    </svg>
+                </div>
+                <h3>Управление складом</h3>
+                <p>Добавление и удаление товаров со склада</p>
+            </a>
+
+            <!-- Карточка категорий -->
+            <a th:if="${authorities.contains('ROLE_' + T(com.bush.pharmacy_web_app.model.entity.user.role.RoleType).ADMIN.name())}"
+               href="/admin/categories" class="card">
+                <div class="card-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="#FFB900" viewBox="0 0 24 24">
+                        <path d="M9.828 3h3.982a2 2 0 0 1 1.992 2.181l-.637 7A2 2 0 0 1 13.174 14H2.825a2 2 0 0 1-1.991-1.819l-.637-7a2 2 0 0 1 .342-1.31L.5 3a2 2 0 0 1 2-2h3.672a2 2 0 0 1 1.414.586l.828.828A2 2 0 0 0 9.828 3m-8.322.12q.322-.119.684-.12h5.396l-.707-.707A1 1 0 0 0 6.172 2H2.5a1 1 0 0 0-1 .981z"/>
+                    </svg>
+                </div>
+                <h3>Управление категориями товаров</h3>
+                <p>Добавление и удаление категорий</p>
+            </a>
+        </div>
+    </main>
+</body>
+</html>
