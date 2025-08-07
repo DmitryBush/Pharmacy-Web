@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 public class MedicineCreateMapper implements DtoMapper<MedicineCreateDto, Medicine> {
     private final SupplierCreateMapper supplierCreateMapper;
     private final ManufacturerCreateMapper manufacturerCreateMapper;
-    private final ProductCategoryMapper categoryMapper;
+    private final ListProductCategoryCreateMapper categoryMapper;
     private final MedicineImageCreateMapper imageCreateMapper;
 
     private final TypeRepository typeRepository;

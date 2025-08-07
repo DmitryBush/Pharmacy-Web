@@ -17,7 +17,7 @@ public class MedicineType {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "type_id", nullable = false)
     private Integer id;
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true, length = 64)
     private String type;
     @OneToOne
     @JoinColumn(name = "parent_id")

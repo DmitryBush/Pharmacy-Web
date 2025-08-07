@@ -23,6 +23,19 @@ body {
     padding-left: 0.5rem;
 }
 
+.action-btn {
+    background-color: #0078D7;
+    color: white;
+    margin-bottom: 20px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
 .search-btn {
     background-color: #0078D7;
     color: white;
@@ -122,6 +135,7 @@ body {
 
 .search-field {
     width: 100%;
+    box-sizing: border-box;
     padding: 18px 24px;
     font-size: 1.2rem;
     border: none;
@@ -145,7 +159,8 @@ body {
 }
 
 .search-result-container {
-    padding: 0;
+    width: 100%;
+    box-sizing: border-box;
     margin-top: 8px;
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(20px) saturate(180%);
@@ -156,6 +171,8 @@ body {
 }
 
 .result-item {
+    width: 100%;
+    box-sizing: border-box;
     padding: 18px 24px;
     font-size: 1.1rem;
     color: #333;

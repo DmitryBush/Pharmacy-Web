@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     document.getElementById('save-btn').addEventListener('click', saveReceipt);
     document.getElementById('cancel-btn').addEventListener('click',
-        () => window.location.href = '/admin/warehouse');
+        () => window.location.href = `/admin/warehouse/${branchId}`);
 
     function saveReceipt() {
         const body = Array.from(document.querySelectorAll('.product-item'))
@@ -36,6 +36,7 @@ document.addEventListener("DOMContentLoaded", function() {
             .then(r => {
                 notification.showNotification('Управление складом',
                     `Продажа товара успешно завершено`);
+                closeFooter();
                 setTimeout(() =>
                     window.location.href = `/admin/warehouse/${branchId}`, 500);
             })
@@ -85,7 +86,7 @@ document.addEventListener("DOMContentLoaded", function() {
     async function fetchResults(searchTerm) {
         try {
             const data = await
-                (await restClient.fetchData(`/api/search/medicine?name=${searchTerm}`, 'GET')).json();
+                (await restClient.fetchData(`/api/v1/search/medicine?searchTerm=${searchTerm}`, 'GET')).json();
             displayResults(data);
         } catch (error) {
             console.error(error);

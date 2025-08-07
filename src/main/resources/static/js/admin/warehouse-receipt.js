@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     document.getElementById('save-btn').addEventListener('click', saveReceipt);
     document.getElementById('cancel-btn').addEventListener('click',
-        () => window.location.href = '/admin/warehouse');
+        () => window.location.href = `/admin/warehouse/${branchId}`);
 
     function saveReceipt() {
         const body = Array.from(document.querySelectorAll('.product-item'))
@@ -36,6 +36,9 @@ document.addEventListener("DOMContentLoaded", function() {
             .then(r => {
                 notification.showNotification('Управление складом',
                     `Оформление товара успешно завершено`);
+                closeFooter();
+                setTimeout(() => window.location.href = `/admin/warehouse/${branchId}`,
+                    1000);
             })
             .catch(e => notification.showNotification('Управление складом',
                 `Во время завершения заказа произошла ошибка. Ошибка: ${e.message}`));
@@ -76,14 +79,14 @@ document.addEventListener("DOMContentLoaded", function() {
             fetchResults(searchTerm)
                 .catch(error =>
                     notification.showNotification('Управление складом',
-                        `Произошла ошибка при поиске продукта: ${error}`));
+                        `Произошла ошибка при поиске продукта. Код ошибки ${error.message}`));
         }, DEBOUNCE_DELAY);
     }
 
     async function fetchResults(searchTerm) {
         try {
             const data = await
-                (await restClient.fetchData(`/api/search/medicine?name=${searchTerm}`, 'GET')).json();
+                (await restClient.fetchData(`/api/v1/search/medicine?searchTerm=${searchTerm}`, 'GET')).json();
             displayResults(data);
         } catch (error) {
             console.error(error);

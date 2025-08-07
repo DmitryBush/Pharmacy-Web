@@ -1,3 +1,5 @@
+import {loadCSS} from "../ResourceLoader.js";
+
 export default class Notification {
     constructor(imageUrl = null) {
         this.container = document.getElementById('notification-container');
@@ -40,3 +42,14 @@ export default class Notification {
         }, 5000);
     }
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+    loadCSS('/css/notification/notification.css');
+
+    const notificationElement = document.createElement('div');
+    notificationElement.id = 'notification-container';
+
+    if (!document.contains(notificationElement)) {
+        document.body.appendChild(notificationElement);
+    }
+})

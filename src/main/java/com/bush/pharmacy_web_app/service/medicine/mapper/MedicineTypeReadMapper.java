@@ -12,7 +12,7 @@ public class MedicineTypeReadMapper implements DtoMapper<MedicineType, MedicineT
     @Override
     public MedicineTypeDto map(MedicineType obj) {
         return Optional.ofNullable(obj.getParent())
-                .map(parent -> new MedicineTypeDto(obj.getType(), parent.getType()))
-                .orElseGet(() -> new MedicineTypeDto(obj.getType(), null));
+                .map(parent -> new MedicineTypeDto(obj.getId(), obj.getType(), parent.getType()))
+                .orElseGet(() -> new MedicineTypeDto(obj.getId(), obj.getType(), null));
     }
 }
