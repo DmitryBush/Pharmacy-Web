@@ -76,7 +76,7 @@ document.addEventListener("DOMContentLoaded", function() {
             fetchResults(searchTerm)
                 .catch(error =>
                     notification.showNotification('Управление складом',
-                        `Произошла ошибка при поиске продукта: ${error}`));
+                        `Произошла ошибка при поиске продукта. Код ошибки ${error.message}`));
         }, DEBOUNCE_DELAY);
     }
 

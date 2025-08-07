@@ -10,7 +10,7 @@ export default class RestClient {
 
             if (!response.ok) {
                 const errorText = await response.json();
-                throw new Error(errorText.error);
+                throw new Error(errorText.status);
             }
 
             return response;

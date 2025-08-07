@@ -31,6 +31,6 @@ public class TypeSearchRestController {
     @GetMapping("/by-name")
     public ResponseEntity<MedicineTypeDto> findMedicineType(String type) {
         return ResponseEntity.ok(typeService.findByType(type)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST)));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND)));
     }
 }
