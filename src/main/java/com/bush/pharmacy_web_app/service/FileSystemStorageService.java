@@ -29,11 +29,9 @@ public class FileSystemStorageService {
         try {
             String filename = Optional.ofNullable(file.getOriginalFilename())
                     .orElseThrow(() -> new StorageException("Invalid filename"));
-            validatePaths(filename);
             checkEmptyFile(file);
 
-            Path resultDir = rootLocation.resolve(filename).normalize().toAbsolutePath();
-            validateResultPath(resultDir);
+            Path resultDir = getValidatedFilePath(filename);
             try(var inputStream = file.getInputStream()) {
                 Files.copy(inputStream, resultDir, StandardCopyOption.REPLACE_EXISTING);
             }
@@ -46,11 +44,9 @@ public class FileSystemStorageService {
         try {
             String filename = Optional.ofNullable(file.getOriginalFilename())
                     .orElseThrow(() -> new StorageException("Invalid filename"));
-            validatePaths(path, filename);
             checkEmptyFile(file);
 
-            Path resultDir = rootLocation.resolve(path).resolve(filename).normalize().toAbsolutePath();
-            validateResultPath(resultDir);
+            Path resultDir = getValidatedFilePath(path, filename);
             if (!Files.exists(getValidatedFilePath(path)))
                 Files.createDirectories(getValidatedFilePath(path));
             try(var inputStream = file.getInputStream()) {
