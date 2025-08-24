@@ -29,11 +29,11 @@ public class FileSystemStorageService {
         try {
             String filename = Optional.ofNullable(file.getOriginalFilename())
                     .orElseThrow(() -> new StorageException("Invalid filename"));
-            validateFileName(filename);
+            validatePaths(filename);
             checkEmptyFile(file);
 
             Path resultDir = rootLocation.resolve(filename).normalize().toAbsolutePath();
-            validatePath(resultDir);
+            validateResultPath(resultDir);
             try(var inputStream = file.getInputStream()) {
                 Files.copy(inputStream, resultDir, StandardCopyOption.REPLACE_EXISTING);
             }
@@ -46,11 +46,11 @@ public class FileSystemStorageService {
         try {
             String filename = Optional.ofNullable(file.getOriginalFilename())
                     .orElseThrow(() -> new StorageException("Invalid filename"));
-            validateFileName(filename);
+            validatePaths(path, filename);
             checkEmptyFile(file);
 
             Path resultDir = rootLocation.resolve(path).resolve(filename).normalize().toAbsolutePath();
-            validatePath(resultDir);
+            validateResultPath(resultDir);
             if (!Files.exists(getValidatedFilePath(path)))
                 Files.createDirectories(getValidatedFilePath(path));
             try(var inputStream = file.getInputStream()) {
@@ -61,13 +61,15 @@ public class FileSystemStorageService {
         }
     }
 
-    private void validateFileName(String filename) {
-        if (filename.contains("..") || filename.contains(".\\") || filename.contains("..\\"))
-            throw new StorageException("File has invalid name");
+    private void validatePaths(String ...paths) {
+        for (var path : paths) {
+            if (path.contains("..") || path.contains(".\\") || path.contains("..\\"))
+                throw new StorageException("File has invalid name");
+        }
     }
 
-    private void validatePath(Path dir) {
-        if (!dir.startsWith(rootLocation.normalize().toAbsolutePath() + File.separator)) {
+    private void validateResultPath(Path resultDir) {
+        if (!resultDir.startsWith(rootLocation.normalize().toAbsolutePath() + File.separator)) {
             throw new StorageException("The file being uploaded cannot be located outside the upload area.");
         }
     }
@@ -111,15 +113,15 @@ public class FileSystemStorageService {
     }
 
     private Path getValidatedFilePath(String path, String filename) {
-        validateFileName(filename);
+        validatePaths(path, filename);
         Path resultPath = rootLocation.resolve(path).resolve(filename).normalize().toAbsolutePath();
-        validatePath(resultPath);
+        validateResultPath(resultPath);
         return resultPath;
     }
 
     private Path getValidatedFilePath(String path) {
         Path resultPath = rootLocation.resolve(path).normalize().toAbsolutePath();
-        validatePath(resultPath);
+        validateResultPath(resultPath);
         return resultPath;
     }
 }
