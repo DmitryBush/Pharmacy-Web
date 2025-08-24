@@ -8,6 +8,7 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.*;
@@ -26,13 +27,15 @@ public class FileSystemStorageService {
 
     public void store(MultipartFile file) {
         try {
+            String filename = Optional.ofNullable(file.getOriginalFilename())
+                    .orElseThrow(() -> new StorageException("Invalid filename"));
+            validateFileName(filename);
             checkEmptyFile(file);
-            Path dir = Paths.get(rootLocation.toString(), Optional.ofNullable(file.getOriginalFilename()).orElseThrow())
-                    .normalize()
-                    .toAbsolutePath();
-            validatePath(dir);
+
+            Path resultDir = rootLocation.resolve(filename).normalize().toAbsolutePath();
+            validatePath(resultDir);
             try(var inputStream = file.getInputStream()) {
-                Files.copy(inputStream, dir, StandardCopyOption.REPLACE_EXISTING);
+                Files.copy(inputStream, resultDir, StandardCopyOption.REPLACE_EXISTING);
             }
         } catch (IOException e) {
             throw new StorageException("An error occurred while saving the file", e);
@@ -41,26 +44,31 @@ public class FileSystemStorageService {
 
     public void store(MultipartFile file, String path) {
         try {
+            String filename = Optional.ofNullable(file.getOriginalFilename())
+                    .orElseThrow(() -> new StorageException("Invalid filename"));
+            validateFileName(filename);
             checkEmptyFile(file);
-            Path dir = Paths.get(rootLocation.toString(),
-                            path, Optional.ofNullable(file.getOriginalFilename()).orElseThrow())
-                    .normalize()
-                    .toAbsolutePath();
-            validatePath(dir);
+
+            Path resultDir = rootLocation.resolve(path).resolve(filename).normalize().toAbsolutePath();
+            validatePath(resultDir);
             if (!Files.exists(load(path)))
                 Files.createDirectories(load(path));
             try(var inputStream = file.getInputStream()) {
-                Files.copy(inputStream, dir, StandardCopyOption.REPLACE_EXISTING);
+                Files.copy(inputStream, resultDir, StandardCopyOption.REPLACE_EXISTING);
             }
         } catch (IOException e) {
             throw new StorageException("An error occurred while saving the file", e);
         }
     }
 
+    private void validateFileName(String filename) {
+        if (filename.contains("..") || filename.contains(".\\") || filename.contains("..\\"))
+            throw new StorageException("File has invalid name");
+    }
+
     private void validatePath(Path dir) {
-        if (!dir.startsWith(rootLocation.normalize().toAbsolutePath())) {
-            throw new StorageException("The file being uploaded cannot be located outside the upload area. " +
-                    String.format("\nRoot location:%s\nCurrent saved location:%s", rootLocation.toAbsolutePath(), dir));
+        if (!dir.startsWith(rootLocation.normalize().toAbsolutePath() + File.separator)) {
+            throw new StorageException("The file being uploaded cannot be located outside the upload area.");
         }
     }
 
@@ -71,17 +79,16 @@ public class FileSystemStorageService {
 
     public void delete(String path) {
         try {
-            Path file = load(path);
-            validatePath(file);
-            if (!Files.exists(file))
-                throw new NoSuchFileException(String.format("File with directory %s doesn't exists", file));
+            Path filePath = load(path);
+            if (!Files.exists(filePath))
+                throw new NoSuchFileException("File doesn't exists");
 
-            Files.delete(file);
+            Files.delete(filePath);
 
-            if (!file.getParent().equals(rootLocation)) {
-                try (var dirStream = Files.newDirectoryStream(file.getParent())) {
+            if (!filePath.getParent().equals(rootLocation)) {
+                try (var dirStream = Files.newDirectoryStream(filePath.getParent())) {
                     if (!dirStream.iterator().hasNext())
-                        Files.delete(file.getParent());
+                        Files.delete(filePath.getParent());
                 }
             }
         } catch (IOException e) {
@@ -91,18 +98,21 @@ public class FileSystemStorageService {
 
     public Resource loadAsResource(String path) {
         try {
-            Path file = load(path);
-            Resource resource = new UrlResource(file.toUri());
+            Path filePath = load(path);
+
+            Resource resource = new UrlResource(filePath.toUri());
             if (resource.exists() || resource.isReadable())
                 return resource;
-            throw new StorageException(String.format("Unable to read file. Uri res: %s\nFilepath: %s\nRoot: %s",
-                    resource, file, rootLocation.toAbsolutePath()));
+
+            throw new StorageException("Unable to read file");
         } catch (MalformedURLException e) {
             throw new RuntimeException(e);
         }
     }
 
     private Path load(String path) {
-        return rootLocation.resolve(path).normalize().toAbsolutePath();
+        Path resultPath = rootLocation.resolve(path).normalize().toAbsolutePath();
+        validatePath(resultPath);
+        return resultPath;
     }
 }
