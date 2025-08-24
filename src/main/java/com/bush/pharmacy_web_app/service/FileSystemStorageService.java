@@ -51,8 +51,8 @@ public class FileSystemStorageService {
 
             Path resultDir = rootLocation.resolve(path).resolve(filename).normalize().toAbsolutePath();
             validatePath(resultDir);
-            if (!Files.exists(load(path)))
-                Files.createDirectories(load(path));
+            if (!Files.exists(getValidatedFilePath(path)))
+                Files.createDirectories(getValidatedFilePath(path));
             try(var inputStream = file.getInputStream()) {
                 Files.copy(inputStream, resultDir, StandardCopyOption.REPLACE_EXISTING);
             }
@@ -79,7 +79,7 @@ public class FileSystemStorageService {
 
     public void delete(String path) {
         try {
-            Path filePath = load(path);
+            Path filePath = getValidatedFilePath(path);
             if (!Files.exists(filePath))
                 throw new NoSuchFileException("File doesn't exists");
 
@@ -96,9 +96,9 @@ public class FileSystemStorageService {
         }
     }
 
-    public Resource loadAsResource(String path) {
+    public Resource loadAsResource(String path, String filename) {
         try {
-            Path filePath = load(path);
+            Path filePath = getValidatedFilePath(path, filename);
 
             Resource resource = new UrlResource(filePath.toUri());
             if (resource.exists() || resource.isReadable())
@@ -110,7 +110,14 @@ public class FileSystemStorageService {
         }
     }
 
-    private Path load(String path) {
+    private Path getValidatedFilePath(String path, String filename) {
+        validateFileName(filename);
+        Path resultPath = rootLocation.resolve(path).resolve(filename).normalize().toAbsolutePath();
+        validatePath(resultPath);
+        return resultPath;
+    }
+
+    private Path getValidatedFilePath(String path) {
         Path resultPath = rootLocation.resolve(path).normalize().toAbsolutePath();
         validatePath(resultPath);
         return resultPath;

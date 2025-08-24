@@ -10,6 +10,6 @@ public class IconService {
     private final FileSystemStorageService storageService;
 
     public Resource findIconByName(String name, String folder) {
-        return storageService.loadAsResource(String.format("icons/%s/%s", folder, name));
+        return storageService.loadAsResource(String.format("icons/%s", folder), name);
     }
 }
