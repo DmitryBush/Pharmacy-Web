@@ -101,7 +101,7 @@ public class FileSystemStorageService {
     }
 
     private void validateResultPath(Path resultDir) {
-        if (!resultDir.startsWith(rootLocation)) {
+        if (!resultDir.startsWith(rootLocation + File.separator)) {
             throw new StorageException("The file being uploaded cannot be located outside the upload area.");
         }
     }
@@ -153,9 +153,12 @@ public class FileSystemStorageService {
 
         validateFileName(filename);
         validatePaths(normalizedPath);
-        Path resultPath = rootLocation.resolve(path).resolve(filename).normalize().toAbsolutePath();
-        validateResultPath(resultPath);
-        return resultPath;
+
+        Path catalogPath = rootLocation.resolve(normalizedPath).normalize().toAbsolutePath();
+        validateResultPath(catalogPath);
+        Path filePath = catalogPath.resolve(filename).normalize().toAbsolutePath();
+        validateResultPath(filePath);
+        return filePath;
     }
 
     private Path getValidatedFilePath(MultipartFile file) {
@@ -163,6 +166,7 @@ public class FileSystemStorageService {
         Path filename = Paths.get(Optional.ofNullable(file.getOriginalFilename())
                 .orElseThrow(() -> new StorageException("Invalid filename"))).normalize();
         validateFileName(filename);
+
         Path resultPath = rootLocation.resolve(filename).normalize().toAbsolutePath();
         validateResultPath(resultPath);
         return resultPath;
@@ -175,16 +179,20 @@ public class FileSystemStorageService {
                 .orElseThrow(() -> new StorageException("Invalid path"))).normalize();
         validateFileName(filename);
         validatePaths(normalizedPath);
-        Path resultPath = rootLocation.resolve(path).resolve(filename).normalize().toAbsolutePath();
-        validateResultPath(resultPath);
-        return resultPath;
+
+        Path catalogPath = rootLocation.resolve(normalizedPath).normalize().toAbsolutePath();
+        validateResultPath(catalogPath);
+        Path filePath = catalogPath.resolve(filename).normalize().toAbsolutePath();
+        validateResultPath(filePath);
+        return filePath;
     }
 
     private Path getValidatedFilePath(String path) {
         Path normalizedPath = Paths.get(Optional.ofNullable(path)
                 .orElseThrow(() -> new StorageException("Invalid path"))).normalize();
         validatePaths(normalizedPath);
-        Path resultPath = rootLocation.resolve(path).normalize().toAbsolutePath();
+
+        Path resultPath = rootLocation.resolve(normalizedPath).normalize().toAbsolutePath();
         validateResultPath(resultPath);
         return resultPath;
     }
