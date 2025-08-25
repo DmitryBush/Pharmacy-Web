@@ -43,8 +43,8 @@ public class MedicineImageService {
     public Optional<Resource> findImageById(Long id) {
         return imageRepository.findById(id)
                 .map(image ->
-                        storageService.loadAsResource(String.format("medicine/%d/%s",
-                                image.getMedicine().getId(), image.getPath())));
+                        storageService.loadAsResource(String.format("medicine/%d", image.getMedicine().getId()),
+                                image.getPath()));
     }
 
     public void createImage(MultipartFile file, String path) {
@@ -73,6 +73,6 @@ public class MedicineImageService {
 
     public Optional<Resource> findProductImageByIdAndName(Long id, String filename) {
         return findImageByMedicineIdAndPath(id, filename)
-                .map(path -> storageService.loadAsResource(String.format("medicine/%d/%s", id, path)));
+                .map(path -> storageService.loadAsResource(String.format("medicine/%d", id), path));
     }
 }
