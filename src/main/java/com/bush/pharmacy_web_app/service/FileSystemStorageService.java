@@ -27,7 +27,7 @@ public class FileSystemStorageService {
     public FileSystemStorageService(StorageConfig config) {
         if (config.getDirectory().trim().isEmpty())
             throw new StorageException("Directory for saving files is not specified. Check storage configuration file");
-        rootLocation = Paths.get(config.getDirectory()).normalize();
+        rootLocation = Paths.get(config.getDirectory()).normalize().toAbsolutePath();
     }
 
     public void store(MultipartFile file) {
@@ -75,14 +75,16 @@ public class FileSystemStorageService {
 
     private void validatePaths(Path ...paths) {
         for (var path : paths) {
-            var segments = path.toString().split("[\\\\/]");
+            var stringPath = path.toString();
+
+            var segments = stringPath.split("[\\\\/]");
             for (var segment: segments) {
                 if (segment.isEmpty()) {
                     logger.error("Find empty segment ${}", Arrays.stream(segments).toList());
                     throw new StorageException("Empty segment");
                 } else if (segment.length() > 255) {
                     throw new StorageException("Segment length doesn't match maximum OS folder or file length");
-                } else if (!segment.matches("(^[a-zA-Z0-9_-]+\\.[a-zA-Z0-9]+$)|(^[a-zA-Z0-9_-]+$)")) {
+                } else if (!segment.matches("^[a-zA-Z0-9_-]+$")) {
                     logger.error("Segment has invalid name: ${}", segment);
                     throw new StorageException("Segment has invalid name");
                 }
@@ -90,8 +92,16 @@ public class FileSystemStorageService {
         }
     }
 
+    private void validateFileName(Path filename) {
+        if (filename.toString().length() > 255)
+            throw new StorageException("File length doesn't match maximum OS file length");
+        else if (filename.toString().contains("..") || filename.toString().contains("/")
+                || filename.toString().contains("\\"))
+            throw new StorageException("Path has invalid characters");
+    }
+
     private void validateResultPath(Path resultDir) {
-        if (!resultDir.startsWith(rootLocation.toAbsolutePath() + File.separator)) {
+        if (!resultDir.startsWith(rootLocation)) {
             throw new StorageException("The file being uploaded cannot be located outside the upload area.");
         }
     }
@@ -140,7 +150,9 @@ public class FileSystemStorageService {
                 .orElseThrow(() -> new StorageException("Invalid filename"))).normalize();
         Path normalizedPath = Paths.get(Optional.ofNullable(path)
                 .orElseThrow(() -> new StorageException("Invalid path"))).normalize();
-        validatePaths(normalizedPath, filename);
+
+        validateFileName(filename);
+        validatePaths(normalizedPath);
         Path resultPath = rootLocation.resolve(path).resolve(filename).normalize().toAbsolutePath();
         validateResultPath(resultPath);
         return resultPath;
@@ -150,7 +162,7 @@ public class FileSystemStorageService {
         checkEmptyFile(file);
         Path filename = Paths.get(Optional.ofNullable(file.getOriginalFilename())
                 .orElseThrow(() -> new StorageException("Invalid filename"))).normalize();
-        validatePaths(filename);
+        validateFileName(filename);
         Path resultPath = rootLocation.resolve(filename).normalize().toAbsolutePath();
         validateResultPath(resultPath);
         return resultPath;
@@ -161,7 +173,8 @@ public class FileSystemStorageService {
                 .orElseThrow(() -> new StorageException("Invalid filename"))).normalize();
         Path normalizedPath = Paths.get(Optional.ofNullable(path)
                 .orElseThrow(() -> new StorageException("Invalid path"))).normalize();
-        validatePaths(normalizedPath, filename);
+        validateFileName(filename);
+        validatePaths(normalizedPath);
         Path resultPath = rootLocation.resolve(path).resolve(filename).normalize().toAbsolutePath();
         validateResultPath(resultPath);
         return resultPath;
