@@ -2,6 +2,8 @@ package com.bush.pharmacy_web_app.service;
 
 import com.bush.pharmacy_web_app.config.StorageConfig;
 import com.bush.pharmacy_web_app.service.exception.StorageException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -16,6 +18,8 @@ import java.util.Optional;
 
 @Service
 public class FileSystemStorageService {
+    private final Logger logger = LoggerFactory.getLogger(FileSystemStorageService.class);
+
     private final Path rootLocation;
 
     @Autowired
@@ -59,8 +63,13 @@ public class FileSystemStorageService {
 
     private void validatePaths(String ...paths) {
         for (var path : paths) {
-            if (path.contains("..") || path.contains(".\\") || path.contains("..\\"))
-                throw new StorageException("File has invalid name");
+            var segments = path.split("[\\\\/]");
+            for (var segment: segments) {
+                if (!segment.matches("(^[\\w_-]+.\\w+$)|([a-zA-Z0-9_-]+)")) {
+                    logger.error("Segment has invalid name: ${}", segment);
+                    throw new StorageException("Segment has invalid name");
+                }
+            }
         }
     }
 
@@ -116,6 +125,7 @@ public class FileSystemStorageService {
     }
 
     private Path getValidatedFilePath(String path) {
+        validatePaths(path);
         Path resultPath = rootLocation.resolve(path).normalize().toAbsolutePath();
         validateResultPath(resultPath);
         return resultPath;
