@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.*;
+import java.util.Arrays;
 import java.util.Optional;
 
 @Service
@@ -26,16 +27,13 @@ public class FileSystemStorageService {
     public FileSystemStorageService(StorageConfig config) {
         if (config.getDirectory().trim().isEmpty())
             throw new StorageException("Directory for saving files is not specified. Check storage configuration file");
-        rootLocation = Paths.get(config.getDirectory());
+        rootLocation = Paths.get(config.getDirectory()).normalize();
     }
 
     public void store(MultipartFile file) {
         try {
-            String filename = Optional.ofNullable(file.getOriginalFilename())
-                    .orElseThrow(() -> new StorageException("Invalid filename"));
-            checkEmptyFile(file);
+            Path resultDir = getValidatedFilePath(file);
 
-            Path resultDir = getValidatedFilePath(filename);
             try(var inputStream = file.getInputStream()) {
                 Files.copy(inputStream, resultDir, StandardCopyOption.REPLACE_EXISTING);
             }
@@ -46,11 +44,8 @@ public class FileSystemStorageService {
 
     public void store(MultipartFile file, String path) {
         try {
-            String filename = Optional.ofNullable(file.getOriginalFilename())
-                    .orElseThrow(() -> new StorageException("Invalid filename"));
-            checkEmptyFile(file);
+            Path resultDir = getValidatedFilePath(path, file);
 
-            Path resultDir = getValidatedFilePath(path, filename);
             if (!Files.exists(getValidatedFilePath(path)))
                 Files.createDirectories(getValidatedFilePath(path));
             try(var inputStream = file.getInputStream()) {
@@ -65,7 +60,29 @@ public class FileSystemStorageService {
         for (var path : paths) {
             var segments = path.split("[\\\\/]");
             for (var segment: segments) {
-                if (!segment.matches("(^[\\w_-]+.\\w+$)|([a-zA-Z0-9_-]+)")) {
+                if (segment.isEmpty()) {
+                    logger.error("Find empty segment ${}", Arrays.stream(segments).toList());
+                    throw new StorageException("Empty segment");
+                } else if (segment.length() > 255) {
+                    throw new StorageException("Segment length doesn't match maximum OS folder or file length");
+                } else if (!segment.matches("(^[a-zA-Z0-9_-]+\\.[a-zA-Z0-9]+$)|(^[a-zA-Z0-9_-]+$)")) {
+                    logger.error("Segment has invalid name: ${}", segment);
+                    throw new StorageException("Segment has invalid name");
+                }
+            }
+        }
+    }
+
+    private void validatePaths(Path ...paths) {
+        for (var path : paths) {
+            var segments = path.toString().split("[\\\\/]");
+            for (var segment: segments) {
+                if (segment.isEmpty()) {
+                    logger.error("Find empty segment ${}", Arrays.stream(segments).toList());
+                    throw new StorageException("Empty segment");
+                } else if (segment.length() > 255) {
+                    throw new StorageException("Segment length doesn't match maximum OS folder or file length");
+                } else if (!segment.matches("(^[a-zA-Z0-9_-]+\\.[a-zA-Z0-9]+$)|(^[a-zA-Z0-9_-]+$)")) {
                     logger.error("Segment has invalid name: ${}", segment);
                     throw new StorageException("Segment has invalid name");
                 }
@@ -74,7 +91,7 @@ public class FileSystemStorageService {
     }
 
     private void validateResultPath(Path resultDir) {
-        if (!resultDir.startsWith(rootLocation.normalize().toAbsolutePath() + File.separator)) {
+        if (!resultDir.startsWith(rootLocation.toAbsolutePath() + File.separator)) {
             throw new StorageException("The file being uploaded cannot be located outside the upload area.");
         }
     }
@@ -117,15 +134,43 @@ public class FileSystemStorageService {
         }
     }
 
-    private Path getValidatedFilePath(String path, String filename) {
-        validatePaths(path, filename);
+    private Path getValidatedFilePath(String path, MultipartFile file) {
+        checkEmptyFile(file);
+        Path filename = Paths.get(Optional.ofNullable(file.getOriginalFilename())
+                .orElseThrow(() -> new StorageException("Invalid filename"))).normalize();
+        Path normalizedPath = Paths.get(Optional.ofNullable(path)
+                .orElseThrow(() -> new StorageException("Invalid path"))).normalize();
+        validatePaths(normalizedPath, filename);
+        Path resultPath = rootLocation.resolve(path).resolve(filename).normalize().toAbsolutePath();
+        validateResultPath(resultPath);
+        return resultPath;
+    }
+
+    private Path getValidatedFilePath(MultipartFile file) {
+        checkEmptyFile(file);
+        Path filename = Paths.get(Optional.ofNullable(file.getOriginalFilename())
+                .orElseThrow(() -> new StorageException("Invalid filename"))).normalize();
+        validatePaths(filename);
+        Path resultPath = rootLocation.resolve(filename).normalize().toAbsolutePath();
+        validateResultPath(resultPath);
+        return resultPath;
+    }
+
+    private Path getValidatedFilePath(String path, String name) {
+        Path filename = Paths.get(Optional.ofNullable(name)
+                .orElseThrow(() -> new StorageException("Invalid filename"))).normalize();
+        Path normalizedPath = Paths.get(Optional.ofNullable(path)
+                .orElseThrow(() -> new StorageException("Invalid path"))).normalize();
+        validatePaths(normalizedPath, filename);
         Path resultPath = rootLocation.resolve(path).resolve(filename).normalize().toAbsolutePath();
         validateResultPath(resultPath);
         return resultPath;
     }
 
     private Path getValidatedFilePath(String path) {
-        validatePaths(path);
+        Path normalizedPath = Paths.get(Optional.ofNullable(path)
+                .orElseThrow(() -> new StorageException("Invalid path"))).normalize();
+        validatePaths(normalizedPath);
         Path resultPath = rootLocation.resolve(path).normalize().toAbsolutePath();
         validateResultPath(resultPath);
         return resultPath;
