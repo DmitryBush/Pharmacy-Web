@@ -36,8 +36,8 @@ public class FileSystemStorageService {
             checkEmptyFile(file);
             Path resultDir = filePathBuilder.getValidatedFilePath(path, file.getOriginalFilename());
 
-            if (!Files.exists(resultDir))
-                Files.createDirectories(resultDir);
+            if (!Files.exists(filePathBuilder.getValidatedFilePath(path)))
+                Files.createDirectories(Path.of(path));
             try(var inputStream = file.getInputStream()) {
                 Files.copy(inputStream, resultDir, StandardCopyOption.REPLACE_EXISTING);
             }

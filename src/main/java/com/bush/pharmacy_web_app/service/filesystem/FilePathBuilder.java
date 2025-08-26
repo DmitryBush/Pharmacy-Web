@@ -23,20 +23,20 @@ public class FilePathBuilder {
         Path filenamePath = fileNameValidator.getValidatedFileNamePath(fileName);
         Path normalizedPath = getValidatedFilePath(path);
 
-        return normalizedPath.resolve(filenamePath).normalize().toAbsolutePath();
+        var resolvedPath = normalizedPath.resolve(filenamePath).normalize().toAbsolutePath();
+        pathValidator.validateRelativelyRootPath(resolvedPath);
+        return resolvedPath;
     }
 
     public Path getValidatedFilePath(String path) {
-        Path normalizedPath = Paths.get(Optional.ofNullable(path)
-                .orElseThrow(() -> new StorageException("Invalid path"))).normalize();
+        pathValidator.validatePaths(path);
+        Path normalizedPath = Paths.get(path).normalize();
         return buildValidatedPath(normalizedPath);
     }
 
     private Path buildValidatedPath(Path ...paths) {
         var resultPath = rootLocation;
         for (var path : paths) {
-            pathValidator.validatePaths(path);
-
             resultPath = resultPath.resolve(path).normalize().toAbsolutePath();
             pathValidator.validateRelativelyRootPath(resultPath);
         }

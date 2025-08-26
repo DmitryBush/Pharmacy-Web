@@ -30,6 +30,9 @@ public class PathValidator {
 
     public void validatePaths(String ...paths) {
         for (var path : paths) {
+            if (path == null) {
+                throw new StorageException("Invalid filename");
+            }
             if (rootLocation.toString().length() + path.length() > MAX_PATH_LENGTH) {
                 throw new StorageException("Path length doesn't match maximum OS path length");
             }
