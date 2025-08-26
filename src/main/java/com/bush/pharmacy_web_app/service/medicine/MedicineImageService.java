@@ -2,7 +2,7 @@ package com.bush.pharmacy_web_app.service.medicine;
 
 import com.bush.pharmacy_web_app.repository.medicine.MedicineImageRepository;
 import com.bush.pharmacy_web_app.model.entity.medicine.MedicineImage;
-import com.bush.pharmacy_web_app.service.FileSystemStorageService;
+import com.bush.pharmacy_web_app.service.filesystem.FileSystemStorageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;

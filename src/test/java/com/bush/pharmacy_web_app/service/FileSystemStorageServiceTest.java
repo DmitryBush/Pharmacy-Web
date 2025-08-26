@@ -2,6 +2,7 @@ package com.bush.pharmacy_web_app.service;
 
 import com.bush.pharmacy_web_app.config.StorageConfig;
 import com.bush.pharmacy_web_app.service.exception.StorageException;
+import com.bush.pharmacy_web_app.service.filesystem.FileSystemStorageService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
