@@ -97,7 +97,7 @@ public class FileSystemStorageService {
             throw new StorageException("File length doesn't match maximum OS file length");
         else if (filename.toString().contains("..") || filename.toString().contains("/")
                 || filename.toString().contains("\\"))
-            throw new StorageException("Path has invalid characters");
+            throw new StorageException("File has invalid characters");
     }
 
     private void validateResultPath(Path resultDir) {

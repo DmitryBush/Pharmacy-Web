@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 public class IconService {
     private final FileSystemStorageService storageService;
 
-    public Resource findIconByName(String name, String folder) {
-        return storageService.loadAsResource(String.format("icons/%s", folder), name);
+    public Resource findAdminIconByName(String name) {
+        return storageService.loadAsResource("icons/admin", name);
     }
 }
