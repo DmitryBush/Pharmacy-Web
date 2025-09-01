@@ -100,7 +100,7 @@ public class MedicineService {
                                                         .stream()
                                                         .filter(Predicate.not(MultipartFile::isEmpty))
                                                         .forEach(file -> imageService.createImage(file,
-                                                                String.format("medicine/%d/", medicine.getId()))));
+                                                                String.format("medicine/%d", medicine.getId()))));
                                 }
                             }
                     );

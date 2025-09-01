@@ -2,6 +2,8 @@ package com.bush.pharmacy_web_app.service.filesystem;
 
 import com.bush.pharmacy_web_app.service.exception.StorageException;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
@@ -14,6 +16,8 @@ import java.nio.file.*;
 @Service
 @RequiredArgsConstructor
 public class FileSystemStorageService {
+    private final Logger logger = LoggerFactory.getLogger(FileSystemStorageService.class);
+
     private final FilePathBuilder filePathBuilder;
 
     private final Path rootLocation;
@@ -27,6 +31,7 @@ public class FileSystemStorageService {
                 Files.copy(inputStream, resultDir, StandardCopyOption.REPLACE_EXISTING);
             }
         } catch (IOException e) {
+            logger.error(e.getMessage());
             throw new StorageException("An error occurred while saving the file", e);
         }
     }
@@ -35,13 +40,13 @@ public class FileSystemStorageService {
         try {
             checkEmptyFile(file);
             Path resultDir = filePathBuilder.getValidatedFilePath(path, file.getOriginalFilename());
-
             if (!Files.exists(filePathBuilder.getValidatedFilePath(path)))
-                Files.createDirectories(Path.of(path));
+                Files.createDirectories(filePathBuilder.getValidatedFilePath(path));
             try(var inputStream = file.getInputStream()) {
                 Files.copy(inputStream, resultDir, StandardCopyOption.REPLACE_EXISTING);
             }
         } catch (IOException e) {
+            logger.error(e.getMessage());
             throw new StorageException("An error occurred while saving the file", e);
         }
     }
@@ -68,6 +73,7 @@ public class FileSystemStorageService {
                 }
             }
         } catch (IOException e) {
+            logger.error(e.getMessage());
             throw new StorageException(e.getMessage());
         }
     }
@@ -81,8 +87,10 @@ public class FileSystemStorageService {
                 return resource;
             }
 
+            logger.error(filePath.toString());
             throw new StorageException("Unable to read file");
         } catch (MalformedURLException e) {
+            logger.error(e.getMessage());
             throw new RuntimeException(e);
         }
     }
