@@ -364,7 +364,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 searchElement.querySelector('#postalCode').value = result.address.postalCode;
             } else if (searchEndpoint === 'country') {
-                searchElement.querySelector('#county').value = result.country;
+                searchElement.querySelector('#country').value = result.country;
             }
             blockInput(searchElement);
         } catch (error) {
