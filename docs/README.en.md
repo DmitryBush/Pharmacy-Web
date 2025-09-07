@@ -1,5 +1,5 @@
 # Pharmacy Web
-[![ru](https://img.shields.io/badge/lang-ru-red.svg)](https://github.com/DmitryBush/MTPL-Insurance_Calculator/blob/main/README.md)
+[![ru](https://img.shields.io/badge/lang-ru-red.svg)](../README.md)
 ## Description
 This is a fullstack (backend-oriented) information system
 for automating business processes of a pharmacy chain.
@@ -61,7 +61,7 @@ Build and run the project
 ```
 
 4. Access the application
-- Admin panel: `http://localhost:8080/admin/dashboard` ([Interface example](docs/dashboard.png))
+- Admin panel: `http://localhost:8080/admin/dashboard` ([Interface example](dashboard.png))
 - Main page: `http://localhost:8080`
 
 ## Roadmap

@@ -1,5 +1,5 @@
 # Pharmacy Web
-[![en](https://img.shields.io/badge/lang-en-red.svg)](https://github.com/DmitryBush/MTPL-Insurance_Calculator/blob/main/README.en.md)
+[![en](https://img.shields.io/badge/lang-en-red.svg)](/docs/README.en.md)
 ## Описание
 Это fullstack (ориентированная на backend) информационная система 
 для автоматизации бизнес процессов аптечной сети.  
