@@ -1,4 +1,4 @@
-package com.bush.pharmacy_web_app.service.user;
+package com.bush.pharmacy_web_app.service.cart;
 
 import com.bush.pharmacy_web_app.repository.user.CartRepository;
 import com.bush.pharmacy_web_app.model.dto.cart.CartCreateDto;
