@@ -20,10 +20,9 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.btn-update').forEach((item) => {
         item.addEventListener('click', e => {
                 try {
-                    const productId = e.target.dataset.id;
-                    if (!/^\d+$/.test(productId))
-                        throw new Error('Произошла критическая ошибка при подготовке ресурсов. ' +
-                            'Обратитесь к вашему администратору');
+                    const productId = e.currentTarget.dataset.id;
+                    testProductId(productId);
+
                     window.location.replace(`/admin/product/${encodeURIComponent(productId)}`);
                 } catch (e) {
                     console.error(e);
@@ -36,11 +35,18 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.btn-delete').forEach(button => {
         button.addEventListener('click', e => {
             e.preventDefault();
-            const productId = e.target.dataset.id;
+            const productId = e.currentTarget.dataset.id;
+            testProductId(productId);
 
             deleteProduct(productId);
         });
     });
+
+    function testProductId(productId) {
+        if (!(/^\d+$/.test(productId)))
+            throw new Error('Произошла критическая ошибка при подготовке ресурсов. ' +
+                'Обратитесь к вашему администратору');
+    }
 
     function deleteProduct(productId) {
         if (!confirm('Удалить продукт?')) return;
