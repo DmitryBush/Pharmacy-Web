@@ -64,8 +64,9 @@ document.addEventListener("DOMContentLoaded", () => {
                         await restClient.fetchData(`/api/v1/search/type/by-name?type=${encodeURI(categoryName)}`,
                             'GET');
                     } catch (error) {
-                        if (error?.message !== 404)
+                        if (error?.message !== '404') {
                             throw error;
+                        }
                     }
                     const parentCategory = titleStack.length > 1
                         ? titleStack[titleStack.length - 1]
@@ -204,7 +205,7 @@ document.addEventListener("DOMContentLoaded", () => {
                             await restClient.fetchData(`/api/v1/search/type/by-name?type=${encodeURI(newCategoryName)}`,
                                 'GET', {}, {});
                         } catch (error) {
-                            if (error?.message !== 404)
+                            if (error?.message !== '404')
                                 throw error;
                         }
 

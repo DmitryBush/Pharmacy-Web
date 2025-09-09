@@ -21,3 +21,5 @@ logging:
 
 storage:
   directory: files
+  max-path-length: 4096
+  MAX_PATH_SEGMENT_LENGTH: 255
