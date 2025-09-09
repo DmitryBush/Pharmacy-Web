@@ -13,4 +13,8 @@ public class IconService {
     public Resource findAdminIconByName(String name) {
         return storageService.loadAsResource("icons/admin", name);
     }
+
+    public Resource findHeaderIconByName(String name) {
+        return storageService.loadAsResource("icons/header", name);
+    }
 }

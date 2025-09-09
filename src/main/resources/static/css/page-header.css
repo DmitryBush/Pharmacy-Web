@@ -132,24 +132,19 @@
 
 .user-actions {
     display: flex;
-    gap: 15px;
+    gap: 35px;
 }
 
 .icon-btn {
-    background: #f1f6ff;
-    color: #2c6baf;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
+    width: 32px;
+    height: 32px;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     position: relative;
-}
-
-.icon-btn:hover {
-    background: #e0ebff;
+    background: transparent;
+    border: none;
 }
 
 .icon-btn .count {
@@ -159,8 +154,6 @@
     background: #ff5a5a;
     color: white;
     font-size: 0.7rem;
-    width: 20px;
-    height: 20px;
     border-radius: 50%;
     display: flex;
     align-items: center;
