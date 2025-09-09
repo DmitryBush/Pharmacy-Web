@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+    <div class="container">
+        <header th:fragment="page-header" class="page-header">
+            <a href="/">
+                <img src="/api/v1/admin" class="logo" alt="Аптека">
+            </a>
+            <button class="btn btn-catalog">
+                Каталог
+            </button>
+            <div class="search-container">
+                <input id="search-field" class="search-field" type="text" placeholder="Поиск по препарату">
+                <button class="search-button"></button>
+                <div id="search-result-container" class="search-result-container"></div>
+            </div>
+            <div class="user-actions">
+                <button class="icon-btn">
+                    Список желаемого
+                </button>
+                <button class="icon-btn">
+                    Корзина
+                </button>
+                <button class="icon-btn">
+                    Пользователь
+                </button>
+            </div>
+            <link href="/css/page-header.css" rel="stylesheet">
+        </header>
+    </div>
+</body>
+</html>

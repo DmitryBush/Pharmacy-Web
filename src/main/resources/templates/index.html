@@ -1,63 +1,67 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Аптека</title>
 </head>
 <body>
-    <h1>Аптека "Здоровье"</h1>
-    <div class="category">
-        <h2>Лекарства и препараты</h2>
-        <ul class="product-list">
-            <li class="product-item">
-                <span class="product-name">Нурофен (таблетки, 20 шт.)</span>
-                <span class="product-price">₽ 350</span>
-            </li>
-            <li class="product-item">
-                <span class="product-name">Активированный уголь (10 пак.)</span>
-                <span class="product-price">₽ 120</span>
-            </li>
-            <li class="product-item">
-                <span class="product-name">Стрепсилс (24 шт.)</span>
-                <span class="product-price">₽ 450</span>
-            </li>
-        </ul>
-    </div>
+    <div th:replace="~{/page-header.html :: page-header}"></div>
+    <main class="main-content">
+        <h1>Аптека "Здоровье"</h1>
+        <div class="category">
+            <h2>Лекарства и препараты</h2>
+            <ul class="product-list">
+                <li class="product-item">
+                    <span class="product-name">Нурофен (таблетки, 20 шт.)</span>
+                    <span class="product-price">₽ 350</span>
+                </li>
+                <li class="product-item">
+                    <span class="product-name">Активированный уголь (10 пак.)</span>
+                    <span class="product-price">₽ 120</span>
+                </li>
+                <li class="product-item">
+                    <span class="product-name">Стрепсилс (24 шт.)</span>
+                    <span class="product-price">₽ 450</span>
+                </li>
+            </ul>
+        </div>
 
-    <div class="category">
-        <h2>Витамины и БАДы</h2>
-        <ul class="product-list">
-            <li class="product-item">
-                <span class="product-name">Компливит (60 таб.)</span>
-                <span class="product-price">₽ 550</span>
-            </li>
-            <li class="product-item">
-                <span class="product-name">Магний B6 (30 капс.)</span>
-                <span class="product-price">₽ 890</span>
-            </li>
-            <li class="product-item">
-                <span class="product-name">Омега-3 (60 капс.)</span>
-                <span class="product-price">₽ 670</span>
-            </li>
-        </ul>
-    </div>
+        <div class="category">
+            <h2>Витамины и БАДы</h2>
+            <ul class="product-list">
+                <li class="product-item">
+                    <span class="product-name">Компливит (60 таб.)</span>
+                    <span class="product-price">₽ 550</span>
+                </li>
+                <li class="product-item">
+                    <span class="product-name">Магний B6 (30 капс.)</span>
+                    <span class="product-price">₽ 890</span>
+                </li>
+                <li class="product-item">
+                    <span class="product-name">Омега-3 (60 капс.)</span>
+                    <span class="product-price">₽ 670</span>
+                </li>
+            </ul>
+        </div>
 
-    <div class="category">
-        <h2>Средства личной гигиены</h2>
-        <ul class="product-list">
-            <li class="product-item">
-                <span class="product-name">Медицинская маска (50 шт.)</span>
-                <span class="product-price">₽ 300</span>
-            </li>
-            <li class="product-item">
-                <span class="product-name">Антисептик для рук 100 мл</span>
-                <span class="product-price">₽ 250</span>
-            </li>
-            <li class="product-item">
-                <span class="product-name">Пластырь бактерицидный (10 шт.)</span>
-                <span class="product-price">₽ 85</span>
-            </li>
-        </ul>
-    </div>
+        <div class="category">
+            <h2>Средства личной гигиены</h2>
+            <ul class="product-list">
+                <li class="product-item">
+                    <span class="product-name">Медицинская маска (50 шт.)</span>
+                    <span class="product-price">₽ 300</span>
+                </li>
+                <li class="product-item">
+                    <span class="product-name">Антисептик для рук 100 мл</span>
+                    <span class="product-price">₽ 250</span>
+                </li>
+                <li class="product-item">
+                    <span class="product-name">Пластырь бактерицидный (10 шт.)</span>
+                    <span class="product-price">₽ 85</span>
+                </li>
+            </ul>
+        </div>
+    </main>
+    <div th:replace="~{/page-footer.html :: page-footer}"></div>
 </body>
 </html>
