@@ -8,7 +8,7 @@
     grid-template-columns: auto auto 1fr auto auto auto;
     align-items: center;
     gap: 20px;
-    padding: 15px 30px;
+    padding: 5px 30px;
     background-color: rgba(246, 246, 246, 0.84);
     box-shadow: 4px 4px 9px rgba(0, 0, 0, 0.125), -4px -4px 9px rgba(0, 0, 0, 0.125), inset 0 0 0 1px rgba(0, 0, 0, 0.03);
     backdrop-filter: blur(80px) saturate(180%);
@@ -57,6 +57,7 @@
     display: flex;
     align-items: center;
     gap: 8px;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .btn:hover {
@@ -105,10 +106,11 @@
     height: 40px;
     border: none;
     cursor: pointer;
-    border-radius: 10px;
+    border-radius: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .search-button:hover {
@@ -132,7 +134,7 @@
 
 .user-actions {
     display: flex;
-    gap: 35px;
+    gap: 15px;
 }
 
 .icon-btn {
@@ -146,6 +148,14 @@
     border: none;
     text-decoration: none;
     color: inherit;
+    padding: 12px 12px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.icon-btn:hover {
+    background: #EEEEEE;
+    color: #00539B;
+    border-radius: 8px;
 }
 
 .icon-btn .count {
