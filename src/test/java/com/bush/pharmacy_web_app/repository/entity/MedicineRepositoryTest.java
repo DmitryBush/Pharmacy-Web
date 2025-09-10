@@ -1,6 +1,6 @@
 package com.bush.pharmacy_web_app.repository.entity;
 
-import com.bush.pharmacy_web_app.repository.MedicineRepository;
+import com.bush.pharmacy_web_app.repository.medicine.MedicineRepository;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Tag;

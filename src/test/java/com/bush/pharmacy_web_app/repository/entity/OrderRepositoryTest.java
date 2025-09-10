@@ -1,9 +1,10 @@
 package com.bush.pharmacy_web_app.repository.entity;
 
-import com.bush.pharmacy_web_app.repository.UserRepository;
-import com.bush.pharmacy_web_app.repository.OrderRepository;
-import com.bush.pharmacy_web_app.repository.PharmacyBranchRepository;
-import com.bush.pharmacy_web_app.repository.entity.order.Order;
+import com.bush.pharmacy_web_app.repository.user.UserRepository;
+import com.bush.pharmacy_web_app.repository.order.OrderRepository;
+import com.bush.pharmacy_web_app.repository.branch.PharmacyBranchRepository;
+import com.bush.pharmacy_web_app.model.entity.order.Order;
+import com.bush.pharmacy_web_app.model.entity.order.state.OrderState;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Tag;
@@ -41,17 +42,17 @@ public class OrderRepositoryTest {
     public void findCustomerOrdersByPhone() {
         var orders = orderRepository.findByUserMobilePhone("+79162345678", page);
         orders.stream()
-                .flatMap(lamb -> lamb.getCartItems().stream())
+                .flatMap(lamb -> lamb.getOrderItemList().stream())
                 .forEach(System.out::println);
 
         Assertions.assertNotNull(orders);
     }
     @Test
     public void createOrder() {
-        var pharmacyBranch = pharmacyBranchRepository.findById(1).orElseThrow();
+        var pharmacyBranch = pharmacyBranchRepository.findById(1L).orElseThrow();
         var customer = userRepository.findById("+79192345678").orElseThrow();
         Order order = Order.builder()
-                .statusOrder((short) 1)
+                .status(OrderState.DECOR)
                 .date(Instant.now())
                 .branch(pharmacyBranch)
                 .user(customer)
@@ -62,7 +63,7 @@ public class OrderRepositoryTest {
     public void updateOrder() {
         var order = orderRepository.findById(5L).orElseThrow();
 
-        order.setStatusOrder((short) 0);
+        order.setStatus(OrderState.PAYMENT_AWAIT);
         Assertions.assertEquals(order, orderRepository.save(order));
     }
 }

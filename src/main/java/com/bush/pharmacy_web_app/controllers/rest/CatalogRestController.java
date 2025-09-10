@@ -1,7 +1,7 @@
 package com.bush.pharmacy_web_app.controllers.rest;
 
-import com.bush.pharmacy_web_app.repository.dto.orders.PharmacyBranchReadDto;
-import com.bush.pharmacy_web_app.service.MedicineService;
+import com.bush.pharmacy_web_app.model.dto.warehouse.PharmacyBranchReadDto;
+import com.bush.pharmacy_web_app.service.medicine.MedicineService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,8 +17,8 @@ import java.util.List;
 public class CatalogRestController {
     private final MedicineService service;
 
-    @GetMapping("/{id}")
-    public ResponseEntity<List<PharmacyBranchReadDto>> getAvailability(@PathVariable Long id) {
+    @GetMapping("/availability/{id}")
+    public ResponseEntity<List<PharmacyBranchReadDto>> getBranchesWithProduct(@PathVariable Long id) {
         return ResponseEntity.ok(service.findBranchesMedicineLocated(id));
     }
 }

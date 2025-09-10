@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Выбор склада</title>
+    <link href="/css/admin/warehouse.css" rel="stylesheet">
+    <script src="/js/admin/warehouse.js" type="module"></script>
+</head>
+<body>
+    <div th:replace="~{/admin/sidebar/sidebar.html :: sidebar}"></div>
+    <main class="main-content">
+      <h1 class="page-title">Выбор склада</h1>
+      <div class="page-container">
+        <div class="branches-container" id="branches-list">
+          <div class="branch-card" th:each="branch : ${branches}">
+            <div class="branch-header">
+                <a class="branch-link" th:href="@{/admin/warehouse/{id}(id=${branch.id})}">
+                    <h4 class="branch-title">[(${branch.name})]</h4>
+                </a>
+                <p class="branch-status-active" th:if="${branch.isActive}">Активен</p>
+                <p class="branch-status-deactivated" th:unless="${branch.isActive}">Не активен</p>
+                <p class="branch-city" th:text="${branch.address.settlement}"></p>
+            </div>
+            <div class="branch-body">
+                <p>
+                    <strong>Адрес:</strong> [(${branch.address.subject})], [(${branch.address.settlement})],
+                    [(${branch.address.street})], [(${branch.address.house})]
+                </p>
+                <div class="working-hours">
+                    <strong>Часы работы:</strong>
+                    <ul class="hours-list">
+                        <li th:each="hours : ${branch.openingHours}"
+                            th:text="${hours}"></li>
+                    </ul>
+                </div>
+                <p>
+                    <strong>Контактный номер:</strong> [(${branch.branchPhone})]
+                </p>
+                <p>
+                    <strong>Директор филиала:</strong> [(${branch.supervisor.surname})] [(${branch.supervisor.name})]
+                    [(${branch.supervisor.lastName})]
+                </p>
+              <button class="branch-more-det" th:data-id="${branch.id}">Выбрать</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+</body>
+</html>

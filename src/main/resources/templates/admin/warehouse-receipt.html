@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Поступление товара</title>
+    <meta th:name="_csrf" th:content="${_csrf.token}">
+    <link href="/css/admin/warehouse-receipt.css" rel="stylesheet" type="text/css">
+    <link href="/css/notification/notification.css" rel="stylesheet" type="text/css">
+    <script src="/js/admin/warehouse-receipt.js" type="module"></script>
+</head>
+<body>
+    <div id="branch-id" typeof="hidden" th:data-branchid="${branchId}"></div>
+    <div th:replace="~{/admin/sidebar/sidebar.html :: sidebar}"></div>
+    <main class="main-content">
+        <div class="search-backdrop" style="display: none" id="search-backdrop"></div>
+        <div id="search-container" class="search-container" style="display: none">
+            <label for="search-field">
+                <input id="search-field" class="search-field" type="text" placeholder="Поиск">
+            </label>
+            <div id="search-result-container" class="search-result-container"></div>
+        </div>
+        <h1 class="page-title">Оформление поступления на склад</h1>
+        <div class="page-container">
+            <div>
+                <button id="search-btn" class="action-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+                    </svg>
+                    Добавить продукт из базы данных
+                </button>
+            </div>
+            <div class="product-list" id="product-list"></div>
+            <div class="action-footer" id="action-footer" style="display: none">
+                <div class="items-count">Оформление товаров: <span id="items-counter">0</span> изменений</div>
+                <div class="footer-actions">
+                    <button class="save-btn" id="save-btn">Сохранить</button>
+                    <button class="cancel-btn" id="cancel-btn">Отменить</button>
+                </div>
+            </div>
+        </div>
+        <div id="notification-container"></div>
+    </main>
+</body>
+</html>

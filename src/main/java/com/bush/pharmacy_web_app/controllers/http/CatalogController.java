@@ -1,7 +1,8 @@
 package com.bush.pharmacy_web_app.controllers.http;
 
-import com.bush.pharmacy_web_app.repository.filter.MedicineFilter;
-import com.bush.pharmacy_web_app.service.MedicineService;
+import com.bush.pharmacy_web_app.repository.medicine.filter.MedicineFilter;
+import com.bush.pharmacy_web_app.service.medicine.MedicineService;
+import com.bush.pharmacy_web_app.service.medicine.MedicineTypeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -16,16 +17,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/catalog")
 @RequiredArgsConstructor
 public class CatalogController {
+    private final MedicineTypeService typeService;
     private final MedicineService service;
 
     @GetMapping
-    public String findAllProducts(Model model,
+    public String showAllProducts(Model model,
                                   MedicineFilter filter,
                                   @PageableDefault(size = 15, sort = "price", direction = Sort.Direction.ASC)
                                        Pageable pageable) {
-        var page = service.findAll(filter, pageable);
+        var page = service.findAllPreviews(filter, pageable);
 
-        model.addAttribute("types", service.findAllTypes());
+        model.addAttribute("types", typeService.findAllTypes());
         model.addAttribute("manufacturers", service.findAllManufacturers());
         model.addAttribute("medicines", page);
         return "catalog/catalog";
@@ -34,7 +36,7 @@ public class CatalogController {
     @GetMapping("/{id}")
     public String getProduct(Model model,
                              @PathVariable Long id) {
-        var product = service.findById(id).orElseThrow();
+        var product = service.findMedicineById(id).orElseThrow();
 
         model.addAttribute("product", product);
         return "catalog/product";

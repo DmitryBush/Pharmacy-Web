@@ -1,4 +1,8 @@
 spring:
+  servlet:
+    multipart:
+      max-file-size=5MB
+      max-request-size=512KB
   datasource:
     url: jdbc:postgresql://localhost:5432/pharmacies
     username: postgres
@@ -10,3 +14,12 @@ spring:
       show_sql: true
       format_sql: true
       hbm2ddl.auto: validate
+
+logging:
+  level:
+    org.springframework.security: trace
+
+storage:
+  directory: files
+  max-path-length: 4096
+  MAX_PATH_SEGMENT_LENGTH: 255

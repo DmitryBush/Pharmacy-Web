@@ -1,7 +1,8 @@
 package com.bush.pharmacy_web_app.service;
 
-import com.bush.pharmacy_web_app.repository.dto.orders.CustomerCreateDto;
-import com.bush.pharmacy_web_app.repository.dto.orders.CustomerReadDto;
+import com.bush.pharmacy_web_app.model.dto.user.CustomerCreateDto;
+import com.bush.pharmacy_web_app.model.dto.user.CustomerReadDto;
+import com.bush.pharmacy_web_app.service.user.UserService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -34,20 +35,22 @@ public class UserServiceTest {
     }
     @Test
     public void createCustomer() {
-        var expectedDto = new CustomerReadDto("+796010712089", "Камилла",
-                "Казакова", "Егоровна", Collections.emptyList());
-        var readDto = service.create(new CustomerCreateDto("+796010712089", "Камилла",
-                "Казакова", "Егоровна"));
+        String id = "+796010712089";
+        var expectedDto = new CustomerReadDto("Камилла", "Казакова",
+                "Егоровна", id, Collections.emptyList());
+        var readDto = service.create(new CustomerCreateDto("Камилла", "Казакова",
+                "Егоровна", id, id));
         Assertions.assertEquals(expectedDto, readDto);
     }
     @Test
     public void updateCustomer() {
         String id = "+796010712089";
-        service.create(new CustomerCreateDto(id,"Камилла","Казакова", "Егоровна"));
+        service.create(new CustomerCreateDto("Камилла","Казакова", "Егоровна", id, id));
 
         var expected = new CustomerReadDto(id,"Камилла","Казакова", "Викторовна",
                 Collections.emptyList());
-        var actual = service.update(id, new CustomerCreateDto(id,"Камилла","Казакова", "Викторовна"));
+        var actual = service.update(id,
+                new CustomerCreateDto("Камилла","Казакова", "Викторовна", id, id));
 
         actual.ifPresent(lamb -> Assertions.assertEquals(expected, actual.orElseThrow()));
     }
@@ -55,7 +58,7 @@ public class UserServiceTest {
     @Transactional
     public void deleteCustomer() {
         String id = "+796010712089";
-        service.create(new CustomerCreateDto(id,"Камилла","Казакова", "Егоровна"));
+        service.create(new CustomerCreateDto("Камилла","Казакова", "Егоровна", id, id));
         Assertions.assertTrue(service.delete(id));
     }
 }
