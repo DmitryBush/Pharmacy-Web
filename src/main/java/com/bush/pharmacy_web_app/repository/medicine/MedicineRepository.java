@@ -1,5 +1,6 @@
 package com.bush.pharmacy_web_app.repository.medicine;
 
+import com.bush.pharmacy_web_app.model.dto.medicine.MedicinePreviewReadDto;
 import com.bush.pharmacy_web_app.model.entity.manufacturer.Manufacturer;
 import com.bush.pharmacy_web_app.model.entity.medicine.Medicine;
 import com.bush.pharmacy_web_app.repository.medicine.filter.FilterMedicineRepository;
@@ -39,4 +40,7 @@ public interface MedicineRepository extends JpaRepository<Medicine, Long>, Filte
             WHERE pc.category_id IN (SELECT type_id FROM subcategories)
             """, nativeQuery = true)
     List<Medicine> findAllMedicineByTypeId(@PathVariable Integer typeId);
+
+    @Query("select m from Medicine m order by random() limit :count")
+    List<Medicine> findRandomMedicine(@PathVariable Integer count);
 }

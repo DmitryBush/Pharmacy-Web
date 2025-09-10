@@ -50,6 +50,12 @@ public class MedicineService {
                 .map(medicinePreviewReadMapper::map);
     }
 
+    public List<MedicinePreviewReadDto> findRandomMedicine(Integer count) {
+        return medicineRepository.findRandomMedicine(count).stream()
+                .map(medicinePreviewReadMapper::map)
+                .toList();
+    }
+
     public List<MedicineManufacturerDto> findAllManufacturers() {
         return medicineRepository.findDistinctMedicineManufacturer().stream()
                 .map(manufacturer -> new MedicineManufacturerDto(manufacturer.getName()))
