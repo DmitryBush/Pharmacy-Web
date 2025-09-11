@@ -20,14 +20,14 @@ public class DailyFeaturedProductService {
     private final DailyFeaturedProductChangelogService changelogService;
 
     @Transactional
-    public void createDayFeaturedProducts(List<MedicinePreviewReadDto> products) {
+    public void createDailyFeaturedProducts(List<MedicinePreviewReadDto> products) {
         if (products == null) {
             throw new NullPointerException("Products should not be null");
         }
 
         var distinctProducts = products.stream().distinct().toList();
-        if (distinctProducts.size() < 5) {
-            throw new IllegalArgumentException("List size is less than 5");
+        if (distinctProducts.size() < products.size()) {
+            throw new IllegalArgumentException("Duplicates found in products");
         }
 
         var featuredProducts = IntStream.range(0, distinctProducts.size())
@@ -35,11 +35,13 @@ public class DailyFeaturedProductService {
                         medicineRepository.getReferenceById(distinctProducts.get(identifier).id())))
                 .toList();
 
+        productsRepository.deleteAllInBatch();
         productsRepository.saveAll(featuredProducts);
         changelogService.createLog();
     }
 
-    public void deleteAllFeaturedProducts() {
+    @Transactional
+    public void deleteAllDailyFeaturedProducts() {
         productsRepository.deleteAll();
     }
 }
