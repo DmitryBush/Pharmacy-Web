@@ -4,17 +4,19 @@
     <meta charset="UTF-8">
     <title>Аптека</title>
     <link href="/css/index.css" rel="stylesheet">
+    <link href="/css/product.css" rel="stylesheet">
+    <script src="/js/index.js" type="module"></script>
 </head>
 <body>
     <div th:replace="~{/page-header.html :: page-header}"></div>
     <main class="main-content">
-        <div class="day-product-section">
+        <div class="day-product-section" id="daily-product-section">
             <h2>Товары дня</h2>
-            <div class="product-section"></div>
+            <div class="product-container"></div>
         </div>
         <div class="bestseller-section">
             <h2>Хиты продаж</h2>
-            <div class="product-section"></div>
+            <div class="product-container"></div>
         </div>
         <div class="promotion-section">
             <h2>Акции</h2>

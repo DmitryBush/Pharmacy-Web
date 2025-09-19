@@ -29,4 +29,4 @@ time:
 
 daily-featured-products:
   update-cron: "* 30 0 * * *"
-  count: 5
+  count: 8

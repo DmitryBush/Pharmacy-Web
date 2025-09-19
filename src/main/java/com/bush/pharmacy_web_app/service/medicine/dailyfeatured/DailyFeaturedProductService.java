@@ -4,6 +4,7 @@ import com.bush.pharmacy_web_app.model.dto.medicine.MedicinePreviewReadDto;
 import com.bush.pharmacy_web_app.model.entity.medicine.dailyfeatured.DailyFeaturedProduct;
 import com.bush.pharmacy_web_app.repository.medicine.MedicineRepository;
 import com.bush.pharmacy_web_app.repository.medicine.dailyfeatured.DailyFeaturedProductsRepository;
+import com.bush.pharmacy_web_app.service.medicine.mapper.MedicinePreviewReadMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,11 +14,14 @@ import java.util.stream.IntStream;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class DailyFeaturedProductService {
     private final DailyFeaturedProductsRepository productsRepository;
     private final MedicineRepository medicineRepository;
 
     private final DailyFeaturedProductChangelogService changelogService;
+
+    private final MedicinePreviewReadMapper medicinePreviewReadMapper;
 
     @Transactional
     public void createDailyFeaturedProducts(List<MedicinePreviewReadDto> products) {
@@ -43,5 +47,13 @@ public class DailyFeaturedProductService {
     @Transactional
     public void deleteAllDailyFeaturedProducts() {
         productsRepository.deleteAll();
+    }
+
+    public List<MedicinePreviewReadDto> findDailyMedicine() {
+        return productsRepository.findAll()
+                .stream()
+                .map(DailyFeaturedProduct::getProduct)
+                .map(medicinePreviewReadMapper::map)
+                .toList();
     }
 }

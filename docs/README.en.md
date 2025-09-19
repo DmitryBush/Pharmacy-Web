@@ -71,7 +71,7 @@ Build and run the project
 - [x] Product type management
 - [x] Product management
 - [ ] Staff management
-### Public interface
+### Client interface
 - [ ] Main page
 - [ ] Product catalog
 - [ ] Order creation

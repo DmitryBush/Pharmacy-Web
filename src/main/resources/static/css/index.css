@@ -22,9 +22,11 @@ h2 {
     padding-bottom: 8px;
 }
 
-.product-section {
+.product-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 25px;
     min-height: 200px;
-    /*background: #f8f9fa;*/
     border-radius: 6px;
     padding: 15px;
     margin: 15px 0;
