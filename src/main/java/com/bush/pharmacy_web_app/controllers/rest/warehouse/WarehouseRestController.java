@@ -1,6 +1,6 @@
 package com.bush.pharmacy_web_app.controllers.rest.warehouse;
 
-import com.bush.pharmacy_web_app.model.dto.warehouse.InventoryReceiptRequestDto;
+import com.bush.pharmacy_web_app.model.dto.warehouse.InventoryRequestDto;
 import com.bush.pharmacy_web_app.model.dto.warehouse.StorageItemsReadDto;
 import com.bush.pharmacy_web_app.service.branch.StorageService;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +30,7 @@ public class WarehouseRestController {
             "@SecurityValidation.checkUserBranchAccess(#userDetails, #productList.branchId)")
     @PostMapping("/inventory-receipts")
     public ResponseEntity<List<StorageItemsReadDto>> createInventoryReceipt(@AuthenticationPrincipal UserDetails userDetails,
-                                                                            @RequestBody InventoryReceiptRequestDto productList) {
+                                                                            @RequestBody InventoryRequestDto productList) {
         try {
             return ResponseEntity.ok(storageService.createInventoryReceiptByBranchId(productList));
         } catch (IllegalArgumentException e) {
