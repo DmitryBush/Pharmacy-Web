@@ -5,6 +5,7 @@ import com.bush.pharmacy_web_app.model.dto.warehouse.StorageItemCreateDto;
 import com.bush.pharmacy_web_app.model.dto.warehouse.StorageItemsReadDto;
 import com.bush.pharmacy_web_app.model.dto.warehouse.TransactionCreateDto;
 import com.bush.pharmacy_web_app.model.entity.branch.transaction.TransactionName;
+import com.bush.pharmacy_web_app.model.entity.branch.transaction.TransactionType;
 import com.bush.pharmacy_web_app.repository.branch.PharmacyBranchRepository;
 import com.bush.pharmacy_web_app.repository.branch.TransactionHistoryRepository;
 import com.bush.pharmacy_web_app.repository.branch.TransactionTypeRepository;
@@ -12,6 +13,8 @@ import com.bush.pharmacy_web_app.repository.medicine.MedicineRepository;
 import com.bush.pharmacy_web_app.repository.order.OrderRepository;
 import com.bush.pharmacy_web_app.service.branch.mapper.TransactionCreateMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,25 +36,32 @@ public class TransactionService {
 
     private final StorageService storageService;
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'OPERATOR') and " +
+            "@SecurityValidation.checkUserBranchAccess(#userDetails, #transactionInfo.branchId)")
     @Transactional
-    public List<StorageItemsReadDto> createTransaction(TransactionCreateDto createDto) {
-        var order = Optional.ofNullable(createDto.orderId())
+    public List<StorageItemsReadDto> createReceiptTransaction(UserDetails userDetails,
+                                                              TransactionCreateDto transactionInfo) {
+        var transactionType = typeRepository.getReferenceById(TransactionName.RECEIVING.ordinal());
+        createTransaction(transactionInfo, transactionType);
+
+        var inventoryRequestDto = new InventoryRequestDto(transactionInfo.branchId(), transactionInfo.transactionItemsList());
+        return storageService.createInventoryReceiptByBranchId(inventoryRequestDto);
+    }
+
+    private void createTransaction(TransactionCreateDto transactionInfo, TransactionType transactionType) {
+        var order = Optional.ofNullable(transactionInfo.orderId())
                 .map(orderRepository::getReferenceById)
                 .orElse(null);
-        var branch = Optional.ofNullable(createDto.branchId())
+        var branch = Optional.ofNullable(transactionInfo.branchId())
                 .map(branchRepository::getReferenceById)
                 .orElseThrow(IllegalArgumentException::new);
-        var transactionType = Optional.ofNullable(createDto.transactionType())
-                .map(TransactionName::ordinal)
-                .map(typeRepository::getReferenceById)
-                .orElseThrow(IllegalArgumentException::new);
-        var transactionItems = Optional.ofNullable(createDto.transactionItemsList())
+        var transactionItems = Optional.ofNullable(transactionInfo.transactionItemsList())
                 .map(transactionItemsList -> transactionItemsList.stream()
                         .map(StorageItemCreateDto::medicineId)
                         .map(medicineRepository::getReferenceById)
                         .toList())
                 .orElseThrow(IllegalArgumentException::new);
-        Optional.of(createDto)
+        Optional.of(transactionInfo)
                 .map(transactionCreateMapper::map)
                 .map(transaction -> {
                     transaction.setType(transactionType);
@@ -61,14 +71,17 @@ public class TransactionService {
                     return transaction;
                 })
                 .map(transactionRepository::save);
+    }
 
-        InventoryRequestDto inventoryRequestDto = new InventoryRequestDto(createDto.branchId(),
-                createDto.transactionItemsList());
-        if (createDto.transactionType().equals(TransactionName.RECEIVING)) {
-            return storageService.createInventoryReceiptByBranchId(inventoryRequestDto);
-        } else if (createDto.transactionType().equals(TransactionName.SALE)) {
-            return storageService.createInventorySaleByBranchId(inventoryRequestDto);
-        }
-        throw new IllegalArgumentException("Unknown transaction type");
+    @PreAuthorize("hasAnyRole('ADMIN', 'OPERATOR') and " +
+            "@SecurityValidation.checkUserBranchAccess(#userDetails, #transactionInfo.branchId)")
+    @Transactional
+    public List<StorageItemsReadDto> createSaleTransaction(UserDetails userDetails,
+                                                           TransactionCreateDto transactionInfo) {
+        var transactionType = typeRepository.getReferenceById(TransactionName.SALE.ordinal());
+        createTransaction(transactionInfo, transactionType);
+
+        var inventoryRequestDto = new InventoryRequestDto(transactionInfo.branchId(), transactionInfo.transactionItemsList());
+        return storageService.createInventorySaleByBranchId(inventoryRequestDto);
     }
 }
