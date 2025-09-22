@@ -35,7 +35,6 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     function isNumber(number) {
-        console.log(/^\d+$/.test(number));
         return /^\d+$/.test(number);
     }
 
@@ -43,8 +42,10 @@ document.addEventListener("DOMContentLoaded", function() {
         const body = Array.from(document.querySelectorAll('.product-item'))
             .map(item => getReceiptData(item));
 
-        restClient.fetchData(`/api/v1/warehouse/inventory-receipts`, 'POST',
-            {'Content-Type': 'application/json'}, JSON.stringify({ productList: body, branchId: branchId }))
+        restClient.fetchData(`/api/v1/receipts`, 'POST',
+            {'Content-Type': 'application/json'}, JSON.stringify({
+                transactionItemsList: body, branchId: branchId
+            }))
             .then(r => {
                 notification.showNotification('Управление складом',
                     `Оформление товара успешно завершено`);

@@ -42,8 +42,10 @@ document.addEventListener("DOMContentLoaded", function() {
         const body = Array.from(document.querySelectorAll('.product-item'))
             .map(item => getReceiptData(item));
 
-        restClient.fetchData(`/api/v1/warehouse/inventory-receipts`, 'POST',
-            {'Content-Type': 'application/json'}, JSON.stringify({ productList: body, branchId: branchId }))
+        restClient.fetchData(`/api/v1/sales`, 'POST',
+            {'Content-Type': 'application/json'}, JSON.stringify({
+                transactionItemsList: body, branchId: branchId
+            }))
             .then(r => {
                 notification.showNotification('Управление складом',
                     `Продажа товара успешно завершено`);
@@ -57,7 +59,7 @@ document.addEventListener("DOMContentLoaded", function() {
     function getReceiptData(item) {
         return {
             medicineId: item.dataset.id,
-            quantity: -item.querySelector('.quantity-input').value
+            quantity: item.querySelector('.quantity-input').value
         };
     }
 

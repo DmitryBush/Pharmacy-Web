@@ -45,3 +45,5 @@ databaseChangeLog:
       file: db/changelog/minor/changelog-3.0.2.sql
   - include:
       file: db/changelog/maintenance/changelog-3.0.3.sql
+  - include:
+      file: db/changelog/maintenance/changelog-3.0.3.1.sql

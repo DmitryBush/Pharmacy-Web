@@ -27,16 +27,4 @@ public class WarehouseRestController {
         return ResponseEntity.ok(storageService.getItemQuantityByBranchId(branchId, productId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND)));
     }
-
-    @PreAuthorize("hasAnyRole('ADMIN', 'OPERATOR') and " +
-            "@SecurityValidation.checkUserBranchAccess(#userDetails, #productList.branchId)")
-    @PostMapping("/inventory-receipts")
-    public ResponseEntity<List<StorageItemsReadDto>> createInventoryReceipt(@AuthenticationPrincipal UserDetails userDetails,
-                                                                            @RequestBody InventoryRequestDto productList) {
-        try {
-            return ResponseEntity.ok(storageService.createInventoryReceiptByBranchId(productList));
-        } catch (IllegalArgumentException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
-        }
-    }
 }
