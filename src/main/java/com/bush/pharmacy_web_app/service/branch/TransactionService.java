@@ -1,9 +1,6 @@
 package com.bush.pharmacy_web_app.service.branch;
 
-import com.bush.pharmacy_web_app.model.dto.warehouse.InventoryRequestDto;
-import com.bush.pharmacy_web_app.model.dto.warehouse.StorageItemCreateDto;
-import com.bush.pharmacy_web_app.model.dto.warehouse.StorageItemsReadDto;
-import com.bush.pharmacy_web_app.model.dto.warehouse.TransactionCreateDto;
+import com.bush.pharmacy_web_app.model.dto.warehouse.*;
 import com.bush.pharmacy_web_app.model.entity.branch.transaction.TransactionName;
 import com.bush.pharmacy_web_app.model.entity.branch.transaction.TransactionType;
 import com.bush.pharmacy_web_app.repository.branch.PharmacyBranchRepository;
@@ -12,6 +9,7 @@ import com.bush.pharmacy_web_app.repository.branch.TransactionTypeRepository;
 import com.bush.pharmacy_web_app.repository.medicine.MedicineRepository;
 import com.bush.pharmacy_web_app.repository.order.OrderRepository;
 import com.bush.pharmacy_web_app.service.branch.mapper.TransactionCreateMapper;
+import com.bush.pharmacy_web_app.service.branch.mapper.TransactionReadMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -28,6 +26,7 @@ public class TransactionService {
     private final TransactionHistoryRepository transactionRepository;
 
     private final TransactionCreateMapper transactionCreateMapper;
+    private final TransactionReadMapper transactionReadMapper;
 
     private final OrderRepository orderRepository;
     private final PharmacyBranchRepository branchRepository;
@@ -35,6 +34,12 @@ public class TransactionService {
     private final MedicineRepository medicineRepository;
 
     private final StorageService storageService;
+
+    public List<TransactionReadDto> findAllTransactionsByBranchId(Long branchId) {
+        return transactionRepository.findByBranchId(branchId).stream()
+                .map(transactionReadMapper::map)
+                .toList();
+    }
 
     @PreAuthorize("hasAnyRole('ADMIN', 'OPERATOR') and " +
             "@SecurityValidation.checkUserBranchAccess(#userDetails, #transactionInfo.branchId)")
