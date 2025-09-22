@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>История транзакций</title>
+    <link href="/css/admin/admin-base.css" rel="stylesheet"/>
+</head>
+<body>
+    <div id="branch-id" typeof="hidden" th:data-id="${branchId}"></div>
+    <div th:replace="~{/admin/sidebar/sidebar.html :: sidebar}"></div>
+    <main class="main-content">
+        <h1 class="page-title">История транзакций</h1>
+        <div class="page-container">
+            <div class="action-btn">
+
+            </div>
+            <div class="transaction-list"></div>
+        </div>
+    </main>
+</body>
+</html>
