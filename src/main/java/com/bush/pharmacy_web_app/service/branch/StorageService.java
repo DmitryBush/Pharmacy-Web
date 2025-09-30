@@ -1,18 +1,18 @@
 package com.bush.pharmacy_web_app.service.branch;
 
+import com.bush.pharmacy_web_app.model.entity.branch.StorageItems;
+import com.bush.pharmacy_web_app.repository.branch.PharmacyBranchRepository;
 import com.bush.pharmacy_web_app.repository.branch.StorageRepository;
-import com.bush.pharmacy_web_app.model.dto.warehouse.InventoryReceiptRequestDto;
+import com.bush.pharmacy_web_app.model.dto.warehouse.InventoryRequestDto;
 import com.bush.pharmacy_web_app.model.dto.warehouse.StorageItemsReadDto;
+import com.bush.pharmacy_web_app.repository.medicine.MedicineRepository;
 import com.bush.pharmacy_web_app.service.branch.mapper.StorageItemReadMapper;
-import com.bush.pharmacy_web_app.service.branch.mapper.InventoryReceiptMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,7 +23,8 @@ public class StorageService {
     private final StorageRepository storageRepository;
     private final StorageItemReadMapper itemReadMapper;
 
-    private final InventoryReceiptMapper inventoryReceiptMapper;
+    private final MedicineRepository medicineRepository;
+    private final PharmacyBranchRepository branchRepository;
 
     public Page<StorageItemsReadDto> findAllItemsByBranchId(Long id, Pageable pageable) {
         return storageRepository.findByBranchId(id, pageable)
@@ -34,16 +35,39 @@ public class StorageService {
         return storageRepository.findAmountByBranchIdAndMedicineId(branchId, productId);
     }
 
-    @Transactional
-    public List<StorageItemsReadDto> createInventoryReceiptByBranchId(InventoryReceiptRequestDto createDto) {
-        return Optional.ofNullable(createDto)
-                .map(inventoryReceiptMapper::map)
-                .map(storageItems -> {
-                    storageItems.forEach(storageRepository::saveAndFlush);
-                    return storageItems;
-                })
-                .map(Collection::stream)
-                .map(storageItems -> storageItems.map(itemReadMapper::map).toList())
-                .orElse(Collections.emptyList());
+    public List<StorageItemsReadDto> createInventoryReceiptByBranchId(InventoryRequestDto createDto) {
+        return createDto.productList().stream()
+                .map(storageItemCreateDto -> storageRepository
+                        .findByBranchIdAndMedicineId(createDto.branchId(), storageItemCreateDto.medicineId())
+                        .map(item -> {
+                            item.setAmount(item.getAmount() + storageItemCreateDto.quantity());
+                            return item;
+                        })
+                        .orElseGet(() -> StorageItems.builder()
+                                .amount(storageItemCreateDto.quantity())
+                                .medicine(medicineRepository.getReferenceById(storageItemCreateDto.medicineId()))
+                                .branch(branchRepository.getReferenceById(createDto.branchId()))
+                                .build()))
+                .map(storageRepository::save)
+                .map(itemReadMapper::map)
+                .toList();
+    }
+
+    public List<StorageItemsReadDto> createInventorySaleByBranchId(InventoryRequestDto createDto) {
+        return createDto.productList().stream()
+                .map(storageItemCreateDto -> storageRepository
+                        .findByBranchIdAndMedicineId(createDto.branchId(), storageItemCreateDto.medicineId())
+                        .map(item -> {
+                            if (item.getAmount() < storageItemCreateDto.quantity()) {
+                                throw new IllegalArgumentException("The number of products sold cannot be greater " +
+                                        "than the number of products available");
+                            }
+                            item.setAmount(item.getAmount() - storageItemCreateDto.quantity());
+                            return item;
+                        })
+                        .orElseThrow(IllegalArgumentException::new))
+                .map(storageRepository::save)
+                .map(itemReadMapper::map)
+                .toList();
     }
 }
