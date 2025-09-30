@@ -1,23 +1,24 @@
 package com.bush.pharmacy_web_app.model.entity.branch.transaction;
 
-import com.bush.pharmacy_web_app.model.entity.medicine.Medicine;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.math.BigDecimal;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Entity
 @Table(name = "transaction_items")
 public class TransactionItem {
-    @Id
-    @ManyToOne
-    @JoinColumn(name = "f_key_product_id")
-    private Medicine medicine;
-    @Id
-    @ManyToOne
-    @JoinColumn(name = "f_key_transaction_id")
-    private TransactionHistory transaction;
+    @EmbeddedId
+    private TransactionItemId id;
+    @Column(nullable = false)
+    private Integer amount;
+    @Column(nullable = false)
+    private BigDecimal price;
 }

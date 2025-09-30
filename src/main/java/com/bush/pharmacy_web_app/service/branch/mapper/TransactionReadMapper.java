@@ -14,13 +14,15 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class TransactionReadMapper implements DtoMapper<TransactionHistory, TransactionReadDto> {
     private final OrderReadMapper orderReadMapper;
-    private final MedicinePreviewReadMapper previewReadMapper;
+    private final TransactionItemReadDto itemReadDto;
     @Override
     public TransactionReadDto map(TransactionHistory obj) {
         var order = Optional.ofNullable(obj.getOrder())
                 .map(orderReadMapper::map)
                 .orElse(null);
-        var transactionItems = obj.getItems().stream().map(previewReadMapper::map).toList();
+        var transactionItems = obj.getItems().stream()
+                .map(itemReadDto::map)
+                .toList();
 
         return new TransactionReadDto(obj.getId(), obj.getCompletedAt(), obj.getType().getTransactionName(),
                 order, transactionItems);

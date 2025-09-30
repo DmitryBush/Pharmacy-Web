@@ -1,6 +1,5 @@
 package com.bush.pharmacy_web_app.model.dto.warehouse;
 
-import com.bush.pharmacy_web_app.model.dto.medicine.MedicinePreviewReadDto;
 import com.bush.pharmacy_web_app.model.dto.orders.OrderReadDto;
 import com.bush.pharmacy_web_app.model.entity.branch.transaction.TransactionName;
 
@@ -11,5 +10,5 @@ public record TransactionReadDto(Long transactionId,
                                  ZonedDateTime completedAt,
                                  TransactionName type,
                                  OrderReadDto order,
-                                 List<MedicinePreviewReadDto> transactionItems) {
+                                 List<TransactionItemDto> transactionItems) {
 }

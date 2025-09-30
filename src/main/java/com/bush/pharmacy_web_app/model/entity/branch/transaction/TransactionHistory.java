@@ -33,8 +33,6 @@ public class TransactionHistory {
     @JoinColumn(name = "f_key_order_id")
     private Order order;
 
-    @ManyToMany
-    @JoinTable(name = "transaction_items", joinColumns = @JoinColumn(name = "f_key_transaction_id"),
-            inverseJoinColumns = @JoinColumn(name = "f_key_product_id"))
-    private List<Medicine> items = new ArrayList<>();
+    @OneToMany(mappedBy = "id.transaction")
+    private List<TransactionItem> items = new ArrayList<>();
 }

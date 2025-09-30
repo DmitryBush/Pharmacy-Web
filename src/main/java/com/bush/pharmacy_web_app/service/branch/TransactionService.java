@@ -1,6 +1,9 @@
 package com.bush.pharmacy_web_app.service.branch;
 
+import com.bush.pharmacy_web_app.model.dto.medicine.MedicineReadDto;
 import com.bush.pharmacy_web_app.model.dto.warehouse.*;
+import com.bush.pharmacy_web_app.model.entity.branch.transaction.TransactionItem;
+import com.bush.pharmacy_web_app.model.entity.branch.transaction.TransactionItemId;
 import com.bush.pharmacy_web_app.model.entity.branch.transaction.TransactionName;
 import com.bush.pharmacy_web_app.model.entity.branch.transaction.TransactionType;
 import com.bush.pharmacy_web_app.repository.branch.PharmacyBranchRepository;
@@ -10,6 +13,7 @@ import com.bush.pharmacy_web_app.repository.medicine.MedicineRepository;
 import com.bush.pharmacy_web_app.repository.order.OrderRepository;
 import com.bush.pharmacy_web_app.service.branch.mapper.TransactionCreateMapper;
 import com.bush.pharmacy_web_app.service.branch.mapper.TransactionReadMapper;
+import com.bush.pharmacy_web_app.service.medicine.MedicineService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -34,6 +38,7 @@ public class TransactionService {
     private final MedicineRepository medicineRepository;
 
     private final StorageService storageService;
+    private final MedicineService medicineService;
 
     public List<TransactionReadDto> findAllTransactionsByBranchId(Long branchId) {
         return transactionRepository.findByBranchId(branchId).stream()
@@ -62,8 +67,15 @@ public class TransactionService {
                 .orElseThrow(IllegalArgumentException::new);
         var transactionItems = Optional.ofNullable(transactionInfo.transactionItemsList())
                 .map(transactionItemsList -> transactionItemsList.stream()
-                        .map(StorageItemCreateDto::medicineId)
-                        .map(medicineRepository::getReferenceById)
+                        .map(item -> TransactionItem.builder()
+                                .amount(item.quantity())
+                                .price(medicineService.findMedicineById(item.medicineId())
+                                        .map(MedicineReadDto::price)
+                                        .orElseThrow())
+                                .id(TransactionItemId.builder()
+                                        .medicine(medicineRepository.getReferenceById(item.medicineId()))
+                                        .build())
+                                .build())
                         .toList())
                 .orElseThrow(IllegalArgumentException::new);
         Optional.of(transactionInfo)
@@ -72,7 +84,10 @@ public class TransactionService {
                     transaction.setType(transactionType);
                     transaction.setBranch(branch);
                     transaction.setOrder(order);
-                    transaction.setItems(transactionItems);
+                    transaction.setItems(transactionItems.stream()
+                            .peek(transactionItem -> transactionItem.getId().setTransaction(transaction))
+                            .toList()
+                    );
                     return transaction;
                 })
                 .map(transactionRepository::save);
