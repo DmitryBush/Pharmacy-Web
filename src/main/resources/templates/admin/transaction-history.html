@@ -5,6 +5,7 @@
     <title>История транзакций</title>
     <link href="/css/admin/admin-base.css" rel="stylesheet"/>
     <link href="/css/admin/transaction-history.css" rel="stylesheet"/>
+    <script src="/js/admin/transaction-history.js" type="module"></script>
 </head>
 <body>
     <div id="branch-id" typeof="hidden" th:data-id="${branchId}"></div>
@@ -15,41 +16,7 @@
             <div class="action-btn">
 
             </div>
-            <div class="object-container" id="object-container">
-                <div class="object">
-                    <div class="transaction-header">
-                        <div class="transaction-info">
-                            <div>
-                                <h3>Транзакция 2</h3>
-                                <p class="transaction-date">15 октября 2023</p>
-                            </div>
-                            <p class="transaction-status">Поступление</p>
-                        </div>
-                        <div class="transaction-object-end">
-                            <div class="transaction-amount">45,000 ₽</div>
-                            <div class="arrow">▼</div>
-                        </div>
-                    </div>
-                    <div class="transaction-details active">
-                        <div class="details-content">
-                            <div class="product-item">
-                                <a href="@{/admin/product/{id}(id=${item.medicine.id})}">
-                                    <img src="/" alt="">
-                                </a>
-                                <div>
-                                    <a href="@{/admin/product/{id}(id=${item.medicine.id})}">item</a>
-                                </div>
-                                <div>
-                                    <p>1 шт.</p>
-                                </div>
-                                <div>
-                                    <p>100 ₽</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <div class="object-container" id="object-container"></div>
         </div>
     </main>
 </body>
