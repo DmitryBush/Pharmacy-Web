@@ -33,6 +33,6 @@ public class TransactionHistory {
     @JoinColumn(name = "f_key_order_id")
     private Order order;
 
-    @OneToMany(mappedBy = "id.transaction")
+    @OneToMany(mappedBy = "id.transaction", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<TransactionItem> items = new ArrayList<>();
 }
