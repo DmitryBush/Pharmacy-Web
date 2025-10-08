@@ -16,7 +16,7 @@ public class DailyFeaturedProductSchedulerService {
         updateService.refreshDailyProducts();
     }
 
-    @Scheduled(cron = "${daily-featured-products.update-cron}", zone = "${time.timezone}")
+    @Scheduled(cron = "${featured-products.update-cron}", zone = "${time.timezone}")
     protected void scheduledUpdateDailyProducts() {
         updateService.refreshDailyProducts();
     }

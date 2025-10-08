@@ -17,7 +17,7 @@ import java.util.Optional;
 public class DailyFeaturedProductUpdateService {
     @Value("${time.timezone}")
     private String timezone;
-    @Value("${daily-featured-products.count}")
+    @Value("${featured-products.count}")
     private Integer dailyFeaturedProductCount;
 
     private final Logger logger = LoggerFactory.getLogger(DailyFeaturedProductUpdateService.class);

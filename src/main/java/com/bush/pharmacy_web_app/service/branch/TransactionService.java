@@ -1,5 +1,6 @@
 package com.bush.pharmacy_web_app.service.branch;
 
+import com.bush.pharmacy_web_app.model.dto.medicine.MedicinePreviewReadDto;
 import com.bush.pharmacy_web_app.model.dto.medicine.MedicineReadDto;
 import com.bush.pharmacy_web_app.model.dto.warehouse.*;
 import com.bush.pharmacy_web_app.model.entity.branch.transaction.TransactionItem;
@@ -14,7 +15,9 @@ import com.bush.pharmacy_web_app.repository.order.OrderRepository;
 import com.bush.pharmacy_web_app.service.branch.mapper.TransactionCreateMapper;
 import com.bush.pharmacy_web_app.service.branch.mapper.TransactionReadMapper;
 import com.bush.pharmacy_web_app.service.medicine.MedicineService;
+import com.bush.pharmacy_web_app.service.medicine.mapper.MedicinePreviewReadMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -27,10 +30,14 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class TransactionService {
+    @Value("${featured-products.count}")
+    private Integer featuredProductCount;
+
     private final TransactionHistoryRepository transactionRepository;
 
     private final TransactionCreateMapper transactionCreateMapper;
     private final TransactionReadMapper transactionReadMapper;
+    private final MedicinePreviewReadMapper medicinePreviewReadMapper;
 
     private final OrderRepository orderRepository;
     private final PharmacyBranchRepository branchRepository;
@@ -43,6 +50,12 @@ public class TransactionService {
     public List<TransactionReadDto> findAllTransactionsByBranchId(Long branchId) {
         return transactionRepository.findByBranchId(branchId).stream()
                 .map(transactionReadMapper::map)
+                .toList();
+    }
+
+    public List<MedicinePreviewReadDto> findBestSellingProducts() {
+        return transactionRepository.findBestSellingProducts(featuredProductCount).stream()
+                .map(medicinePreviewReadMapper::map)
                 .toList();
     }
 

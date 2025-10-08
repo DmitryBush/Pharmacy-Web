@@ -27,6 +27,6 @@ storage:
 time:
   timezone: Europe/Moscow
 
-daily-featured-products:
+featured-products:
   update-cron: "* 30 0 * * *"
   count: 8
