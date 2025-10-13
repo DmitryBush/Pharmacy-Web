@@ -28,4 +28,18 @@ public class NewsManagementController {
         model.addAttribute("currentUri", request.getRequestURI());
         return "/admin/news-management";
     }
+
+    @GetMapping("/creation")
+    public String getCreationForm(Model model,
+                                  HttpServletRequest request,
+                                  @AuthenticationPrincipal UserDetails userDetails) {
+        var authorities = userDetails.getAuthorities()
+                .stream()
+                .map(GrantedAuthority::getAuthority)
+                .toList();
+
+        model.addAttribute("authorities", authorities);
+        model.addAttribute("currentUri", request.getRequestURI());
+        return "/admin/editing-news";
+    }
 }
