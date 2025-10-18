@@ -1,0 +1,35 @@
+services:
+  backend:
+    image: pharmacy-web-backend
+    environment:
+      DB_URL: ${DB_URL}
+      DB_USERNAME: ${POSTGRES_USERNAME}
+      DB_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - backend_data:/app/files
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--spider", "--tries=1", "http://localhost:8080/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+    ports:
+      - 8080:8080
+  db:
+    image: postgres:16.10-alpine
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USERNAME: ${POSTGRES_USERNAME}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    healthcheck:
+      test: ["CMD", "pg_isready -U $${POSTGRES_USERNAME} -d $${POSTGRES_DB}"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+volumes:
+  db_data:
+  backend_data:
