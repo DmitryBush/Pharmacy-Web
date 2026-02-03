@@ -1,6 +1,6 @@
 package com.bush.pharmacy_web_app.model.entity.cart;
 
-import com.bush.pharmacy_web_app.model.entity.medicine.Medicine;
+import com.bush.pharmacy_web_app.model.entity.medicine.Product;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -20,8 +20,8 @@ public class CartItems {
     private Integer amount;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "f_key_medicine_id", nullable = false)
-    private Medicine medicine;
+    @JoinColumn(name = "f_key_product_id", nullable = false)
+    private Product product;
     @ManyToOne
     @JoinColumn(name = "f_key_cart_id")
     private Cart cart;

@@ -15,9 +15,9 @@ public interface StorageRepository extends JpaRepository<StorageItems, Long> {
 
     Page<StorageItems> findByBranchId(Long id, Pageable pageable);
 
-    Optional<StorageItems> findByBranchIdAndMedicineId(Long branchId, Long medicineId);
+    Optional<StorageItems> findByBranchIdAndProductId(Long branchId, Long medicineId);
 
     @Query("select i.amount from StorageItems i " +
-            "where i.medicine.id = :medicineId and i.branch.id = :branchId")
-    Optional<Integer> findAmountByBranchIdAndMedicineId(@PathVariable Long branchId, @PathVariable Long medicineId);
+            "where i.product.id = :productId and i.branch.id = :branchId")
+    Optional<Integer> findAmountByBranchIdAndProductId(@PathVariable Long branchId, @PathVariable Long productId);
 }

@@ -30,7 +30,7 @@ public class Order {
     private Instant date;
 
     @ManyToOne
-    @JoinColumn(name = "f_key_customer_id", nullable = false)
+    @JoinColumn(name = "f_key_user_id", nullable = false)
     private User user;
     @ManyToOne
     @JoinColumn(name = "f_key_branch_id", nullable = false)

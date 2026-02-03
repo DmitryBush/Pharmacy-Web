@@ -35,7 +35,7 @@ public class SupplierCreateMapper implements DtoMapper<SupplierCreateDto, Suppli
                     toObj.setName(fromObj.name());
                     toObj.setItn(fromObj.itn());
                     toObj.setAddress(address);
-                    toObj.setMedicines(Collections.emptyList());
+                    toObj.setProducts(Collections.emptyList());
                     return toObj;
                 });
     }

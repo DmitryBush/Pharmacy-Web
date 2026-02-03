@@ -32,7 +32,7 @@ public class StorageRepositoryTest {
 
     @Test
     public void getItemsByBranchAndMedicine() {
-        var record = storageRepository.findByBranchIdAndMedicineId(9L, 9L);
+        var record = storageRepository.findByBranchIdAndProductId(9L, 9L);
 
         Assertions.assertNull(record);
     }

@@ -2,10 +2,10 @@ package com.bush.pharmacy_web_app.service.medicine.mapper;
 
 import com.bush.pharmacy_web_app.model.dto.medicine.MedicineImageReadDto;
 import com.bush.pharmacy_web_app.model.dto.medicine.MedicinePreviewReadDto;
-import com.bush.pharmacy_web_app.model.entity.medicine.Medicine;
+import com.bush.pharmacy_web_app.model.entity.medicine.Product;
 import com.bush.pharmacy_web_app.model.entity.medicine.MedicineType;
-import com.bush.pharmacy_web_app.model.entity.medicine.ProductCategories;
-import com.bush.pharmacy_web_app.model.entity.medicine.ProductCategoriesId;
+import com.bush.pharmacy_web_app.model.entity.medicine.ProductTypeMapping;
+import com.bush.pharmacy_web_app.model.entity.medicine.ProductTypeMappingId;
 import com.bush.pharmacy_web_app.shared.mapper.DtoMapper;
 import com.bush.pharmacy_web_app.service.manufacturer.mapper.ManufacturerReadMapper;
 import lombok.RequiredArgsConstructor;
@@ -16,15 +16,15 @@ import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
-public class MedicinePreviewReadMapper implements DtoMapper<Medicine, MedicinePreviewReadDto> {
+public class MedicinePreviewReadMapper implements DtoMapper<Product, MedicinePreviewReadDto> {
     private final ManufacturerReadMapper manufacturerReadMapper;
     @Override
-    public MedicinePreviewReadDto map(Medicine obj) {
+    public MedicinePreviewReadDto map(Product obj) {
         var type = Optional.ofNullable(obj.getType())
                 .map(productCategories -> productCategories.stream()
-                        .filter(ProductCategories::getIsMain)
-                        .map(ProductCategories::getId)
-                        .map(ProductCategoriesId::getType)
+                        .filter(ProductTypeMapping::getIsMain)
+                        .map(ProductTypeMapping::getId)
+                        .map(ProductTypeMappingId::getType)
                         .map(MedicineType::getType)
                         .findFirst()
                         .orElseThrow())

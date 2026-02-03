@@ -1,8 +1,7 @@
 package com.bush.pharmacy_web_app.repository.medicine;
 
-import com.bush.pharmacy_web_app.model.dto.medicine.MedicinePreviewReadDto;
 import com.bush.pharmacy_web_app.model.entity.manufacturer.Manufacturer;
-import com.bush.pharmacy_web_app.model.entity.medicine.Medicine;
+import com.bush.pharmacy_web_app.model.entity.medicine.Product;
 import com.bush.pharmacy_web_app.repository.medicine.filter.FilterMedicineRepository;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -12,14 +11,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
-public interface MedicineRepository extends JpaRepository<Medicine, Long>, FilterMedicineRepository {
-    @Query("select distinct m from Medicine m " +
-            "join StorageItems s on m = s.medicine")
-    Slice<Medicine> findDistinctMedicineStorageLocated(Pageable pageable);
+public interface MedicineRepository extends JpaRepository<Product, Long>, FilterMedicineRepository {
+    @Query("select distinct m from Product m " +
+            "join StorageItems s on m = s.product")
+    Slice<Product> findDistinctMedicineStorageLocated(Pageable pageable);
 
-    List<Medicine> findByNameContainingIgnoreCase(String name);
+    List<Product> findByNameContainingIgnoreCase(String name);
 
-    @Query("select distinct m.manufacturer from Medicine m ")
+    @Query("select distinct m.manufacturer from Product m ")
     List<Manufacturer> findDistinctMedicineManufacturer();
 
     @Query(value = """
@@ -35,12 +34,12 @@ public interface MedicineRepository extends JpaRepository<Medicine, Long>, Filte
                         INNER JOIN subcategories s ON c.parent_id = s.type_id
                     )
             SELECT DISTINCT p.*\s
-            FROM medicine p
+            FROM product p
             JOIN product_categories pc ON p.medicine_id = pc.product_id
             WHERE pc.category_id IN (SELECT type_id FROM subcategories)
             """, nativeQuery = true)
-    List<Medicine> findAllMedicineByTypeId(@PathVariable Integer typeId);
+    List<Product> findAllMedicineByTypeId(@PathVariable Integer typeId);
 
-    @Query("select m from Medicine m order by random() limit :count")
-    List<Medicine> findRandomMedicine(@PathVariable Integer count);
+    @Query("select m from Product m order by random() limit :count")
+    List<Product> findRandomMedicine(@PathVariable Integer count);
 }

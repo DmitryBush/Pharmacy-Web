@@ -1,6 +1,6 @@
 package com.bush.pharmacy_web_app.model.entity.branch.transaction;
 
-import com.bush.pharmacy_web_app.model.entity.medicine.Medicine;
+import com.bush.pharmacy_web_app.model.entity.medicine.Product;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 public class TransactionItemId {
     @ManyToOne
     @JoinColumn(name = "f_key_product_id")
-    private Medicine medicine;
+    private Product product;
     @ManyToOne
     @JoinColumn(name = "f_key_transaction_id")
     private TransactionHistory transaction;
