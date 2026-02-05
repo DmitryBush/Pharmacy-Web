@@ -22,6 +22,7 @@ public class FileSystemStorageService {
 
     private final Path rootLocation;
 
+    @Deprecated
     public void store(MultipartFile file) {
         try {
             checkEmptyFile(file);
@@ -36,10 +37,26 @@ public class FileSystemStorageService {
         }
     }
 
+    @Deprecated
     public void store(MultipartFile file, String path) {
         try {
             checkEmptyFile(file);
             Path resultDir = filePathBuilder.getValidatedFilePath(path, file.getOriginalFilename());
+            if (!Files.exists(filePathBuilder.getValidatedFilePath(path)))
+                Files.createDirectories(filePathBuilder.getValidatedFilePath(path));
+            try(var inputStream = file.getInputStream()) {
+                Files.copy(inputStream, resultDir, StandardCopyOption.REPLACE_EXISTING);
+            }
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+            throw new StorageException("An error occurred while saving the file", e);
+        }
+    }
+
+    public void store(MultipartFile file, String filename, String path) {
+        try {
+            checkEmptyFile(file);
+            Path resultDir = filePathBuilder.getValidatedFilePath(path, filename);
             if (!Files.exists(filePathBuilder.getValidatedFilePath(path)))
                 Files.createDirectories(filePathBuilder.getValidatedFilePath(path));
             try(var inputStream = file.getInputStream()) {

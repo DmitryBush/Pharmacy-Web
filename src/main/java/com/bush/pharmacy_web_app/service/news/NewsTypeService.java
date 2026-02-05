@@ -1,5 +1,6 @@
 package com.bush.pharmacy_web_app.service.news;
 
+import com.bush.pharmacy_web_app.model.entity.news.News;
 import com.bush.pharmacy_web_app.model.entity.news.NewsType;
 import com.bush.pharmacy_web_app.repository.news.NewsTypeRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,5 +19,9 @@ public class NewsTypeService {
         return typeRepository.findAll().stream()
                 .map(NewsType::getType)
                 .toList();
+    }
+
+    public NewsType getReferenceById(String id) {
+        return typeRepository.getReferenceById(id);
     }
 }

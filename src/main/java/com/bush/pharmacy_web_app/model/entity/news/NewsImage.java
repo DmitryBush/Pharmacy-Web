@@ -18,6 +18,6 @@ public class NewsImage {
     private String imageWorkPath;
 
     @ManyToOne
-    @JoinColumn(name = "f_key_news_id")
+    @JoinColumn(name = "f_key_news_id", nullable = false)
     private News news;
 }
