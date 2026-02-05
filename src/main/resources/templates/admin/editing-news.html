@@ -2,6 +2,8 @@
 <html lang="ru" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
     <title>Редактирование новости</title>
     <link href="/css/admin/admin-base.css" rel="stylesheet"/>
     <link href="/css/admin/admin-form.css" rel="stylesheet"/>
@@ -26,7 +28,7 @@
         <div class="image-preview-container">
             <div id="imagePreview" class="preview-container"></div>
         </div>
-        <div id="news-id">
+        <div id="news-id" th:data-id="${newsId}">
             <form id="productCreationForm" name="productCreationForm">
                 <label class="file-input-label">
                     <input type="file" id="imageInput" accept="image/*" multiple hidden>
@@ -55,7 +57,7 @@
         <div>
             <button id="save-btn">Сохранить</button>
             <button id="cancel-btn">Отмена</button>
-            <button id="delete-btn">Удалить</button>
+            <button id="delete-btn" hidden="hidden">Удалить</button>
         </div>
     </main>
 </body>

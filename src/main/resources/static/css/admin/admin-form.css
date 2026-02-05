@@ -147,3 +147,32 @@ textarea.input-group:focus::placeholder {
                 0 3.2px 7.2px rgba(0, 0, 0, 0.028);
     }
 }
+
+.image-item {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.image-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.delete-image-btn,
+.delete-new-image-btn {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: red;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    width: 24px;
+    height: 24px;
+}
