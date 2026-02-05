@@ -44,7 +44,7 @@ document.addEventListener("DOMContentLoaded", () => {
         getNewsTypes();
         if (newsId !== null && newsId !== undefined) {
             deleteBtn.classList.remove('disabled');
-            fillFormData()
+            fillFormData();
         }
     }
 
@@ -54,6 +54,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         data.forEach(item => {
             const option = new Option(item, item);
+            option.classList.add('pop-up-btn');
             newsTypeSelector.add(option);
         });
     }
@@ -119,9 +120,6 @@ document.addEventListener("DOMContentLoaded", () => {
         if (newImageFiles.length > 0) {
             newImageFiles.forEach(file => formData.append('images', file));
         }
-        // else {
-        //     formData.append('images', new File([], 'empty'));
-        // }
     }
 
     function deleteNews() {

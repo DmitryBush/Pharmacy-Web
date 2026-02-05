@@ -30,7 +30,7 @@
         </div>
         <div id="news-id" th:data-id="${newsId}">
             <form id="productCreationForm" name="productCreationForm">
-                <label class="file-input-label">
+                <label class="file-input-label action-btn agree-btn">
                     <input type="file" id="imageInput" accept="image/*" multiple hidden>
                     + Добавить изображения
                 </label>
@@ -45,7 +45,7 @@
                     </label>
                     <label class="input-group" for="news-type">
                         Тип новости
-                        <select class="input-group" id="news-type"></select>
+                        <select class="input-group pop-up-container" id="news-type"></select>
                     </label>
                     <label class="input-group" for="body">
                         Основной текст новости
@@ -55,9 +55,9 @@
             </form>
         </div>
         <div>
-            <button id="save-btn">Сохранить</button>
-            <button id="cancel-btn">Отмена</button>
-            <button id="delete-btn" hidden="hidden">Удалить</button>
+            <button id="save-btn" class="action-btn agree-btn">Сохранить</button>
+            <button id="cancel-btn" class="action-btn disagree-btn">Отмена</button>
+            <button id="delete-btn" class="action-btn delete-btn" hidden="hidden">Удалить</button>
         </div>
     </main>
 </body>
