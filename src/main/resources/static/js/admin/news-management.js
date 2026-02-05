@@ -56,6 +56,11 @@ document.addEventListener('DOMContentLoaded', async () => {
                     </button>
                 </div>
         `;
+        newsItem.querySelector('.edit-btn')
+            .addEventListener('click', (e) => window.replace(`/admin/news/${news.slug}`));
+        newsItem.querySelector('.delete-btn')
+            .addEventListener('click', (e)
+                => restClient.fetchData(`/api/v1/news/${news.slug}`, 'DELETE'))
         objectContainer.append(newsItem);
     }
 
