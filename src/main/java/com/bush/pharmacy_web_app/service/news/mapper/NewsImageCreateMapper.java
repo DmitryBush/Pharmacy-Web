@@ -14,12 +14,12 @@ import java.util.UUID;
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface NewsImageCreateMapper {
     @Mapping(target = "news")
-    @Mapping(target = "imageWorkPath", source = "multipartFile", qualifiedByName = "getFileName")
-    NewsImage mapToNewsImage(MultipartFile multipartFile, News news);
+    @Mapping(target = "imageWorkPath", expression = "java(getFilePath(multipartFile, uniqueFolderName))")
+    NewsImage mapToNewsImage(MultipartFile multipartFile, News news, String uniqueFolderName);
 
-    @Named("getFileName")
-    default String getFileName(MultipartFile multipartFile) {
-        return UUID.nameUUIDFromBytes(Objects.requireNonNull(multipartFile.getOriginalFilename()).getBytes())
-                .toString();
+    @Named("getFilePath")
+    default String getFilePath(MultipartFile multipartFile, String uniqueFolderName) {
+        byte[] byteFilename = Objects.requireNonNull(multipartFile.getOriginalFilename()).getBytes();
+        return String.format("%s/%s", uniqueFolderName, UUID.nameUUIDFromBytes(byteFilename));
     }
 }

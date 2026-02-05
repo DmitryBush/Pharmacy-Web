@@ -1,7 +1,5 @@
 package com.bush.pharmacy_web_app.service.news;
 
-import com.bush.pharmacy_web_app.model.dto.news.NewsImageDto;
-import com.bush.pharmacy_web_app.model.dto.news.NewsReadDto;
 import com.bush.pharmacy_web_app.model.entity.news.News;
 import com.bush.pharmacy_web_app.model.entity.news.NewsImage;
 import com.bush.pharmacy_web_app.repository.news.NewsImageRepository;
@@ -15,10 +13,8 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -39,18 +35,20 @@ public class NewsImageService {
                         .orElseThrow(IllegalArgumentException::new));
     }
 
-    public void createNewsImage(final List<MultipartFile> multipartFiles, final News news) {
+    @Transactional(propagation = Propagation.MANDATORY)
+    public News createNewsImage(final List<MultipartFile> multipartFiles, final News news) {
+        String uniqueFolderName = String.format("news/%s", UUID.randomUUID());
         for (MultipartFile multipartFile : multipartFiles) {
             if (Objects.nonNull(multipartFile)) {
-                NewsImage newsImage = createMapper.mapToNewsImage(multipartFile, news);
+                NewsImage newsImage = createMapper.mapToNewsImage(multipartFile, news, uniqueFolderName);
                 news.addImage(newsImage);
-                fileSystemStorageService.store(multipartFile,
-                        newsImage.getImageWorkPath(), "news/%d/".formatted(newsImage.getId()));
+                fileSystemStorageService.storeByFullPath(multipartFile, newsImage.getImageWorkPath());
             }
         }
+        return news;
     }
 
-    public void deleteNewsImagesByNewsId(Long newsId) {
-        fileSystemStorageService.delete("news/%d".formatted(newsId));
+    public void deleteNewsImages(News news) {
+        news.getNewsImageList().forEach(image -> fileSystemStorageService.delete(image.getImageWorkPath()));
     }
 }

@@ -11,5 +11,5 @@ public record NewsCreateDto(@NotBlank @Length(max = 255) String title,
                             @NotBlank @Length(max = 64) String slug,
                             @NotBlank @Length(max = 25) String type,
                             @NotNull String body,
-                            @NotNull List<MultipartFile> images) {
+                            List<MultipartFile> images) {
 }

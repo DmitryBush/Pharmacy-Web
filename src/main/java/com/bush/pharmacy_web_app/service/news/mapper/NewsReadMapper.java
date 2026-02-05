@@ -13,17 +13,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class NewsReadMapper implements DtoMapper<News, NewsReadDto> {
     private final NewsImageReadMapper imageReadMapper;
+
     @Override
     public NewsReadDto map(News obj) {
         return new NewsReadDto(obj.getCreationTime(), obj.getType()
-                .getType(), obj.getTitle(), obj.getSlug(), obj.getBody(), obj.getNewsImageList()
-                .stream()
-                .map(imageReadMapper::map)
-                .toList());
-    }
-
-    public NewsReadDto map(News obj, List<NewsImageDto> newsImages) {
-        return new NewsReadDto(obj.getCreationTime(), obj.getType().getType(), obj.getTitle(),
-                obj.getSlug(), obj.getBody(), newsImages);
+                .getType(), obj.getTitle(), obj.getSlug(), obj.getBody(),
+                obj.getNewsImageList().stream().map(imageReadMapper::map).toList());
     }
 }

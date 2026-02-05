@@ -68,6 +68,21 @@ public class FileSystemStorageService {
         }
     }
 
+    public void storeByFullPath(MultipartFile file, String fullPath) {
+        try {
+            checkEmptyFile(file);
+            Path resultDir = filePathBuilder.getValidatedFilePath(fullPath);
+            if (!Files.exists(filePathBuilder.getValidatedFilePath(fullPath)))
+                Files.createDirectories(filePathBuilder.getValidatedFilePath(fullPath));
+            try(var inputStream = file.getInputStream()) {
+                Files.copy(inputStream, resultDir, StandardCopyOption.REPLACE_EXISTING);
+            }
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+            throw new StorageException("An error occurred while saving the file", e);
+        }
+    }
+
     private static void checkEmptyFile(MultipartFile file) {
         if (file.isEmpty()) {
             throw new StorageException("Upload file is empty");
