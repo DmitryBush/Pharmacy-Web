@@ -38,8 +38,9 @@ public class NewsService {
 
     @Transactional
     public NewsReadDto createNews(NewsCreateDto newsCreateDto) {
-        return Optional.ofNullable(newsCreateDto)
-                .map(newsCreateMapper::mapToNews)
+        NewsType newsType = newsTypeService.getReferenceById(newsCreateDto.type());
+        return Optional.of(newsCreateDto)
+                .map(dto -> newsCreateMapper.mapToNews(dto, newsType))
                 .map(newsRepository::save)
                 .map(newsReadMapper::map)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST));

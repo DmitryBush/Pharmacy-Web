@@ -53,7 +53,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const data = await typeList.json();
 
         data.forEach(item => {
-            const option = new Option(item, item);
+            const option = new Option(item.typeName, item.id);
             option.classList.add('pop-up-btn');
             newsTypeSelector.add(option);
         });
@@ -66,6 +66,7 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById('title').value = dataResponse.title;
         document.getElementById('slug').value = dataResponse.slug;
         document.getElementById('body').value = dataResponse.body;
+        newsTypeSelector.selectedIndex = dataResponse.type - 1;
         fillImages(newsId, dataResponse.imageDtoList);
     }
 
@@ -85,11 +86,12 @@ document.addEventListener("DOMContentLoaded", () => {
     async function saveNewsForm() {
         if (newsId === null || newsId === undefined) {
             try {
-                await restClient.fetchData(`/api/v1/news/${newsId}`, 'POST',
+                await restClient.fetchData(`/api/v1/news`, 'POST',
                     {'Content-Type': 'application/json'}, getJsonFormData());
                 if (newImageFiles.length > 0) {
-                    await restClient.fetchData(`/api/v1/news-images/upload/${newsId}`, 'POST', {},
-                        fillNewsImages());
+                    await restClient.fetchData(
+                        `/api/v1/news-images/upload/${document.getElementById('slug').value.trim()}`,
+                        'POST', {}, fillNewsImages());
                 }
                 notification.showNotification('Управление новостями', 'Новость успешно создана');
                 setTimeout(() => window.location.replace('/admin/news'), 1000);
@@ -108,7 +110,6 @@ document.addEventListener("DOMContentLoaded", () => {
                             fillNewsImages())
                     ]);
                 } else {
-                    console.log(getJsonFormData());
                     await restClient.fetchData(`/api/v1/news/${newsId}`, 'PATCH',
                         {'Content-Type': 'application/json'}, getJsonFormData());
                 }

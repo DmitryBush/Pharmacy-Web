@@ -578,8 +578,8 @@ CREATE TABLE IF NOT EXISTS public.transaction_items
 --changeset Bushuev:News
 CREATE TABLE IF NOT EXISTS public.news_type
 (
-    type character varying(25) NOT NULL,
-    CONSTRAINT news_type_pkey PRIMARY KEY (type)
+    type_id SMALLINT NOT NULL PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    type character varying(25) NOT NULL UNIQUE
 );
 
 CREATE TABLE IF NOT EXISTS public.news
@@ -589,11 +589,11 @@ CREATE TABLE IF NOT EXISTS public.news
     created_time timestamp with time zone NOT NULL,
     title character varying(255) NOT NULL,
     body text NOT NULL,
-    f_key_type character varying(25),
+    f_key_type_id SMALLINT NOT NULL,
     CONSTRAINT news_pkey PRIMARY KEY (id),
     CONSTRAINT news_slug_key UNIQUE (slug),
-    CONSTRAINT news_f_key_type_fkey FOREIGN KEY (f_key_type)
-        REFERENCES public.news_type (type)
+    CONSTRAINT news_f_key_type_fkey FOREIGN KEY (f_key_type_id)
+        REFERENCES public.news_type (type_id)
 );
 
 CREATE TABLE IF NOT EXISTS public.news_image

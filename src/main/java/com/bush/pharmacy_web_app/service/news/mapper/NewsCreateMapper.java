@@ -10,13 +10,13 @@ import org.mapstruct.MappingConstants;
 import java.time.ZonedDateTime;
 import java.util.Optional;
 
-@Mapper(componentModel = MappingConstants.ComponentModel.SPRING,
-        uses = NewsTypeMapper.class, imports = ZonedDateTime.class)
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING, imports = ZonedDateTime.class)
 public interface NewsCreateMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "newsImageList", ignore = true)
     @Mapping(target = "creationTime", expression = "java(ZonedDateTime.now())")
-    News mapToNews(NewsCreateDto dto);
+    @Mapping(target = "type", source = "type")
+    News mapToNews(NewsCreateDto dto, NewsType type);
 
     default News updateNews(News news, NewsCreateDto newsCreateDto, NewsType newsType) {
         news.setCreationTime(ZonedDateTime.now());

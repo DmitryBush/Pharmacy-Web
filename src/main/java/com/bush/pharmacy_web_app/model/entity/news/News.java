@@ -28,17 +28,8 @@ public class News {
     private String body;
 
     @ManyToOne
-    @JoinColumn(name = "f_key_type", nullable = false)
+    @JoinColumn(name = "f_key_type_id", nullable = false)
     private NewsType type;
     @OneToMany(mappedBy = "news", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<NewsImage> newsImageList = new ArrayList<>();
-
-    public void addImage(NewsImage image) {
-        image.setNews(this);
-        newsImageList.add(image);
-    }
-
-    public void removeImage(NewsImage image) {
-        newsImageList.remove(image);
-    }
 }

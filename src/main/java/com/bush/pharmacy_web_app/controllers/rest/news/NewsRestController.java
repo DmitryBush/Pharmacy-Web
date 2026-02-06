@@ -2,6 +2,7 @@ package com.bush.pharmacy_web_app.controllers.rest.news;
 
 import com.bush.pharmacy_web_app.model.dto.news.NewsCreateDto;
 import com.bush.pharmacy_web_app.model.dto.news.NewsReadDto;
+import com.bush.pharmacy_web_app.model.dto.news.NewsTypeDto;
 import com.bush.pharmacy_web_app.repository.news.filter.NewsFilter;
 import com.bush.pharmacy_web_app.service.news.NewsService;
 import com.bush.pharmacy_web_app.service.news.NewsTypeService;
@@ -33,8 +34,8 @@ public class NewsRestController {
     private final NewsService newsService;
     private final NewsTypeService typesService;
 
-    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<NewsReadDto> createNews(@ModelAttribute @Validated NewsCreateDto newsCreateDto) {
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<NewsReadDto> createNews(@RequestBody @Validated NewsCreateDto newsCreateDto) {
         return ResponseEntity.ok(newsService.createNews(newsCreateDto));
     }
 
@@ -46,7 +47,7 @@ public class NewsRestController {
     }
 
     @GetMapping(value = "/types", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<String>> getAllNewsTypes() {
+    public ResponseEntity<List<NewsTypeDto>> getAllNewsTypes() {
         return ResponseEntity.ok(typesService.findAllNewsTypes());
     }
 

@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/news-images")
 @RequiredArgsConstructor
@@ -31,8 +33,8 @@ public class NewsImageRestController {
 
     @PostMapping(value = "/upload/{slug}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<NewsImageDto> attachImageToNews(@PathVariable String slug,
-                                                          @Validated @NotNull @RequestBody MultipartFile file) {
+    public ResponseEntity<List<NewsImageDto>> attachImageToNews(@PathVariable String slug,
+                                                          @Validated @NotNull @RequestBody List<MultipartFile> file) {
         return ResponseEntity.ok(newsImageService.attachImageToNews(slug, file));
     }
 

@@ -4,7 +4,7 @@ import java.time.ZonedDateTime;
 import java.util.List;
 
 public record NewsReadDto(ZonedDateTime creationTime,
-                          String type,
+                          Short type,
                           String title,
                           String slug,
                           String body,

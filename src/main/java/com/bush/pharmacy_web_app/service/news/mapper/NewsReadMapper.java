@@ -17,7 +17,7 @@ public class NewsReadMapper implements DtoMapper<News, NewsReadDto> {
     @Override
     public NewsReadDto map(News obj) {
         return new NewsReadDto(obj.getCreationTime(), obj.getType()
-                .getType(), obj.getTitle(), obj.getSlug(), obj.getBody(),
+                .getTypeId(), obj.getTitle(), obj.getSlug(), obj.getBody(),
                 obj.getNewsImageList().stream().map(imageReadMapper::map).toList());
     }
 }

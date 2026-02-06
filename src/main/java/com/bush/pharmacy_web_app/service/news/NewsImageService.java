@@ -17,6 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -39,17 +41,22 @@ public class NewsImageService {
     }
 
     @Transactional
-    public NewsImageDto attachImageToNews(String slug, MultipartFile multipartFile) {
+    public List<NewsImageDto> attachImageToNews(String slug, List<MultipartFile> multipartFiles) {
         News news = newsRepository.findBySlug(slug)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-        NewsImage newsImage = Optional.ofNullable(multipartFile)
-                .map(file -> createMapper.mapToNewsImage(multipartFile, news))
-                .map(imageRepository::save)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST));
+        List<NewsImage> newsImageList = new ArrayList<>();
         try {
-            fileSystemStorageService.storeByFullPath(multipartFile, newsImage.getImageLinkPath());
-            return newsImageReadMapper.map(newsImage);
+            for (MultipartFile file : multipartFiles) {
+                NewsImage image = createMapper.mapToNewsImage(file, news);
+                fileSystemStorageService.storeByFullPath(file, image.getImageLinkPath());
+                newsImageList.add(image);
+            }
+            imageRepository.saveAll(newsImageList);
+            return newsImageList.stream()
+                    .map(newsImageReadMapper::map)
+                    .toList();
         } catch (StorageException e) {
+            newsImageList.forEach(image -> fileSystemStorageService.delete(image.getImageLinkPath()));
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
