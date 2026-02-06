@@ -3,6 +3,7 @@ package com.bush.pharmacy_web_app.service.news;
 import com.bush.pharmacy_web_app.model.dto.news.NewsCreateDto;
 import com.bush.pharmacy_web_app.model.dto.news.NewsReadDto;
 import com.bush.pharmacy_web_app.model.entity.news.News;
+import com.bush.pharmacy_web_app.model.entity.news.NewsType;
 import com.bush.pharmacy_web_app.repository.news.NewsRepository;
 import com.bush.pharmacy_web_app.repository.news.filter.NewsFilter;
 import com.bush.pharmacy_web_app.service.exception.StorageException;
@@ -30,6 +31,7 @@ public class NewsService {
     private final NewsCreateMapper newsCreateMapper;
 
     private final NewsImageService newsImageService;
+    private final NewsTypeService newsTypeService;
 
     public Page<NewsReadDto> findAllNewsByFilter(NewsFilter filter, Pageable pageable) {
         return newsRepository.findAllByFilter(filter, pageable)
@@ -51,5 +53,33 @@ public class NewsService {
             newsImageService.deleteNewsImages(news);
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
+    }
+
+    public NewsReadDto getNewsBySlug(String slug) {
+        return newsRepository.findBySlug(slug)
+                .map(newsReadMapper::map)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    }
+
+    @Transactional
+    public NewsReadDto updateNewsBySlug(String slug, NewsCreateDto createDto) {
+        NewsType newsType = newsTypeService.getReferenceById(createDto.type());
+        return Optional.ofNullable(slug)
+                .flatMap(newsRepository::findBySlug)
+                .map(news -> newsCreateMapper.updateNews(news, createDto, newsType))
+                .map(newsRepository::saveAndFlush)
+                .map(newsReadMapper::map)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    }
+
+    @Transactional
+    public void deleteNewsBySlug(String slug) {
+        newsRepository.findBySlug(slug)
+                .ifPresentOrElse(news -> {
+                    newsRepository.delete(news);
+                    newsImageService.deleteNewsImages(news);
+                }, () -> {
+                    throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+                });
     }
 }
