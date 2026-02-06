@@ -1,13 +1,19 @@
 package com.bush.pharmacy_web_app.controllers.rest.news;
 
+import com.bush.pharmacy_web_app.model.dto.news.NewsImageDto;
 import com.bush.pharmacy_web_app.service.news.NewsImageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api/v1/news-images")
@@ -18,5 +24,16 @@ public class NewsImageRestController {
     @GetMapping("/{id}")
     public ResponseEntity<Resource> getImageById(@PathVariable Long id) {
         return ResponseEntity.ok(newsImageService.findImageById(id));
+    }
+
+    @PostMapping("/upload/{slug}")
+    public ResponseEntity<NewsImageDto> attachImageToNews(@PathVariable String slug, @RequestBody MultipartFile file) {
+        return ResponseEntity.ok(newsImageService.attachImageToNews(slug, file));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteImage(@PathVariable Long id) {
+        newsImageService.deleteNewsImageById(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

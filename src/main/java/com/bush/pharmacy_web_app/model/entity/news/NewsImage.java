@@ -14,8 +14,8 @@ public class NewsImage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "image_work_path", nullable = false, length = 4096)
-    private String imageWorkPath;
+    @Column(name = "image_work_path", nullable = false)
+    private String imageLinkPath;
 
     @ManyToOne
     @JoinColumn(name = "f_key_news_id", nullable = false)
