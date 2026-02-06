@@ -18,7 +18,7 @@ public class News {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(nullable = false, length = 64, unique = true)
+    @Column(nullable = false, length = 64, unique = true, updatable = false)
     private String slug;
     @Column(name = "created_time", nullable = false)
     private ZonedDateTime creationTime;

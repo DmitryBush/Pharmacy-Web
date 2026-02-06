@@ -59,8 +59,8 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    async function fillFormData(newsId) {
-        const response = restClient.fetchData(`/api/v1/news/${newsId}`, 'GET', {});
+    async function fillFormData() {
+        const response = await restClient.fetchData(`/api/v1/news/${newsId}`, 'GET', {});
         const dataResponse = await response.json();
 
         document.getElementById('title').value = dataResponse.title;
@@ -84,46 +84,62 @@ document.addEventListener("DOMContentLoaded", () => {
 
     async function saveNewsForm() {
         if (newsId === null || newsId === undefined) {
-            restClient.fetchData('/api/v1/news', 'POST', {}, getFormData())
-                .then(() => {
-                    notification.showNotification('Управление новостями',
-                        'Новость успешно создана');
-                    setTimeout(() => window.location.replace('/admin/news'), 1000);
-                })
-                .catch(e => notification.showNotification('Управление новостями',
-                    `Во время создании новости произошла ошибка. Ошибка: ${e.message}`));
+            try {
+                await restClient.fetchData(`/api/v1/news/${newsId}`, 'POST',
+                    {'Content-Type': 'application/json'}, getJsonFormData());
+                if (newImageFiles.length > 0) {
+                    await restClient.fetchData(`/api/v1/news-images/upload/${newsId}`, 'POST', {},
+                        fillNewsImages());
+                }
+                notification.showNotification('Управление новостями', 'Новость успешно создана');
+                setTimeout(() => window.location.replace('/admin/news'), 1000);
+            } catch (e) {
+                console.error(e);
+                notification.showNotification('Управление новостями',
+                    `Во время создании новости произошла ошибка. Ошибка: ${e.message}`)
+            }
         } else {
-            restClient.fetchData('/api/v1/news', 'PUT', {}, getFormData())
-                .then(() => {
-                    notification.showNotification('Управление новостями',
-                        'Новость успешно обновлена');
-                    setTimeout(() => window.location.replace('/admin/news'), 1000);
-                })
-                .catch(e => notification.showNotification('Управление новостями',
-                    `Во время обновлении новости произошла ошибка. Ошибка: ${e.message}`));
+            try {
+                if (newImageFiles.length > 0) {
+                    await Promise.all([
+                        restClient.fetchData(`/api/v1/news/${newsId}`, 'PATCH',
+                            {'Content-Type': 'application/json'}, getJsonFormData()),
+                        restClient.fetchData(`/api/v1/news-images/upload/${newsId}`, 'POST', {},
+                            fillNewsImages())
+                    ]);
+                } else {
+                    console.log(getJsonFormData());
+                    await restClient.fetchData(`/api/v1/news/${newsId}`, 'PATCH',
+                        {'Content-Type': 'application/json'}, getJsonFormData());
+                }
+                notification.showNotification('Управление новостями', 'Новость успешно обновлена');
+                setTimeout(() => window.location.replace('/admin/news'), 1000);
+            } catch (e) {
+                console.error(e);
+                notification.showNotification('Управление новостями',
+                    `Во время обновлении новости произошла ошибка. Ошибка: ${e.message}`);
+            }
         }
     }
 
-    function getFormData() {
+    function getJsonFormData() {
+        const form = {
+            title: document.getElementById('title').value.trim(),
+            slug: document.getElementById('slug').value.trim(),
+            type: newsTypeSelector.value,
+            body: document.getElementById('body').value.trim()
+        };
+        return JSON.stringify(form);
+    }
+
+    function fillNewsImages() {
         const formData = new FormData();
-
-        formData.append('title', document.getElementById('title').value.trim());
-        formData.append('slug', document.getElementById('slug').value.trim());
-        formData.append('type', newsTypeSelector.value);
-        formData.append('body', document.getElementById('body').value.trim());
-        fillNewsImages(formData);
-
-        return formData;
-    }
-
-    function fillNewsImages(formData) {
-        if (newImageFiles.length > 0) {
-            newImageFiles.forEach(file => formData.append('images', file));
-        }
+        newImageFiles.forEach(file => formData.append('images', file));
+        return formData
     }
 
     function deleteNews() {
-        restClient.fetchData(`/api/v1/news/${newsId}`, 'DELETE', {}, getFormData())
+        restClient.fetchData(`/api/v1/news/${newsId}`, 'DELETE', {}, getJsonFormData())
             .then(() => {
                 notification.showNotification('Управление новостями',
                     'Новость успешно удалена');

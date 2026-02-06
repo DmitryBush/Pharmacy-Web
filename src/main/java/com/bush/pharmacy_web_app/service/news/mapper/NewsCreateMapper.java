@@ -20,8 +20,6 @@ public interface NewsCreateMapper {
 
     default News updateNews(News news, NewsCreateDto newsCreateDto, NewsType newsType) {
         news.setCreationTime(ZonedDateTime.now());
-        Optional.ofNullable(newsCreateDto.slug())
-                .ifPresent(news::setSlug);
         Optional.ofNullable(newsCreateDto.title())
                 .ifPresent(news::setTitle);
         Optional.ofNullable(newsCreateDto.body())

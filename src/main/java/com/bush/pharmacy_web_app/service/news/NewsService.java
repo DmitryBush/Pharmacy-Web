@@ -2,11 +2,9 @@ package com.bush.pharmacy_web_app.service.news;
 
 import com.bush.pharmacy_web_app.model.dto.news.NewsCreateDto;
 import com.bush.pharmacy_web_app.model.dto.news.NewsReadDto;
-import com.bush.pharmacy_web_app.model.entity.news.News;
 import com.bush.pharmacy_web_app.model.entity.news.NewsType;
 import com.bush.pharmacy_web_app.repository.news.NewsRepository;
 import com.bush.pharmacy_web_app.repository.news.filter.NewsFilter;
-import com.bush.pharmacy_web_app.service.exception.StorageException;
 import com.bush.pharmacy_web_app.service.news.mapper.NewsCreateMapper;
 import com.bush.pharmacy_web_app.service.news.mapper.NewsReadMapper;
 import lombok.RequiredArgsConstructor;
@@ -40,19 +38,11 @@ public class NewsService {
 
     @Transactional
     public NewsReadDto createNews(NewsCreateDto newsCreateDto) {
-        News news = newsCreateMapper.mapToNews(newsCreateDto);
-        try {
-            return Optional.ofNullable(newsCreateDto.images())
-                    .map(images -> newsImageService.createNewsImage(images, news))
-                    .or(() -> Optional.of(news))
-                    .map(newsRepository::save)
-                    .map(newsReadMapper::map)
-                    .orElseThrow();
-        } catch (StorageException e) {
-            log.error(e.getMessage());
-            newsImageService.deleteNewsImages(news);
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
-        }
+        return Optional.ofNullable(newsCreateDto)
+                .map(newsCreateMapper::mapToNews)
+                .map(newsRepository::save)
+                .map(newsReadMapper::map)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST));
     }
 
     public NewsReadDto getNewsBySlug(String slug) {

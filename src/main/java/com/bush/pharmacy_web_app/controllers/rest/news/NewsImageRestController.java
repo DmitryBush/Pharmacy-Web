@@ -2,10 +2,13 @@ package com.bush.pharmacy_web_app.controllers.rest.news;
 
 import com.bush.pharmacy_web_app.model.dto.news.NewsImageDto;
 import com.bush.pharmacy_web_app.service.news.NewsImageService;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,8 +29,10 @@ public class NewsImageRestController {
         return ResponseEntity.ok(newsImageService.findImageById(id));
     }
 
-    @PostMapping("/upload/{slug}")
-    public ResponseEntity<NewsImageDto> attachImageToNews(@PathVariable String slug, @RequestBody MultipartFile file) {
+    @PostMapping(value = "/upload/{slug}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<NewsImageDto> attachImageToNews(@PathVariable String slug,
+                                                          @Validated @NotNull @RequestBody MultipartFile file) {
         return ResponseEntity.ok(newsImageService.attachImageToNews(slug, file));
     }
 

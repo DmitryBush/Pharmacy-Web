@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
@@ -40,6 +41,22 @@ public class NewsManagementController {
 
         model.addAttribute("authorities", authorities);
         model.addAttribute("currentUri", request.getRequestURI());
+        return "/admin/editing-news";
+    }
+
+    @GetMapping("/{slug}")
+    public String editNews(Model model,
+                           HttpServletRequest request,
+                           @AuthenticationPrincipal UserDetails userDetails,
+                           @PathVariable String slug) {
+        var authorities = userDetails.getAuthorities()
+                .stream()
+                .map(GrantedAuthority::getAuthority)
+                .toList();
+
+        model.addAttribute("authorities", authorities);
+        model.addAttribute("currentUri", request.getRequestURI());
+        model.addAttribute("newsSlug", slug);
         return "/admin/editing-news";
     }
 }

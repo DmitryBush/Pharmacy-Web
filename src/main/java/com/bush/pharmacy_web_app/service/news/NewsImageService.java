@@ -13,13 +13,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -39,18 +36,6 @@ public class NewsImageService {
                 imageRepository.findById(imageId)
                         .map(NewsImage::getImageLinkPath)
                         .orElseThrow(IllegalArgumentException::new));
-    }
-
-    @Transactional(propagation = Propagation.MANDATORY)
-    public News createNewsImage(final List<MultipartFile> multipartFiles, final News news) {
-        for (MultipartFile multipartFile : multipartFiles) {
-            if (Objects.nonNull(multipartFile)) {
-                NewsImage newsImage = createMapper.mapToNewsImage(multipartFile, news);
-                news.addImage(newsImage);
-                fileSystemStorageService.storeByFullPath(multipartFile, newsImage.getImageLinkPath());
-            }
-        }
-        return news;
     }
 
     @Transactional
