@@ -57,10 +57,11 @@ document.addEventListener('DOMContentLoaded', async () => {
                 </div>
         `;
         newsItem.querySelector('.edit-btn')
-            .addEventListener('click', (e) => window.replace(`/admin/news/${news.slug}`));
+            .addEventListener('click', (e) =>
+                window.location.replace(`/admin/news/${news.slug}`));
         newsItem.querySelector('.delete-btn')
-            .addEventListener('click', (e)
-                => restClient.fetchData(`/api/v1/news/${news.slug}`, 'DELETE'))
+            .addEventListener('click', (e) =>
+                restClient.fetchData(`/api/v1/news/${news.slug}`, 'DELETE', {}));
         objectContainer.append(newsItem);
     }
 
