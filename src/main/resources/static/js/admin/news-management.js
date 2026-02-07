@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     async function initialize() {
-        getNewsList();
+        await getNewsList();
     }
 
     async function getNewsList() {
@@ -24,6 +24,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const data = await newsList.json();
         const content = data.content;
 
+        objectContainer.innerHTML = '';
         if (content.length === 0) {
             const message = document.createElement('h3');
             message.textContent = 'Отсутствуют созданные статьи';
@@ -57,11 +58,21 @@ document.addEventListener('DOMContentLoaded', async () => {
                 </div>
         `;
         newsItem.querySelector('.edit-btn')
-            .addEventListener('click', (e) =>
+            .addEventListener('click', () =>
                 window.location.replace(`/admin/news/${news.slug}`));
         newsItem.querySelector('.delete-btn')
-            .addEventListener('click', (e) =>
-                restClient.fetchData(`/api/v1/news/${news.slug}`, 'DELETE', {}));
+            .addEventListener('click', async () => {
+                try {
+                    await restClient.fetchData(`/api/v1/news/${news.slug}`, 'DELETE', {});
+                    newsItem.remove();
+                    setTimeout(() => window.location.replace('/admin/news'), 1000);
+                    await getNewsList();
+                } catch (e) {
+                    console.error(e);
+                    notification.showNotification('Управление товарами',
+                        `Во время удаления новости произошла ошибка. Ошибка: ${e.message}`);
+                }
+            });
         objectContainer.append(newsItem);
     }
 

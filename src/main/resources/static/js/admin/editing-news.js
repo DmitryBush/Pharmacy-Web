@@ -1,7 +1,7 @@
 import RestClient from "../RestClient.js";
 import Notification from "../notification/notification.js";
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
     const restClient = new RestClient();
     const notification = new Notification('/api/v1/icons/admin/pencil-fill.png');
 
@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const cancelBtn = document.getElementById('cancel-btn');
     const deleteBtn = document.getElementById('delete-btn');
 
-    saveBtn.addEventListener('click', saveNewsForm)
+    saveBtn.addEventListener('click', saveNewsForm);
     cancelBtn.addEventListener('click', () => window.location.replace('/admin/news'));
     deleteBtn.addEventListener('click', deleteNews);
 
@@ -38,13 +38,19 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    initialize();
+    try {
+        await initialize();
+    } catch (error) {
+        console.log(error);
+        notification.showNotification('Управление новостями',
+            'Произошла неизвестная ошибка при попытке инициализации списка новостей');
+    }
 
     async function initialize() {
         await getNewsTypes();
         if (newsId !== null && newsId !== undefined) {
             deleteBtn.hidden = false;
-            fillFormData();
+            await fillFormData();
         }
     }
 
