@@ -13,6 +13,7 @@ import java.util.UUID;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface NewsImageCreateMapper {
+    @Mapping(target = "id", ignore = true)
     @Mapping(target = "news")
     @Mapping(target = "imageLinkPath", expression = "java(getFilePath(multipartFile, news))")
     NewsImage mapToNewsImage(MultipartFile multipartFile, News news);
@@ -21,6 +22,6 @@ public interface NewsImageCreateMapper {
     default String getFilePath(MultipartFile multipartFile, News news) {
         byte[] byteNewsSlug = news.getSlug().getBytes();
         byte[] byteFilename = Objects.requireNonNull(multipartFile.getOriginalFilename()).getBytes();
-        return String.format("%s/%s", UUID.nameUUIDFromBytes(byteNewsSlug), UUID.nameUUIDFromBytes(byteFilename));
+        return String.format("news/%s/%s", UUID.nameUUIDFromBytes(byteNewsSlug), UUID.nameUUIDFromBytes(byteFilename));
     }
 }

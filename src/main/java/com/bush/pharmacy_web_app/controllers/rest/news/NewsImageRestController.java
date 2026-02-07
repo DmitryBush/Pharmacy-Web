@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -34,8 +35,8 @@ public class NewsImageRestController {
     @PostMapping(value = "/upload/{slug}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<NewsImageDto>> attachImageToNews(@PathVariable String slug,
-                                                          @Validated @NotNull @RequestBody List<MultipartFile> file) {
-        return ResponseEntity.ok(newsImageService.attachImageToNews(slug, file));
+                                                          @Validated @NotNull @RequestParam List<MultipartFile> images) {
+        return ResponseEntity.ok(newsImageService.attachImageToNews(slug, images));
     }
 
     @DeleteMapping("/{id}")
