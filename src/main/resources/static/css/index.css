@@ -44,9 +44,12 @@ h2 {
 
 .promotion-section > .promotion-section,
 .news-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(50rem, 1fr));
     padding: 20px;
     border-radius: 6px;
-    margin-top: 25px;
+    margin-top: 15px;
+    gap: 1rem;
     clear: both;
     color: #6c757d;
 }

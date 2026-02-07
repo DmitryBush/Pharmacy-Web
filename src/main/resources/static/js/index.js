@@ -1,11 +1,15 @@
 import RestClient from "./RestClient.js";
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     const restClient = new RestClient();
 
     const dailyProductsSection = document.getElementById('daily-product-section');
 
-    initialize();
+    try {
+        await initialize();
+    } catch (error) {
+        console.log(error);
+    }
 
     async function initialize() {
         loadDailyProducts();
