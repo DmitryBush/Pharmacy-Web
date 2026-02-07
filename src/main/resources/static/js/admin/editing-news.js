@@ -41,9 +41,9 @@ document.addEventListener("DOMContentLoaded", () => {
     initialize();
 
     async function initialize() {
-        getNewsTypes();
+        await getNewsTypes();
         if (newsId !== null && newsId !== undefined) {
-            deleteBtn.classList.remove('disabled');
+            deleteBtn.hidden = false;
             fillFormData();
         }
     }
@@ -79,6 +79,18 @@ document.addEventListener("DOMContentLoaded", () => {
                                  width="350px">
                 <button class="delete-image-btn" data-id="${image.id}">×</button>
             `;
+            imageItem.querySelector('.delete-image-btn')
+                .addEventListener('click', (e) => {
+                    e.preventDefault();
+                    restClient.fetchData(`/api/v1/news-images/${image.id}`, 'DELETE', {})
+                        .then(() => {
+                            notification.showNotification('Управление новостями',
+                                'Изображение новости успешно удалено');
+                            imageItem.remove();
+                        })
+                        .catch((e) => notification.showNotification('Управление товарами',
+                            `Во время удаления изображения произошла ошибка. Ошибка: ${e.message}`));
+                });
             newImagesContainer.appendChild(imageItem);
         })
     }
