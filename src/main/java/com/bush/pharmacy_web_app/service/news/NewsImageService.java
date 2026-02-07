@@ -34,10 +34,10 @@ public class NewsImageService {
     private final FileSystemStorageService fileSystemStorageService;
 
     public Resource findImageById(Long imageId) {
-        return fileSystemStorageService.loadAsResource("news/" + imageId,
+        return fileSystemStorageService.loadAsResource(
                 imageRepository.findById(imageId)
                         .map(NewsImage::getImageLinkPath)
-                        .orElseThrow(IllegalArgumentException::new));
+                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND)));
     }
 
     @Transactional

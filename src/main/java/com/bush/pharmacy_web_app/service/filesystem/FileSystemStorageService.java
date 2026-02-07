@@ -126,4 +126,21 @@ public class FileSystemStorageService {
             throw new RuntimeException(e);
         }
     }
+
+    public Resource loadAsResource(String path) {
+        try {
+            Path filePath = filePathBuilder.getValidatedFilePath(path);
+
+            Resource resource = new UrlResource(filePath.toUri());
+            if (resource.exists() || resource.isReadable()) {
+                return resource;
+            }
+
+            logger.error(filePath.toString());
+            throw new StorageException("Unable to read file");
+        } catch (MalformedURLException e) {
+            logger.error(e.getMessage());
+            throw new RuntimeException(e);
+        }
+    }
 }
