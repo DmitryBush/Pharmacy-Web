@@ -12,12 +12,12 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 public class NewsReadMapper implements DtoMapper<News, NewsReadDto> {
+    private final NewsTypeMapper newsTypeMapper;
     private final NewsImageReadMapper imageReadMapper;
 
     @Override
     public NewsReadDto map(News obj) {
-        return new NewsReadDto(obj.getCreationTime(), obj.getType()
-                .getTypeId(), obj.getTitle(), obj.getSlug(), obj.getBody(),
-                obj.getNewsImageList().stream().map(imageReadMapper::map).toList());
+        return new NewsReadDto(obj.getCreationTime(), newsTypeMapper.mapToNewsTypeDto(obj.getType()), obj.getTitle(),
+                obj.getSlug(), obj.getBody(), obj.getNewsImageList().stream().map(imageReadMapper::map).toList());
     }
 }

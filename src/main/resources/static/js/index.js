@@ -103,7 +103,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             const newsTypeContainer = document.createElement('div');
             newsTypeContainer.classList.add('item-types');
             const newsTypeName = document.createElement('span');
-            newsTypeName.textContent = news.type;
+            newsTypeName.classList.add('item-type');
+            newsTypeName.textContent = news.type.typeName;
             newsTypeContainer.appendChild(newsTypeName);
             newsDetails.append(newsTypeContainer);
 
