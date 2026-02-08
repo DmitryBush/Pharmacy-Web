@@ -66,16 +66,6 @@ body {
     margin-right: 0.5rem;
 }
 
-.image-unavailable {
-    background: #f0f0f0;
-    border: 2px dashed #ddd;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #666;
-}
-
 .object {
     display: flex;
     align-items: center;

@@ -7,7 +7,7 @@
 .day-product-section,
 .bestseller-section,
 .promotion-section,
-.news,
+.news-section,
 .alphabetical-section {
     margin-bottom: 40px;
     padding: 20px;
@@ -33,7 +33,7 @@ h2 {
 }
 
 .promotion-section > a,
-.news > a {
+.news-section > a {
     text-decoration: none;
     color: #3498db;
     float: right;
@@ -43,7 +43,7 @@ h2 {
 }
 
 .promotion-section > .promotion-section,
-.news-section {
+.news-container {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(50rem, 1fr));
     padding: 20px;

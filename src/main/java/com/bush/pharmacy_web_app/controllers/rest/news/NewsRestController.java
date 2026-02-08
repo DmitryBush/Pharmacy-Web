@@ -11,6 +11,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -34,16 +37,20 @@ public class NewsRestController {
     private final NewsService newsService;
     private final NewsTypeService typesService;
 
+    private final PagedResourcesAssembler<NewsReadDto> assembler;
+
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<NewsReadDto> createNews(@RequestBody @Validated NewsCreateDto newsCreateDto) {
         return ResponseEntity.ok(newsService.createNews(newsCreateDto));
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public Page<NewsReadDto> getNewsByFilter(@PageableDefault(size = 15, sort = "creationTime",
-                                                 direction = Sort.Direction.DESC) Pageable pageable,
-                                             NewsFilter filter) {
-        return newsService.findAllNewsByFilter(filter, pageable);
+    public ResponseEntity<PagedModel<EntityModel<NewsReadDto>>> getNewsByFilter(@PageableDefault(size = 15, sort = "creationTime",
+                                                                                            direction = Sort.Direction.DESC)
+                                                                                    Pageable pageable,
+                                                                                NewsFilter filter) {
+        var assemblerNewsModel = assembler.toModel(newsService.findAllNewsByFilter(filter, pageable));
+        return ResponseEntity.ok(assemblerNewsModel);
     }
 
     @GetMapping(value = "/types", produces = MediaType.APPLICATION_JSON_VALUE)
