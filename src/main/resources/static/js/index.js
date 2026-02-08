@@ -68,7 +68,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     async function loadNews() {
-        const newsResponse = await (await restClient.fetchData('/api/v1/news', 'GET', {})).json();
+        const newsResponse = await (await restClient.fetchData('/api/v1/news?size=3', 'GET', {})).json();
 
         const newsArray = newsResponse._embedded.newsReadDtoList;
         newsLoader.hideLoading();
