@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     async function getNewsList() {
         const newsList = await restClient.fetchData(`/api/v1/news`, 'GET', {});
         const data = await newsList.json();
-        const content = data.content;
+        const content = data._embedded.newsReadDtoList;
 
         objectContainer.innerHTML = '';
         if (content.length === 0) {

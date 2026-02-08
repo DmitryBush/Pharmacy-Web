@@ -1,9 +1,14 @@
 import RestClient from "./RestClient.js";
+import Loader from "./loader/loader.js";
 
 document.addEventListener('DOMContentLoaded', async () => {
     const restClient = new RestClient();
 
-    const dailyProductsSection = document.getElementById('daily-product-section');
+    const dailyProductsContainer = document.getElementById('product-container');
+    const dailyProductsLoader = new Loader(dailyProductsContainer);
+
+    const newsContainer = document.getElementById('news-container');
+    const newsLoader = new Loader(newsContainer);
 
     try {
         await initialize();
@@ -12,15 +17,21 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     async function initialize() {
+        showLoadingAnimation();
         loadDailyProducts();
         loadNews();
+    }
+
+    function showLoadingAnimation() {
+        newsLoader.showLoading();
+        dailyProductsLoader.showLoading();
     }
 
     async function loadDailyProducts() {
         const dailyProducts = await (await restClient.fetchData('/api/v1/products/daily-products',
             'GET', {})).json();
 
-        const dailyProductContainer = dailyProductsSection.querySelector('.product-container');
+        dailyProductsLoader.hideLoading();
         dailyProducts.forEach((dailyProduct) => {
             const productCard = document.createElement('div');
             productCard.classList.add('product-card');
@@ -52,7 +63,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             productCard.append(nameLinkContainer);
             productCard.append(actionContainer);
 
-            dailyProductContainer.append(productCard);
+            dailyProductsContainer.append(productCard);
         });
     }
 
@@ -60,7 +71,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const newsResponse = await (await restClient.fetchData('/api/v1/news', 'GET', {})).json();
 
         const newsArray = newsResponse._embedded.newsReadDtoList;
-        const newsContainer = document.getElementById('news-container');
+        newsLoader.hideLoading();
         if (newsArray.length === 0) {
             const newsMessage = document.createElement('p');
             newsMessage.textContent = 'Нет доступных новостей';
@@ -73,10 +84,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             const newsItem = document.createElement('div');
             newsItem.classList.add('news-item');
             newsLink.append(newsItem);
-
-            // const newsLink = document.createElement('a');
-            // newsLink.href = `/news/${news.slug}`;
-            // newsItem.append(newsLink);
 
             const newsImage = document.createElement('div');
             newsImage.classList.add('item-image');
