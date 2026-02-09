@@ -45,7 +45,7 @@ public class NewsRestController {
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<PagedModel<EntityModel<NewsReadDto>>> getNewsByFilter(@PageableDefault(size = 15, sort = "creationTime",
+    public ResponseEntity<PagedModel<EntityModel<NewsReadDto>>> getNewsByFilter(@PageableDefault(sort = {"creationTime", "id"},
                                                                                             direction = Sort.Direction.DESC)
                                                                                     Pageable pageable,
                                                                                 NewsFilter filter) {
