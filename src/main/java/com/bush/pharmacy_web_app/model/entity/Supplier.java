@@ -1,6 +1,6 @@
 package com.bush.pharmacy_web_app.model.entity;
 
-import com.bush.pharmacy_web_app.model.entity.medicine.Medicine;
+import com.bush.pharmacy_web_app.model.entity.medicine.Product;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -10,7 +10,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString(exclude = {"medicines", "address"})
+@ToString(exclude = {"products", "address"})
 @Builder
 @Entity
 @Table(name = "suppliers")
@@ -26,5 +26,5 @@ public class Supplier {
 
     @Builder.Default
     @OneToMany(mappedBy = "supplier")
-    private List<Medicine> medicines = new ArrayList<>();
+    private List<Product> products = new ArrayList<>();
 }

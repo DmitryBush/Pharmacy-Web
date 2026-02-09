@@ -2,7 +2,7 @@ package com.bush.pharmacy_web_app.service.medicine.mapper;
 
 import com.bush.pharmacy_web_app.model.dto.medicine.MedicineAdminReadDto;
 import com.bush.pharmacy_web_app.model.dto.medicine.MedicineImageReadDto;
-import com.bush.pharmacy_web_app.model.entity.medicine.Medicine;
+import com.bush.pharmacy_web_app.model.entity.medicine.Product;
 import com.bush.pharmacy_web_app.shared.mapper.DtoMapper;
 import com.bush.pharmacy_web_app.service.supplier.mapper.SupplierReadMapper;
 import com.bush.pharmacy_web_app.service.manufacturer.mapper.ManufacturerReadMapper;
@@ -14,12 +14,12 @@ import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
-public class MedicineAdminReadMapper implements DtoMapper<Medicine, MedicineAdminReadDto> {
+public class MedicineAdminReadMapper implements DtoMapper<Product, MedicineAdminReadDto> {
     private final ManufacturerReadMapper manufacturerReadMapper;
     private final SupplierReadMapper supplierReadMapper;
     private final ListProductCategoryReadMapper listProductCategoryReadMapper;
     @Override
-    public MedicineAdminReadDto map(Medicine obj) {
+    public MedicineAdminReadDto map(Product obj) {
         var supplier = Optional.ofNullable(obj.getSupplier())
                 .map(supplierReadMapper::map)
                 .orElseThrow();

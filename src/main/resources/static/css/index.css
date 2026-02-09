@@ -1,0 +1,82 @@
+.main-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.day-product-section,
+.bestseller-section,
+.promotion-section,
+.news-section,
+.alphabetical-section {
+    margin-bottom: 40px;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+h2 {
+    color: #2c3e50;
+    margin-bottom: 15px;
+    font-size: 24px;
+    border-bottom: 2px solid #3498db;
+    padding-bottom: 8px;
+}
+
+.product-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 25px;
+    min-height: 200px;
+    border-radius: 6px;
+    padding: 15px;
+    margin: 15px 0;
+}
+
+.promotion-section > a,
+.news-section > a {
+    text-decoration: none;
+    color: #3498db;
+    float: right;
+    font-size: 14px;
+    cursor: pointer;
+    margin-top: -50px;
+}
+
+.promotion-section > .promotion-section,
+.news-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(50rem, 1fr));
+    padding: 20px;
+    border-radius: 6px;
+    margin-top: 15px;
+    gap: 1rem;
+    clear: both;
+    color: #6c757d;
+}
+
+.alphabetical-enum ul {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(40px, 1fr));
+    gap: 10px;
+    padding: 0;
+    list-style: none;
+}
+
+.alphabetical-enum li {
+    text-align: center;
+}
+
+.alphabetical-enum a {
+    display: block;
+    padding: 10px;
+    background: #2c6baf;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background 0.3s ease;
+    cursor: pointer;
+}
+
+.alphabetical-enum a:hover {
+    background: #1f5a9a;
+}

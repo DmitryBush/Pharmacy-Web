@@ -22,7 +22,7 @@ public class ProductManagementController {
     @GetMapping
     public String showProductList(Model model,
                                   MedicineFilter medicineFilter,
-                                  @PageableDefault(size = 15, sort = "price", direction = Sort.Direction.ASC) Pageable pageable,
+                                  @PageableDefault(size = 30, sort = "price", direction = Sort.Direction.ASC) Pageable pageable,
                                   HttpServletRequest request,
                                   @AuthenticationPrincipal UserDetails userDetails) {
         var page = medicineService.findAllPreviews(medicineFilter, pageable);

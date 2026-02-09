@@ -1,63 +1,76 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Аптека</title>
+    <link href="/css/base.css" rel="stylesheet"/>
+    <link href="/css/index.css" rel="stylesheet">
+    <link href="/css/product/product-card.css" rel="stylesheet">
+    <link href="/css/card/card.css" rel="stylesheet">
+    <script src="/js/index.js" type="module"></script>
 </head>
 <body>
-    <h1>Аптека "Здоровье"</h1>
-    <div class="category">
-        <h2>Лекарства и препараты</h2>
-        <ul class="product-list">
-            <li class="product-item">
-                <span class="product-name">Нурофен (таблетки, 20 шт.)</span>
-                <span class="product-price">₽ 350</span>
-            </li>
-            <li class="product-item">
-                <span class="product-name">Активированный уголь (10 пак.)</span>
-                <span class="product-price">₽ 120</span>
-            </li>
-            <li class="product-item">
-                <span class="product-name">Стрепсилс (24 шт.)</span>
-                <span class="product-price">₽ 450</span>
-            </li>
-        </ul>
-    </div>
-
-    <div class="category">
-        <h2>Витамины и БАДы</h2>
-        <ul class="product-list">
-            <li class="product-item">
-                <span class="product-name">Компливит (60 таб.)</span>
-                <span class="product-price">₽ 550</span>
-            </li>
-            <li class="product-item">
-                <span class="product-name">Магний B6 (30 капс.)</span>
-                <span class="product-price">₽ 890</span>
-            </li>
-            <li class="product-item">
-                <span class="product-name">Омега-3 (60 капс.)</span>
-                <span class="product-price">₽ 670</span>
-            </li>
-        </ul>
-    </div>
-
-    <div class="category">
-        <h2>Средства личной гигиены</h2>
-        <ul class="product-list">
-            <li class="product-item">
-                <span class="product-name">Медицинская маска (50 шт.)</span>
-                <span class="product-price">₽ 300</span>
-            </li>
-            <li class="product-item">
-                <span class="product-name">Антисептик для рук 100 мл</span>
-                <span class="product-price">₽ 250</span>
-            </li>
-            <li class="product-item">
-                <span class="product-name">Пластырь бактерицидный (10 шт.)</span>
-                <span class="product-price">₽ 85</span>
-            </li>
-        </ul>
-    </div>
+    <div th:replace="~{/page-header.html :: page-header}"></div>
+    <main class="main-content">
+        <div class="day-product-section" id="daily-product-section">
+            <h2>Товары дня</h2>
+            <div class="product-container" id="product-container"></div>
+        </div>
+        <div class="bestseller-section" id="bestseller-section">
+            <h2>Хиты продаж</h2>
+            <div class="product-container"></div>
+        </div>
+        <div class="promotion-section">
+            <h2>Акции</h2>
+            <a href="/promotions"><span>Подробнее</span></a>
+            <div class="promotion-section"><p>Акции в данный момент недоступны</p></div>
+        </div>
+        <div class="news-section" id="news-section">
+            <h2>Новости</h2>
+            <a href="/news"><span>Подробнее</span></a>
+            <div class="news-container" id="news-container"></div>
+        </div>
+        <div class="alphabetical-section">
+            <h2>Препараты по алфавиту</h2>
+            <div class="alphabetical-enum">
+                <ul>
+                    <li><a>А</a></li>
+                    <li><a>Б</a></li>
+                    <li><a>В</a></li>
+                    <li><a>Г</a></li>
+                    <li><a>Д</a></li>
+                    <li><a>Е</a></li>
+                    <li><a>Ё</a></li>
+                    <li><a>Ж</a></li>
+                    <li><a>З</a></li>
+                    <li><a>И</a></li>
+                    <li><a>Й</a></li>
+                    <li><a>К</a></li>
+                    <li><a>Л</a></li>
+                    <li><a>М</a></li>
+                    <li><a>Н</a></li>
+                    <li><a>О</a></li>
+                    <li><a>П</a></li>
+                    <li><a>Р</a></li>
+                    <li><a>С</a></li>
+                    <li><a>Т</a></li>
+                    <li><a>У</a></li>
+                    <li><a>Ф</a></li>
+                    <li><a>Х</a></li>
+                    <li><a>Ц</a></li>
+                    <li><a>Ч</a></li>
+                    <li><a>Ш</a></li>
+                    <li><a>Щ</a></li>
+                    <li><a>Ъ</a></li>
+                    <li><a>Ы</a></li>
+                    <li><a>Ь</a></li>
+                    <li><a>Э</a></li>
+                    <li><a>Ю</a></li>
+                    <li><a>Я</a></li>
+                </ul>
+            </div>
+        </div>
+    </main>
+    <div th:replace="~{/page-footer.html :: page-footer}"></div>
 </body>
 </html>

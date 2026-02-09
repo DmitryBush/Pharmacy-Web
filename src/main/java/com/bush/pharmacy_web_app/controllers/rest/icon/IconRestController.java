@@ -11,8 +11,13 @@ import org.springframework.web.bind.annotation.*;
 public class IconRestController {
     private final IconService iconService;
 
-    @GetMapping(value = "/{folder}/{name}")
-    public Resource findIconByName(@PathVariable String folder, @PathVariable String name) {
-        return iconService.findIconByName(name, folder);
+    @GetMapping(value = "/admin/{name}")
+    public Resource findAdminIcon(@PathVariable String name) {
+        return iconService.findAdminIconByName(name);
+    }
+
+    @GetMapping("/header/{name}")
+    public Resource findHeaderIcon(@PathVariable String name) {
+        return iconService.findHeaderIconByName(name);
     }
 }

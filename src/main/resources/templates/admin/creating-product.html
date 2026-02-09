@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Создание продукта</title>
+    <link href="/css/admin/admin-base.css" rel="stylesheet" type="text/css"/>
     <link href="/css/admin/editing-product.css" rel="stylesheet" type="text/css">
     <link href="/css/product/product.css" rel="stylesheet" type="text/css">
     <link href="/css/notification/notification.css" rel="stylesheet" type="text/css">
@@ -24,7 +25,7 @@
             </svg>
             Назад к списку продуктов
         </a>
-        <h1>Создание продукта</h1>
+        <h1 class="page-title">Создание продукта</h1>
         <div class="edit-display">
             <div class="button-group">
                 <button class="toggle-btn active" id="editBtn">Редактировать</button>
@@ -48,11 +49,11 @@
                         </label>
                     </div>
                     <div id="type-container">
-                        <div class="type">
-                            <label class="input-group" for="type">
+                        <div class="type-content">
+                            <label class="input-group" for="type 1">
                                 Основной тип товара
                                 <span class="input-with-button type">
-                                    <input class="input-group main-type" type="text" id="type">
+                                    <input class="input-group main-type" type="text" id="type 1">
                                     <button class="search-btn search-icon">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
                                             <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
@@ -60,10 +61,10 @@
                                     </button>
                                 </span>
                             </label>
-                            <label class="input-group" for="parent-type">
+                            <label class="input-group" for="parent-type 1">
                                 Родительский тип
                                 <span class="input-with-button parent-type">
-                                    <input class="input-group parent-type" type="text" id="parent-type">
+                                    <input class="input-group parent-type" type="text" id="parent-type 1">
                                     <button class="search-btn search-icon">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
                                             <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>

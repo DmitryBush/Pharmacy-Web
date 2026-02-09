@@ -1,8 +1,8 @@
 package com.bush.pharmacy_web_app.service.medicine;
 
 import com.bush.pharmacy_web_app.repository.medicine.MedicineImageRepository;
-import com.bush.pharmacy_web_app.model.entity.medicine.MedicineImage;
-import com.bush.pharmacy_web_app.service.FileSystemStorageService;
+import com.bush.pharmacy_web_app.model.entity.medicine.ProductImage;
+import com.bush.pharmacy_web_app.service.filesystem.FileSystemStorageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
@@ -24,27 +24,27 @@ public class MedicineImageService {
     public List<String> findProductImageList() {
         return imageRepository.findAll()
                 .stream()
-                .map(MedicineImage::getPath)
+                .map(ProductImage::getPath)
                 .toList();
     }
 
     private List<String> findProductImageListByMedicineId(Long id) {
-        return imageRepository.findByMedicineId(id)
+        return imageRepository.findByProductId(id)
                 .stream()
-                .map(MedicineImage::getPath)
+                .map(ProductImage::getPath)
                 .toList();
     }
 
     private Optional<String> findImageByMedicineIdAndPath(Long id, String filename) {
-        return imageRepository.findByMedicineIdAndPath(id, filename)
-                .map(MedicineImage::getPath);
+        return imageRepository.findByProductIdAndPath(id, filename)
+                .map(ProductImage::getPath);
     }
 
     public Optional<Resource> findImageById(Long id) {
         return imageRepository.findById(id)
                 .map(image ->
-                        storageService.loadAsResource(String.format("medicine/%d/%s",
-                                image.getMedicine().getId(), image.getPath())));
+                        storageService.loadAsResource(String.format("product/%d", image.getProduct().getId()),
+                                image.getPath()));
     }
 
     public void createImage(MultipartFile file, String path) {
@@ -61,8 +61,8 @@ public class MedicineImageService {
                             new TransactionSynchronization() {
                                 @Override
                                 public void afterCommit() {
-                                    storageService.delete(String.format("medicine/%d/%s",
-                                            medicineImage.getMedicine().getId(), medicineImage.getPath()));
+                                    storageService.delete(String.format("product/%d/%s",
+                                            medicineImage.getProduct().getId(), medicineImage.getPath()));
                                 }
                             }
                     );
@@ -73,6 +73,6 @@ public class MedicineImageService {
 
     public Optional<Resource> findProductImageByIdAndName(Long id, String filename) {
         return findImageByMedicineIdAndPath(id, filename)
-                .map(path -> storageService.loadAsResource(String.format("medicine/%d/%s", id, path)));
+                .map(path -> storageService.loadAsResource(String.format("product/%d", id), path));
     }
 }

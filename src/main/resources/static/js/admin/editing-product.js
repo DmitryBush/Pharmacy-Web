@@ -94,13 +94,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 className = 'type';
                 typeDescription = 'Тип товара';
             }
+            typeCounter++;
             const typeElement = document.createElement('div');
-            typeElement.className = 'type';
+            typeElement.className = 'type-content';
             typeElement.innerHTML = `
-                            <label class="input-group" for="type">
-                                ${typeDescription} ${++typeCounter}
+                            <label class="input-group" for="type ${typeCounter}">
+                                ${typeDescription} ${typeCounter}
                                 <span class="input-with-button type">
-                                    <input class="input-group ${className}" type="text" id="type" 
+                                    <input class="input-group ${className}" type="text" id="type ${typeCounter}"
                                         value="${type.type.name}">
                                     <button class="search-btn search-icon">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
@@ -109,11 +110,11 @@ document.addEventListener('DOMContentLoaded', () => {
                                     </button>
                                 </span>
                             </label>
-                            <label class="input-group" for="parent-type">
+                            <label class="input-group" for="parent-type ${typeCounter}">
                                 Родительский тип
                                 <span class="input-with-button parent-type">
-                                    <input class="input-group parent-type locked-input" type="text" id="parent-type" 
-                                        value="${type.type.parent}" readonly>
+                                    <input class="input-group parent-type locked-input" type="text" 
+                                        id="parent-type ${typeCounter}" value="${type.type.parent}" readonly>
                                     <button class="search-btn search-icon">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
                                             <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
@@ -144,11 +145,21 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function addInputEvent() {
-        typeContainer.querySelectorAll('.type').forEach(type => {
-            type.querySelector('#type').addEventListener('input', (e) => {
-                const parentInput = type.querySelector('#parent-type');
-                parentInput.classList.remove('locked-input');
-                parentInput.readOnly = false;
+        typeContainer.querySelectorAll('.type-content').forEach(typeContent => {
+            typeContent.querySelectorAll('input').forEach(input => {
+                if (input.classList.contains('type')) {
+                    input.addEventListener('input', e => {
+                        const parentInput = typeContent.querySelector('input.parent-type');
+                        parentInput.classList.remove('locked-input');
+                        parentInput.readOnly = false;
+                    });
+                } else if (input.classList.contains('main-type')) {
+                    input.addEventListener('input', e => {
+                        const parentInput = typeContent.querySelector('input.parent-type');
+                        parentInput.classList.remove('locked-input');
+                        parentInput.readOnly = false;
+                    });
+                }
             });
         });
 
@@ -186,12 +197,14 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById("search-field").addEventListener('input', handleSearchInput);
 
     document.getElementById('add-type-btn').addEventListener('click', (e) => {
+        e.preventDefault();
+        typeCounter++;
         const newType = document.createElement('div');
-        newType.className = 'type';
-        newType.innerHTML = `<label class="input-group" for="type">
-                                Тип товара ${++typeCounter}
+        newType.className = 'type-content';
+        newType.innerHTML = `<label class="input-group" for="type ${typeCounter}">
+                                Тип товара ${typeCounter}
                                 <span class="input-with-button type">
-                                    <input class="input-group type" type="text" id="type">
+                                    <input class="input-group type" type="text" id="type ${typeCounter}">
                                     <button class="search-btn search-icon">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
                                             <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
@@ -199,10 +212,10 @@ document.addEventListener('DOMContentLoaded', () => {
                                     </button>
                                 </span>
                             </label>
-                            <label class="input-group" for="parent-type">
+                            <label class="input-group" for="parent-type ${typeCounter}">
                                 Родительский тип
                                 <span class="input-with-button parent-type">
-                                    <input class="input-group parent-type" type="text" id="parent-type">
+                                    <input class="input-group parent-type" type="text" id="parent-type ${typeCounter}">
                                     <button class="search-btn search-icon">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
                                             <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
@@ -236,7 +249,7 @@ document.addEventListener('DOMContentLoaded', () => {
         handleOpenSearch();
     }
 
-    document.getElementById('save-btn').addEventListener('click', () => updateProduct);
+    document.getElementById('save-btn').addEventListener('click', updateProduct);
     document.getElementById('delete-btn').addEventListener('click', deleteProduct);
 
     editBtn.addEventListener('click', () => {
@@ -394,20 +407,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function getTypeData() {
         let types = [];
-        typeContainer.querySelectorAll('div[class=type]').forEach((item) => {
-            if (item.querySelector('input[id=type]').classList.contains('type')) {
+        typeContainer.querySelectorAll('.type-content').forEach((typeContent) => {
+            if (typeContent.querySelector('input.type')) {
                 types.push({
                     type: {
-                        name: item.querySelector('input[id=type]').value,
-                        parent: item.querySelector('input[id=parent-type]').value
+                        name: typeContent.querySelector('input.type').value,
+                        parent: typeContent.querySelector('input.parent-type').value
                     },
                     isMain : false
                 });
-            } else if (item.querySelector('input[id=type]').classList.contains('main-type')) {
+            } else if (typeContent.querySelector('input.main-type')) {
                 types.push({
                     type: {
-                        name: item.querySelector('input[id=type]').value,
-                        parent: item.querySelector('input[id=parent-type]').value
+                        name: typeContent.querySelector('input.main-type').value,
+                        parent: typeContent.querySelector('input.parent-type').value
                     },
                     isMain : true
                 });
@@ -479,10 +492,14 @@ document.addEventListener('DOMContentLoaded', () => {
     function handleSearchClick(result) {
         try {
             if (searchEndpoint === 'type') {
-                searchElement.querySelector('#type').value = result.name;
-                searchElement.querySelector('#parent-type').value = result.parent;
+                if (searchElement.querySelector('input.type')) {
+                    searchElement.querySelector(`input.type`).value = result.name;
+                } else if (searchElement.querySelector('input.main-type')) {
+                    searchElement.querySelector(`input.main-type`).value = result.name;
+                }
+                searchElement.querySelector(`input.parent-type`).value = result.parent;
             } else if (searchEndpoint === 'type/parent') {
-                searchElement.querySelector('#parent-type').value = result.name;
+                searchElement.querySelector('input.parent-type').value = result.name;
             } else if (searchEndpoint === 'manufacturer') {
                 idMap.set('manufacturer', result.id);
 
@@ -508,7 +525,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 searchElement.querySelector('#postalCode').value = result.address.postalCode;
             } else if (searchEndpoint === 'country') {
-                searchElement.querySelector('#county').value = result.country;
+                searchElement.querySelector('#country').value = result.country;
             }
             blockInput(searchElement);
         } catch (error) {
@@ -587,11 +604,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         restClient.fetchData(`/api/v1/admin/products/${productId}`, 'PUT', {}, formData)
             .then(response => {
-                if (response.ok) {
-                    notification.showNotification('Управление товарами',
-                        'Товар успешно обновлен');
-                    setTimeout(() => window.location.replace('/admin/product'), 1000);
-                }
+                notification.showNotification('Управление товарами',
+                    'Товар успешно обновлен');
+                setTimeout(() => window.location.replace('/admin/product'), 1000);
             })
             .catch(e => notification.showNotification('Управление товарами',
                 `Во время завершения заказа произошла ошибка. Ошибка: ${e.message}`));

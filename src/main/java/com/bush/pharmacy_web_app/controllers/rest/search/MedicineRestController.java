@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/search/medicine")
+@RequestMapping("/api/v1/search/product")
 @RequiredArgsConstructor
 public class MedicineRestController {
     private final MedicineService medicineService;

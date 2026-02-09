@@ -14,10 +14,11 @@ import java.util.Set;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString(exclude = {"orders"})
+@EqualsAndHashCode(exclude = {"orders", "branchUserAssignments", "roles"})
+@ToString(exclude = {"orders", "branchUserAssignments", "roles"})
 @Builder
 @Entity
-@Table(name = "customers")
+@Table(name = "users")
 public class User {
     @Id
     @Column(name = "mobile_phone", nullable = false, length = 15)

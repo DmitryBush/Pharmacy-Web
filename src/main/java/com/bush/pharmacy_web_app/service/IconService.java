@@ -1,5 +1,6 @@
 package com.bush.pharmacy_web_app.service;
 
+import com.bush.pharmacy_web_app.service.filesystem.FileSystemStorageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
@@ -9,7 +10,11 @@ import org.springframework.stereotype.Service;
 public class IconService {
     private final FileSystemStorageService storageService;
 
-    public Resource findIconByName(String name, String folder) {
-        return storageService.loadAsResource(String.format("icons/%s/%s", folder, name));
+    public Resource findAdminIconByName(String name) {
+        return storageService.loadAsResource("icons/admin", name);
+    }
+
+    public Resource findHeaderIconByName(String name) {
+        return storageService.loadAsResource("icons/header", name);
     }
 }

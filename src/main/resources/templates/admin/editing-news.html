@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <title>Редактирование новости</title>
+    <link href="/css/admin/admin-base.css" rel="stylesheet"/>
+    <link href="/css/admin/admin-form.css" rel="stylesheet"/>
+    <link href="/css/admin/editing-news.css" rel="stylesheet"/>
+    <script src="/js/admin/editing-news.js" type="module"></script>
+</head>
+<body>
+    <div th:replace="~{/admin/sidebar/sidebar.html :: sidebar}"></div>
+    <main class="main-content">
+        <div class="title-container" id="title-container">
+            <a href="/admin/news" class="active item-btn" id="back-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" class="bi-arrow-left-short" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5"/>
+                </svg>
+            </a>
+            <h1 class="page-title">Редактирование новости</h1>
+        </div>
+        <div class="button-group">
+            <button class="toggle-btn active" id="editBtn">Редактировать</button>
+            <button class="toggle-btn" id="previewBtn">Превью</button>
+        </div>
+        <div class="image-preview-container">
+            <div id="imagePreview" class="preview-container"></div>
+        </div>
+        <div id="news-id" th:data-id="${newsSlug}">
+            <form id="productCreationForm" name="productCreationForm">
+                <label class="file-input-label action-btn agree-btn">
+                    <input type="file" id="imageInput" accept="image/*" multiple hidden>
+                    + Добавить изображения
+                </label>
+                <div>
+                    <label class="input-group" for="title">
+                        Название новости
+                        <input class="input-group" type="text" id="title" max="255">
+                    </label>
+                    <label class="input-group" for="slug">
+                        Slug новости
+                        <input class="input-group" type="text" id="slug" max="64">
+                    </label>
+                    <label class="input-group" for="news-type">
+                        Тип новости
+                        <select class="input-group pop-up-container" id="news-type"></select>
+                    </label>
+                    <label class="input-group" for="body">
+                        Основной текст новости
+                        <textarea class="input-group" id="body"></textarea>
+                    </label>
+                </div>
+            </form>
+        </div>
+        <div>
+            <button id="save-btn" class="action-btn agree-btn">Сохранить</button>
+            <button id="cancel-btn" class="action-btn disagree-btn">Отмена</button>
+            <button id="delete-btn" class="action-btn delete-btn" hidden="hidden">Удалить</button>
+        </div>
+    </main>
+</body>
+</html>
