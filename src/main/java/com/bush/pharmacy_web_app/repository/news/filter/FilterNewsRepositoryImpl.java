@@ -80,7 +80,7 @@ public class FilterNewsRepositoryImpl implements FilterNewsRepository {
         var typedQuery = entityManager.createQuery(query);
 
         typedQuery.setFirstResult(Math.toIntExact(pageable.getOffset()));
-        typedQuery.setMaxResults(typedQuery.getMaxResults());
+        typedQuery.setMaxResults(pageable.getPageSize());
 
         return typedQuery.getResultList();
     }
