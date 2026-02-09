@@ -29,7 +29,7 @@ public class CatalogController {
 
         model.addAttribute("types", typeService.findAllTypes());
         model.addAttribute("manufacturers", service.findAllManufacturers());
-        model.addAttribute("medicines", page);
+        model.addAttribute("products", page);
         return "catalog/catalog";
     }
 

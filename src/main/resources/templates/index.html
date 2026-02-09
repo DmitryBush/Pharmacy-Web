@@ -6,6 +6,7 @@
     <link href="/css/base.css" rel="stylesheet"/>
     <link href="/css/index.css" rel="stylesheet">
     <link href="/css/product/product-card.css" rel="stylesheet">
+    <link href="/css/card/card.css" rel="stylesheet">
     <script src="/js/index.js" type="module"></script>
 </head>
 <body>
@@ -13,7 +14,7 @@
     <main class="main-content">
         <div class="day-product-section" id="daily-product-section">
             <h2>Товары дня</h2>
-            <div class="product-container"></div>
+            <div class="product-container" id="product-container"></div>
         </div>
         <div class="bestseller-section" id="bestseller-section">
             <h2>Хиты продаж</h2>
@@ -24,12 +25,10 @@
             <a href="/promotions"><span>Подробнее</span></a>
             <div class="promotion-section"><p>Акции в данный момент недоступны</p></div>
         </div>
-        <div class="news">
+        <div class="news-section" id="news-section">
             <h2>Новости</h2>
             <a href="/news"><span>Подробнее</span></a>
-            <div class="news-section">
-                <p>Новости в данный момент недоступны</p>
-            </div>
+            <div class="news-container" id="news-container"></div>
         </div>
         <div class="alphabetical-section">
             <h2>Препараты по алфавиту</h2>

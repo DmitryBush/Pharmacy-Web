@@ -10,9 +10,9 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@ToString(exclude = "medicine")
-@Table(name = "medicine_image")
-public class MedicineImage {
+@ToString(exclude = "product")
+@Table(name = "product_images")
+public class ProductImage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "image_id", nullable = false)
@@ -20,6 +20,6 @@ public class MedicineImage {
     @Column(name = "image_path", nullable = false, unique = true, length = 512)
     private String path;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "f_key_medicine_id", nullable = false)
-    private Medicine medicine;
+    @JoinColumn(name = "f_key_product_id", nullable = false)
+    private Product product;
 }

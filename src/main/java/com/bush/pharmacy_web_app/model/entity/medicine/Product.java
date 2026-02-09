@@ -15,18 +15,18 @@ import java.util.List;
 @Builder
 @ToString(exclude = {"image", "supplier"})
 @Entity
-@Table(name = "medicine")
-public class Medicine {
+@Table(name = "products")
+public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "medicine_id", nullable = false)
+    @Column(name = "product_id", nullable = false)
     private Long id;
-    @Column(name = "medicine_name", nullable = false)
+    @Column(name = "product_name", nullable = false)
     private String name;
-    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REMOVE}, mappedBy = "id.medicine")
-    private List<ProductCategories> type;
+    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REMOVE}, mappedBy = "id.product")
+    private List<ProductTypeMapping> type;
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    @JoinColumn(name = "fk_medicine_manufacturer")
+    @JoinColumn(name = "fk_product_manufacturer")
     private Manufacturer manufacturer;
     @Column(nullable = false)
     private BigDecimal price;
@@ -59,10 +59,10 @@ public class Medicine {
     private Supplier supplier;
 
     @Builder.Default
-    @OneToMany(mappedBy = "medicine", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<MedicineImage> image = new ArrayList<>();
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ProductImage> image = new ArrayList<>();
 
-    public void setImage(List<MedicineImage> image) {
+    public void setImage(List<ProductImage> image) {
         if (image != null) {
             this.image.clear();
             this.image.addAll(image);

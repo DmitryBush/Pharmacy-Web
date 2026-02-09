@@ -32,20 +32,20 @@ public class StorageService {
     }
 
     public Optional<Integer> getItemQuantityByBranchId(Long branchId, Long productId) {
-        return storageRepository.findAmountByBranchIdAndMedicineId(branchId, productId);
+        return storageRepository.findAmountByBranchIdAndProductId(branchId, productId);
     }
 
     public List<StorageItemsReadDto> createInventoryReceiptByBranchId(InventoryRequestDto createDto) {
         return createDto.productList().stream()
                 .map(storageItemCreateDto -> storageRepository
-                        .findByBranchIdAndMedicineId(createDto.branchId(), storageItemCreateDto.medicineId())
+                        .findByBranchIdAndProductId(createDto.branchId(), storageItemCreateDto.medicineId())
                         .map(item -> {
                             item.setAmount(item.getAmount() + storageItemCreateDto.quantity());
                             return item;
                         })
                         .orElseGet(() -> StorageItems.builder()
                                 .amount(storageItemCreateDto.quantity())
-                                .medicine(medicineRepository.getReferenceById(storageItemCreateDto.medicineId()))
+                                .product(medicineRepository.getReferenceById(storageItemCreateDto.medicineId()))
                                 .branch(branchRepository.getReferenceById(createDto.branchId()))
                                 .build()))
                 .map(storageRepository::save)
@@ -56,7 +56,7 @@ public class StorageService {
     public List<StorageItemsReadDto> createInventorySaleByBranchId(InventoryRequestDto createDto) {
         return createDto.productList().stream()
                 .map(storageItemCreateDto -> storageRepository
-                        .findByBranchIdAndMedicineId(createDto.branchId(), storageItemCreateDto.medicineId())
+                        .findByBranchIdAndProductId(createDto.branchId(), storageItemCreateDto.medicineId())
                         .map(item -> {
                             if (item.getAmount() < storageItemCreateDto.quantity()) {
                                 throw new IllegalArgumentException("The number of products sold cannot be greater " +

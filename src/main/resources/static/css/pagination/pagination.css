@@ -1,0 +1,149 @@
+/* Обертка для пагинации и селектора */
+.pagination-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 3rem;
+    padding: 1.5rem 0;
+    border-top: 1px solid #eaeaea;
+}
+
+/* Контейнер пагинации */
+.pagination-container {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+/* Общие стили для кнопок пагинации */
+.pagination-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background-color: #fff;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    color: #374151;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-height: 36px;
+}
+
+.pagination-btn:hover:not(:disabled) {
+    background-color: #f9fafb;
+    border-color: #9ca3af;
+}
+
+.pagination-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    color: #9ca3af;
+}
+
+.pagination-btn:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    border-color: #3b82f6;
+}
+
+/* Контейнер номеров страниц */
+.page-numbers {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+/* Стили для номеров страниц */
+.page-number {
+    min-width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 0.5rem;
+    background-color: #fff;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    color: #374151;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.page-number:hover {
+    background-color: #f9fafb;
+    border-color: #9ca3af;
+}
+
+.page-number.active {
+    background-color: #3b82f6;
+    border-color: #3b82f6;
+    color: #fff;
+}
+
+.page-number.active:hover {
+    background-color: #2563eb;
+    border-color: #2563eb;
+}
+
+/* Многоточие */
+.page-dots {
+    padding: 0 0.5rem;
+    color: #6b7280;
+    font-size: 0.875rem;
+}
+
+/* Контейнер для выбора количества элементов */
+.page-size-selector {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.selector-label {
+    font-size: 0.875rem;
+    color: #6b7280;
+}
+
+/* Стили для выпадающего списка */
+.select-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.page-size-select {
+    appearance: none;
+    padding: 0.5rem 2rem 0.5rem 0.75rem;
+    background-color: #fff;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    color: #374151;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    min-width: 70px;
+    transition: all 0.2s ease;
+}
+
+.page-size-select:hover {
+    border-color: #9ca3af;
+}
+
+.page-size-select:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.select-arrow {
+    position: absolute;
+    right: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    color: #6b7280;
+}

@@ -1,0 +1,28 @@
+.createBtn {
+    background-color: #4CAF50;
+    color: white;
+}
+
+h3 {
+    color: #404255;
+    font-weight: 600;
+    font-size: 1.5rem;
+}
+
+a {
+    text-decoration: none;
+}
+
+.edit-btn {
+    background-color: #2196F3;
+    color: white;
+}
+
+.delete-btn {
+    background-color: #f44336;
+    color: white;
+}
+
+.edit-btn:hover, .delete-btn:hover {
+    opacity: 0.9;
+}

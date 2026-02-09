@@ -15,9 +15,6 @@ spring:
       format_sql: true
       hbm2ddl.auto: validate
 
-logging:
-  level:
-    org.springframework.security: trace
 
 storage:
   directory: files

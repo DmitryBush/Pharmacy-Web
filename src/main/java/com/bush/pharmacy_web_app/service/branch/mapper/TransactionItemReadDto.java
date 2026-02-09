@@ -13,6 +13,6 @@ public class TransactionItemReadDto implements DtoMapper<TransactionItem, Transa
     private final MedicinePreviewReadMapper previewReadMapper;
     @Override
     public TransactionItemDto map(TransactionItem obj) {
-        return new TransactionItemDto(previewReadMapper.map(obj.getId().getMedicine()), obj.getAmount(), obj.getPrice());
+        return new TransactionItemDto(previewReadMapper.map(obj.getId().getProduct()), obj.getAmount(), obj.getPrice());
     }
 }

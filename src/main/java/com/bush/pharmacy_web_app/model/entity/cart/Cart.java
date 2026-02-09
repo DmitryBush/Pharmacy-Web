@@ -20,7 +20,7 @@ public class Cart {
     @Column(name = "cart_id", nullable = false)
     private Long id;
     @ManyToOne
-    @JoinColumn(name = "f_key_customer_id", nullable = false)
+    @JoinColumn(name = "f_key_user_id", nullable = false)
     private User user;
 
     @OneToMany(mappedBy = "cart")

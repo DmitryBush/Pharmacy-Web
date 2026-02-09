@@ -1,23 +1,37 @@
 import RestClient from "./RestClient.js";
+import Loader from "./loader/loader.js";
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     const restClient = new RestClient();
 
-    const dailyProductsSection = document.getElementById('daily-product-section');
-    const bestSellerSection = document.getElementById('bestseller-section');
+    const dailyProductsContainer = document.getElementById('product-container');
+    const dailyProductsLoader = new Loader(dailyProductsContainer);
 
-    initialize();
+    const newsContainer = document.getElementById('news-container');
+    const newsLoader = new Loader(newsContainer);
+
+    try {
+        await initialize();
+    } catch (error) {
+        console.log(error);
+    }
 
     async function initialize() {
+        showLoadingAnimation();
         loadDailyProducts();
-        loadBestSellerProducts();
+        loadNews();
+    }
+
+    function showLoadingAnimation() {
+        newsLoader.showLoading();
+        dailyProductsLoader.showLoading();
     }
 
     async function loadDailyProducts() {
         const dailyProducts = await (await restClient.fetchData('/api/v1/products/best-sellers',
             'GET', {})).json();
 
-        const dailyProductContainer = dailyProductsSection.querySelector('.product-container');
+        dailyProductsLoader.hideLoading();
         dailyProducts.forEach((dailyProduct) => {
             const productCard = createProductCard(dailyProduct);
             dailyProductContainer.append(productCard);
@@ -66,6 +80,81 @@ document.addEventListener('DOMContentLoaded', () => {
         productCard.append(nameLinkContainer);
         productCard.append(actionContainer);
 
-        return productCard;
+            dailyProductsContainer.append(productCard);
+        });
+    }
+
+    async function loadNews() {
+        const newsResponse = await (await restClient.fetchData('/api/v1/news?size=3', 'GET', {})).json();
+
+        const newsArray = newsResponse._embedded.newsReadDtoList;
+        newsLoader.hideLoading();
+        if (newsArray.length === 0) {
+            const newsMessage = document.createElement('p');
+            newsMessage.textContent = 'Нет доступных новостей';
+            return;
+        }
+        newsArray.forEach((news) => {
+            const newsLink = document.createElement('a');
+            newsLink.href = `/news/${news.slug}`;
+
+            const newsItem = document.createElement('div');
+            newsItem.classList.add('news-item');
+            newsLink.append(newsItem);
+
+            const newsImage = document.createElement('div');
+            newsImage.classList.add('item-image');
+
+            const image = document.createElement('img');
+            if (news.imageDtoList.length > 0) {
+                image.src = `/api/v1/news-images/${news.imageDtoList[0].id}`;
+                image.alt = news.title;
+            } else {
+                image.classList.add('.image-unavailable');
+            }
+            newsImage.append(image);
+            newsItem.append(newsImage);
+
+            const newsContent = document.createElement('div');
+            newsContent.classList.add('item-content');
+            const newsTitle = document.createElement('h4');
+            newsTitle.classList.add('item-title');
+            newsTitle.textContent = news.title;
+            newsContent.append(newsTitle);
+
+            const newsDetails = document.createElement('div');
+            newsDetails.classList.add('item-details');
+            const newsTypeContainer = document.createElement('div');
+            newsTypeContainer.classList.add('item-types');
+            const newsTypeName = document.createElement('span');
+            newsTypeName.classList.add('item-type');
+            newsTypeName.textContent = news.type.typeName;
+            newsTypeContainer.appendChild(newsTypeName);
+            newsDetails.append(newsTypeContainer);
+
+            const newsDate = document.createElement('span');
+            newsDate.classList.add('item-date');
+            newsDate.textContent = formatDate(news.creationTime);
+            newsDetails.append(newsDate);
+            newsContent.append(newsDetails);
+            newsItem.append(newsContent);
+
+            const newsArrowContainer = document.createElement('div');
+            newsArrowContainer.classList.add('item-arrow');
+            newsItem.append(newsArrowContainer);
+
+            newsContainer.append(newsLink);
+        });
+    }
+
+    function formatDate(date) {
+        const dateObject = new Date(date);
+        return Intl.DateTimeFormat('ru-Ru', {
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        }).format(dateObject);
     }
 })

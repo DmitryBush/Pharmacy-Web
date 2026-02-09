@@ -86,7 +86,7 @@ public class TransactionService {
                                         .map(MedicineReadDto::price)
                                         .orElseThrow())
                                 .id(TransactionItemId.builder()
-                                        .medicine(medicineRepository.getReferenceById(item.medicineId()))
+                                        .product(medicineRepository.getReferenceById(item.medicineId()))
                                         .build())
                                 .build())
                         .toList())

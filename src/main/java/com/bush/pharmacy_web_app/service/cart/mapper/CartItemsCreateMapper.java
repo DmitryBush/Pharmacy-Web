@@ -25,7 +25,7 @@ public class CartItemsCreateMapper implements DtoMapper<CartItemCreateDto, CartI
         var medicine = medicineRepository.findById(fromObj.medicine().id())
                         .orElseThrow();
         toObj.setAmount(fromObj.amount());
-        toObj.setMedicine(medicine);
+        toObj.setProduct(medicine);
         return toObj;
     }
 }

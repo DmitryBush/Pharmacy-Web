@@ -4,7 +4,7 @@ import com.bush.pharmacy_web_app.model.dto.medicine.*;
 import com.bush.pharmacy_web_app.repository.medicine.MedicineRepository;
 import com.bush.pharmacy_web_app.repository.branch.PharmacyBranchRepository;
 import com.bush.pharmacy_web_app.model.dto.warehouse.PharmacyBranchReadDto;
-import com.bush.pharmacy_web_app.model.entity.medicine.MedicineImage;
+import com.bush.pharmacy_web_app.model.entity.medicine.ProductImage;
 import com.bush.pharmacy_web_app.repository.medicine.filter.MedicineFilter;
 import com.bush.pharmacy_web_app.service.medicine.mapper.MedicineCreateMapper;
 import com.bush.pharmacy_web_app.service.medicine.mapper.MedicineAdminReadMapper;
@@ -106,7 +106,7 @@ public class MedicineService {
                                                         .stream()
                                                         .filter(Predicate.not(MultipartFile::isEmpty))
                                                         .forEach(file -> imageService.createImage(file,
-                                                                String.format("medicine/%d", medicine.getId()))));
+                                                                String.format("product/%d", medicine.getId()))));
                                 }
                             }
                     );
@@ -133,7 +133,7 @@ public class MedicineService {
                                                         .stream()
                                                         .filter(Predicate.not(MultipartFile::isEmpty))
                                                         .forEach(file -> imageService.createImage(file,
-                                                                String.format("medicine/%d/", medicine.getId()))));
+                                                                String.format("product/%d/", medicine.getId()))));
                                 }
                             }
                     );
@@ -147,7 +147,7 @@ public class MedicineService {
                     var images = medicine
                             .getImage()
                             .stream()
-                            .map(MedicineImage::getId)
+                            .map(ProductImage::getId)
                             .toList();
                     TransactionSynchronizationManager.registerSynchronization(
                             new TransactionSynchronization() {

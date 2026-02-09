@@ -54,6 +54,7 @@ body {
     align-items: center;
     gap: 8px;
     padding: 8px 12px;
+    margin: 0.1rem;
     border: none;
     border-radius: 6px;
     cursor: pointer;
@@ -65,16 +66,6 @@ body {
     margin-right: 0.5rem;
 }
 
-.image-unavailable {
-    background: #f0f0f0;
-    border: 2px dashed #ddd;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #666;
-}
-
 .object {
     display: flex;
     align-items: center;
@@ -84,4 +75,8 @@ body {
     background-color: white;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.object div {
+    flex: 1;
 }

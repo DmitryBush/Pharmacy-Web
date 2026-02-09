@@ -1,0 +1,46 @@
+.news-container {
+    max-width: 55rem;
+    margin: 3rem auto;
+    color: #333;
+    line-height: 1.6;
+}
+
+.news-header {
+    text-align: center;
+    position: relative;
+    margin-bottom: 2rem;
+}
+
+.news-header img {
+    width: 100%;
+    height: 400px;
+    object-fit: cover;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    display: block;
+}
+
+.news-date {
+    color: #666;
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin-left: 1rem;
+}
+
+.news-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 2rem;
+    color: #222;
+}
+
+.news-body {
+    font-size: 1.125rem;
+    padding: 0 0.5rem;
+}
+
+.news-body p {
+    margin: 0 0 1.5rem 0;
+    color: #444;
+}

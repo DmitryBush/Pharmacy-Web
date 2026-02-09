@@ -4,8 +4,10 @@ export default class RestClient {
             const response = await fetch(url, {
                 method: method,
                 body: body,
-                headers: /^[gG][eE][tT]$/.test(method) ? headers : {...headers,
-                    ...(await this.getCsrfToken())},
+                headers: /^[gG][eE][tT]$/.test(method) ? headers : {
+                    ...headers,
+                    ...(this.getCsrfToken())
+                },
             });
 
             if (!response.ok) {
@@ -20,10 +22,12 @@ export default class RestClient {
         }
     }
 
-    async getCsrfToken() {
-        const response = await this.fetchData('/api/v1/csrf', 'GET');
-        const csrf = await response.json();
-
-        return { 'X-CSRF-TOKEN': csrf.token };
+    getCsrfToken() {
+        const csrfHeader = document.querySelector('meta[name="_csrf_header"]');
+        if (csrfHeader) {
+            const token = document.querySelector('meta[name="_csrf"]').content;
+            return {[csrfHeader.content]: token};
+        }
+        return {};
     }
 }

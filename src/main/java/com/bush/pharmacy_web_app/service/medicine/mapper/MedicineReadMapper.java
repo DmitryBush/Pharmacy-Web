@@ -2,10 +2,10 @@ package com.bush.pharmacy_web_app.service.medicine.mapper;
 
 import com.bush.pharmacy_web_app.model.dto.medicine.MedicineImageReadDto;
 import com.bush.pharmacy_web_app.model.dto.medicine.MedicineReadDto;
-import com.bush.pharmacy_web_app.model.entity.medicine.Medicine;
+import com.bush.pharmacy_web_app.model.entity.medicine.Product;
 import com.bush.pharmacy_web_app.model.entity.medicine.MedicineType;
-import com.bush.pharmacy_web_app.model.entity.medicine.ProductCategories;
-import com.bush.pharmacy_web_app.model.entity.medicine.ProductCategoriesId;
+import com.bush.pharmacy_web_app.model.entity.medicine.ProductTypeMapping;
+import com.bush.pharmacy_web_app.model.entity.medicine.ProductTypeMappingId;
 import com.bush.pharmacy_web_app.shared.mapper.DtoMapper;
 import com.bush.pharmacy_web_app.service.manufacturer.mapper.ManufacturerReadMapper;
 import lombok.RequiredArgsConstructor;
@@ -16,18 +16,18 @@ import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
-public class MedicineReadMapper implements DtoMapper<Medicine, MedicineReadDto> {
+public class MedicineReadMapper implements DtoMapper<Product, MedicineReadDto> {
     private final ManufacturerReadMapper manufacturerReadMapper;
     @Override
-    public MedicineReadDto map(Medicine obj) {
+    public MedicineReadDto map(Product obj) {
         var manufacturer = Optional.ofNullable(obj.getManufacturer())
                 .map(manufacturerReadMapper::map)
                 .orElseThrow();
         var type = Optional.ofNullable(obj.getType())
                 .map(productCategories -> productCategories.stream()
-                        .filter(ProductCategories::getIsMain)
-                        .map(ProductCategories::getId)
-                        .map(ProductCategoriesId::getType)
+                        .filter(ProductTypeMapping::getIsMain)
+                        .map(ProductTypeMapping::getId)
+                        .map(ProductTypeMappingId::getType)
                         .map(MedicineType::getType)
                         .findFirst()
                         .orElseThrow())

@@ -22,6 +22,7 @@ public class FileSystemStorageService {
 
     private final Path rootLocation;
 
+    @Deprecated
     public void store(MultipartFile file) {
         try {
             checkEmptyFile(file);
@@ -36,12 +37,43 @@ public class FileSystemStorageService {
         }
     }
 
+    @Deprecated
     public void store(MultipartFile file, String path) {
         try {
             checkEmptyFile(file);
             Path resultDir = filePathBuilder.getValidatedFilePath(path, file.getOriginalFilename());
             if (!Files.exists(filePathBuilder.getValidatedFilePath(path)))
                 Files.createDirectories(filePathBuilder.getValidatedFilePath(path));
+            try(var inputStream = file.getInputStream()) {
+                Files.copy(inputStream, resultDir, StandardCopyOption.REPLACE_EXISTING);
+            }
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+            throw new StorageException("An error occurred while saving the file", e);
+        }
+    }
+
+    public void store(MultipartFile file, String filename, String path) {
+        try {
+            checkEmptyFile(file);
+            Path resultDir = filePathBuilder.getValidatedFilePath(path, filename);
+            if (!Files.exists(filePathBuilder.getValidatedFilePath(path)))
+                Files.createDirectories(filePathBuilder.getValidatedFilePath(path));
+            try(var inputStream = file.getInputStream()) {
+                Files.copy(inputStream, resultDir, StandardCopyOption.REPLACE_EXISTING);
+            }
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+            throw new StorageException("An error occurred while saving the file", e);
+        }
+    }
+
+    public void storeByFullPath(MultipartFile file, String fullPath) {
+        try {
+            checkEmptyFile(file);
+            Path resultDir = filePathBuilder.getValidatedFilePath(fullPath);
+            if (!Files.exists(filePathBuilder.getValidatedFilePath(fullPath)))
+                Files.createDirectories(filePathBuilder.getValidatedFilePath(fullPath));
             try(var inputStream = file.getInputStream()) {
                 Files.copy(inputStream, resultDir, StandardCopyOption.REPLACE_EXISTING);
             }
@@ -81,6 +113,23 @@ public class FileSystemStorageService {
     public Resource loadAsResource(String path, String filename) {
         try {
             Path filePath = filePathBuilder.getValidatedFilePath(path, filename);
+
+            Resource resource = new UrlResource(filePath.toUri());
+            if (resource.exists() || resource.isReadable()) {
+                return resource;
+            }
+
+            logger.error(filePath.toString());
+            throw new StorageException("Unable to read file");
+        } catch (MalformedURLException e) {
+            logger.error(e.getMessage());
+            throw new RuntimeException(e);
+        }
+    }
+
+    public Resource loadAsResource(String path) {
+        try {
+            Path filePath = filePathBuilder.getValidatedFilePath(path);
 
             Resource resource = new UrlResource(filePath.toUri());
             if (resource.exists() || resource.isReadable()) {

@@ -11,11 +11,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Embeddable
 @Builder
-@IdClass(ProductCategoriesId.class)
-public class ProductCategoriesId {
+@IdClass(ProductTypeMappingId.class)
+public class ProductTypeMappingId {
     @ManyToOne
     @JoinColumn(name = "product_id", nullable = false)
-    private Medicine medicine;
+    private Product product;
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
     private MedicineType type;

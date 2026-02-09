@@ -15,7 +15,7 @@ public class StorageItemReadMapper implements DtoMapper<StorageItems, StorageIte
     private final MedicinePreviewReadMapper medicinePreviewReadMapper;
     @Override
     public StorageItemsReadDto map(StorageItems obj) {
-        var medicine = Optional.ofNullable(obj.getMedicine())
+        var medicine = Optional.ofNullable(obj.getProduct())
                 .map(medicinePreviewReadMapper::map).orElse(null);
         return new StorageItemsReadDto(obj.getId(), obj.getAmount(), medicine);
     }
