@@ -1,4 +1,4 @@
-package com.bush.pharmacy_web_app.controllers.rest.product;
+package com.bush.pharmacy_web_app.controllers.rest.admin;
 
 import com.bush.pharmacy_web_app.model.dto.medicine.MedicineTypeDto;
 import com.bush.pharmacy_web_app.model.dto.medicine.MedicineTypeUpdateDto;

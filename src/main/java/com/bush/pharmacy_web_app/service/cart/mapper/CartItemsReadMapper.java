@@ -16,7 +16,7 @@ public class CartItemsReadMapper implements DtoMapper<CartItems, CartItemReadDto
     private final MedicinePreviewReadMapper mapper;
     @Override
     public CartItemReadDto map(CartItems obj) {
-        MedicinePreviewReadDto medicineDto = Optional.ofNullable(obj.getMedicine())
+        MedicinePreviewReadDto medicineDto = Optional.ofNullable(obj.getProduct())
                 .map(mapper::map)
                 .orElse(null);
         return new CartItemReadDto(medicineDto, obj.getAmount());

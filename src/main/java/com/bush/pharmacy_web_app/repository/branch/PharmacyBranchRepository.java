@@ -10,7 +10,7 @@ import java.util.List;
 public interface PharmacyBranchRepository extends JpaRepository<PharmacyBranch, Long> {
     @Query("select b from PharmacyBranch b " +
             "join StorageItems s on b = s.branch " +
-            "where s.medicine.id = :id")
+            "where s.product.id = :id")
     List<PharmacyBranch> findBranchesWithMedicineLocated(@Param("id") Long id);
 
     @Query("select b from PharmacyBranch b " +

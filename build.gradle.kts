@@ -34,7 +34,11 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-hateoas")
 	implementation("org.springframework.statemachine:spring-statemachine-core:4.0.1")
 	implementation("org.springframework.boot:spring-boot-actuator")
+
 	compileOnly("org.projectlombok:lombok")
+    annotationProcessor("org.projectlombok:lombok")
+    compileOnly("org.mapstruct:mapstruct:1.6.3")
+    annotationProcessor("org.mapstruct:mapstruct-processor:1.6.3")
 
 	testCompileOnly("org.projectlombok:lombok")
 	runtimeOnly("org.postgresql:postgresql")

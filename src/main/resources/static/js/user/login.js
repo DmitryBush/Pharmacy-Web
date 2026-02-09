@@ -13,7 +13,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         let cleaned = value.replace(/\D/g, '');
-        console.log(cleaned);
 
         if (/^79/.test(cleaned)) {
             cleaned = cleaned.substring(2);
@@ -22,7 +21,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const digits = cleaned.substring(0, 9);
-        console.log(digits + ' ' + digits.length);
 
         let formatted = '+7 (9';
         if (digits.length > 0) {

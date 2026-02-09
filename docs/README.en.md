@@ -71,8 +71,10 @@ Build and run the project
 - [x] Product type management
 - [x] Product management
 - [ ] Staff management
-### Public interface
+- [ ] News management
+### Client interface
 - [ ] Main page
+- [ ] News
 - [ ] Product catalog
 - [ ] Order creation
 - [ ] Shopping cart

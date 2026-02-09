@@ -14,7 +14,8 @@ import java.util.Set;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString(exclude = {"items", "orders", "address"})
+@EqualsAndHashCode(exclude = {"items", "orders", "address", "supervisor", "userBranchAssigned"})
+@ToString(exclude = {"items", "orders", "address", "supervisor", "userBranchAssigned"})
 @Entity
 @Table(name = "pharmacy_branches")
 public class PharmacyBranch {

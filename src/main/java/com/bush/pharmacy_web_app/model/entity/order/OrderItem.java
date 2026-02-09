@@ -1,6 +1,6 @@
 package com.bush.pharmacy_web_app.model.entity.order;
 
-import com.bush.pharmacy_web_app.model.entity.medicine.Medicine;
+import com.bush.pharmacy_web_app.model.entity.medicine.Product;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,8 +23,8 @@ public class OrderItem {
     @Column(name = "obj_price", nullable = false)
     private BigDecimal price;
     @ManyToOne
-    @JoinColumn(name = "f_key_medicine_id", nullable = false)
-    private Medicine medicine;
+    @JoinColumn(name = "f_key_product_id", nullable = false)
+    private Product product;
     @ManyToOne
     @JoinColumn(name = "f_key_order_id", nullable = false)
     private Order order;

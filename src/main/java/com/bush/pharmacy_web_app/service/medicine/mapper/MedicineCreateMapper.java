@@ -1,10 +1,10 @@
 package com.bush.pharmacy_web_app.service.medicine.mapper;
 
+import com.bush.pharmacy_web_app.model.entity.medicine.Product;
 import com.bush.pharmacy_web_app.repository.medicine.MedicineImageRepository;
 import com.bush.pharmacy_web_app.repository.medicine.MedicineRepository;
 import com.bush.pharmacy_web_app.repository.medicine.TypeRepository;
 import com.bush.pharmacy_web_app.model.dto.medicine.MedicineCreateDto;
-import com.bush.pharmacy_web_app.model.entity.medicine.Medicine;
 import com.bush.pharmacy_web_app.shared.mapper.DtoMapper;
 import com.bush.pharmacy_web_app.service.supplier.mapper.SupplierCreateMapper;
 import com.bush.pharmacy_web_app.service.manufacturer.mapper.ManufacturerCreateMapper;
@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
-public class MedicineCreateMapper implements DtoMapper<MedicineCreateDto, Medicine> {
+public class MedicineCreateMapper implements DtoMapper<MedicineCreateDto, Product> {
     private final SupplierCreateMapper supplierCreateMapper;
     private final ManufacturerCreateMapper manufacturerCreateMapper;
     private final ListProductCategoryCreateMapper categoryMapper;
@@ -28,16 +28,16 @@ public class MedicineCreateMapper implements DtoMapper<MedicineCreateDto, Medici
     private final MedicineRepository medicineRepository;
     private final MedicineImageRepository imageRepository;
     @Override
-    public Medicine map(MedicineCreateDto obj) {
-        return copyObj(obj, new Medicine());
+    public Product map(MedicineCreateDto obj) {
+        return copyObj(obj, new Product());
     }
 
     @Override
-    public Medicine map(MedicineCreateDto fromObj, Medicine toObj) {
+    public Product map(MedicineCreateDto fromObj, Product toObj) {
         return copyObj(fromObj, toObj);
     }
 
-    private Medicine copyObj(MedicineCreateDto fromObj, Medicine toObj) {
+    private Product copyObj(MedicineCreateDto fromObj, Product toObj) {
         var supplier = Optional.ofNullable(fromObj.supplier())
                 .map(supplierCreateMapper::map)
                 .orElseThrow();
@@ -48,25 +48,25 @@ public class MedicineCreateMapper implements DtoMapper<MedicineCreateDto, Medici
                 .map(categoryMapper::map)
                 .orElseThrow();
         var images = Optional.ofNullable(fromObj.id())
-                .map(imageRepository::findByMedicineId)
+                .map(imageRepository::findByProductId)
                 .map(list -> {
                     var dtoCollection = Optional.ofNullable(fromObj.images())
                             .map(file -> file.stream()
                                     .map(imageCreateMapper::map)
-                                    .peek(image -> image.setMedicine(toObj))
+                                    .peek(image -> image.setProduct(toObj))
                                     .collect(Collectors.toCollection(ArrayList::new)))
                             .orElse(new ArrayList<>());
                     list.addAll(dtoCollection);
                     return list;
                 })
                 .or(() -> Optional.ofNullable(toObj.getId())
-                        .map(imageRepository::findByMedicineId)
+                        .map(imageRepository::findByProductId)
                         .map(list -> {
                             var dtoCollection = Optional.ofNullable(fromObj.images())
                                     .map(file -> file.stream()
                                             .filter(Predicate.not(MultipartFile::isEmpty))
                                             .map(imageCreateMapper::map)
-                                            .peek(image -> image.setMedicine(toObj))
+                                            .peek(image -> image.setProduct(toObj))
                                             .collect(Collectors.toCollection(ArrayList::new)))
                                     .orElse(new ArrayList<>());
                             list.addAll(dtoCollection);
@@ -76,7 +76,7 @@ public class MedicineCreateMapper implements DtoMapper<MedicineCreateDto, Medici
                         .map(list -> list
                                 .stream()
                                 .map(imageCreateMapper::map)
-                                .peek(image -> image.setMedicine(toObj))
+                                .peek(image -> image.setProduct(toObj))
                                 .collect(Collectors.toCollection(ArrayList::new)))
                 )
                 .orElse(new ArrayList<>());
@@ -89,7 +89,7 @@ public class MedicineCreateMapper implements DtoMapper<MedicineCreateDto, Medici
                     toObj.setType(categories.stream()
                             .peek(productCategories -> {
                                 var id = productCategories.getId();
-                                id.setMedicine(medicine);
+                                id.setProduct(medicine);
 
                                 productCategories.setId(id);
                             })
@@ -121,7 +121,7 @@ public class MedicineCreateMapper implements DtoMapper<MedicineCreateDto, Medici
                     toObj.setType(categories.stream()
                             .peek(productCategories -> {
                                 var id = productCategories.getId();
-                                id.setMedicine(toObj);
+                                id.setProduct(toObj);
 
                                 productCategories.setId(id);
                             })

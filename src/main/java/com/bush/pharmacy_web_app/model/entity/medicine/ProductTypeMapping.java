@@ -9,10 +9,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "product_categories")
-public class ProductCategories {
+@Table(name = "product_type_mapping")
+public class ProductTypeMapping {
     @EmbeddedId
-    private ProductCategoriesId id;
+    private ProductTypeMappingId id;
 
     @Column(name = "is_main", nullable = false)
     private Boolean isMain;

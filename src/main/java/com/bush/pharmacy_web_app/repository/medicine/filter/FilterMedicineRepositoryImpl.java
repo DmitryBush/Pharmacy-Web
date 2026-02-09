@@ -1,6 +1,6 @@
 package com.bush.pharmacy_web_app.repository.medicine.filter;
 
-import com.bush.pharmacy_web_app.model.entity.medicine.Medicine;
+import com.bush.pharmacy_web_app.model.entity.medicine.Product;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
@@ -19,7 +19,7 @@ import java.util.List;
 public class FilterMedicineRepositoryImpl implements FilterMedicineRepository {
     private final EntityManager entityManager;
     @Override
-    public Page<Medicine> findAllByFilter(MedicineFilter filter, Pageable pageable) {
+    public Page<Product> findAllByFilter(MedicineFilter filter, Pageable pageable) {
         var criteriaBuilder = entityManager.getCriteriaBuilder();
 
         var medicines = applyPagination(createFilteredQuery(filter, criteriaBuilder, pageable), pageable);
@@ -29,10 +29,10 @@ public class FilterMedicineRepositoryImpl implements FilterMedicineRepository {
         return new PageImpl<>(medicines, pageable, totalElementsCount);
     }
 
-    private CriteriaQuery<Medicine> createFilteredQuery(MedicineFilter filter, CriteriaBuilder criteriaBuilder,
-                                                        Pageable pageable) {
-        var query = criteriaBuilder.createQuery(Medicine.class);
-        var medicine = query.from(Medicine.class);
+    private CriteriaQuery<Product> createFilteredQuery(MedicineFilter filter, CriteriaBuilder criteriaBuilder,
+                                                       Pageable pageable) {
+        var query = criteriaBuilder.createQuery(Product.class);
+        var medicine = query.from(Product.class);
         query.select(medicine);
 
         var predicates = buildPredicates(filter, criteriaBuilder, medicine);
@@ -44,7 +44,7 @@ public class FilterMedicineRepositoryImpl implements FilterMedicineRepository {
 
     private CriteriaQuery<Long> createCountQuery(MedicineFilter filter, CriteriaBuilder criteriaBuilder) {
         var query = criteriaBuilder.createQuery(Long.class);
-        var medicine = query.from(Medicine.class);
+        var medicine = query.from(Product.class);
         query.select(criteriaBuilder.count(medicine));
 
         var predicates = buildPredicates(filter, criteriaBuilder, medicine);
@@ -54,7 +54,7 @@ public class FilterMedicineRepositoryImpl implements FilterMedicineRepository {
     }
 
     private static List<Predicate> buildPredicates(MedicineFilter filter, CriteriaBuilder criteriaBuilder,
-                                                   Root<Medicine> medicine) {
+                                                   Root<Product> medicine) {
         List<Predicate> predicates = new ArrayList<>();
 
         if (filter.type() != null) {
@@ -88,7 +88,7 @@ public class FilterMedicineRepositoryImpl implements FilterMedicineRepository {
         return predicates;
     }
 
-    private List<Medicine> applyPagination(CriteriaQuery<Medicine> query, Pageable pageable) {
+    private List<Product> applyPagination(CriteriaQuery<Product> query, Pageable pageable) {
         var typedQuery = entityManager.createQuery(query);
 
         typedQuery.setFirstResult(Math.toIntExact(pageable.getOffset()));

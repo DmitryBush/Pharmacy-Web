@@ -104,4 +104,20 @@ public class WarehouseController {
         model.addAttribute("authorities", authorities);
         return "/admin/warehouse-sale";
     }
+
+    @GetMapping("/{id}/history")
+    public String showTransactionHistory(Model model,
+                                         HttpServletRequest httpServletRequest,
+                                         @AuthenticationPrincipal UserDetails userDetails,
+                                         @PathVariable Long id) {
+        var authorities = userDetails.getAuthorities()
+                .stream()
+                .map(GrantedAuthority::getAuthority)
+                .toList();
+
+        model.addAttribute("currentUri", httpServletRequest.getRequestURI());
+        model.addAttribute("branchId", id);
+        model.addAttribute("authorities", authorities);
+        return "/admin/transaction-history";
+    }
 }

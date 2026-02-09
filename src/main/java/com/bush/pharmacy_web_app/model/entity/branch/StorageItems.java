@@ -1,6 +1,6 @@
 package com.bush.pharmacy_web_app.model.entity.branch;
 
-import com.bush.pharmacy_web_app.model.entity.medicine.Medicine;
+import com.bush.pharmacy_web_app.model.entity.medicine.Product;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,8 +20,8 @@ public class StorageItems {
     private Long id;
     private Integer amount;
     @OneToOne
-    @JoinColumn(name = "f_key_medicine_id", nullable = false, unique = true)
-    private Medicine medicine;
+    @JoinColumn(name = "f_key_product_id", nullable = false, unique = true)
+    private Product product;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "f_key_branch_id", nullable = false)
     private PharmacyBranch branch;

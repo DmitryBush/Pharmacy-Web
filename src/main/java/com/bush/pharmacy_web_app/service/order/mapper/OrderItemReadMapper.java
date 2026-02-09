@@ -15,7 +15,7 @@ public class OrderItemReadMapper implements DtoMapper<OrderItem, OrderItemReadDt
     private final MedicinePreviewReadMapper medicinePreviewReadMapper;
     @Override
     public OrderItemReadDto map(OrderItem obj) {
-        var medicine = Optional.ofNullable(obj.getMedicine())
+        var medicine = Optional.ofNullable(obj.getProduct())
                 .map(medicinePreviewReadMapper::map)
                 .orElse(null);
         return new OrderItemReadDto(obj.getId(), obj.getAmount(), obj.getPrice(), medicine);

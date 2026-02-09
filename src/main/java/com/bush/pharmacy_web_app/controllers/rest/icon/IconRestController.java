@@ -15,4 +15,9 @@ public class IconRestController {
     public Resource findAdminIcon(@PathVariable String name) {
         return iconService.findAdminIconByName(name);
     }
+
+    @GetMapping("/header/{name}")
+    public Resource findHeaderIcon(@PathVariable String name) {
+        return iconService.findHeaderIconByName(name);
+    }
 }

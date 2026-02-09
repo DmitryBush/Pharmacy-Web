@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Новости</title>
+    <link href="/css/base.css" rel="stylesheet"/>
+    <link href="/css/card/card.css" rel="stylesheet"/>
+    <link href="/css/index.css" rel="stylesheet">
+    <link href="/css/pagination/pagination.css" rel="stylesheet">
+    <script src="/js/news/news-list.js" type="module"></script>
+</head>
+<body>
+    <div th:replace="~{/page-header.html :: page-header}"></div>
+    <main class="main-content" id="main-content" th:data-slug="${newsSlug}">
+        <div class="news-section" id="news-section">
+            <h2>Новости</h2>
+            <div class="news-container" id="news-container"></div>
+        </div>
+    </main>
+    <div th:replace="~{/page-footer.html :: page-footer}"></div>
+</body>
+</html>

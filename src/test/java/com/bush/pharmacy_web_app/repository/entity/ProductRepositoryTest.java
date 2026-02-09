@@ -13,7 +13,7 @@ import org.springframework.data.domain.PageRequest;
 @Tag("DatabaseRequired")
 @SpringBootTest
 @Transactional
-public class MedicineRepositoryTest {
+public class ProductRepositoryTest {
     @Autowired
     private MedicineRepository medicineRepository;
     @Test
