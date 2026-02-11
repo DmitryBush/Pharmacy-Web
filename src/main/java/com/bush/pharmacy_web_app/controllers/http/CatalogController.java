@@ -21,15 +21,7 @@ public class CatalogController {
     private final MedicineService service;
 
     @GetMapping
-    public String showAllProducts(Model model,
-                                  MedicineFilter filter,
-                                  @PageableDefault(size = 15, sort = "price", direction = Sort.Direction.ASC)
-                                       Pageable pageable) {
-        var page = service.findAllPreviews(filter, pageable);
-
-        model.addAttribute("types", typeService.findAllTypes());
-        model.addAttribute("manufacturers", service.findAllManufacturers());
-        model.addAttribute("products", page);
+    public String showAllProducts() {
         return "catalog/catalog";
     }
 
