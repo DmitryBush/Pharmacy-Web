@@ -26,7 +26,7 @@ public class Product {
     @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REMOVE}, mappedBy = "id.product")
     private List<ProductTypeMapping> type;
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    @JoinColumn(name = "fk_product_manufacturer")
+    @JoinColumn(name = "fk_product_manufacturer", nullable = false)
     private Manufacturer manufacturer;
     @Column(nullable = false)
     private BigDecimal price;
