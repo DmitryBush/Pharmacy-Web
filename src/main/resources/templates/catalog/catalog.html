@@ -4,12 +4,16 @@
     <meta charset="UTF-8">
     <title>Каталог</title>
     <link href="/css/catalog/catalog.css" rel="stylesheet" type="text/css">
+    <link href="/css/base.css" rel="stylesheet"/>
+    <link href="/css/product/product-card.css" rel="stylesheet">
+    <script src="/js/catalog/catalog.js" type="module"></script>
 </head>
 <body>
+    <div th:replace="~{/page-header.html :: page-header}"></div>
     <div class="catalog-page">
-        <h1>Лекарства [(${medicines.getTotalElements()})] товаров</h1>
+        <h1 id="catalog-header"></h1>
         <div class="filter-container">
-            <form action="/api/v1/catalog">
+            <form action="/api/v1/catalog" id="filter-form">
                 <div class="filter-section">
                     <h3>Цена</h3>
                     <div class="price-filter-group">
@@ -22,11 +26,12 @@
                     </div>
                 </div>
                 <div class="filter-section">
-                    <h3>Тип товара</h3>
+                    <h3>Действующее вещество</h3>
+                    <ul id="active-ingredient-filter-container"></ul>
                 </div>
                 <div class="filter-section">
                     <h3>Производитель</h3>
-                    <ul>
+                    <ul id="manufacturer-filters-container">
                         <li th:each="medicineManufacturer : ${manufacturers}">
                             <label class="price-filter-group">
                                 <input type="checkbox" name="manufacturer" th:value="${medicineManufacturer.name}">
@@ -34,6 +39,10 @@
                             </label>
                         </li>
                     </ul>
+                </div>
+                <div class="filter-section">
+                    <h3>Страна</h3>
+                    <ul id="country-filter-container"></ul>
                 </div>
                 <div class="filter-section">
                     <h3>Рецепт</h3>
@@ -54,72 +63,24 @@
                     </label>
                 </div>
                 <div class="filter-actions">
-                    <button type="submit">Применить фильтрацию</button>
-                    <button type="button" id="resetFilters">Сбросить фильтрацию</button>
+                    <button type="submit" id="submit-button">Применить фильтрацию</button>
+                    <button type="button" id="reset-filter-button">Сбросить фильтрацию</button>
                 </div>
             </form>
         </div>
-        <div class="product-list-container">
+        <div class="product-list-container" id="product-list-container">
             <div class="sort-container">
-                <label for="sortBy">
+                <label for="sort-selector">
                     Сортировать по
-                    <select id="sortBy">
-                        <option value="price,asc"
-                                th:selected="${#strings.equals(medicines.sort, 'price: ASC')}">По возрастанию цены</option>
-                        <option value="price,desc"
-                                th:selected="${#strings.equals(medicines.sort, 'price: DESC')}">По убыванию цены</option>
+                    <select id="sort-selector">
+                        <option value="price,asc">По возрастанию цены</option>
+                        <option value="price,desc">По убыванию цены</option>
                     </select>
                 </label>
             </div>
-            <div class="product-grid">
-                <div class="product-card" th:each="medicine : ${medicines.content}">
-                    <a th:href="@{/catalog/{id}(id=${medicine.id})}">
-                        <img th:src="@{/api/v1/product-image/{id}/{filename}(id=${medicine.id},filename=${medicine.imagePaths.get(0).path})}"
-                             width="200px"
-                             alt="[(${medicine.name})]">
-                    </a>
-                    <div>
-                        <a th:href="@{/catalog/{id}(id=${medicine.id})}" th:text="${medicine.name}"></a>
-                    </div>
-                    <div>
-                        <p>[(${medicine.price})] ₽</p>
-                        <button>Купить</button>
-                    </div>
-                </div>
-            </div>
-            <div class="pagination-container">
-                <a th:if="${medicines.hasPrevious()}"
-                   th:href="@{${baseUrl}(page=${medicines.number - 1}, size=${medicines.size})}">
-                    ←
-                </a>
-                <span th:unless="${medicines.hasPrevious()}">←</span>
-
-                <span th:each="pageNum : ${#numbers.sequence(1, medicines.totalPages)}">
-                    <a th:if="${pageNum - 1 != medicines.number}"
-                       th:href="@{${baseUrl}(page=${pageNum - 1}, size=${medicines.size})}"
-                       th:text="${pageNum}">
-                    </a>
-                    <span th:if="${pageNum - 1 == medicines.number}"
-                          th:text="${pageNum}">
-                    </span>
-                </span>
-
-                <a th:if="${medicines.hasNext()}"
-                   th:href="@{${baseUrl}(page=${medicines.number + 1}, size=${medicines.size})}">
-                    →
-                </a>
-                <span th:unless="${medicines.hasNext()}">→</span>
-
-                <label for="pageSize">Показывать по:</label>
-                <select name="pageSize" id="pageSize">
-                    <option value="15" th:selected="${medicines.size == 15}">15</option>
-                    <option value="30" th:selected="${medicines.size == 30}">30</option>
-                    <option value="50" th:selected="${medicines.size == 50}">50</option>
-                    <option value="75" th:selected="${medicines.size == 75}">75</option>
-                </select>
-            </div>
+            <div class="product-grid" id="product-grid"></div>
         </div>
     </div>
-    <script src="/js/catalog/catalog.js"></script>
+    <div th:replace="~{/page-footer.html :: page-footer}"></div>
 </body>
 </html>
