@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: Search-Service
+  datasource:
+    pharmacies:
+      username: postgres
+      password: postgres
+  debezium:
+    connectors:
+      path: classpath:debezium/connectors/*.json
+  threads:
+    virtual: enabled
