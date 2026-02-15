@@ -40,7 +40,7 @@ dependencies {
     compileOnly("org.mapstruct:mapstruct:1.6.3")
     annotationProcessor("org.mapstruct:mapstruct-processor:1.6.3")
 
-    implementation(":Transaction-Outbox")
+    implementation(project(":Transaction-Outbox"))
 
 	testCompileOnly("org.projectlombok:lombok")
 	runtimeOnly("org.postgresql:postgresql")
