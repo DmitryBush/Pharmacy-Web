@@ -5,8 +5,20 @@ spring:
     pharmacies:
       username: postgres
       password: postgres
+  elsaticsearch:
+    url: localhost:9200
+    username: elastic
+    password: elastic
+  kafka:
+    consumer:
+      bootstrap-servers: localhost:9096
+      trusted-packages: com.bush.search.event.kafka
   debezium:
+    url: http://localhost:9083
     connectors:
       path: classpath:debezium/connectors/*.json
   threads:
     virtual: enabled
+
+server:
+  port: 8081
