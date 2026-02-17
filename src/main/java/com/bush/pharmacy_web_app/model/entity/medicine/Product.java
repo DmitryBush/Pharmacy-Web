@@ -2,6 +2,7 @@ package com.bush.pharmacy_web_app.model.entity.medicine;
 
 import com.bush.pharmacy_web_app.model.entity.Supplier;
 import com.bush.pharmacy_web_app.model.entity.manufacturer.Manufacturer;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -59,6 +60,7 @@ public class Product {
     private Supplier supplier;
 
     @Builder.Default
+    @JsonIdentityReference(alwaysAsId = true)
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProductImage> image = new ArrayList<>();
 

@@ -1,6 +1,7 @@
 package com.bush.pharmacy_web_app.model.entity;
 
 import com.bush.pharmacy_web_app.model.entity.medicine.Product;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -25,6 +26,7 @@ public class Supplier {
     private Address address;
 
     @Builder.Default
+    @JsonIgnore
     @OneToMany(mappedBy = "supplier")
     private List<Product> products = new ArrayList<>();
 }
