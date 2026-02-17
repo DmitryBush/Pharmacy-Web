@@ -17,7 +17,7 @@ public interface ResolveIndexStrategy {
     /**
      * Method executes target object preprocessing before indexing
      * @param jsonPayload Raw target object
-     * @param crudOperationConstantsType Type of CDC operation that occurred
+     * @param operation Type of CDC operation that occurred
      */
-    void indexObject(String jsonPayload, CrudOperationConstants crudOperationConstantsType);
+    void indexObject(String jsonPayload, CrudOperationConstants operation);
 }

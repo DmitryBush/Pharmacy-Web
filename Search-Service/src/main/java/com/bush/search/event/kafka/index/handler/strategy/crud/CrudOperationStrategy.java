@@ -5,7 +5,7 @@ import com.bush.search.domain.index.CrudOperationConstants;
 /**
  * CRUD operation processing strategy for the target object
  */
-public interface CrudOperationStrategy {
+interface CrudOperationStrategy {
     /**
      * Method checks whether the strategy is applicable to target object with the required operation type
      * @param crudOperationConstantsType Required operation type
