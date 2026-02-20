@@ -4,10 +4,12 @@ import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigurationPackage;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import java.util.Objects;
@@ -18,6 +20,8 @@ import java.util.Objects;
 @Configuration
 @AutoConfigurationPackage(basePackages = "com.bush.outbox")
 @ComponentScan(basePackages = "com.bush.outbox")
+@EntityScan(basePackages = "com.bush.outbox.domain.entity")
+@EnableJpaRepositories(basePackages = "com.bush.outbox.repository")
 public class OutboxAutoConfiguration {
     @Autowired
     private Environment environment;

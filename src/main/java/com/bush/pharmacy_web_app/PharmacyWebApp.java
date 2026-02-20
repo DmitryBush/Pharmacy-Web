@@ -1,5 +1,6 @@
 package com.bush.pharmacy_web_app;
 
+import com.bush.outbox.annotation.EnableOutboxService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -7,6 +8,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 
 @EnableMethodSecurity
 @EnableScheduling
+@EnableOutboxService
 @SpringBootApplication
 public class PharmacyWebApp {
 
