@@ -6,12 +6,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
+import java.util.List;
 
 @Slf4j
 @Component
 @RequiredArgsConstructor
 public class CrudOperationStrategyRegistry {
-    private final HashSet<CrudOperationStrategy> crudOperationStrategies;
+    private final List<CrudOperationStrategy> crudOperationStrategies;
 
     public <S, P> void resolveCrudOperation(CrudOperationConstants operation, Class<S> serviceClazz, P payload) {
         crudOperationStrategies.stream()

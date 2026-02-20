@@ -5,11 +5,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
 public class ResolveIndexStrategyRegistry {
-    private final HashSet<ResolveIndexStrategy> resolveIndexStrategies;
+    private final List<ResolveIndexStrategy> resolveIndexStrategies;
 
     public void resolveIndexStrategy(String objectName, CrudOperationConstants operation, String jsonPayload) {
         resolveIndexStrategies.stream()
