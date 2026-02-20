@@ -10,7 +10,8 @@ import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
 
 @Component
-@KafkaListener(topics = "search-pharmacies.public.outbox_service_table", groupId = "product-processing-group")
+@KafkaListener(topics = "search-pharmacies.public.outbox_service_table", groupId = "product-processing-group",
+        containerFactory = "concurrentKafkaListenerContainerFactory")
 @RequiredArgsConstructor
 public class ProductCdcEventHandler implements CdcEventHandler<String> {
     private final ResolveIndexStrategyRegistry indexStrategyRegistry;

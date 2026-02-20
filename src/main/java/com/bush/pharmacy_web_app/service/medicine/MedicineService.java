@@ -1,5 +1,8 @@
 package com.bush.pharmacy_web_app.service.medicine;
 
+import com.bush.outbox.domain.dto.OutboxRecordDto;
+import com.bush.outbox.domain.entity.CrudOperationType;
+import com.bush.outbox.service.OutboxService;
 import com.bush.pharmacy_web_app.model.dto.medicine.*;
 import com.bush.pharmacy_web_app.repository.medicine.MedicineRepository;
 import com.bush.pharmacy_web_app.repository.branch.PharmacyBranchRepository;
@@ -38,6 +41,7 @@ public class MedicineService {
     private final MedicineAdminReadMapper adminMedicineReadMapper;
 
     private final MedicineImageService imageService;
+    private final OutboxService outboxService;
 
     public List<MedicinePreviewReadDto> findAllPreviews() {
         return medicineRepository.findAll().stream()
@@ -95,6 +99,8 @@ public class MedicineService {
                     return medicineCreateMapper.map(mergedDto);
                 })
                 .map(medicineRepository::save)
+                .map(product -> outboxService.createRecord(
+                        new OutboxRecordDto<>("product", CrudOperationType.C, product)))
                 .map(medicine -> {
                     TransactionSynchronizationManager.registerSynchronization(
                             new TransactionSynchronization() {
@@ -122,6 +128,8 @@ public class MedicineService {
                     return medicineCreateMapper.map(mergedDto, lamb);
                 })
                 .map(medicineRepository::saveAndFlush)
+                .map(product -> outboxService.createRecord(
+                        new OutboxRecordDto<>("product", CrudOperationType.U, product)))
                 .map(medicine -> {
                     TransactionSynchronizationManager.registerSynchronization(
                             new TransactionSynchronization() {
@@ -160,6 +168,7 @@ public class MedicineService {
                     );
 
                     medicineRepository.delete(medicine);
+                    outboxService.createRecord(new OutboxRecordDto<>("product", CrudOperationType.D, medicine));
                     return true;
                 })
                 .orElse(false);

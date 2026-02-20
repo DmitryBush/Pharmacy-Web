@@ -4,6 +4,7 @@ import com.bush.outbox.domain.dto.OutboxRecordDto;
 import com.bush.outbox.domain.entity.OutboxRecord;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.hibernate6.Hibernate6Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -23,6 +24,7 @@ public interface OutboxCreateMapper {
     default String convertToJsonPayload(Object payload) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
+        objectMapper.registerModule(new Hibernate6Module());
         return objectMapper.writeValueAsString(payload);
     }
 

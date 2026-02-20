@@ -19,7 +19,7 @@ public abstract class AbstractCrudOperationStrategy<S, P> implements CrudOperati
     @Override
     public void process(Object payload) {
         if (payload.getClass().isAssignableFrom(payloadClazz)) {
-            processInternal(payloadClazz.cast(payloadClazz));
+            processInternal(payloadClazz.cast(payload));
         } else {
             throw new IllegalArgumentException("An error has occurred when casting a payload to required class");
         }
