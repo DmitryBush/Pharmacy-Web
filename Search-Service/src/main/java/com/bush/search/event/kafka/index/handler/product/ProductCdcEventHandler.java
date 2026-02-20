@@ -6,6 +6,7 @@ import com.bush.search.event.kafka.index.handler.strategy.index.ResolveIndexStra
 import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.annotation.KafkaHandler;
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -16,7 +17,7 @@ public class ProductCdcEventHandler implements CdcEventHandler<String> {
 
     @Override
     @KafkaHandler
-    public void handle(CdcEvent<String> event) {
+    public void handle(@Payload CdcEvent<String> event) {
         indexStrategyRegistry.resolveIndexStrategy(event.objectName(), event.crudOperationConstantsType(), event.payload());
     }
 }
