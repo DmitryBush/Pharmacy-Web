@@ -1,6 +1,7 @@
 package com.bush.search.domain.index.product;
 
-public record ProductTypeMappingPayload(ProductPayload product,
-                                        ProductTypePayload type,
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+public record ProductTypeMappingPayload(@JsonProperty("type.id.type") ProductTypePayload type,
                                         Boolean isMain) {
 }

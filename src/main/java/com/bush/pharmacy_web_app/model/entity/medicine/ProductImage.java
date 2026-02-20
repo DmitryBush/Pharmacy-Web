@@ -15,7 +15,7 @@ import lombok.ToString;
 @Entity
 @ToString(exclude = "product")
 @Table(name = "product_images")
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class)
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class ProductImage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

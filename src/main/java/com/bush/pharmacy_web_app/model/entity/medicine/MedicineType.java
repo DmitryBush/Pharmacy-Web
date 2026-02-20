@@ -1,5 +1,6 @@
 package com.bush.pharmacy_web_app.model.entity.medicine;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,5 +25,6 @@ public class MedicineType {
     private MedicineType parent;
 
     @OneToMany(mappedBy = "parent")
+    @JsonIgnore
     private List<MedicineType> childTypes;
 }
