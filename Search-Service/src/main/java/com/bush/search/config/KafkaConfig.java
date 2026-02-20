@@ -46,7 +46,9 @@ public class KafkaConfig {
         kafkaConfigMap.put(ErrorHandlingDeserializer.VALUE_DESERIALIZER_CLASS, JsonDeserializer.class);
         kafkaConfigMap.put(JsonDeserializer.TRUSTED_PACKAGES,
                 environment.getProperty("spring.kafka.consumer.trusted-packages"));
-        return new DefaultKafkaConsumerFactory<>(kafkaConfigMap);
+        kafkaConfigMap.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
+        return new DefaultKafkaConsumerFactory<>(kafkaConfigMap, new StringDeserializer(),
+                new ErrorHandlingDeserializer<>(new JsonDeserializer<>(CdcEvent.class)));
     }
 
     @Bean

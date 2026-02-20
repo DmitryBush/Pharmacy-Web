@@ -8,7 +8,7 @@ import org.springframework.data.elasticsearch.client.elc.ElasticsearchConfigurat
 import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;
 
 @Configuration
-@EnableElasticsearchRepositories(basePackages = "com.bush.search.domain.document")
+@EnableElasticsearchRepositories(basePackages = "com.bush.search.repository")
 public class ElasticsearchConfig extends ElasticsearchConfiguration {
     @Value("${spring.elsaticsearch.url}")
     private String url;
