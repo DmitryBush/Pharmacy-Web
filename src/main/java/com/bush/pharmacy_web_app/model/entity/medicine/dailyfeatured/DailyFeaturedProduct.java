@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 public class DailyFeaturedProduct {
     @Id
     private Short id;
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "product_id", nullable = false, unique = true)
     private Product product;
 }
