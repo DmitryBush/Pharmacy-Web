@@ -9,7 +9,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING, imports = String.class,
-        uses = {ManufacturerCreateMapper.class, SupplierCreateMapper.class})
+        uses = {ManufacturerCreateMapper.class, SupplierCreateMapper.class, ProductTypeCreateMapper.class})
 public interface ProductCreateMapper {
     @Mapping(target = "id", expression = "java(String.valueOf(productPayload.id()))")
     @Mapping(target = "productId", source = "id")

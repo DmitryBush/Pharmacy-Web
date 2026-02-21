@@ -9,5 +9,6 @@ import org.mapstruct.MappingConstants;
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface CountryCreateMapper {
     @Mapping(target = "id", expression = "java(String.valueOf(countryPayload.id()))")
+    @Mapping(target = "countryName", source = "country")
     Country mapToCountry(CountryPayload countryPayload);
 }

@@ -24,6 +24,8 @@ public class Product {
     private Long productId;
     @Field(type = FieldType.Keyword)
     private String name;
+    @Field(type = FieldType.Nested)
+    private List<ProductType> type;
     @Field(type = FieldType.Scaled_Float, scalingFactor = 100)
     private BigDecimal price;
     @Field(type = FieldType.Boolean)
