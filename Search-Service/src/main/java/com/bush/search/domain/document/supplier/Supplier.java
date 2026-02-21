@@ -16,7 +16,7 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
 public class Supplier {
     @Id
     private String itn;
-    @Field(type = FieldType.Keyword)
+    @Field(type = FieldType.Text)
     private String name;
     @Field(type = FieldType.Nested)
     private Address address;

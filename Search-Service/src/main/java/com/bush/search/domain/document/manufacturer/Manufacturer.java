@@ -17,7 +17,7 @@ public class Manufacturer {
     private String id;
     @Field(type = FieldType.Long)
     private Long manufacturerId;
-    @Field(type = FieldType.Keyword)
+    @Field(type = FieldType.Text)
     private String name;
 
     @Field(type = FieldType.Nested)

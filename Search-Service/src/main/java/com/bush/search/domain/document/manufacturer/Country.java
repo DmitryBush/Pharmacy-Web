@@ -15,6 +15,6 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
 public class Country {
     @Id
     private String id;
-    @Field(type = FieldType.Keyword)
+    @Field(type = FieldType.Text)
     private String countryName;
 }

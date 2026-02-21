@@ -19,8 +19,6 @@ public class ProductType {
     private Integer typeId;
     @Field(type = FieldType.Keyword)
     private String typeName;
-    @Field(type = FieldType.Nested)
-    private ProductType parent;
     @Field(type = FieldType.Boolean)
     private Boolean isMain;
 }
