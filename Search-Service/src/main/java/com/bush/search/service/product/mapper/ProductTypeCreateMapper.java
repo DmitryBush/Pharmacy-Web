@@ -11,6 +11,5 @@ public interface ProductTypeCreateMapper {
     @Mapping(target = "id", expression = "java(String.valueOf(productTypeMappingPayload.id()))")
     @Mapping(target = "typeId", source = "id")
     @Mapping(target = "typeName", source = "type")
-    @Mapping(target = "parent", source = "parent")
     ProductType mapToProductType(ProductTypeMappingPayload productTypeMappingPayload);
 }

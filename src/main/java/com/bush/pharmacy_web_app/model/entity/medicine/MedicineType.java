@@ -22,6 +22,7 @@ public class MedicineType {
     private String type;
     @OneToOne
     @JoinColumn(name = "parent_id")
+    @JsonIgnore
     private MedicineType parent;
 
     @OneToMany(mappedBy = "parent")
