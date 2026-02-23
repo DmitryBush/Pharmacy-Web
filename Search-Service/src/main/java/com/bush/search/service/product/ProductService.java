@@ -1,11 +1,14 @@
 package com.bush.search.service.product;
 
+import com.bush.search.domain.dto.ProductFilter;
 import com.bush.search.domain.dto.ProductPreviewDto;
 import com.bush.search.domain.index.product.ProductPayload;
 import com.bush.search.repository.ProductRepository;
 import com.bush.search.service.product.mapper.ProductCreateMapper;
 import com.bush.search.service.product.mapper.ProductReadMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -42,5 +45,10 @@ public class ProductService {
         return productRepository.findByNameContainingIgnoreCase(productName).stream()
                 .map(productReadMapper::mapToProductPreviewDto)
                 .toList();
+    }
+
+    public Page<ProductPreviewDto> findProductsByFilter(ProductFilter productFilter, Pageable pageable) {
+        return productRepository.findProductsByFilter(productFilter, pageable)
+                .map(productReadMapper::mapToProductPreviewDto);
     }
 }
