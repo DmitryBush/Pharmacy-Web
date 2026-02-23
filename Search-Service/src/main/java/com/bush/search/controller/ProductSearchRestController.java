@@ -9,6 +9,7 @@ import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,7 +29,7 @@ public class ProductSearchRestController {
 
     @GetMapping("/filter")
     public ResponseEntity<PagedModel<EntityModel<ProductPreviewDto>>> findProductByFilter(Pageable pageable,
-                                                                                          ProductFilter filter,
+                                                                                          @Validated ProductFilter filter,
                                                                                           PagedResourcesAssembler<ProductPreviewDto> assembler) {
         return ResponseEntity.ok(assembler.toModel(productService.findProductsByFilter(filter, pageable)));
     }

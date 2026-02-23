@@ -26,10 +26,10 @@ public class DynamicProductFilterRepositoryImpl implements DynamicProductFilterR
         Criteria criteria = new Criteria("type.typeName").is(filter.type());
 
         if (Objects.nonNull(filter.manufacturers())) {
-            criteria = criteria.and("manufacturers.name").in(filter.manufacturers());
+            criteria = criteria.and("manufacturer.name").in(filter.manufacturers());
         }
         if (Objects.nonNull(filter.countries())) {
-            criteria = criteria.and("manufacturers.country.countryName").in(filter.countries());
+            criteria = criteria.and("manufacturer.country.countryName").in(filter.countries());
         }
         if (Objects.nonNull(filter.activeIngredients())) {
             criteria = criteria.and("activeIngredient").in(filter.activeIngredients());
