@@ -22,9 +22,9 @@ public class Product {
     private String id;
     @Field(type = FieldType.Long)
     private Long productId;
-    @Field(type = FieldType.Text)
+    @Field(type = FieldType.Text, analyzer = "russian")
     private String name;
-    @Field(type = FieldType.Nested)
+    @Field(type = FieldType.Nested, store = true)
     private List<ProductType> type;
     @Field(type = FieldType.Scaled_Float, scalingFactor = 100)
     private BigDecimal price;
@@ -37,8 +37,8 @@ public class Product {
     @Field(type = FieldType.Long)
     private List<Long> image;
 
-    @Field(type = FieldType.Nested)
+    @Field(type = FieldType.Nested, store = true)
     private Supplier supplier;
-    @Field(type = FieldType.Nested)
+    @Field(type = FieldType.Nested, store = true)
     private Manufacturer manufacturer;
 }

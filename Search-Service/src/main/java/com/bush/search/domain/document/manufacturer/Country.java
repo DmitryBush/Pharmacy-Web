@@ -7,6 +7,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
+import org.springframework.data.elasticsearch.annotations.InnerField;
+import org.springframework.data.elasticsearch.annotations.MultiField;
 
 @Data
 @AllArgsConstructor
@@ -15,6 +17,7 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
 public class Country {
     @Id
     private String id;
-    @Field(type = FieldType.Text)
+    @MultiField(mainField = @Field(type = FieldType.Text, analyzer = "russian"),
+            otherFields = @InnerField(suffix = "keyword", type = FieldType.Keyword))
     private String countryName;
 }

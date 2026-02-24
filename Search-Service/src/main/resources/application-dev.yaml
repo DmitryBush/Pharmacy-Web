@@ -22,3 +22,9 @@ spring:
 
 server:
   port: 8081
+
+logging:
+  level:
+    tracer: trace
+    org.elasticsearch.client: trace
+    org.springframework.data.elasticsearch.client.wire: trace
