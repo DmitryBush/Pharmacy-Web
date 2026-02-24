@@ -16,6 +16,9 @@ public class RouteConfig {
 
     private RouteLocatorBuilder.Builder getPharmacyServiceRoutes(RouteLocatorBuilder.Builder builder) {
         return builder
+                .route("mainHttp", predicateSpec -> predicateSpec
+                        .path("/")
+                        .uri(ServiceUriEnum.PHARMACY_SERVICE.getUri()))
                 .route("catalogHttp", predicateSpec -> predicateSpec
                         .path("/catalog/**")
                         .uri(ServiceUriEnum.PHARMACY_SERVICE.getUri()))
@@ -88,6 +91,12 @@ public class RouteConfig {
                         .uri(ServiceUriEnum.PHARMACY_SERVICE.getUri()))
                 .route("type-search", predicateSpec -> predicateSpec
                         .path("/api/*/search/type/**")
+                        .uri(ServiceUriEnum.PHARMACY_SERVICE.getUri()))
+                .route("css", predicateSpec -> predicateSpec
+                        .path("/css/**")
+                        .uri(ServiceUriEnum.PHARMACY_SERVICE.getUri()))
+                .route("js", predicateSpec -> predicateSpec
+                        .path("/js/**")
                         .uri(ServiceUriEnum.PHARMACY_SERVICE.getUri()));
     }
 
