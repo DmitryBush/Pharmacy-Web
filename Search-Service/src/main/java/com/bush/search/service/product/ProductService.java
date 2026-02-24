@@ -1,9 +1,12 @@
 package com.bush.search.service.product;
 
+import com.bush.search.domain.document.product.Product;
 import com.bush.search.domain.dto.ProductFilter;
 import com.bush.search.domain.dto.ProductPreviewDto;
 import com.bush.search.domain.index.product.ProductPayload;
+import com.bush.search.repository.FilterResultTuple;
 import com.bush.search.repository.ProductRepository;
+import com.bush.search.repository.filter.ProductAggregation;
 import com.bush.search.service.product.mapper.ProductCreateMapper;
 import com.bush.search.service.product.mapper.ProductReadMapper;
 import lombok.RequiredArgsConstructor;
@@ -47,8 +50,9 @@ public class ProductService {
                 .toList();
     }
 
-    public Page<ProductPreviewDto> findProductsByFilter(ProductFilter productFilter, Pageable pageable) {
-        return productRepository.findProductsByFilter(productFilter, pageable)
-                .map(productReadMapper::mapToProductPreviewDto);
+    public FilterResultTuple<Page<ProductPreviewDto>, ProductAggregation> findProductsByFilter(ProductFilter productFilter, Pageable pageable) {
+        var filterResultTuple = productRepository.findProductsByFilter(productFilter, pageable);
+        return new FilterResultTuple<>(filterResultTuple.filtrationResult().map(productReadMapper::mapToProductPreviewDto),
+                filterResultTuple.aggregation());
     }
 }

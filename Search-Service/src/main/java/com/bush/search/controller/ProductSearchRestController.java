@@ -1,7 +1,9 @@
 package com.bush.search.controller;
 
+import com.bush.search.controller.response.FilteredResponse;
 import com.bush.search.domain.dto.ProductFilter;
 import com.bush.search.domain.dto.ProductPreviewDto;
+import com.bush.search.repository.filter.ProductAggregation;
 import com.bush.search.service.product.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -28,9 +31,11 @@ public class ProductSearchRestController {
     }
 
     @GetMapping("/filter")
-    public ResponseEntity<PagedModel<EntityModel<ProductPreviewDto>>> findProductByFilter(Pageable pageable,
-                                                                                          @Validated ProductFilter filter,
-                                                                                          PagedResourcesAssembler<ProductPreviewDto> assembler) {
-        return ResponseEntity.ok(assembler.toModel(productService.findProductsByFilter(filter, pageable)));
+    public ResponseEntity<FilteredResponse<ProductPreviewDto, ProductAggregation>> findProductByFilter(Pageable pageable,
+                                                                                                       @Validated ProductFilter filter,
+                                                                                                       PagedResourcesAssembler<ProductPreviewDto> assembler) {
+        var filteredTuple = productService.findProductsByFilter(filter, pageable);
+        var assembled = assembler.toModel(filteredTuple.filtrationResult());
+        return ResponseEntity.ok(new FilteredResponse<>(assembled, filteredTuple.aggregation()));
     }
 }
