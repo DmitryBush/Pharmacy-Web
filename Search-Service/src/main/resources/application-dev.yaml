@@ -28,3 +28,8 @@ logging:
     tracer: trace
     org.elasticsearch.client: trace
     org.springframework.data.elasticsearch.client.wire: trace
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
