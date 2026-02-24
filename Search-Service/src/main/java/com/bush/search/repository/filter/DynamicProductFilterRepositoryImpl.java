@@ -8,9 +8,11 @@ import co.elastic.clients.elasticsearch._types.aggregations.NestedAggregate;
 import co.elastic.clients.elasticsearch._types.aggregations.StringTermsAggregate;
 import co.elastic.clients.elasticsearch._types.query_dsl.BoolQuery;
 import co.elastic.clients.elasticsearch._types.query_dsl.Query;
+import co.elastic.clients.util.ObjectBuilder;
 import com.bush.search.domain.document.product.Product;
 import com.bush.search.domain.dto.ProductFilter;
 import com.bush.search.repository.FilterResultTuple;
+import jakarta.annotation.Nonnull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -24,13 +26,13 @@ import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Repository
 @RequiredArgsConstructor
@@ -39,17 +41,22 @@ public class DynamicProductFilterRepositoryImpl implements DynamicProductFilterR
 
     @Override
     public FilterResultTuple<Page<Product>, ProductAggregation> findProductsByFilter(ProductFilter filter, Pageable pageable) {
-        BoolQuery boolQuery = BoolQuery.of(builder -> builder
-                .filter(f -> f.nested(n -> n.path("type")
-                        .query(q -> q.term(t -> t.field("type.typeName.keyword")
-                                .value(filter.type())))))
-                .filter(createManufacturerQuery(filter))
-                .filter(createCountryQuery(filter))
-                .filter(createActiveIngredientQuery(filter))
-                .filter(createPriceQuery(filter))
-                .filter(createRecipeQuery(filter))
-        );
-        NativeQuery nativeQuery = NativeQuery.builder()
+        BoolQuery boolQuery = getBoolQuery(filter);
+        NativeQuery nativeQuery = buildNativeQuery(boolQuery);
+
+        SearchHits<Product> productSearchHits = elasticsearchClient.search(nativeQuery, Product.class);
+        return new FilterResultTuple<>(buildPage(productSearchHits, pageable),
+                getProductAggregation(Objects.requireNonNull(productSearchHits.getAggregations())));
+    }
+
+    private Page<Product> buildPage(SearchHits<Product> productSearchHits, Pageable pageable) {
+        List<Product> filteredProducts = productSearchHits.stream().map(SearchHit::getContent).toList();
+        return new PageImpl<>(filteredProducts, pageable, productSearchHits.getTotalHits());
+    }
+
+    @Nonnull
+    private NativeQuery buildNativeQuery(BoolQuery boolQuery) {
+        return NativeQuery.builder()
                 .withQuery(boolQuery._toQuery())
                 .withAggregation("manufacturers", createNestedAggregation("manufacturer",
                         "manufacturer.name.keyword"))
@@ -58,81 +65,74 @@ public class DynamicProductFilterRepositoryImpl implements DynamicProductFilterR
                 .withAggregation("activeIngredients", Aggregation.of(a -> a.terms(t ->
                         t.field("activeIngredient").size(100))))
                 .build();
-
-        SearchHits<Product> productSearchHits = elasticsearchClient.search(nativeQuery, Product.class);
-        List<Product> filteredProducts = productSearchHits.stream()
-                .map(SearchHit::getContent)
-                .toList();
-        Page<Product> productPage = new PageImpl<>(filteredProducts, pageable, productSearchHits.getTotalHits());
-        return new FilterResultTuple<>(productPage,
-                getProductAggregation(Objects.requireNonNull(productSearchHits.getAggregations())));
-    }
-
-    private List<Query> createPriceQuery(ProductFilter filter) {
-        List<Query> queries = new ArrayList<>();
-        Optional.ofNullable(filter.minPrice())
-                .ifPresent(minPrice -> queries.add(
-                        new Query.Builder().range(r -> r.number(n -> n.field("price")
-                                .gte(minPrice.doubleValue()))).build()));
-        Optional.ofNullable(filter.maxPrice())
-                .ifPresent(maxPrice -> queries.add(
-                        new Query.Builder().range(r -> r.number(n -> n.field("price")
-                                .lte(maxPrice.doubleValue()))).build()));
-        return queries;
-    }
-
-    private List<Query> createRecipeQuery(ProductFilter filter) {
-        Query.Builder builder = new Query.Builder();
-        List<Query> queries = new ArrayList<>();
-        if (filter.recipe().equals(1)) {
-            queries.add(builder.term(t -> t.field("recipe").value(true)).build());
-        } else if (filter.recipe().equals(2)) {
-            queries.add(builder.term(t -> t.field("recipe").value(false)).build());
-        }
-        return queries;
-    }
-
-    private List<Query> createManufacturerQuery(ProductFilter filter) {
-        Query.Builder builder = new Query.Builder();
-        List<Query> queries = new ArrayList<>();
-        if (Objects.nonNull(filter.manufacturers())) {
-            for (String manufacturer : filter.manufacturers()) {
-                queries.add(builder.nested(n ->
-                        n.path("manufacturer").query(q -> q.term(t -> t.field("manufacturer.name.keyword")
-                                .value(manufacturer)))).build());
-            }
-        }
-        return queries;
-    }
-
-    private List<Query> createCountryQuery(ProductFilter filter) {
-        Query.Builder builder = new Query.Builder();
-        List<Query> queries = new ArrayList<>();
-        if (Objects.nonNull(filter.countries())) {
-            for (String country : filter.countries()) {
-                queries.add(builder.nested(n ->
-                        n.path("manufacturer.country").query(q ->
-                                q.term(t -> t.field("manufacturer.country.countryName.keyword")
-                                        .value(country)))).build());
-            }
-        }
-        return queries;
-    }
-
-    private List<Query> createActiveIngredientQuery(ProductFilter filter) {
-        Query.Builder builder = new Query.Builder();
-        List<Query> queries = new ArrayList<>();
-        if (Objects.nonNull(filter.activeIngredients())) {
-            for (String activeIngredient : filter.activeIngredients()) {
-                queries.add(builder.term(t -> t.field("activeIngredient").value(activeIngredient)).build());
-            }
-        }
-        return queries;
     }
 
     private Aggregation createNestedAggregation(String nestedObjectName, String fieldName) {
         Aggregation aggregation = Aggregation.of(a -> a.terms(t -> t.field(fieldName).size(100)));
         return Aggregation.of(a -> a.nested(n -> n.path(nestedObjectName)).aggregations(fieldName, aggregation));
+    }
+
+    private BoolQuery getBoolQuery(ProductFilter filter) {
+        return BoolQuery.of(builder -> builder
+                .filter(f -> f.nested(n -> n.path("type").query(q ->
+                        q.term(t -> t.field("type.typeName.keyword").value(filter.type())))))
+                .filter(createNestedFilterCriteriaQuery(filter.manufacturers(), "manufacturer",
+                        "manufacturer.name.keyword"))
+                .filter(createNestedFilterCriteriaQuery(filter.countries(), "manufacturer.country",
+                        "manufacturer.country.countryName.keyword"))
+                .filter(createFilterCriteriaQuery(filter.activeIngredients(), "activeIngredient"))
+                .filter(createPriceQuery(filter))
+                .filter(createRecipeQuery(filter))
+        );
+    }
+
+    private List<Query> createPriceQuery(ProductFilter filter) {
+        return Stream.of(
+                        Optional.ofNullable(filter.minPrice())
+                                .map(minPrice -> new Query.Builder()
+                                        .range(r -> r.number(n -> n.field("price")
+                                                .gte(minPrice.doubleValue())))).orElse(null),
+                        Optional.ofNullable(filter.maxPrice())
+                                .map(maxPrice -> new Query.Builder()
+                                        .range(r -> r.number(n -> n.field("price")
+                                                .lte(maxPrice.doubleValue())))).orElse(null)
+                )
+                .filter(Objects::nonNull)
+                .map(ObjectBuilder::build)
+                .toList();
+    }
+
+    private List<Query> createRecipeQuery(ProductFilter filter) {
+        return Stream.of(buildRecipeQuery(filter.recipe())).filter(Objects::nonNull).toList();
+    }
+
+    private Query buildRecipeQuery(Integer recipe) {
+        Query.Builder builder = new Query.Builder();
+        if (recipe.equals(1)) {
+            return builder.term(t -> t.field("recipe").value(true)).build();
+        } else if (recipe.equals(2)) {
+            return builder.term(t -> t.field("recipe").value(false)).build();
+        }
+        return null;
+    }
+
+    private List<Query> createNestedFilterCriteriaQuery(List<String> filteringObjects, String path, String field) {
+        Query.Builder builder = new Query.Builder();
+        return Optional.ofNullable(filteringObjects).stream()
+                .flatMap(Collection::stream)
+                .map(filterCriteria -> builder.nested(n -> n.path(path)
+                        .query(q -> q.term(t -> t.field(field).value(filterCriteria)))))
+                .map(ObjectBuilder::build)
+                .toList();
+    }
+
+    private List<Query> createFilterCriteriaQuery(List<String> filteringObjects, String field) {
+        Query.Builder builder = new Query.Builder();
+        return Optional.ofNullable(filteringObjects).stream()
+                .flatMap(Collection::stream)
+                .map(filterCriteria -> builder.term(t -> t.field(field).value(filterCriteria)))
+                .map(ObjectBuilder::build)
+                .toList();
     }
 
     private ProductAggregation getProductAggregation(AggregationsContainer<?> aggregationContainer) {
@@ -151,10 +151,8 @@ public class DynamicProductFilterRepositoryImpl implements DynamicProductFilterR
         return Optional.ofNullable(aggregation).stream()
                 .map(ElasticsearchAggregation::aggregation)
                 .map(org.springframework.data.elasticsearch.client.elc.Aggregation::getAggregate)
-                .map(Aggregate::sterms)
-                .map(StringTermsAggregate::buckets)
-                .map(Buckets::array)
-                .flatMap(Collection::stream)
+                .map(Aggregate::sterms).map(StringTermsAggregate::buckets)
+                .map(Buckets::array).flatMap(Collection::stream)
                 .collect(Collectors.toMap(b -> b.key().stringValue(), MultiBucketBase::docCount));
     }
 
@@ -162,11 +160,8 @@ public class DynamicProductFilterRepositoryImpl implements DynamicProductFilterR
         return Optional.ofNullable(aggregation).stream()
                 .map(ElasticsearchAggregation::aggregation)
                 .map(org.springframework.data.elasticsearch.client.elc.Aggregation::getAggregate)
-                .map(Aggregate::nested)
-                .map(NestedAggregate::aggregations)
-                .map(Map::values)
-                .flatMap(Collection::stream)
-                .map(Aggregate::sterms)
+                .map(Aggregate::nested).map(NestedAggregate::aggregations).map(Map::values)
+                .flatMap(Collection::stream).map(Aggregate::sterms)
                 .map(StringTermsAggregate::buckets)
                 .map(Buckets::array)
                 .flatMap(Collection::stream)
