@@ -1,0 +1,23 @@
+{
+  "name": "product-connector",
+  "config": {
+    "connector.class": "io.debezium.connector.postgresql.PostgresConnector",
+    "plugin.name": "pgoutput",
+    "tasks.max": "1",
+    "database.hostname": "db",
+    "database.port": "5432",
+    "database.user": "$POSTGRES_USERNAME",
+    "database.password": "$POSTGRES_PASSWORD",
+    "database.dbname" : "pharmacies",
+    "topic.prefix": "search-pharmacies",
+    "slot.name": "debezium_pharmacies",
+    "table.include.list": "public.outbox_service_table",
+    "key.converter": "org.apache.kafka.connect.json.JsonConverter",
+    "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+    "key.converter.schemas.enable": "false",
+    "value.converter.schemas.enable": "false",
+    "transforms": "unwrap",
+    "transforms.unwrap.type": "io.debezium.transforms.ExtractNewRecordState",
+    "transforms.unwrap.drop.tombstones": "false"
+  }
+}

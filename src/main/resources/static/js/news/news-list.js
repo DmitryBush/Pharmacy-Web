@@ -26,9 +26,15 @@ document.addEventListener("DOMContentLoaded", async () => {
             await restClient.fetchData(`/api/v1/news?size=${paginationManager.pageSize}&page=${paginationManager.currentPage}`,
                 'GET', {})).json();
         paginationManager.initializePagination(newsObject.page.number, newsObject.page.size, newsObject.page.totalPages);
-        const newsList = newsObject._embedded.newsReadDtoList;
-
         loader.hideLoading();
+        if (newsObject._embedded === undefined) {
+            const newsMessage = document.createElement('p');
+            newsMessage.textContent = 'Нет доступных новостей';
+            newsContainer.appendChild(newsMessage);
+            return;
+        }
+
+        const newsList = newsObject._embedded.newsReadDtoList;
         if (newsList.length === 0) {
             const newsMessage = document.createElement('p');
             newsMessage.textContent = 'Нет доступных новостей';
