@@ -69,14 +69,15 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     async function loadNews() {
         const newsResponse = await (await restClient.fetchData('/api/v1/news?size=3', 'GET', {})).json();
-
-        const newsArray = newsResponse._embedded.newsReadDtoList;
         newsLoader.hideLoading();
-        if (newsArray.length === 0) {
+        if (newsResponse._embedded === undefined) {
             const newsMessage = document.createElement('p');
             newsMessage.textContent = 'Нет доступных новостей';
+            newsContainer.appendChild(newsMessage);
             return;
         }
+
+        const newsArray = newsResponse._embedded.newsReadDtoList;
         newsArray.forEach((news) => {
             const newsLink = document.createElement('a');
             newsLink.href = `/news/${news.slug}`;
