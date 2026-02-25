@@ -1,3 +1,5 @@
+import {loadCSS} from "../ResourceLoader.js";
+
 export default class PaginationManager {
     constructor(container, restartAction) {
         this.totalPages = 0;
@@ -69,7 +71,7 @@ export default class PaginationManager {
 
     createNextButtonElement() {
         const button = document.createElement('button');
-        button.disabled = (this.currentPage + 1 === this.totalPages);
+        button.disabled = (this.currentPage + 1 >= this.totalPages);
         button.classList.add('pagination-btn');
         button.classList.add('next-btn');
         button.innerHTML = `
@@ -131,3 +133,7 @@ export default class PaginationManager {
         this.render();
     }
 }
+
+document.addEventListener("DOMContentLoaded", async () => {
+    await loadCSS('/css/pagination/pagination.css');
+})

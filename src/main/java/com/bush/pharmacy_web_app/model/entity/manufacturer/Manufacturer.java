@@ -1,9 +1,14 @@
 package com.bush.pharmacy_web_app.model.entity.manufacturer;
 
+import com.bush.pharmacy_web_app.model.entity.medicine.Product;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -20,4 +25,8 @@ public class Manufacturer {
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "f_key_country_id", nullable = false)
     private Country country;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "manufacturer")
+    private List<Product> products = new ArrayList<>();
 }

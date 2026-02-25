@@ -28,57 +28,40 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     async function loadDailyProducts() {
-        const dailyProducts = await (await restClient.fetchData('/api/v1/products/best-sellers',
+        const dailyProducts = await (await restClient.fetchData('/api/v1/products/daily-products',
             'GET', {})).json();
 
         dailyProductsLoader.hideLoading();
         dailyProducts.forEach((dailyProduct) => {
-            const productCard = createProductCard(dailyProduct);
-            dailyProductContainer.append(productCard);
-        });
-    }
+            const productCard = document.createElement('div');
+            productCard.classList.add('product-card');
 
-    async function loadBestSellerProducts() {
-        const bestSellerProducts = await (await restClient.fetchData('/api/v1/products/daily-products',
-            'GET', {})).json();
-
-        const bestSellerProductContainer = bestSellerSection.querySelector('.product-container');
-        bestSellerProducts.forEach((bestSeller) => {
-            const productCard = createProductCard(bestSeller);
-            bestSellerProductContainer.append(productCard);
-        });
-    }
-
-    function createProductCard(product) {
-        const productCard = document.createElement('div');
-        productCard.classList.add('product-card');
-
-        const imageLink = document.createElement('a');
-        imageLink.href = `/catalog/${product.id}`;
-        imageLink.innerHTML = `<img src="/api/v1/product-image/${product.imagePaths[0].id}"
+            const imageLink = document.createElement('a');
+            imageLink.href = `/catalog/${dailyProduct.id}`;
+            imageLink.innerHTML = `<img src="/api/v1/product-image/${dailyProduct.imagePaths[0].id}"
                                         width="200px"
-                                        alt="${product.name}">`;
+                                        alt="${dailyProduct.name}">`;
 
-        const nameLinkContainer = document.createElement('div');
-        const nameLink = document.createElement('a');
-        nameLink.href = `/catalog/${product.id}`;
-        nameLink.textContent = product.name;
+            const nameLinkContainer = document.createElement('div');
+            const nameLink = document.createElement('a');
+            nameLink.href = `/catalog/${dailyProduct.id}`;
+            nameLink.textContent = dailyProduct.name;
 
-        nameLinkContainer.appendChild(nameLink);
+            nameLinkContainer.appendChild(nameLink);
 
-        const actionContainer = document.createElement('div');
+            const actionContainer = document.createElement('div');
 
-        const price = document.createElement('p');
-        price.textContent = `${product.price} ₽`;
-        const buyButton = document.createElement('button');
-        buyButton.textContent = 'Купить';
+            const price = document.createElement('p');
+            price.textContent = `${dailyProduct.price} ₽`;
+            const buyButton = document.createElement('button');
+            buyButton.textContent = 'Купить';
 
-        actionContainer.appendChild(price);
-        actionContainer.appendChild(buyButton);
+            actionContainer.appendChild(price);
+            actionContainer.appendChild(buyButton);
 
-        productCard.append(imageLink);
-        productCard.append(nameLinkContainer);
-        productCard.append(actionContainer);
+            productCard.append(imageLink);
+            productCard.append(nameLinkContainer);
+            productCard.append(actionContainer);
 
             dailyProductsContainer.append(productCard);
         });
@@ -157,4 +140,4 @@ document.addEventListener('DOMContentLoaded', async () => {
             minute: '2-digit'
         }).format(dateObject);
     }
-})
+});

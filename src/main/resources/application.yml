@@ -27,3 +27,8 @@ time:
 featured-products:
   update-cron: "* 30 0 * * *"
   count: 8
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka

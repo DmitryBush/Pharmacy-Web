@@ -23,6 +23,8 @@ repositories {
 	mavenCentral()
 }
 
+extra["springCloudVersion"] = "2024.0.3"
+
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.springframework.boot:spring-boot-starter-web")
@@ -34,11 +36,14 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-hateoas")
 	implementation("org.springframework.statemachine:spring-statemachine-core:4.0.1")
 	implementation("org.springframework.boot:spring-boot-actuator")
+	implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
 
 	compileOnly("org.projectlombok:lombok")
     annotationProcessor("org.projectlombok:lombok")
     compileOnly("org.mapstruct:mapstruct:1.6.3")
     annotationProcessor("org.mapstruct:mapstruct-processor:1.6.3")
+
+    implementation(project(":Transaction-Outbox"))
 
 	testCompileOnly("org.projectlombok:lombok")
 	runtimeOnly("org.postgresql:postgresql")
@@ -46,6 +51,12 @@ dependencies {
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.springframework.security:spring-security-test")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+}
+
+dependencyManagement {
+	imports {
+		mavenBom("org.springframework.cloud:spring-cloud-dependencies:${property("springCloudVersion")}")
+	}
 }
 
 tasks.withType<Test> {
