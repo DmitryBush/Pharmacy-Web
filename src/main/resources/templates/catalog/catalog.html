@@ -31,14 +31,7 @@
                 </div>
                 <div class="filter-section">
                     <h3>Производитель</h3>
-                    <ul id="manufacturer-filters-container">
-                        <li th:each="medicineManufacturer : ${manufacturers}">
-                            <label class="price-filter-group">
-                                <input type="checkbox" name="manufacturer" th:value="${medicineManufacturer.name}">
-                                [(${medicineManufacturer.name})]
-                            </label>
-                        </li>
-                    </ul>
+                    <ul id="manufacturer-filters-container"></ul>
                 </div>
                 <div class="filter-section">
                     <h3>Страна</h3>
