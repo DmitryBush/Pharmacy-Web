@@ -26,6 +26,7 @@ import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -74,8 +75,7 @@ public class DynamicProductFilterRepositoryImpl implements DynamicProductFilterR
 
     private BoolQuery getBoolQuery(ProductFilter filter) {
         return BoolQuery.of(builder -> builder
-                .filter(f -> f.nested(n -> n.path("type").query(q ->
-                        q.term(t -> t.field("type.typeName.keyword").value(filter.type())))))
+                .filter(createTypeQuery(filter))
                 .filter(createNestedFilterCriteriaQuery(filter.manufacturers(), "manufacturer",
                         "manufacturer.name.keyword"))
                 .filter(createNestedFilterCriteriaQuery(filter.countries(), "manufacturer.country",
@@ -84,6 +84,17 @@ public class DynamicProductFilterRepositoryImpl implements DynamicProductFilterR
                 .filter(createPriceQuery(filter))
                 .filter(createRecipeQuery(filter))
         );
+    }
+
+    private List<Query> createTypeQuery(ProductFilter filter) {
+        Query.Builder builder = new Query.Builder();
+        return Optional.of(filter.type())
+                .filter(type -> !type.isBlank())
+                .map(criteria -> builder.nested(n -> n.path("type").query(q ->
+                        q.term(t -> t.field("type.typeName.keyword").value(criteria)))))
+                .map(ObjectBuilder::build)
+                .stream()
+                .toList();
     }
 
     private List<Query> createPriceQuery(ProductFilter filter) {
