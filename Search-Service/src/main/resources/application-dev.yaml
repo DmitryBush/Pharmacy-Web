@@ -9,6 +9,8 @@ spring:
     url: localhost:9200
     username: elastic
     password: elastic
+    aggregation:
+      bucket-size: 100
   kafka:
     consumer:
       bootstrap-servers: localhost:9096
