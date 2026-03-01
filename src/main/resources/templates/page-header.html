@@ -10,10 +10,92 @@
             <a href="/">
                 <img src="/api/v1/icons/header/logo.png" loading="lazy" class="logo" alt="Аптека" width="128px" height="25px">
             </a>
-            <button class="btn btn-catalog">
-                <img src="/api/v1/icons/header/list.png" loading="lazy" alt="Каталог" width="25px" height="25px">
-                Каталог
-            </button>
+            <div class="dropdown" style="position: relative; display: inline-block;">
+                <button class="btn btn-catalog" id="dropdownButton">
+                    <img src="/api/v1/icons/header/list.png" loading="lazy" alt="Каталог" width="25" height="25">
+                    Каталог
+                </button>
+                <div class="dropdown-menu" id="dropdownMenu">
+                    <div class="category-panel">
+                        <div class="category-list">
+                            <div class="category-item" data-category="medicines">💊 Лекарства</div>
+                            <div class="category-item" data-category="vitamins">💪 Витамины и БАДы</div>
+                            <div class="category-item" data-category="tests">Экспресс-тесты</div>
+                            <div class="category-item" data-category="hygiene">🧼 Гигиена</div>
+                            <div class="category-item" data-category="cosmetics">Косметика</div>
+                        </div>
+                        <div class="subcategory-container">
+                            <div class="subcategory-block" data-category="medicines">
+                                <a href="#">Аллергия</a>
+                                <a href="#">Пищеварительная система</a>
+                                <a href="#">Гематология</a>
+                                <a href="#">Гинекология</a>
+                                <a href="#">Дерматовенерология</a>
+                                <a href="#">Инфекционное</a>
+                                <a href="#">Кардиология</a>
+                                <a href="#">Наркология</a>
+                                <a>Нервная система</a>
+                                <a>Онкология</a>
+                                <a>Оториноларингология</a>
+                                <a>Офтальмология</a>
+                                <a>Психиатрия</a>
+                                <a>Дыхательная система</a>
+                                <a>Реанимация</a>
+                                <a>Ревматология</a>
+                                <a>Стоматология</a>
+                                <a>Терапия</a>
+                                <a>Мочеполовая система</a>
+                                <a>Флебология</a>
+                                <a>Хирургия</a>
+                                <a>Эндокринная система</a>
+                            </div>
+                            <div class="subcategory-block" data-category="vitamins">
+                                <a href="#">Витамины моно</a>
+                                <a href="#">Поливитамины</a>
+                                <a href="#">Витамины ДЗ</a>
+                                <a href="#">Витамины для детей</a>
+                                <a href="#">Витамины для беременных</a>
+                                <a href="#">Витамины для мужчин</a>
+                                <a href="#">Общеукрепляющие действия</a>
+                            </div>
+                            <div class="subcategory-block" data-category="tests">
+                                <a href="#">Тест-полоски для глюкометров</a>
+                                <a href="#">Тесты на беременность</a>
+                                <a href="#">Тесты на ВИЧ, гепатит, сифилис</a>
+                                <a href="#">Тесты женские</a>
+                                <a href="#">Тесты на различные инфекции</a>
+                                <a href="#">Тесты на овуляцию</a>
+                                <a href="#">Тесты на наркологию</a>
+                            </div>
+                            <div class="subcategory-block" data-category="hygiene">
+                                <a href="#">Санитайзеры</a>
+                                <a href="#">Бумажные изделия</a>
+                                <a href="#">Влажные салфетки</a>
+                                <a href="#">Интимная гигиена</a>
+                                <a href="#">Потливость</a>
+                                <a href="#">Прокладки ежедневные</a>
+                                <a href="#">Прокладки на критичные дни</a>
+                                <a href="#">Тампоны</a>
+                                <a>Приборы для ухода за полостью рта</a>
+                                <a>Протезы зубные</a>
+                                <a>Уход за полостью рта</a>
+                            </div>
+                            <div class="subcategory-block" data-category="cosmetics">
+                                <a href="#">Ароматерапия</a>
+                                <a href="#">Наборы косметические</a>
+                                <a href="#">Средства для бритья</a>
+                                <a href="#">Уход за волосами</a>
+                                <a href="#">Уход за лицом</a>
+                                <a href="#">Уход за ногами</a>
+                                <a href="#">Уход за руками</a>
+                                <a href="#">Уход за телом</a>
+                                <a>Маникюрные инструменты</a>
+                                <a>Солнцезащитные средства</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="search-container">
                 <input id="search-field" class="search-field" type="text" placeholder="Поиск по препарату">
                 <button class="search-button">
@@ -36,6 +118,8 @@
                 </a>
             </div>
             <link href="/css/page-header.css" rel="stylesheet">
+            <link href="/css/dropdown-catalog.css" rel="stylesheet">
+            <script src="/js/dropdown-catalog.js"></script>
         </header>
     </div>
 </body>
