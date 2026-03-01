@@ -9,18 +9,18 @@ import java.util.List;
 import java.util.Optional;
 
 public interface MedicineTypeRepository extends JpaRepository<MedicineType, Integer> {
-    Optional<MedicineType> findByType(String type);
+    Optional<MedicineType> findByName(String name);
 
     @Query("select distinct mt from MedicineType mt")
     List<MedicineType> findAllDistinctTypes();
 
     @Query(value = """
             WITH RECURSIVE category_path AS (
-                SELECT type_id, type, parent_id
+                SELECT type_id, type_name, parent_id
                 FROM medicine_types
                 WHERE type_id = :typeId
                 UNION ALL
-                SELECT c.type_id, c.type, c.parent_id
+                SELECT c.type_id, c.type_name, c.parent_id
                 FROM medicine_types c
                 JOIN category_path cp ON c.type_id = cp.parent_id
             )
@@ -28,9 +28,9 @@ public interface MedicineTypeRepository extends JpaRepository<MedicineType, Inte
             """, nativeQuery = true)
     List<MedicineType> getTypeHierarchyPath(@PathVariable Integer typeId);
 
-    List<MedicineType> findByTypeContainingIgnoreCaseAndParentIsNotNull(String type);
+    List<MedicineType> findByNameContainingIgnoreCaseAndParentIsNotNull(String name);
 
-    List<MedicineType> findByTypeContainingIgnoreCase(String type);
+    List<MedicineType> findByNameContainingIgnoreCase(String name);
 
-    List<MedicineType> findByParentType(String parent);
+    List<MedicineType> findByParentName(String parentName);
 }

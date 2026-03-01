@@ -25,7 +25,7 @@ public class MedicinePreviewReadMapper implements DtoMapper<Product, MedicinePre
                         .filter(ProductTypeMapping::getIsMain)
                         .map(ProductTypeMapping::getId)
                         .map(ProductTypeMappingId::getType)
-                        .map(MedicineType::getType)
+                        .map(MedicineType::getName)
                         .findFirst()
                         .orElseThrow())
                 .orElseThrow();

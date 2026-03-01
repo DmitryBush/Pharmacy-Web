@@ -3,7 +3,7 @@ package com.bush.pharmacy_web_app.service.medicine.mapper;
 import com.bush.pharmacy_web_app.model.entity.medicine.Product;
 import com.bush.pharmacy_web_app.repository.medicine.MedicineImageRepository;
 import com.bush.pharmacy_web_app.repository.medicine.MedicineRepository;
-import com.bush.pharmacy_web_app.repository.medicine.TypeRepository;
+import com.bush.pharmacy_web_app.repository.medicine.MedicineTypeRepository;
 import com.bush.pharmacy_web_app.model.dto.medicine.MedicineCreateDto;
 import com.bush.pharmacy_web_app.shared.mapper.DtoMapper;
 import com.bush.pharmacy_web_app.service.supplier.mapper.SupplierCreateMapper;
@@ -24,7 +24,7 @@ public class MedicineCreateMapper implements DtoMapper<MedicineCreateDto, Produc
     private final ListProductCategoryCreateMapper categoryMapper;
     private final MedicineImageCreateMapper imageCreateMapper;
 
-    private final TypeRepository typeRepository;
+    private final MedicineTypeRepository typeRepository;
     private final MedicineRepository medicineRepository;
     private final MedicineImageRepository imageRepository;
     @Override

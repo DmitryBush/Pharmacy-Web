@@ -25,9 +25,11 @@ public class MedicineTypeUpdateMapper implements DtoMapper<MedicineTypeUpdateDto
 
     private MedicineType copyObj(MedicineTypeUpdateDto fromObj, MedicineType toObj) {
         Optional.ofNullable(fromObj.type())
-                .ifPresent(toObj::setType);
+                .ifPresent(toObj::setName);
+        Optional.ofNullable(fromObj.slug())
+                .ifPresent(toObj::setSlug);
         Optional.ofNullable(fromObj.parent())
-                .map(medicineTypeRepository::findByType)
+                .map(medicineTypeRepository::findByName)
                 .ifPresentOrElse(parent ->
                         parent.ifPresentOrElse(toObj::setParent, parent::orElseThrow), () -> toObj.setParent(null));
         return toObj;

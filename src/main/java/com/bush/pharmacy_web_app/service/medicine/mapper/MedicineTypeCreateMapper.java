@@ -25,11 +25,12 @@ public class MedicineTypeCreateMapper implements DtoMapper<MedicineTypeDto, Medi
 
     private MedicineType copyObj(MedicineTypeDto fromObj, MedicineType toObj) {
         var parent = Optional.ofNullable(fromObj.parent())
-                .map(medicineTypeRepository::findByType)
+                .map(medicineTypeRepository::findByName)
                 .map(Optional::orElseThrow)
                 .orElse(null);
 
-        toObj.setType(fromObj.name());
+        toObj.setName(fromObj.name());
+        toObj.setSlug(fromObj.slug());
         toObj.setParent(parent);
         return toObj;
     }

@@ -18,8 +18,10 @@ public class MedicineType {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "type_id", nullable = false)
     private Integer id;
-    @Column(nullable = false, unique = true, length = 64)
-    private String type;
+    @Column(name = "type_name", nullable = false, unique = true, length = 64)
+    private String name;
+    @Column(name = "type_slug", nullable = false, unique = true, length = 64)
+    private String slug;
     @OneToOne
     @JoinColumn(name = "parent_id")
     @JsonIgnore

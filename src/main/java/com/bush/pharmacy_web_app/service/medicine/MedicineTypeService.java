@@ -30,26 +30,26 @@ public class MedicineTypeService {
     }
 
     public List<MedicineTypeDto> searchTypesByName(String type) {
-        return medicineTypeRepository.findByTypeContainingIgnoreCaseAndParentIsNotNull(type).stream()
+        return medicineTypeRepository.findByNameContainingIgnoreCaseAndParentIsNotNull(type).stream()
                 .map(typeReadMapper::map)
                 .toList();
     }
 
     public List<MedicineTypeDto> searchParentTypesByName(String type) {
-        return medicineTypeRepository.findByTypeContainingIgnoreCase(type).stream()
+        return medicineTypeRepository.findByNameContainingIgnoreCase(type).stream()
                 .map(typeReadMapper::map)
                 .toList();
     }
 
     public List<MedicineTypeDto> findAllTypesByParent(String parent) {
-        return medicineTypeRepository.findByParentType(parent)
+        return medicineTypeRepository.findByParentName(parent)
                 .stream()
                 .map(typeReadMapper::map)
                 .toList();
     }
 
     public Optional<MedicineTypeDto> findByType(String type) {
-        return medicineTypeRepository.findByType(type)
+        return medicineTypeRepository.findByName(type)
                 .map(typeReadMapper::map);
     }
 
