@@ -7,7 +7,7 @@ import com.bush.pharmacy_web_app.model.entity.medicine.MedicineType;
 import com.bush.pharmacy_web_app.model.entity.medicine.ProductTypeMapping;
 import com.bush.pharmacy_web_app.model.entity.medicine.ProductTypeMappingId;
 import com.bush.pharmacy_web_app.shared.mapper.DtoMapper;
-import com.bush.pharmacy_web_app.service.manufacturer.mapper.ManufacturerReadMapper;
+import com.bush.pharmacy_web_app.service.manufacturer.mapper.LegacyManufacturerReadMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -17,7 +17,7 @@ import java.util.Optional;
 @Component
 @RequiredArgsConstructor
 public class MedicinePreviewReadMapper implements DtoMapper<Product, MedicinePreviewReadDto> {
-    private final ManufacturerReadMapper manufacturerReadMapper;
+    private final LegacyManufacturerReadMapper manufacturerReadMapper;
     @Override
     public MedicinePreviewReadDto map(Product obj) {
         var type = Optional.ofNullable(obj.getType())
@@ -35,7 +35,7 @@ public class MedicinePreviewReadMapper implements DtoMapper<Product, MedicinePre
         var imagePaths = Optional.ofNullable(obj.getImage())
                 .map(list -> list
                         .stream()
-                        .map(image -> new MedicineImageReadDto(image.getId(), image.getPath()))
+                        .map(image -> new MedicineImageReadDto(image.getId()))
                         .toList())
                 .orElse(Collections.emptyList());
         return new MedicinePreviewReadDto(obj.getId(), obj.getName(), manufacturer, type, obj.getPrice(), imagePaths);

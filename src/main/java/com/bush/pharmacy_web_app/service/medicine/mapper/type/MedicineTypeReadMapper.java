@@ -1,4 +1,4 @@
-package com.bush.pharmacy_web_app.service.medicine.mapper;
+package com.bush.pharmacy_web_app.service.medicine.mapper.type;
 
 import com.bush.pharmacy_web_app.model.dto.medicine.MedicineTypeDto;
 import com.bush.pharmacy_web_app.model.entity.medicine.MedicineType;

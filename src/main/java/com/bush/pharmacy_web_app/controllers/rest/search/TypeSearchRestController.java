@@ -1,14 +1,12 @@
 package com.bush.pharmacy_web_app.controllers.rest.search;
 
 import com.bush.pharmacy_web_app.model.dto.medicine.MedicineTypeDto;
-import com.bush.pharmacy_web_app.service.medicine.MedicineTypeService;
+import com.bush.pharmacy_web_app.service.medicine.ProductTypeService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -16,7 +14,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/search/type")
 public class TypeSearchRestController {
-    private final MedicineTypeService typeService;
+    private final ProductTypeService typeService;
 
     @GetMapping
     public ResponseEntity<List<MedicineTypeDto>> findTypes(String searchTerm) {
@@ -30,7 +28,6 @@ public class TypeSearchRestController {
 
     @GetMapping("/by-name")
     public ResponseEntity<MedicineTypeDto> findMedicineType(String type) {
-        return ResponseEntity.ok(typeService.findByType(type)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND)));
+        return ResponseEntity.ok(typeService.findByTypeName(type));
     }
 }

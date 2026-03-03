@@ -1,7 +1,7 @@
 package com.bush.pharmacy_web_app.controllers.rest.admin;
 
 import com.bush.pharmacy_web_app.model.dto.medicine.MedicineAdminReadDto;
-import com.bush.pharmacy_web_app.model.dto.medicine.MedicineCreateDto;
+import com.bush.pharmacy_web_app.model.dto.medicine.ProductCreateDto;
 import com.bush.pharmacy_web_app.model.dto.medicine.MedicinePreviewReadDto;
 import com.bush.pharmacy_web_app.repository.medicine.filter.MedicineFilter;
 import com.bush.pharmacy_web_app.service.medicine.MedicineService;
@@ -50,23 +50,21 @@ public class ProductAdminRestController {
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    public MedicinePreviewReadDto createProduct(@RequestPart("product") @Validated MedicineCreateDto medicineCreateDto,
+    public MedicinePreviewReadDto createProduct(@RequestPart("product") @Validated ProductCreateDto productCreateDto,
                                                 @RequestPart(value = "images", required = false)
                                          @Validated @ImageFile({"image/jpeg", "image/png", "image/webp"})
                                          List<MultipartFile> images) {
-        return medicineService.createMedicine(medicineCreateDto, images)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        return medicineService.createMedicine(productCreateDto, images);
     }
 
     @PutMapping(value = "/{id}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     @ResponseStatus(HttpStatus.CREATED)
     public MedicinePreviewReadDto updateProduct(@PathVariable Long id,
-                                                @RequestPart("product") @Validated MedicineCreateDto medicineCreateDto,
+                                                @RequestPart("product") @Validated ProductCreateDto productCreateDto,
                                                 @RequestPart(value = "images", required = false)
                                              @Validated @NotNull @ImageFile({"image/jpeg", "image/png", "image/webm"})
                                              List<MultipartFile> images) {
-        return medicineService.updateMedicine(id, medicineCreateDto, images)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        return medicineService.updateMedicine(id, productCreateDto, images);
     }
 
     @DeleteMapping("/{id}")

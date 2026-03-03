@@ -11,6 +11,7 @@ import lombok.*;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Data
 @NoArgsConstructor
@@ -26,8 +27,9 @@ public class Product {
     private Long id;
     @Column(name = "product_name", nullable = false)
     private String name;
+    @Builder.Default
     @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REMOVE}, mappedBy = "id.product")
-    private List<ProductTypeMapping> type;
+    private List<ProductTypeMapping> type = new ArrayList<>();
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "fk_product_manufacturer", nullable = false)
     private Manufacturer manufacturer;
@@ -43,7 +45,8 @@ public class Product {
     private String composition;
     @Column(name = "indications")
     private String indication;
-    private String contraindications;
+    @Column(name = "contraindications")
+    private String contraindication;
     @Column(name = "side_effects")
     private String sideEffect;
     private String interaction;
@@ -75,5 +78,19 @@ public class Product {
             this.image.clear();
             this.image.addAll(image);
         }
+    }
+
+    public void addType(ProductTypeMapping typeMapping) {
+        if (Objects.isNull(typeMapping)) {
+            throw new NullPointerException("Added null type mapping");
+        }
+        type.add(typeMapping);
+    }
+
+    public void addImage(ProductImage productImage) {
+        if (Objects.isNull(productImage)) {
+            throw new NullPointerException("Added null image");
+        }
+        image.add(productImage);
     }
 }

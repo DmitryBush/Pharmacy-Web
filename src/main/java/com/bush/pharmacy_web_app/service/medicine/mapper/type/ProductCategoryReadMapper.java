@@ -1,6 +1,6 @@
-package com.bush.pharmacy_web_app.service.medicine.mapper;
+package com.bush.pharmacy_web_app.service.medicine.mapper.type;
 
-import com.bush.pharmacy_web_app.model.dto.medicine.ProductCategoryDto;
+import com.bush.pharmacy_web_app.model.dto.medicine.ProductTypeMappingDto;
 import com.bush.pharmacy_web_app.model.entity.medicine.ProductTypeMapping;
 import com.bush.pharmacy_web_app.shared.mapper.DtoMapper;
 import lombok.RequiredArgsConstructor;
@@ -10,13 +10,13 @@ import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
-public class ProductCategoryReadMapper implements DtoMapper<ProductTypeMapping, ProductCategoryDto> {
+public class ProductCategoryReadMapper implements DtoMapper<ProductTypeMapping, ProductTypeMappingDto> {
     private final MedicineTypeReadMapper medicineTypeReadMapper;
     @Override
-    public ProductCategoryDto map(ProductTypeMapping obj) {
+    public ProductTypeMappingDto map(ProductTypeMapping obj) {
         var type = Optional.ofNullable(obj.getId().getType())
                 .map(medicineTypeReadMapper::map)
                 .orElseThrow();
-        return new ProductCategoryDto(type, obj.getIsMain());
+        return new ProductTypeMappingDto(type.name(), type.parent(), obj.getIsMain());
     }
 }

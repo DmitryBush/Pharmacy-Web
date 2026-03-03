@@ -3,8 +3,9 @@ package com.bush.pharmacy_web_app.service.medicine.mapper;
 import com.bush.pharmacy_web_app.model.entity.medicine.Product;
 import com.bush.pharmacy_web_app.repository.medicine.MedicineImageRepository;
 import com.bush.pharmacy_web_app.repository.medicine.MedicineRepository;
-import com.bush.pharmacy_web_app.repository.medicine.MedicineTypeRepository;
-import com.bush.pharmacy_web_app.model.dto.medicine.MedicineCreateDto;
+import com.bush.pharmacy_web_app.model.dto.medicine.ProductCreateDto;
+import com.bush.pharmacy_web_app.service.medicine.mapper.image.MedicineImageCreateMapper;
+import com.bush.pharmacy_web_app.service.medicine.mapper.list.ListProductCategoryCreateMapper;
 import com.bush.pharmacy_web_app.shared.mapper.DtoMapper;
 import com.bush.pharmacy_web_app.service.supplier.mapper.SupplierCreateMapper;
 import com.bush.pharmacy_web_app.service.manufacturer.mapper.ManufacturerCreateMapper;
@@ -18,26 +19,25 @@ import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
-public class MedicineCreateMapper implements DtoMapper<MedicineCreateDto, Product> {
+public class LegacyMedicineCreateMapper implements DtoMapper<ProductCreateDto, Product> {
     private final SupplierCreateMapper supplierCreateMapper;
     private final ManufacturerCreateMapper manufacturerCreateMapper;
     private final ListProductCategoryCreateMapper categoryMapper;
     private final MedicineImageCreateMapper imageCreateMapper;
 
-    private final MedicineTypeRepository typeRepository;
     private final MedicineRepository medicineRepository;
     private final MedicineImageRepository imageRepository;
     @Override
-    public Product map(MedicineCreateDto obj) {
+    public Product map(ProductCreateDto obj) {
         return copyObj(obj, new Product());
     }
 
     @Override
-    public Product map(MedicineCreateDto fromObj, Product toObj) {
+    public Product map(ProductCreateDto fromObj, Product toObj) {
         return copyObj(fromObj, toObj);
     }
 
-    private Product copyObj(MedicineCreateDto fromObj, Product toObj) {
+    private Product copyObj(ProductCreateDto fromObj, Product toObj) {
         var supplier = Optional.ofNullable(fromObj.supplier())
                 .map(supplierCreateMapper::map)
                 .orElseThrow();
@@ -47,39 +47,39 @@ public class MedicineCreateMapper implements DtoMapper<MedicineCreateDto, Produc
         var categories = Optional.ofNullable(fromObj.type())
                 .map(categoryMapper::map)
                 .orElseThrow();
-        var images = Optional.ofNullable(fromObj.id())
-                .map(imageRepository::findByProductId)
-                .map(list -> {
-                    var dtoCollection = Optional.ofNullable(fromObj.images())
-                            .map(file -> file.stream()
-                                    .map(imageCreateMapper::map)
-                                    .peek(image -> image.setProduct(toObj))
-                                    .collect(Collectors.toCollection(ArrayList::new)))
-                            .orElse(new ArrayList<>());
-                    list.addAll(dtoCollection);
-                    return list;
-                })
-                .or(() -> Optional.ofNullable(toObj.getId())
-                        .map(imageRepository::findByProductId)
-                        .map(list -> {
-                            var dtoCollection = Optional.ofNullable(fromObj.images())
-                                    .map(file -> file.stream()
-                                            .filter(Predicate.not(MultipartFile::isEmpty))
-                                            .map(imageCreateMapper::map)
-                                            .peek(image -> image.setProduct(toObj))
-                                            .collect(Collectors.toCollection(ArrayList::new)))
-                                    .orElse(new ArrayList<>());
-                            list.addAll(dtoCollection);
-                            return list;
-                        }))
-                .or(() -> Optional.ofNullable(fromObj.images())
-                        .map(list -> list
-                                .stream()
-                                .map(imageCreateMapper::map)
-                                .peek(image -> image.setProduct(toObj))
-                                .collect(Collectors.toCollection(ArrayList::new)))
-                )
-                .orElse(new ArrayList<>());
+//        var images = Optional.ofNullable(fromObj.id())
+//                .map(imageRepository::findByProductId)
+//                .map(list -> {
+//                    var dtoCollection = Optional.ofNullable(fromObj.images())
+//                            .map(file -> file.stream()
+//                                    .map(imageCreateMapper::map)
+//                                    .peek(image -> image.setProduct(toObj))
+//                                    .collect(Collectors.toCollection(ArrayList::new)))
+//                            .orElse(new ArrayList<>());
+//                    list.addAll(dtoCollection);
+//                    return list;
+//                })
+//                .or(() -> Optional.ofNullable(toObj.getId())
+//                        .map(imageRepository::findByProductId)
+//                        .map(list -> {
+//                            var dtoCollection = Optional.ofNullable(fromObj.images())
+//                                    .map(file -> file.stream()
+//                                            .filter(Predicate.not(MultipartFile::isEmpty))
+//                                            .map(imageCreateMapper::map)
+//                                            .peek(image -> image.setProduct(toObj))
+//                                            .collect(Collectors.toCollection(ArrayList::new)))
+//                                    .orElse(new ArrayList<>());
+//                            list.addAll(dtoCollection);
+//                            return list;
+//                        }))
+//                .or(() -> Optional.ofNullable(fromObj.images())
+//                        .map(list -> list
+//                                .stream()
+//                                .map(imageCreateMapper::map)
+//                                .peek(image -> image.setProduct(toObj))
+//                                .collect(Collectors.toCollection(ArrayList::new)))
+//                )
+//                .orElse(new ArrayList<>());
 
         return Optional.ofNullable(fromObj.id())
                 .flatMap(medicineRepository::findById)
@@ -99,13 +99,13 @@ public class MedicineCreateMapper implements DtoMapper<MedicineCreateDto, Produc
                     toObj.setPrice(fromObj.price());
                     toObj.setRecipe(fromObj.recipe());
                     toObj.setSupplier(supplier);
-                    toObj.setImage(images);
+//                    toObj.setImage(images);
 
                     toObj.setActiveIngredient(fromObj.activeIngredient());
                     toObj.setExpirationDate(fromObj.expirationDate());
                     toObj.setComposition(fromObj.composition());
                     toObj.setIndication(fromObj.indication());
-                    toObj.setContraindications(fromObj.contraindication());
+                    toObj.setContraindication(fromObj.contraindication());
                     toObj.setSideEffect(fromObj.sideEffect());
                     toObj.setInteraction(fromObj.interaction());
                     toObj.setAdmissionCourse(fromObj.admissionCourse());
@@ -132,13 +132,13 @@ public class MedicineCreateMapper implements DtoMapper<MedicineCreateDto, Produc
                     toObj.setPrice(fromObj.price());
                     toObj.setRecipe(fromObj.recipe());
                     toObj.setSupplier(supplier);
-                    toObj.setImage(images);
+//                    toObj.setImage(images);
 
                     toObj.setActiveIngredient(fromObj.activeIngredient());
                     toObj.setExpirationDate(fromObj.expirationDate());
                     toObj.setComposition(fromObj.composition());
                     toObj.setIndication(fromObj.indication());
-                    toObj.setContraindications(fromObj.contraindication());
+                    toObj.setContraindication(fromObj.contraindication());
                     toObj.setSideEffect(fromObj.sideEffect());
                     toObj.setInteraction(fromObj.interaction());
                     toObj.setAdmissionCourse(fromObj.admissionCourse());

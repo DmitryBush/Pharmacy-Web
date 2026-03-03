@@ -1,4 +1,4 @@
-package com.bush.pharmacy_web_app.service.medicine.mapper;
+package com.bush.pharmacy_web_app.service.medicine.mapper.image;
 
 import com.bush.pharmacy_web_app.model.entity.medicine.ProductImage;
 import com.bush.pharmacy_web_app.shared.mapper.DtoMapper;

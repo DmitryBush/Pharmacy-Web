@@ -3,9 +3,10 @@ package com.bush.pharmacy_web_app.service.medicine.mapper;
 import com.bush.pharmacy_web_app.model.dto.medicine.MedicineAdminReadDto;
 import com.bush.pharmacy_web_app.model.dto.medicine.MedicineImageReadDto;
 import com.bush.pharmacy_web_app.model.entity.medicine.Product;
+import com.bush.pharmacy_web_app.service.medicine.mapper.list.ListProductCategoryReadMapper;
 import com.bush.pharmacy_web_app.shared.mapper.DtoMapper;
-import com.bush.pharmacy_web_app.service.supplier.mapper.SupplierReadMapper;
-import com.bush.pharmacy_web_app.service.manufacturer.mapper.ManufacturerReadMapper;
+import com.bush.pharmacy_web_app.service.supplier.mapper.LegacySupplierReadMapper;
+import com.bush.pharmacy_web_app.service.manufacturer.mapper.LegacyManufacturerReadMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -15,13 +16,13 @@ import java.util.Optional;
 @Component
 @RequiredArgsConstructor
 public class MedicineAdminReadMapper implements DtoMapper<Product, MedicineAdminReadDto> {
-    private final ManufacturerReadMapper manufacturerReadMapper;
-    private final SupplierReadMapper supplierReadMapper;
+    private final LegacyManufacturerReadMapper manufacturerReadMapper;
+    private final LegacySupplierReadMapper legacySupplierReadMapper;
     private final ListProductCategoryReadMapper listProductCategoryReadMapper;
     @Override
     public MedicineAdminReadDto map(Product obj) {
         var supplier = Optional.ofNullable(obj.getSupplier())
-                .map(supplierReadMapper::map)
+                .map(legacySupplierReadMapper::map)
                 .orElseThrow();
         var manufacturer = Optional.ofNullable(obj.getManufacturer())
                 .map(manufacturerReadMapper::map)
@@ -32,7 +33,7 @@ public class MedicineAdminReadMapper implements DtoMapper<Product, MedicineAdmin
         var imagePaths = Optional.ofNullable(obj.getImage())
                 .map(list -> list
                         .stream()
-                        .map(image -> new MedicineImageReadDto(image.getId(), image.getPath()))
+                        .map(image -> new MedicineImageReadDto(image.getId()))
                         .toList())
                 .orElse(Collections.emptyList());
         return MedicineAdminReadDto.builder()
@@ -48,7 +49,7 @@ public class MedicineAdminReadMapper implements DtoMapper<Product, MedicineAdmin
                 .expirationDate(obj.getExpirationDate())
                 .composition(obj.getComposition())
                 .indication(obj.getIndication())
-                .contraindication(obj.getContraindications())
+                .contraindication(obj.getContraindication())
                 .sideEffect(obj.getSideEffect())
                 .interaction(obj.getInteraction())
                 .admissionCourse(obj.getAdmissionCourse())

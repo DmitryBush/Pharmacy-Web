@@ -1,17 +1,17 @@
-package com.bush.pharmacy_web_app.service.medicine.mapper;
+package com.bush.pharmacy_web_app.service.medicine.mapper.type;
 
-import com.bush.pharmacy_web_app.repository.medicine.MedicineTypeRepository;
 import com.bush.pharmacy_web_app.model.dto.medicine.MedicineTypeDto;
 import com.bush.pharmacy_web_app.model.entity.medicine.MedicineType;
+import com.bush.pharmacy_web_app.repository.medicine.MedicineTypeRepository;
 import com.bush.pharmacy_web_app.shared.mapper.DtoMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
-public class MedicineTypeMapper implements DtoMapper<MedicineTypeDto, MedicineType> {
+public class MedicineTypeCreateMapper implements DtoMapper<MedicineTypeDto, MedicineType> {
     private final MedicineTypeRepository medicineTypeRepository;
     @Override
     public MedicineType map(MedicineTypeDto obj) {
@@ -24,14 +24,14 @@ public class MedicineTypeMapper implements DtoMapper<MedicineTypeDto, MedicineTy
     }
 
     private MedicineType copyObj(MedicineTypeDto fromObj, MedicineType toObj) {
-        return medicineTypeRepository.findByName(fromObj.name())
-                .orElseGet(() -> {
-                    var parent = medicineTypeRepository.findByName(fromObj.parent()).orElse(null);
+        var parent = Optional.ofNullable(fromObj.parent())
+                .map(medicineTypeRepository::findByName)
+                .map(Optional::orElseThrow)
+                .orElse(null);
 
-                    toObj.setName(fromObj.name());
-                    toObj.setParent(parent);
-                    toObj.setChildTypes(Collections.emptyList());
-                    return toObj;
-                });
+        toObj.setName(fromObj.name());
+        toObj.setSlug(fromObj.slug());
+        toObj.setParent(parent);
+        return toObj;
     }
 }
