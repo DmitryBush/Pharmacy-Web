@@ -1,6 +1,6 @@
 package com.bush.pharmacy_web_app.service.cart.mapper;
 
-import com.bush.pharmacy_web_app.repository.medicine.MedicineRepository;
+import com.bush.pharmacy_web_app.repository.product.ProductRepository;
 import com.bush.pharmacy_web_app.model.dto.cart.CartItemCreateDto;
 import com.bush.pharmacy_web_app.model.entity.cart.CartItems;
 import com.bush.pharmacy_web_app.shared.mapper.DtoMapper;
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class CartItemsCreateMapper implements DtoMapper<CartItemCreateDto, CartItems> {
-    private final MedicineRepository medicineRepository;
+    private final ProductRepository productRepository;
     @Override
     public CartItems map(CartItemCreateDto obj) {
         return copyObj(obj, new CartItems());
@@ -22,7 +22,7 @@ public class CartItemsCreateMapper implements DtoMapper<CartItemCreateDto, CartI
     }
 
     public CartItems copyObj(CartItemCreateDto fromObj, CartItems toObj) {
-        var medicine = medicineRepository.findById(fromObj.medicine().id())
+        var medicine = productRepository.findById(fromObj.medicine().id())
                         .orElseThrow();
         toObj.setAmount(fromObj.amount());
         toObj.setProduct(medicine);

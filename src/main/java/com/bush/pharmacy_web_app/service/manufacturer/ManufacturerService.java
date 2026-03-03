@@ -4,7 +4,7 @@ import com.bush.pharmacy_web_app.model.dto.manufacturer.ManufacturerCountProduct
 import com.bush.pharmacy_web_app.model.dto.manufacturer.ManufacturerCreateDto;
 import com.bush.pharmacy_web_app.model.dto.manufacturer.ManufacturerReadDto;
 import com.bush.pharmacy_web_app.model.entity.manufacturer.Manufacturer;
-import com.bush.pharmacy_web_app.repository.medicine.filter.MedicineFilter;
+import com.bush.pharmacy_web_app.repository.product.filter.ProductFilter;
 import com.bush.pharmacy_web_app.service.manufacturer.mapper.ManufacturerCreateMapper;
 import com.bush.pharmacy_web_app.service.manufacturer.mapper.LegacyManufacturerReadMapper;
 import com.bush.pharmacy_web_app.repository.manufacturer.ManufacturerRepository;
@@ -43,8 +43,8 @@ public class ManufacturerService {
         return manufacturerRepository.getReferenceById(manufacturerId);
     }
 
-    public List<ManufacturerCountProductFilterResponse> findAllManufacturersCountByProductFilter(MedicineFilter medicineFilter) {
-        return manufacturerRepository.findAllManufacturersByProductFilter(medicineFilter);
+    public List<ManufacturerCountProductFilterResponse> findAllManufacturersCountByProductFilter(ProductFilter productFilter) {
+        return manufacturerRepository.findAllManufacturersByProductFilter(productFilter);
     }
 
     public List<ManufacturerReadDto> findByNameContaining(String name) {

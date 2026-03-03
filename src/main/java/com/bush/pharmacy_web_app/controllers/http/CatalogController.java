@@ -1,7 +1,7 @@
 package com.bush.pharmacy_web_app.controllers.http;
 
-import com.bush.pharmacy_web_app.service.medicine.MedicineService;
-import com.bush.pharmacy_web_app.service.medicine.ProductTypeService;
+import com.bush.pharmacy_web_app.service.product.ProductService;
+import com.bush.pharmacy_web_app.service.product.ProductTypeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequiredArgsConstructor
 public class CatalogController {
     private final ProductTypeService typeService;
-    private final MedicineService service;
+    private final ProductService service;
 
     @GetMapping
     public String showAllProducts() {

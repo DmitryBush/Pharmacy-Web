@@ -2,7 +2,7 @@ package com.bush.pharmacy_web_app.controllers.rest.search;
 
 import com.bush.pharmacy_web_app.model.dto.manufacturer.ManufacturerCountProductFilterResponse;
 import com.bush.pharmacy_web_app.model.dto.manufacturer.ManufacturerReadDto;
-import com.bush.pharmacy_web_app.repository.medicine.filter.MedicineFilter;
+import com.bush.pharmacy_web_app.repository.product.filter.ProductFilter;
 import com.bush.pharmacy_web_app.service.manufacturer.ManufacturerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -25,7 +25,7 @@ public class ManufacturerRestController {
     }
 
     @GetMapping(path = "/filter/count", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<ManufacturerCountProductFilterResponse>> getAllManufacturersCountByProductFilter(MedicineFilter filter) {
+    public ResponseEntity<List<ManufacturerCountProductFilterResponse>> getAllManufacturersCountByProductFilter(ProductFilter filter) {
         return ResponseEntity.ok(manufacturerService.findAllManufacturersCountByProductFilter(filter));
     }
 }

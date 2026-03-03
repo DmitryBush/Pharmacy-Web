@@ -1,6 +1,6 @@
 package com.bush.pharmacy_web_app.controllers.rest.product;
 
-import com.bush.pharmacy_web_app.service.medicine.ProductImageService;
+import com.bush.pharmacy_web_app.service.product.ProductImageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
