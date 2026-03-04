@@ -410,18 +410,12 @@ document.addEventListener('DOMContentLoaded', () => {
         typeContainer.querySelectorAll('.type-content').forEach((typeContent) => {
             if (typeContent.querySelector('input.type')) {
                 types.push({
-                    type: {
-                        name: typeContent.querySelector('input.type').value,
-                        parent: typeContent.querySelector('input.parent-type').value
-                    },
+                    type: typeContent.querySelector('input.type').value,
                     isMain : false
                 });
             } else if (typeContent.querySelector('input.main-type')) {
                 types.push({
-                    type: {
-                        name: typeContent.querySelector('input.main-type').value,
-                        parent: typeContent.querySelector('input.parent-type').value
-                    },
+                    type: typeContent.querySelector('input.main-type').value,
                     isMain : true
                 });
             }
