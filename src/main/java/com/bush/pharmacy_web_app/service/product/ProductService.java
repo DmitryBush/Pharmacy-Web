@@ -76,6 +76,12 @@ public class ProductService {
                 .map(productReadMapper::mapToMedicineReadDto);
     }
 
+    public ProductPreviewReadDto findProductPreviewById(Long id) {
+        return productRepository.findById(id)
+                .map(productReadMapper::mapToMedicinePreviewReadDto)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    }
+
     public Optional<ProductAdminReadDto> findAdminDtoById(Long id) {
         return productRepository.findById(id)
                 .map(productReadMapper::mapToMedicineAdminReadDto);
