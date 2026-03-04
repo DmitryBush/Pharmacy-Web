@@ -4,15 +4,15 @@ import com.bush.outbox.domain.dto.OutboxRecordDto;
 import com.bush.outbox.domain.entity.CrudOperationType;
 import com.bush.outbox.service.OutboxService;
 import com.bush.pharmacy_web_app.model.dto.product.ProductAdminReadDto;
+import com.bush.pharmacy_web_app.model.dto.product.ProductCreateDto;
 import com.bush.pharmacy_web_app.model.dto.product.ProductPreviewReadDto;
 import com.bush.pharmacy_web_app.model.dto.product.ProductReadDto;
-import com.bush.pharmacy_web_app.model.dto.product.ProductCreateDto;
 import com.bush.pharmacy_web_app.model.dto.warehouse.PharmacyBranchReadDto;
 import com.bush.pharmacy_web_app.model.entity.Supplier;
 import com.bush.pharmacy_web_app.model.entity.manufacturer.Manufacturer;
-import com.bush.pharmacy_web_app.model.entity.product.ProductType;
 import com.bush.pharmacy_web_app.model.entity.product.Product;
 import com.bush.pharmacy_web_app.model.entity.product.ProductImage;
+import com.bush.pharmacy_web_app.model.entity.product.ProductType;
 import com.bush.pharmacy_web_app.repository.branch.PharmacyBranchRepository;
 import com.bush.pharmacy_web_app.repository.product.ProductRepository;
 import com.bush.pharmacy_web_app.repository.product.filter.ProductFilter;
@@ -164,8 +164,7 @@ public class ProductService {
         return productRepository.findById(id)
                 .map(product -> {
                     productRepository.delete(product);
-                    product.getImage().forEach(productImage ->
-                            imageService.deleteImage(productImage.getId()));
+                    product.getImage().forEach(imageService::deleteImage);
                     outboxService.createRecord(new OutboxRecordDto<>("product", CrudOperationType.D, product));
                     return true;
                 })

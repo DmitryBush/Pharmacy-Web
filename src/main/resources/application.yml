@@ -17,6 +17,10 @@ spring:
 
 
 storage:
+  object:
+    endpoint: http://127.0.0.1:9000
+    access-key: minioadmin
+    secret-key: minioadmin
   directory: files
   max-path-length: 4096
   MAX_PATH_SEGMENT_LENGTH: 255

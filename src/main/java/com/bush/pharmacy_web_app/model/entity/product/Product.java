@@ -66,7 +66,7 @@ public class Product {
 
     @Builder.Default
     @JsonIdentityReference(alwaysAsId = true)
-    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<ProductImage> image = new ArrayList<>();
 
     @JsonIgnore

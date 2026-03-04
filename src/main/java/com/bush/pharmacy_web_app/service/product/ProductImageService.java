@@ -4,9 +4,10 @@ import com.bush.pharmacy_web_app.model.dto.product.ProductImageReadDto;
 import com.bush.pharmacy_web_app.model.entity.product.Product;
 import com.bush.pharmacy_web_app.model.entity.product.ProductImage;
 import com.bush.pharmacy_web_app.repository.product.ProductImageRepository;
-import com.bush.pharmacy_web_app.service.filesystem.FileSystemStorageService;
 import com.bush.pharmacy_web_app.service.product.mapper.ProductImageCreateMapper;
 import com.bush.pharmacy_web_app.service.product.mapper.ProductImageReadMapper;
+import com.bush.pharmacy_web_app.service.storage.BucketConstantEnum;
+import com.bush.pharmacy_web_app.service.storage.ObjectStorageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
@@ -26,7 +27,7 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public class ProductImageService {
     private final ProductImageRepository imageRepository;
-    private final FileSystemStorageService storageService;
+    private final ObjectStorageService storageService;
 
     private final ProductImageCreateMapper imageCreateMapper;
     private final ProductImageReadMapper imageReadMapper;
@@ -41,7 +42,7 @@ public class ProductImageService {
     public Optional<Resource> findImageById(Long id) {
         return imageRepository.findById(id)
                 .map(ProductImage::getPath)
-                .map(storageService::loadAsResource);
+                .map(path -> storageService.loadResource(BucketConstantEnum.PRODUCT, path));
     }
 
     @Transactional(propagation = Propagation.MANDATORY)
@@ -51,7 +52,7 @@ public class ProductImageService {
                 .map(imageRepository::save)
                 .orElseThrow(() -> new IllegalArgumentException("Product id can't be null"));
 
-        storageService.storeByFullPath(file, image.getPath());
+        storageService.store(file, BucketConstantEnum.PRODUCT, image.getPath());
         product.addImage(image);
         return image;
     }
@@ -61,19 +62,19 @@ public class ProductImageService {
         imageRepository.findById(id)
                 .ifPresentOrElse(image -> {
                     imageRepository.delete(image);
-                    storageService.delete(image.getPath());
+                    storageService.delete(BucketConstantEnum.PRODUCT, image.getPath());
                 }, () -> {
                     throw new ResponseStatusException(HttpStatus.NOT_FOUND);
                 });
     }
 
     protected void deleteImage(ProductImage productImage) {
-        storageService.delete(productImage.getPath());
+        storageService.delete(BucketConstantEnum.PRODUCT, productImage.getPath());
     }
 
     public Optional<Resource> findProductImageByIdAndName(Long id, String filename) {
         return findImageByMedicineIdAndPath(id, filename)
-                .map(storageService::loadAsResource);
+                .map(path -> storageService.loadResource(BucketConstantEnum.PRODUCT, path));
     }
 
     private Optional<String> findImageByMedicineIdAndPath(Long id, String filename) {
