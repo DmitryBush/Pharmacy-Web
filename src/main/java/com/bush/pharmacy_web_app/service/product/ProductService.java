@@ -139,8 +139,6 @@ public class ProductService {
                 .flatMap(productRepository::findById)
                 .map(findedProduct -> productCreateMapper.mapToProduct(createDto, supplier, manufacturer))
                 .map(productRepository::saveAndFlush)
-                .map(updatedProduct -> outboxService.createRecord(
-                        new OutboxRecordDto<>("product", CrudOperationType.U, updatedProduct)))
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         List<ProductImage> productImages = new ArrayList<>();
         try {
@@ -151,6 +149,7 @@ public class ProductService {
                         productTypeService.findByTypeName(type.type()).id());
                 typeMappingService.createProductTypeMapping(product, productType, type.isMain());
             });
+            outboxService.createRecord(new OutboxRecordDto<>("product", CrudOperationType.U, product));
             return productReadMapper.mapToMedicinePreviewReadDto(product);
         } catch (Exception e) {
             log.error("Caught exception while updating product - {}", e.getMessage());

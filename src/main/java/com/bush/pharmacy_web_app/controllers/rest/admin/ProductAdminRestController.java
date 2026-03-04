@@ -62,7 +62,7 @@ public class ProductAdminRestController {
     public ProductPreviewReadDto updateProduct(@PathVariable Long id,
                                                @RequestPart("product") @Validated ProductCreateDto productCreateDto,
                                                @RequestPart(value = "images", required = false)
-                                             @Validated @NotNull @ImageFile({"image/jpeg", "image/png", "image/webm"})
+                                             @Validated @ImageFile({"image/jpeg", "image/png", "image/webm"})
                                              List<MultipartFile> images) {
         return productService.updateMedicine(id, productCreateDto, images);
     }
