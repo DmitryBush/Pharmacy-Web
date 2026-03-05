@@ -2,7 +2,6 @@ package com.bush.pharmacy_web_app.service.branch.mapper;
 
 import com.bush.pharmacy_web_app.model.dto.warehouse.TransactionReadDto;
 import com.bush.pharmacy_web_app.model.entity.branch.transaction.TransactionHistory;
-import com.bush.pharmacy_web_app.service.medicine.mapper.MedicinePreviewReadMapper;
 import com.bush.pharmacy_web_app.service.order.mapper.OrderReadMapper;
 import com.bush.pharmacy_web_app.shared.mapper.DtoMapper;
 import lombok.RequiredArgsConstructor;

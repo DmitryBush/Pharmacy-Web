@@ -6,9 +6,10 @@ import com.bush.pharmacy_web_app.model.entity.news.NewsImage;
 import com.bush.pharmacy_web_app.repository.news.NewsImageRepository;
 import com.bush.pharmacy_web_app.repository.news.NewsRepository;
 import com.bush.pharmacy_web_app.service.exception.StorageException;
-import com.bush.pharmacy_web_app.service.filesystem.FileSystemStorageService;
 import com.bush.pharmacy_web_app.service.news.mapper.NewsImageCreateMapper;
 import com.bush.pharmacy_web_app.service.news.mapper.NewsImageReadMapper;
+import com.bush.pharmacy_web_app.service.storage.BucketConstantEnum;
+import com.bush.pharmacy_web_app.service.storage.ObjectStorageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
@@ -31,13 +32,14 @@ public class NewsImageService {
     private final NewsImageCreateMapper createMapper;
     private final NewsImageReadMapper newsImageReadMapper;
 
-    private final FileSystemStorageService fileSystemStorageService;
+    private final ObjectStorageService objectStorageService;
 
     public Resource findImageById(Long imageId) {
-        return fileSystemStorageService.loadAsResource(
-                imageRepository.findById(imageId)
-                        .map(NewsImage::getImageLinkPath)
-                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND)));
+        return Optional.ofNullable(imageId)
+                .flatMap(imageRepository::findById)
+                .map(NewsImage::getImageLinkPath)
+                .map(link -> objectStorageService.loadResource(BucketConstantEnum.NEWS, link))
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
     @Transactional
@@ -48,7 +50,7 @@ public class NewsImageService {
         try {
             for (MultipartFile file : multipartFiles) {
                 NewsImage image = createMapper.mapToNewsImage(file, news);
-                fileSystemStorageService.storeByFullPath(file, image.getImageLinkPath());
+                objectStorageService.store(file, BucketConstantEnum.NEWS, image.getImageLinkPath());
                 newsImageList.add(image);
             }
             imageRepository.saveAll(newsImageList);
@@ -56,13 +58,15 @@ public class NewsImageService {
                     .map(newsImageReadMapper::map)
                     .toList();
         } catch (StorageException e) {
-            newsImageList.forEach(image -> fileSystemStorageService.delete(image.getImageLinkPath()));
+            newsImageList.forEach(image ->
+                    objectStorageService.delete(BucketConstantEnum.NEWS, image.getImageLinkPath()));
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     public void deleteNewsImages(News news) {
-        news.getNewsImageList().forEach(image -> fileSystemStorageService.delete(image.getImageLinkPath()));
+        news.getNewsImageList().forEach(image ->
+                objectStorageService.delete(BucketConstantEnum.NEWS, image.getImageLinkPath()));
     }
 
     @Transactional
@@ -71,7 +75,7 @@ public class NewsImageService {
                 .flatMap(imageRepository::findById)
                 .ifPresentOrElse(image -> {
                     imageRepository.delete(image);
-                    fileSystemStorageService.delete(image.getImageLinkPath());
+                    objectStorageService.delete(BucketConstantEnum.NEWS, image.getImageLinkPath());
                 }, () -> {
                     throw new ResponseStatusException(HttpStatus.NOT_FOUND);
                 });

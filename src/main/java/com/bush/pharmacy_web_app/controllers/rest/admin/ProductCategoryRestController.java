@@ -1,8 +1,8 @@
 package com.bush.pharmacy_web_app.controllers.rest.admin;
 
-import com.bush.pharmacy_web_app.model.dto.medicine.MedicineTypeDto;
-import com.bush.pharmacy_web_app.model.dto.medicine.MedicineTypeUpdateDto;
-import com.bush.pharmacy_web_app.service.medicine.MedicineTypeService;
+import com.bush.pharmacy_web_app.model.dto.product.ProductTypeDto;
+import com.bush.pharmacy_web_app.model.dto.product.ProductTypeUpdateDto;
+import com.bush.pharmacy_web_app.service.product.ProductTypeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,29 +16,29 @@ import java.util.List;
 @RequestMapping("/api/v1/admin/categories")
 @RequiredArgsConstructor
 public class ProductCategoryRestController {
-    private final MedicineTypeService medicineTypeService;
+    private final ProductTypeService productTypeService;
 
     @GetMapping
-    public ResponseEntity<List<MedicineTypeDto>> getCategoriesList(String parent) {
-        return ResponseEntity.ok(medicineTypeService.findAllTypesByParent(parent));
+    public ResponseEntity<List<ProductTypeDto>> getCategoriesList(String parent) {
+        return ResponseEntity.ok(productTypeService.findAllTypesByParent(parent));
     }
 
     @PostMapping
-    public ResponseEntity<MedicineTypeDto> createCategory(@RequestBody @Validated MedicineTypeDto createDto) {
-        return ResponseEntity.ok(medicineTypeService.createDto(createDto)
+    public ResponseEntity<ProductTypeDto> createCategory(@RequestBody @Validated ProductTypeDto createDto) {
+        return ResponseEntity.ok(productTypeService.createDto(createDto)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST)));
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<MedicineTypeDto> updateCategory(@PathVariable Integer id,
-                                                          @RequestBody MedicineTypeUpdateDto updateDto) {
-        return ResponseEntity.ok(medicineTypeService.updatePartlyType(id, updateDto)
+    public ResponseEntity<ProductTypeDto> updateCategory(@PathVariable Integer id,
+                                                         @RequestBody ProductTypeUpdateDto updateDto) {
+        return ResponseEntity.ok(productTypeService.updatePartlyType(id, updateDto)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST)));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Boolean> deleteCategory(@PathVariable Integer id) {
-        if (medicineTypeService.deleteType(id))
+        if (productTypeService.deleteType(id))
             return ResponseEntity.accepted().body(true);
         return ResponseEntity.badRequest().body(false);
     }

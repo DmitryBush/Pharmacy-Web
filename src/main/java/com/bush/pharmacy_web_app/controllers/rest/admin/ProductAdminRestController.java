@@ -1,10 +1,10 @@
 package com.bush.pharmacy_web_app.controllers.rest.admin;
 
-import com.bush.pharmacy_web_app.model.dto.medicine.MedicineAdminReadDto;
-import com.bush.pharmacy_web_app.model.dto.medicine.MedicineCreateDto;
-import com.bush.pharmacy_web_app.model.dto.medicine.MedicinePreviewReadDto;
-import com.bush.pharmacy_web_app.repository.medicine.filter.MedicineFilter;
-import com.bush.pharmacy_web_app.service.medicine.MedicineService;
+import com.bush.pharmacy_web_app.model.dto.product.ProductAdminReadDto;
+import com.bush.pharmacy_web_app.model.dto.product.ProductCreateDto;
+import com.bush.pharmacy_web_app.model.dto.product.ProductPreviewReadDto;
+import com.bush.pharmacy_web_app.repository.product.filter.ProductFilter;
+import com.bush.pharmacy_web_app.service.product.ProductService;
 import com.bush.pharmacy_web_app.validation.ImageFile;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -31,48 +31,46 @@ import java.util.List;
 @RequestMapping("/api/v1/admin/products")
 @RequiredArgsConstructor
 public class ProductAdminRestController {
-    private final MedicineService medicineService;
+    private final ProductService productService;
 
     @GetMapping
-    public HttpEntity<PagedModel<EntityModel<MedicinePreviewReadDto>>> findAllProducts(MedicineFilter medicineFilter,
-                                                                                       @PageableDefault(size = 15, sort = "price",
+    public HttpEntity<PagedModel<EntityModel<ProductPreviewReadDto>>> findAllProducts(ProductFilter productFilter,
+                                                                                      @PageableDefault(size = 15, sort = "price",
                                                                                        direction = Sort.Direction.ASC)
                                                                                Pageable pageable,
-                                                                                       PagedResourcesAssembler<MedicinePreviewReadDto> assembler) {
-        return ResponseEntity.ok(assembler.toModel(medicineService.findAllPreviews(medicineFilter, pageable)));
+                                                                                      PagedResourcesAssembler<ProductPreviewReadDto> assembler) {
+        return ResponseEntity.ok(assembler.toModel(productService.findAllPreviews(productFilter, pageable)));
     }
 
     @GetMapping("/{id}")
-    public MedicineAdminReadDto findByIdProduct(@PathVariable Long id) {
-        return medicineService.findAdminDtoById(id)
+    public ProductAdminReadDto findByIdProduct(@PathVariable Long id) {
+        return productService.findAdminDtoById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    public MedicinePreviewReadDto createProduct(@RequestPart("product") @Validated MedicineCreateDto medicineCreateDto,
-                                                @RequestPart(value = "images", required = false)
+    public ProductPreviewReadDto createProduct(@RequestPart("product") @Validated ProductCreateDto productCreateDto,
+                                               @RequestPart(value = "images", required = false)
                                          @Validated @ImageFile({"image/jpeg", "image/png", "image/webp"})
                                          List<MultipartFile> images) {
-        return medicineService.createMedicine(medicineCreateDto, images)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        return productService.createMedicine(productCreateDto, images);
     }
 
     @PutMapping(value = "/{id}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     @ResponseStatus(HttpStatus.CREATED)
-    public MedicinePreviewReadDto updateProduct(@PathVariable Long id,
-                                                @RequestPart("product") @Validated MedicineCreateDto medicineCreateDto,
-                                                @RequestPart(value = "images", required = false)
-                                             @Validated @NotNull @ImageFile({"image/jpeg", "image/png", "image/webm"})
+    public ProductPreviewReadDto updateProduct(@PathVariable Long id,
+                                               @RequestPart("product") @Validated ProductCreateDto productCreateDto,
+                                               @RequestPart(value = "images", required = false)
+                                             @Validated @ImageFile({"image/jpeg", "image/png", "image/webm"})
                                              List<MultipartFile> images) {
-        return medicineService.updateMedicine(id, medicineCreateDto, images)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        return productService.updateMedicine(id, productCreateDto, images);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
     public void deleteProduct(@PathVariable Long id) {
-        if (!medicineService.deleteMedicine(id))
+        if (!productService.deleteMedicine(id))
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
     }
 }

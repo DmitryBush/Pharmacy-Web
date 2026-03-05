@@ -2,7 +2,7 @@ package com.bush.pharmacy_web_app.service.branch.mapper;
 
 import com.bush.pharmacy_web_app.model.dto.warehouse.TransactionItemDto;
 import com.bush.pharmacy_web_app.model.entity.branch.transaction.TransactionItem;
-import com.bush.pharmacy_web_app.service.medicine.mapper.MedicinePreviewReadMapper;
+import com.bush.pharmacy_web_app.service.product.mapper.MedicinePreviewReadMapper;
 import com.bush.pharmacy_web_app.shared.mapper.DtoMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

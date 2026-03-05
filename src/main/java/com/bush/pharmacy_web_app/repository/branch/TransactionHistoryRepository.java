@@ -1,7 +1,7 @@
 package com.bush.pharmacy_web_app.repository.branch;
 
 import com.bush.pharmacy_web_app.model.entity.branch.transaction.TransactionHistory;
-import com.bush.pharmacy_web_app.model.entity.medicine.Product;
+import com.bush.pharmacy_web_app.model.entity.product.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

@@ -1,6 +1,6 @@
 package com.bush.pharmacy_web_app.repository.entity;
 
-import com.bush.pharmacy_web_app.repository.medicine.MedicineRepository;
+import com.bush.pharmacy_web_app.repository.product.ProductRepository;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Tag;
@@ -15,11 +15,11 @@ import org.springframework.data.domain.PageRequest;
 @Transactional
 public class ProductRepositoryTest {
     @Autowired
-    private MedicineRepository medicineRepository;
+    private ProductRepository productRepository;
     @Test
     public void findDistinctMedicineInStorage() {
         var page = PageRequest.of(0, 25);
-        var medicines = medicineRepository.findDistinctMedicineStorageLocated(page);
+        var medicines = productRepository.findDistinctMedicineStorageLocated(page);
         medicines.stream().forEach(System.out::println);
 
         Assertions.assertNotNull(medicines);

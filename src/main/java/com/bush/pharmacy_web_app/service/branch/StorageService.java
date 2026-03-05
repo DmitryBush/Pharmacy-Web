@@ -5,7 +5,7 @@ import com.bush.pharmacy_web_app.repository.branch.PharmacyBranchRepository;
 import com.bush.pharmacy_web_app.repository.branch.StorageRepository;
 import com.bush.pharmacy_web_app.model.dto.warehouse.InventoryRequestDto;
 import com.bush.pharmacy_web_app.model.dto.warehouse.StorageItemsReadDto;
-import com.bush.pharmacy_web_app.repository.medicine.MedicineRepository;
+import com.bush.pharmacy_web_app.repository.product.ProductRepository;
 import com.bush.pharmacy_web_app.service.branch.mapper.StorageItemReadMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -23,7 +23,7 @@ public class StorageService {
     private final StorageRepository storageRepository;
     private final StorageItemReadMapper itemReadMapper;
 
-    private final MedicineRepository medicineRepository;
+    private final ProductRepository productRepository;
     private final PharmacyBranchRepository branchRepository;
 
     public Page<StorageItemsReadDto> findAllItemsByBranchId(Long id, Pageable pageable) {
@@ -45,7 +45,7 @@ public class StorageService {
                         })
                         .orElseGet(() -> StorageItems.builder()
                                 .amount(storageItemCreateDto.quantity())
-                                .product(medicineRepository.getReferenceById(storageItemCreateDto.medicineId()))
+                                .product(productRepository.getReferenceById(storageItemCreateDto.medicineId()))
                                 .branch(branchRepository.getReferenceById(createDto.branchId()))
                                 .build()))
                 .map(storageRepository::save)

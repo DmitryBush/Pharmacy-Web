@@ -2,11 +2,8 @@ package com.bush.pharmacy_web_app.repository.manufacturer.filter;
 
 import com.bush.pharmacy_web_app.model.dto.manufacturer.ManufacturerCountProductFilterResponse;
 import com.bush.pharmacy_web_app.model.entity.manufacturer.Manufacturer;
-import com.bush.pharmacy_web_app.model.entity.medicine.MedicineType;
-import com.bush.pharmacy_web_app.model.entity.medicine.Product;
-import com.bush.pharmacy_web_app.model.entity.medicine.ProductTypeMapping;
-import com.bush.pharmacy_web_app.repository.medicine.filter.FilterMedicineRepositoryImpl;
-import com.bush.pharmacy_web_app.repository.medicine.filter.MedicineFilter;
+import com.bush.pharmacy_web_app.model.entity.product.Product;
+import com.bush.pharmacy_web_app.repository.product.filter.ProductFilter;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
@@ -18,25 +15,24 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
-import static com.bush.pharmacy_web_app.repository.medicine.filter.FilterMedicineRepositoryImpl.createActiveIngredientPredicates;
-import static com.bush.pharmacy_web_app.repository.medicine.filter.FilterMedicineRepositoryImpl.createCountryPredicates;
-import static com.bush.pharmacy_web_app.repository.medicine.filter.FilterMedicineRepositoryImpl.createManufacturerPredicates;
-import static com.bush.pharmacy_web_app.repository.medicine.filter.FilterMedicineRepositoryImpl.createMaxPricePredicate;
-import static com.bush.pharmacy_web_app.repository.medicine.filter.FilterMedicineRepositoryImpl.createRecipePredicate;
-import static com.bush.pharmacy_web_app.repository.medicine.filter.FilterMedicineRepositoryImpl.createTypePredicate;
+import static com.bush.pharmacy_web_app.repository.product.filter.FilterProductRepositoryImpl.createActiveIngredientPredicates;
+import static com.bush.pharmacy_web_app.repository.product.filter.FilterProductRepositoryImpl.createCountryPredicates;
+import static com.bush.pharmacy_web_app.repository.product.filter.FilterProductRepositoryImpl.createManufacturerPredicates;
+import static com.bush.pharmacy_web_app.repository.product.filter.FilterProductRepositoryImpl.createMaxPricePredicate;
+import static com.bush.pharmacy_web_app.repository.product.filter.FilterProductRepositoryImpl.createRecipePredicate;
+import static com.bush.pharmacy_web_app.repository.product.filter.FilterProductRepositoryImpl.createTypePredicate;
 
 @RequiredArgsConstructor
 public class ManufacturerProductCountRepositoryImpl implements ManufacturerProductCountRepository {
     private final EntityManager entityManager;
     @Override
-    public List<ManufacturerCountProductFilterResponse> findAllManufacturersByProductFilter(MedicineFilter filter) {
+    public List<ManufacturerCountProductFilterResponse> findAllManufacturersByProductFilter(ProductFilter filter) {
         var cb = entityManager.getCriteriaBuilder();
         return filter(createFilteredQuery(filter, cb));
     }
 
-    private CriteriaQuery<ManufacturerCountProductFilterResponse> createFilteredQuery(MedicineFilter filter, CriteriaBuilder cb) {
+    private CriteriaQuery<ManufacturerCountProductFilterResponse> createFilteredQuery(ProductFilter filter, CriteriaBuilder cb) {
         var query = cb.createQuery(ManufacturerCountProductFilterResponse.class);
         var root = query.from(Manufacturer.class);
 
@@ -50,7 +46,7 @@ public class ManufacturerProductCountRepositoryImpl implements ManufacturerProdu
         return query.where(predicates.toArray(Predicate[]::new));
     }
 
-    private List<Predicate> buildPredicates(MedicineFilter filter, CriteriaBuilder cb, Root<Manufacturer> root) {
+    private List<Predicate> buildPredicates(ProductFilter filter, CriteriaBuilder cb, Root<Manufacturer> root) {
         Join<Manufacturer, Product> productJoin = root.join("products");
         List<Predicate> predicates = new ArrayList<>();
 
