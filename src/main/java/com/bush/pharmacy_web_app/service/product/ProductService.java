@@ -32,8 +32,10 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 @Slf4j
 @Service
@@ -114,8 +116,7 @@ public class ProductService {
                         new OutboxRecordDto<>("product", CrudOperationType.C, savedProduct)))
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST));
         try {
-            Optional.ofNullable(images).ifPresent(imageList -> images
-                    .forEach(file -> imageService.createImage(file, product)));
+            processMultipartFiles(images).forEach(file -> imageService.createImage(file, product));
             createDto.type().forEach(type -> {
                 ProductType productType = productTypeService.getReferenceById(
                         productTypeService.findByTypeName(type.type()).id());
@@ -127,6 +128,13 @@ public class ProductService {
             product.getImage().forEach(imageService::deleteImage);
             throw new RuntimeException(e);
         }
+    }
+
+    private Stream<MultipartFile> processMultipartFiles(List<MultipartFile> images) {
+        return Optional.ofNullable(images)
+                .stream()
+                .flatMap(Collection::parallelStream)
+                .filter(file -> !file.isEmpty());
     }
 
     @Transactional
@@ -143,8 +151,8 @@ public class ProductService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         List<ProductImage> productImages = new ArrayList<>();
         try {
-            Optional.ofNullable(images).ifPresent(imageList -> images
-                    .forEach(file -> productImages.add(imageService.createImage(file, product))));
+            processMultipartFiles(images)
+                    .forEach(file -> productImages.add(imageService.createImage(file, product)));
             createDto.type().forEach(type -> {
                 ProductType productType = productTypeService.getReferenceById(
                         productTypeService.findByTypeName(type.type()).id());
