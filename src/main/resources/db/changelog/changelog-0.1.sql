@@ -306,10 +306,10 @@ CREATE TABLE IF NOT EXISTS public.manufacturers
 CREATE TABLE IF NOT EXISTS public.product_types
 (
     type_id integer NOT NULL GENERATED ALWAYS AS IDENTITY,
-    type character varying(64) NOT NULL,
+    type_name character varying(64) NOT NULL UNIQUE,
+    type_slug VARCHAR(64) NOT NULL UNIQUE,
     parent_id integer,
     CONSTRAINT product_types_pkey PRIMARY KEY (type_id),
-    CONSTRAINT product_types_type_key UNIQUE (type),
     CONSTRAINT product_types_parent_id_fkey FOREIGN KEY (parent_id) REFERENCES public.product_types (type_id)
 );
 

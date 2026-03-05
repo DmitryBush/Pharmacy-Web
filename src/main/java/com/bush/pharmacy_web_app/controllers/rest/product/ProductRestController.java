@@ -1,10 +1,10 @@
 package com.bush.pharmacy_web_app.controllers.rest.product;
 
-import com.bush.pharmacy_web_app.model.dto.medicine.MedicinePreviewReadDto;
-import com.bush.pharmacy_web_app.repository.medicine.filter.MedicineFilter;
+import com.bush.pharmacy_web_app.model.dto.product.ProductPreviewReadDto;
+import com.bush.pharmacy_web_app.repository.product.filter.ProductFilter;
 import com.bush.pharmacy_web_app.service.branch.TransactionService;
-import com.bush.pharmacy_web_app.service.medicine.MedicineService;
-import com.bush.pharmacy_web_app.service.medicine.dailyfeatured.DailyFeaturedProductService;
+import com.bush.pharmacy_web_app.service.product.ProductService;
+import com.bush.pharmacy_web_app.service.product.dailyfeatured.DailyFeaturedProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
@@ -23,22 +23,22 @@ import java.util.List;
 public class ProductRestController {
     private final DailyFeaturedProductService dailyFeaturedProductService;
     private final TransactionService transactionService;
-    private final MedicineService medicineService;
+    private final ProductService productService;
 
     @GetMapping("/daily-products")
-    public List<MedicinePreviewReadDto> getDailyProducts() {
+    public List<ProductPreviewReadDto> getDailyProducts() {
         return dailyFeaturedProductService.findDailyMedicine();
     }
 
     @GetMapping("/best-sellers")
-    public List<MedicinePreviewReadDto> getBestSellingProducts() {
+    public List<ProductPreviewReadDto> getBestSellingProducts() {
         return transactionService.findBestSellingProducts();
     }
 
     @GetMapping
-    public ResponseEntity<PagedModel<EntityModel<MedicinePreviewReadDto>>> getProductsByFilter(Pageable pageable,
-                                                                                               MedicineFilter filter,
-                                                                                               PagedResourcesAssembler<MedicinePreviewReadDto> assembler) {
-        return ResponseEntity.ok(assembler.toModel(medicineService.findAllPreviews(filter, pageable)));
+    public ResponseEntity<PagedModel<EntityModel<ProductPreviewReadDto>>> getProductsByFilter(Pageable pageable,
+                                                                                              ProductFilter filter,
+                                                                                              PagedResourcesAssembler<ProductPreviewReadDto> assembler) {
+        return ResponseEntity.ok(assembler.toModel(productService.findAllPreviews(filter, pageable)));
     }
 }

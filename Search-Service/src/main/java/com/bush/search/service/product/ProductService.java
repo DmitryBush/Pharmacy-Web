@@ -1,6 +1,5 @@
 package com.bush.search.service.product;
 
-import com.bush.search.domain.document.product.Product;
 import com.bush.search.domain.dto.ProductFilter;
 import com.bush.search.domain.dto.ProductPreviewDto;
 import com.bush.search.domain.index.product.ProductPayload;
@@ -34,7 +33,7 @@ public class ProductService {
     public void updateProduct(String id, ProductPayload productPayload) {
         Optional.ofNullable(id)
                 .flatMap(productRepository::findById)
-                .map(_ -> productCreateMapper.mapToProduct(productPayload))
+                .map(product -> productCreateMapper.updateProduct(product, productPayload))
                 .map(productRepository::save);
     }
 

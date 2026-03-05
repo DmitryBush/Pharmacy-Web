@@ -3,7 +3,7 @@ package com.bush.pharmacy_web_app.service.branch.mapper;
 import com.bush.pharmacy_web_app.model.dto.warehouse.StorageItemsReadDto;
 import com.bush.pharmacy_web_app.model.entity.branch.StorageItems;
 import com.bush.pharmacy_web_app.shared.mapper.DtoMapper;
-import com.bush.pharmacy_web_app.service.medicine.mapper.MedicinePreviewReadMapper;
+import com.bush.pharmacy_web_app.service.product.mapper.MedicinePreviewReadMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

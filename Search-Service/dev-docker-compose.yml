@@ -100,6 +100,13 @@ services:
       - debezium_reindex_data_1:/kafka/data
       - debezium_reindex_log_1:/kafka/logs
       - debezium_reindex_config_1:/kafka/config
+  object-storage:
+    image: minio/minio:RELEASE.2025-09-07T16-13-09Z
+    ports:
+      - "9000:9000"
+    command: server /data
+    volumes:
+      - object-storage-data:/data
 
 volumes:
   db_data:
@@ -110,3 +117,4 @@ volumes:
   debezium_reindex_data_1:
   debezium_reindex_log_1:
   debezium_reindex_config_1:
+  object-storage-data:

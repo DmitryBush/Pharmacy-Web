@@ -38,6 +38,8 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-actuator")
 	implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
 
+	implementation("io.minio:minio:8.6.0")
+
 	compileOnly("org.projectlombok:lombok")
     annotationProcessor("org.projectlombok:lombok")
     compileOnly("org.mapstruct:mapstruct:1.6.3")
@@ -49,6 +51,10 @@ dependencies {
 	runtimeOnly("org.postgresql:postgresql")
 	annotationProcessor("org.projectlombok:lombok")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
+	testImplementation("org.springframework.boot:spring-boot-testcontainers")
+	testImplementation("org.testcontainers:postgresql:1.21.4")
+	testImplementation("org.testcontainers:minio:1.21.4")
+	testImplementation("org.testcontainers:junit-jupiter:1.21.4")
 	testImplementation("org.springframework.security:spring-security-test")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }

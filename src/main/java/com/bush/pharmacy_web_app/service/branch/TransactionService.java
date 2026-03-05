@@ -1,7 +1,7 @@
 package com.bush.pharmacy_web_app.service.branch;
 
-import com.bush.pharmacy_web_app.model.dto.medicine.MedicinePreviewReadDto;
-import com.bush.pharmacy_web_app.model.dto.medicine.MedicineReadDto;
+import com.bush.pharmacy_web_app.model.dto.product.ProductPreviewReadDto;
+import com.bush.pharmacy_web_app.model.dto.product.ProductReadDto;
 import com.bush.pharmacy_web_app.model.dto.warehouse.*;
 import com.bush.pharmacy_web_app.model.entity.branch.transaction.TransactionItem;
 import com.bush.pharmacy_web_app.model.entity.branch.transaction.TransactionItemId;
@@ -10,12 +10,12 @@ import com.bush.pharmacy_web_app.model.entity.branch.transaction.TransactionType
 import com.bush.pharmacy_web_app.repository.branch.PharmacyBranchRepository;
 import com.bush.pharmacy_web_app.repository.branch.TransactionHistoryRepository;
 import com.bush.pharmacy_web_app.repository.branch.TransactionTypeRepository;
-import com.bush.pharmacy_web_app.repository.medicine.MedicineRepository;
+import com.bush.pharmacy_web_app.repository.product.ProductRepository;
 import com.bush.pharmacy_web_app.repository.order.OrderRepository;
 import com.bush.pharmacy_web_app.service.branch.mapper.TransactionCreateMapper;
 import com.bush.pharmacy_web_app.service.branch.mapper.TransactionReadMapper;
-import com.bush.pharmacy_web_app.service.medicine.MedicineService;
-import com.bush.pharmacy_web_app.service.medicine.mapper.MedicinePreviewReadMapper;
+import com.bush.pharmacy_web_app.service.product.ProductService;
+import com.bush.pharmacy_web_app.service.product.mapper.MedicinePreviewReadMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -42,10 +42,10 @@ public class TransactionService {
     private final OrderRepository orderRepository;
     private final PharmacyBranchRepository branchRepository;
     private final TransactionTypeRepository typeRepository;
-    private final MedicineRepository medicineRepository;
+    private final ProductRepository productRepository;
 
     private final StorageService storageService;
-    private final MedicineService medicineService;
+    private final ProductService productService;
 
     public List<TransactionReadDto> findAllTransactionsByBranchId(Long branchId) {
         return transactionRepository.findByBranchId(branchId).stream()
@@ -53,7 +53,7 @@ public class TransactionService {
                 .toList();
     }
 
-    public List<MedicinePreviewReadDto> findBestSellingProducts() {
+    public List<ProductPreviewReadDto> findBestSellingProducts() {
         return transactionRepository.findBestSellingProducts(featuredProductCount).stream()
                 .map(medicinePreviewReadMapper::map)
                 .toList();
@@ -82,11 +82,11 @@ public class TransactionService {
                 .map(transactionItemsList -> transactionItemsList.stream()
                         .map(item -> TransactionItem.builder()
                                 .amount(item.quantity())
-                                .price(medicineService.findMedicineById(item.medicineId())
-                                        .map(MedicineReadDto::price)
+                                .price(productService.findMedicineById(item.medicineId())
+                                        .map(ProductReadDto::price)
                                         .orElseThrow())
                                 .id(TransactionItemId.builder()
-                                        .product(medicineRepository.getReferenceById(item.medicineId()))
+                                        .product(productRepository.getReferenceById(item.medicineId()))
                                         .build())
                                 .build())
                         .toList())

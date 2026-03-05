@@ -9,7 +9,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.FIELD)
+@Target({ElementType.FIELD, ElementType.PARAMETER})
 @Constraint(validatedBy = MobilePhoneValidator.class)
 public @interface MobilePhone {
     String message() default "Номер телефона должен быть заполнен в формате +79XXXXXXXXXX";

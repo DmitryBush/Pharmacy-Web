@@ -10,27 +10,25 @@ document.addEventListener("DOMContentLoaded", async () => {
     const productContainer = document.getElementById('product-grid');
     const filterForm = document.getElementById('filter-form');
     const sortSelector = document.getElementById('sort-selector');
+    const submitButton = document.getElementById('submit-button');
+    const resetFilterButton = document.getElementById('reset-filter-button');
 
     const mainList = document.getElementById('product-list-container');
     const productLoader = new Loader(mainList);
     const paginationManager = new PaginationManager(mainList, initialize);
 
-    filterForm.addEventListener('change', event => {
-        event.preventDefault();
-        initialize();
-    });
-    document.getElementById('submit-button').addEventListener('click', (e) => {
+    submitButton.addEventListener('click', async (e) => {
         e.preventDefault();
-        initialize();
+        await initialize();
     });
-    document.getElementById('reset-filter-button').addEventListener('click', (e) => {
+    resetFilterButton.addEventListener('click', async (e) => {
         e.preventDefault();
         resetFilters();
-        initialize();
+        await initialize();
     });
-    sortSelector.addEventListener('change', (e) => {
+    sortSelector.addEventListener('change', async (e) => {
         e.preventDefault();
-        initialize();
+        await initialize();
     });
 
     try {
@@ -40,61 +38,68 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     async function initialize() {
+        lockFilterButtons();
         productLoader.showLoading();
-        await loadFilters();
-        initializeFilterParams();
         await loadProducts();
+        unlockFilterButtons();
     }
 
-    async function loadFilters() {
-        await Promise.allSettled([
-            createManufacturerFilters(),
-            createCountryFilters(),
-            createActiveIngredientFilters(),
-        ]);
+    function loadFilters(filterAggregation) {
+        createManufacturerFilters(filterAggregation);
+        createCountryFilters(filterAggregation);
+        createActiveIngredientFilters(filterAggregation);
     }
 
-    async function createManufacturerFilters(){
-        const manufacturerFilters =
-           await (await restClient.fetchData(`/api/v1/search/manufacturer/filter/count`, 'GET', {})).json();
+    function createManufacturerFilters(filterAggregation) {
+        if (filterAggregation.manufacturers === undefined) {
+            throw Error('Integrity of the filter aggregation of manufacturers structure has been compromised');
+        }
 
-        const manufacturerFilterContainer = document.getElementById('manufacturer-filter-container');
-        manufacturerFilters.forEach(manufacturer => {
+        const manufacturerFilterContainer = document.getElementById('manufacturer-filters-container');
+        manufacturerFilterContainer.innerHTML = '';
+        const manufacturersMap = new Map(Object.entries(filterAggregation.manufacturers));
+        manufacturersMap.forEach((value, key) => {
             const item = document.createElement("li");
-            item.append(createLabelFilter('manufacturer', manufacturer));
+            item.append(createLabelFilter('manufacturer', `${key} (${value})`, key));
             manufacturerFilterContainer.append(item);
         });
     }
 
-    async function createCountryFilters(){
-        const countryFilters =
-            await (await restClient.fetchData(`/api/v1/search/country/filter/count`, 'GET', {})).json();
+    function createCountryFilters(filterAggregation) {
+        if (filterAggregation.countries === undefined) {
+            throw Error('Integrity of the filter aggregation of countries structure has been compromised');
+        }
 
         const countryFilterContainer = document.getElementById('country-filter-container');
-        countryFilters.forEach(country => {
+        countryFilterContainer.innerHTML = '';
+        const countriesMap = new Map(Object.entries(filterAggregation.countries));
+        countriesMap.forEach((value, key) => {
             const item = document.createElement("li");
-            item.append(createLabelFilter('country', country));
+            item.append(createLabelFilter('country', `${key} (${value})`, key));
             countryFilterContainer.append(item);
-        })
+        });
     }
 
-    async function createActiveIngredientFilters(){
-        const activeIngredientFilters =
-            await (await restClient.fetchData(`/api/v1/search/active-ingredient/filter/count`, 'GET', {})).json();
+    function createActiveIngredientFilters(filterAggregation) {
+        if (filterAggregation.activeIngredients === undefined) {
+            throw Error('Integrity of the filter aggregation of active ingredients structure has been compromised');
+        }
 
         const activeIngredientFilterContainer = document.getElementById('active-ingredient-filter-container');
-        activeIngredientFilters.forEach(ingredient => {
+        activeIngredientFilterContainer.innerHTML = '';
+        const activeIngredientsMap = new Map(Object.entries(filterAggregation.activeIngredients));
+        activeIngredientsMap.forEach((value, key) => {
             const item = document.createElement("li");
-            item.append(createLabelFilter('ingredient', ingredient));
+            item.append(createLabelFilter('ingredient', `${key} (${value})`, key));
             activeIngredientFilterContainer.append(item);
-        })
+        });
     }
 
-    function createLabelFilter(name, value){
+    function createLabelFilter(name, text, value) {
         const labelItem = document.createElement("label");
         labelItem.classList.add('price-filter-group');
-        labelItem.append(createCheckbox(name, value));
-        labelItem.textContent = value;
+        labelItem.appendChild(createCheckbox(name, value));
+        labelItem.insertAdjacentHTML('beforeend', text);
         return labelItem;
     }
 
@@ -110,21 +115,18 @@ document.addEventListener("DOMContentLoaded", async () => {
         const urlParams = new URLSearchParams(window.location.search);
 
         urlParams.getAll("manufacturer").forEach(value => {
-            document.querySelector(`input[name="manufacturer"][value="${value}"]`).forEach(checkbox => {
-                checkbox.checked = true;
-            });
+            const element = document.querySelector(`input[name="manufacturer"][value="${value}"]`);
+            element.checked = true;
         });
 
         urlParams.getAll('country').forEach(value => {
-            document.querySelector(`input[name="country"][value="${value}"]`).forEach(checkbox => {
-                checkbox.checked = true;
-            });
+            const element = document.querySelector(`input[name="country"][value="${value}"]`);
+            element.checked = true;
         });
 
         urlParams.getAll('ingredient').forEach(value => {
-            document.querySelector(`input[name="ingredient"][value="${value}"]`).forEach(checkbox => {
-                checkbox.checked = true;
-            });
+            const element = document.querySelector(`input[name="ingredient"][value="${value}"]`);
+            element.checked = true;
         });
 
         const recipeValue = urlParams.get("recipe");
@@ -138,21 +140,30 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     async function loadProducts() {
         productContainer.innerHTML = '';
-        const productResponse = await (await restClient.fetchData(`/api/v1/products?${applyFilters()}`,
+
+        const productResponse = await (await restClient.fetchData(`/api/v1/search/products/filter?${applyFilters()}`,
             'GET', {})).json();
-        const totalElements = productResponse.page.totalElements;
-        catalogHeader.textContent = `Лекарства ${totalElements} товаров`;
-        paginationManager.initializePagination(productResponse.page.number, productResponse.page.size, totalElements);
+        const pageStatistic = productResponse.pageResponse.page;
+        catalogHeader.textContent = `Лекарства ${pageStatistic.totalElements} товаров`;
+        paginationManager.initializePagination(pageStatistic.number, pageStatistic.size, pageStatistic.totalElements);
+
+        loadFilters(productResponse.filterAggregation);
+        initializeFilterParams();
 
         productLoader.hideLoading();
-        if (totalElements === 0) {
+        if (pageStatistic.totalElements === 0) {
             const newsMessage = document.createElement('h3');
             newsMessage.textContent = 'Нет доступных товаров';
             productContainer.appendChild(newsMessage);
             return;
         }
-        const productList = productResponse._embedded.newsReadDtoList;
+        const productList = productResponse.pageResponse._embedded.productPreviewDtoList;
         productList.forEach(product => createProductElement(product));
+    }
+
+    function getProductTypeFromPathname() {
+        const pathname = window.location.pathname;
+        return pathname.replace(/^\/catalog\/?/, '');
     }
 
     function applyFilters() {
@@ -162,6 +173,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         params.set('page', paginationManager.currentPage);
         params.set('size', paginationManager.pageSize);
         window.history.replaceState(null, null, `?${params.toString()}`);
+        params.set('type', getProductTypeFromPathname());
         return params.toString();
     }
 
@@ -189,7 +201,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         imageLink.href = `/catalog/${product.id}`;
         const productImage = document.createElement('img');
         if (product.imagePaths.length > 0) {
-            productImage.src = `/api/v1/product-image/${product.imagePaths[0].id}`;
+            productImage.src = `/api/v1/product-image/${product.imagePaths[0]}`;
             productImage.alt = product.name;
             productImage.setAttribute('width', '200px');
         } else {
@@ -203,6 +215,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         const productNameContainer = document.createElement('div');
         const productNameLink = document.createElement('a');
         productNameLink.href = `/catalog/${product.id}`;
+        productNameLink.textContent = product.name;
         productNameContainer.appendChild(productNameLink);
         return productNameContainer;
     }
@@ -212,8 +225,21 @@ document.addEventListener("DOMContentLoaded", async () => {
         const productPrice = document.createElement('p');
         productPrice.textContent = `${product.price} ₽`;
         const buyButton = document.createElement('button');
+        buyButton.textContent = 'Купить'
         productPriceContainer.appendChild(productPrice);
         productPriceContainer.appendChild(buyButton);
         return productPriceContainer;
+    }
+
+    function lockFilterButtons() {
+        sortSelector.disabled = true;
+        submitButton.disabled = true;
+        resetFilterButton.disabled = true;
+    }
+
+    function unlockFilterButtons() {
+        sortSelector.disabled = false;
+        submitButton.disabled = false;
+        resetFilterButton.disabled = false;
     }
 });

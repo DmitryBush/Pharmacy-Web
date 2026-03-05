@@ -9,6 +9,6 @@ import org.springframework.hateoas.RepresentationModel;
 @AllArgsConstructor
 @Getter
 public class FilteredResponse<T, A> extends RepresentationModel<FilteredResponse<T, A>> {
-    private PagedModel<EntityModel<T>> page;
+    private PagedModel<EntityModel<T>> pageResponse;
     private A filterAggregation;
 }

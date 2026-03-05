@@ -102,7 +102,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 ${typeDescription} ${typeCounter}
                                 <span class="input-with-button type">
                                     <input class="input-group ${className}" type="text" id="type ${typeCounter}"
-                                        value="${type.type.name}">
+                                        value="${type.type}">
                                     <button class="search-btn search-icon">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
                                             <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
@@ -136,7 +136,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const imageItem = document.createElement('div');
             imageItem.classList.add('image-item');
             imageItem.innerHTML = `
-                <img src='/api/v1/product-image/${productId}/${image.path}'
+                <img src='/api/v1/product-image/${image.id}'
                                  width="350px">
                 <button class="delete-image-btn" data-id="${image.id}">×</button>
             `;
@@ -312,7 +312,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.addEventListener('click', (e) => {
         if (e.target.classList.contains('delete-image-btn')) {
-            e.preventDefault(); // Предотвращаем действие по умолчанию
+            e.preventDefault();
             deleteImage(e.target);
         }
     });
@@ -410,18 +410,12 @@ document.addEventListener('DOMContentLoaded', () => {
         typeContainer.querySelectorAll('.type-content').forEach((typeContent) => {
             if (typeContent.querySelector('input.type')) {
                 types.push({
-                    type: {
-                        name: typeContent.querySelector('input.type').value,
-                        parent: typeContent.querySelector('input.parent-type').value
-                    },
+                    type: typeContent.querySelector('input.type').value,
                     isMain : false
                 });
             } else if (typeContent.querySelector('input.main-type')) {
                 types.push({
-                    type: {
-                        name: typeContent.querySelector('input.main-type').value,
-                        parent: typeContent.querySelector('input.parent-type').value
-                    },
+                    type: typeContent.querySelector('input.main-type').value,
                     isMain : true
                 });
             }
@@ -527,7 +521,7 @@ document.addEventListener('DOMContentLoaded', () => {
             } else if (searchEndpoint === 'country') {
                 searchElement.querySelector('#country').value = result.country;
             }
-            blockInput(searchElement);
+            blockInput(searchElement, searchEndpoint);
         } catch (error) {
             console.error(error);
             notification.showNotification('Управление продуктами',
@@ -537,16 +531,14 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    function blockInput(element) {
+    function blockInput(element, searchEndpoint) {
         let blockedInputs = [];
         let inputContainer = null;
 
         if (searchEndpoint === 'manufacturer') {
             inputContainer = element.querySelector('.countryPart');
-            idMap.delete('manufacturer');
         } else if (searchEndpoint === 'supplier') {
-            inputContainer = element.querySelector('.addressPart');
-            idMap.delete('address');
+            inputContainer = element.querySelector('#addressPart');
         } else if (searchEndpoint === 'type') {
             inputContainer = element.querySelector('.parent-type');
         }
@@ -561,6 +553,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         element.querySelectorAll('input').forEach((input) => {
             input.addEventListener('input', () => {
+                idMap.delete(searchEndpoint);
                 blockedInputs.forEach(blockedInput => unblockInput(blockedInput));
             });
         });
@@ -569,7 +562,6 @@ document.addEventListener('DOMContentLoaded', () => {
     function unblockInput(inputElement) {
         inputElement.readOnly = false;
         inputElement.classList.remove('locked-input');
-        idMap.delete(searchEndpoint);
     }
 
     function closeSearch() {

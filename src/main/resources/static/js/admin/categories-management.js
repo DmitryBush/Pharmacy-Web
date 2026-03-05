@@ -47,17 +47,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
     addButton.addEventListener('click', (e) => {
         e.preventDefault();
-        const popupContent = `<label for="categoryInput">
+        const popupContent = `<label for="categoryName">
                                         Название категории
-                                        <input type="text" id="categoryInput" placeholder="Введите название">
+                                        <input type="text" id="categoryName" placeholder="Введите название">
+                                    </label>
+                                    <label for="categorySlug">
+                                        Slug категории
+                                        <input type="text" id="categorySlug" placeholder="Введите slug категории">
                                     </label>`;
         new PopupManager()
             .setTarget(e.target)
             .setPopupContent(popupContent)
             .setSubmitAction(async () => {
                 try {
-                    const categoryName = document.querySelector('#categoryInput').value.trim();
-                    if (!categoryName)
+                    const categoryName = document.querySelector('#categoryName').value.trim();
+                    const categorySlug = document.querySelector('#categorySlug').value.trim();
+                    if (!categoryName || !categorySlug)
                         throw new Error('Название категории не может быть пустым');
 
                     try {
@@ -75,6 +80,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     await restClient.fetchData(`/api/v1/admin/categories`, 'POST',
                         { 'Content-Type': 'application/json' }, JSON.stringify({
                             name: categoryName,
+                            slug: categorySlug,
                             parent: parentCategory
                         }));
                     notification.showNotification('Управление категориями',
@@ -187,9 +193,13 @@ document.addEventListener("DOMContentLoaded", () => {
         categoryElement.querySelector('.edit-btn').addEventListener('click', (e) => {
             e.stopPropagation();
             const popupContent = `<div class="popup-title"><h4>Редактировать категорию</h4></div>
-                                        <label for="categoryInput">
+                                        <label for="categoryName">
                                             Название категории
-                                            <input type="text" id="categoryInput" placeholder="Введите название">
+                                            <input type="text" id="categoryName" placeholder="Введите название">
+                                        </label>
+                                        <label for="categorySlug">
+                                            Slug категории
+                                            <input type="text" id="categorySlug" placeholder="Введите slug категории">
                                         </label>`;
 
             new PopupManager()
@@ -197,8 +207,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 .setPopupContent(popupContent)
                 .setSubmitAction(async () => {
                     try {
-                        const newCategoryName = document.querySelector('#categoryInput').value.trim();
-                        if (!newCategoryName)
+                        const newCategoryName = document.querySelector('#categoryName').value.trim();
+                        const categorySlug = document.querySelector('#categorySlug').value.trim();
+                        if (!newCategoryName || !categorySlug)
                             throw new Error('Название категории не может быть пустым');
 
                         try {
@@ -211,7 +222,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                         await restClient.fetchData(`/api/v1/admin/categories/${category.id}`, 'PATCH',
                             {'Content-Type': 'application/json'},
-                            JSON.stringify({type: newCategoryName}));
+                            JSON.stringify({type: newCategoryName, slug: categorySlug}));
                         notification.showNotification('Управление категориями',
                             'Изменение названия категории успешно завершено');
                         updateList();

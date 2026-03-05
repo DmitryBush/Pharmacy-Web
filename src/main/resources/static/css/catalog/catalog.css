@@ -5,7 +5,14 @@
     align-items: start;
     max-width: 1200px;
     margin: 0 auto;
-    padding: 20px;
+    padding: 30px;
+}
+
+.catalog-header {
+    font-size: 2.5rem;
+    letter-spacing: -0.03em;
+    margin: 1.5rem 0;
+    color: #2b2d42;
 }
 
 .catalog-page > h1 {
@@ -79,7 +86,7 @@
     width: 100%;
 }
 
-button[type="submit"] {
+#submit-button {
     background: #0078D7;
     color: white;
     padding: 12px 25px;
@@ -89,7 +96,7 @@ button[type="submit"] {
     transition: background 0.3s;
 }
 
-button[type="submit"]:hover {
+#submit-button:hover {
     background: #0063B1;
 }
 
@@ -106,6 +113,12 @@ button[type="submit"]:hover {
 #reset-filter-button:hover {
     background: #E81123;
     padding: 12px 25px;
+}
+
+#submit-button:disabled, #submit-button:disabled:hover,
+#reset-filter-button:disabled, #reset-filter-button:disabled:hover {
+    background: #666666;
+    cursor: not-allowed;
 }
 
 .product-list-container {
