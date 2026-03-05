@@ -17,9 +17,11 @@ class ProductTypeMappingService {
     private final ProductTypeMappingRepository mappingRepository;
 
     protected void createProductTypeMapping(Product product, ProductType type, Boolean isMainType) {
-        ProductTypeMappingId id = new ProductTypeMappingId(product, type);
-        ProductTypeMapping mapping = new ProductTypeMapping(id, isMainType);
-        mapping = mappingRepository.save(mapping);
-        product.addType(mapping);
+        if (!mappingRepository.existsByIdProductAndIdType(product, type)) {
+            ProductTypeMappingId id = new ProductTypeMappingId(product, type);
+            ProductTypeMapping mapping = new ProductTypeMapping(id, isMainType);
+            mapping = mappingRepository.save(mapping);
+            product.addType(mapping);
+        }
     }
 }

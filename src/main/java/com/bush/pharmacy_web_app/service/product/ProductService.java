@@ -112,22 +112,25 @@ public class ProductService {
         Product product = Optional.of(createDto)
                 .map(dto -> productCreateMapper.mapToProduct(dto, supplier, manufacturer))
                 .map(productRepository::save)
-                .map(savedProduct -> outboxService.createRecord(
-                        new OutboxRecordDto<>("product", CrudOperationType.C, savedProduct)))
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST));
         try {
             processMultipartFiles(images).forEach(file -> imageService.createImage(file, product));
-            createDto.type().forEach(type -> {
-                ProductType productType = productTypeService.getReferenceById(
-                        productTypeService.findByTypeName(type.type()).id());
-                typeMappingService.createProductTypeMapping(product, productType, type.isMain());
-            });
+            processProductTypes(createDto, product);
+            outboxService.createRecord(new OutboxRecordDto<>("product", CrudOperationType.C, product));
             return productReadMapper.mapToMedicinePreviewReadDto(product);
         } catch (Exception e) {
             log.error("Caught exception while saving product - {}", e.getMessage());
             product.getImage().forEach(imageService::deleteImage);
             throw new RuntimeException(e);
         }
+    }
+
+    private void processProductTypes(ProductCreateDto createDto, Product product) {
+        createDto.type().forEach(type -> {
+            ProductType productType = productTypeService.getReferenceById(
+                    productTypeService.findByTypeName(type.type()).id());
+            typeMappingService.createProductTypeMapping(product, productType, type.isMain());
+        });
     }
 
     private Stream<MultipartFile> processMultipartFiles(List<MultipartFile> images) {
@@ -153,11 +156,7 @@ public class ProductService {
         try {
             processMultipartFiles(images)
                     .forEach(file -> productImages.add(imageService.createImage(file, product)));
-            createDto.type().forEach(type -> {
-                ProductType productType = productTypeService.getReferenceById(
-                        productTypeService.findByTypeName(type.type()).id());
-                typeMappingService.createProductTypeMapping(product, productType, type.isMain());
-            });
+            processProductTypes(createDto, product);
             outboxService.createRecord(new OutboxRecordDto<>("product", CrudOperationType.U, product));
             return productReadMapper.mapToMedicinePreviewReadDto(product);
         } catch (Exception e) {

@@ -10,7 +10,7 @@ import org.mapstruct.MappingConstants;
 public interface ProductTypeCreateMapper {
     @Mapping(target = "id", expression = "java(String.valueOf(productTypeMappingPayload.id()))")
     @Mapping(target = "typeId", source = "id")
-    @Mapping(target = "typeName", source = "type")
+    @Mapping(target = "typeName", source = "name")
     @Mapping(target = "typeSlug", source = "slug")
     ProductType mapToProductType(ProductTypeMappingPayload productTypeMappingPayload);
 }
