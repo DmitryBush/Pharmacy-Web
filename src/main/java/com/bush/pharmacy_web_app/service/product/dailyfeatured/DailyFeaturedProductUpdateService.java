@@ -1,5 +1,6 @@
 package com.bush.pharmacy_web_app.service.product.dailyfeatured;
 
+import com.bush.pharmacy_web_app.model.entity.product.dailyfeatured.DailyFeaturedProductsChangelog;
 import com.bush.pharmacy_web_app.service.product.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -15,29 +16,29 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class DailyFeaturedProductUpdateService {
-    @Value("${time.timezone}")
-    private String timezone;
-    @Value("${featured-products.count}")
-    private Integer dailyFeaturedProductCount;
-
     private final Logger logger = LoggerFactory.getLogger(DailyFeaturedProductUpdateService.class);
-
-    private LocalDate cachedUpdateDate = null;
-
     private final DailyFeaturedProductService dailyProductService;
     private final DailyFeaturedProductChangelogService changelogService;
     private final ProductService productService;
 
-    public void refreshDailyProducts() {
+    @Value("${time.timezone}")
+    private String timezone;
+    @Value("${featured-products.count}")
+    private Integer dailyFeaturedProductCount;
+    private LocalDate cachedUpdateDate = null;
+
+    public void refreshDailyProducts(Boolean forceRefresh) {
         Optional.ofNullable(cachedUpdateDate)
-                .ifPresentOrElse(this::checkAndUpdateDailyProducts,
+                .ifPresentOrElse(date -> checkAndUpdateDailyProducts(date, forceRefresh),
                         () -> changelogService.findLatestUpdateRecord()
-                                .map(record -> record.getCreatedAt().toLocalDate())
-                                .ifPresentOrElse(this::checkAndUpdateDailyProducts, this::updateDailyProducts));
+                                .map(DailyFeaturedProductsChangelog::getCreatedAt)
+                                .map(ZonedDateTime::toLocalDate)
+                                .ifPresentOrElse(date -> checkAndUpdateDailyProducts(date, forceRefresh),
+                                        this::updateDailyProducts));
     }
 
-    private void checkAndUpdateDailyProducts(LocalDate updateDate) {
-        if (updateDate.isBefore(ZonedDateTime.now(ZoneId.of(timezone)).toLocalDate())) {
+    private void checkAndUpdateDailyProducts(LocalDate updateDate, Boolean forceRefresh) {
+        if (updateDate.isBefore(ZonedDateTime.now(ZoneId.of(timezone)).toLocalDate()) || forceRefresh) {
             updateDailyProducts();
             cachedUpdateDate = ZonedDateTime.now(ZoneId.of(timezone)).toLocalDate();
         } else {

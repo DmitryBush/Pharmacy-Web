@@ -13,11 +13,11 @@ public class DailyFeaturedProductSchedulerService {
 
     @EventListener(ApplicationReadyEvent.class)
     protected void updateDailyProductsAfterBoot() {
-        updateService.refreshDailyProducts();
+        updateService.refreshDailyProducts(false);
     }
 
     @Scheduled(cron = "${featured-products.update-cron}", zone = "${time.timezone}")
     protected void scheduledUpdateDailyProducts() {
-        updateService.refreshDailyProducts();
+        updateService.refreshDailyProducts(true);
     }
 }

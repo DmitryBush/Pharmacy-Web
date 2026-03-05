@@ -29,7 +29,7 @@ time:
   timezone: Europe/Moscow
 
 featured-products:
-  update-cron: "* 30 0 * * *"
+  update-cron: "0 30 0 * * *"
   count: 8
 
 eureka:
