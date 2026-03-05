@@ -137,7 +137,8 @@ public class ProductService {
                 .findOrCreateManufacturer(createDto.manufacturer()).id());
         Product product = Optional.of(id)
                 .flatMap(productRepository::findById)
-                .map(findedProduct -> productCreateMapper.mapToProduct(createDto, supplier, manufacturer))
+                .map(findedProduct -> productCreateMapper
+                        .updateProduct(findedProduct, createDto, supplier, manufacturer))
                 .map(productRepository::saveAndFlush)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         List<ProductImage> productImages = new ArrayList<>();
