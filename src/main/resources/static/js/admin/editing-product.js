@@ -136,7 +136,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const imageItem = document.createElement('div');
             imageItem.classList.add('image-item');
             imageItem.innerHTML = `
-                <img src='/api/v1/product-image/${productId}'
+                <img src='/api/v1/product-image/${image.id}'
                                  width="350px">
                 <button class="delete-image-btn" data-id="${image.id}">×</button>
             `;
