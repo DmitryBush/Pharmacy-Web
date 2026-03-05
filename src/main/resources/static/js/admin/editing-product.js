@@ -521,7 +521,7 @@ document.addEventListener('DOMContentLoaded', () => {
             } else if (searchEndpoint === 'country') {
                 searchElement.querySelector('#country').value = result.country;
             }
-            blockInput(searchElement);
+            blockInput(searchElement, searchEndpoint);
         } catch (error) {
             console.error(error);
             notification.showNotification('Управление продуктами',
@@ -531,16 +531,14 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    function blockInput(element) {
+    function blockInput(element, searchEndpoint) {
         let blockedInputs = [];
         let inputContainer = null;
 
         if (searchEndpoint === 'manufacturer') {
             inputContainer = element.querySelector('.countryPart');
-            idMap.delete('manufacturer');
         } else if (searchEndpoint === 'supplier') {
-            inputContainer = element.querySelector('.addressPart');
-            idMap.delete('address');
+            inputContainer = element.querySelector('#addressPart');
         } else if (searchEndpoint === 'type') {
             inputContainer = element.querySelector('.parent-type');
         }
@@ -555,6 +553,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         element.querySelectorAll('input').forEach((input) => {
             input.addEventListener('input', () => {
+                idMap.delete(searchEndpoint);
                 blockedInputs.forEach(blockedInput => unblockInput(blockedInput));
             });
         });
@@ -563,7 +562,6 @@ document.addEventListener('DOMContentLoaded', () => {
     function unblockInput(inputElement) {
         inputElement.readOnly = false;
         inputElement.classList.remove('locked-input');
-        idMap.delete(searchEndpoint);
     }
 
     function closeSearch() {
