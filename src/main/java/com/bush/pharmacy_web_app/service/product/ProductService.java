@@ -152,16 +152,16 @@ public class ProductService {
                         .updateProduct(findedProduct, createDto, supplier, manufacturer))
                 .map(productRepository::saveAndFlush)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-        List<ProductImage> productImages = new ArrayList<>();
+        List<ProductImage> rollbackProductImageList = new ArrayList<>();
         try {
             processMultipartFiles(images)
-                    .forEach(file -> productImages.add(imageService.createImage(file, product)));
+                    .forEach(file -> rollbackProductImageList.add(imageService.createImage(file, product)));
             processProductTypes(createDto, product);
             outboxService.createRecord(new OutboxRecordDto<>("product", CrudOperationType.U, product));
             return productReadMapper.mapToMedicinePreviewReadDto(product);
         } catch (Exception e) {
             log.error("Caught exception while updating product - {}", e.getMessage());
-            productImages.forEach(imageService::deleteImage);
+            rollbackProductImageList.forEach(imageService::deleteImage);
             throw new RuntimeException(e);
         }
     }
