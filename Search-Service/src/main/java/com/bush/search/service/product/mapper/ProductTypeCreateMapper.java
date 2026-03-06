@@ -12,5 +12,6 @@ public interface ProductTypeCreateMapper {
     @Mapping(target = "typeId", source = "id")
     @Mapping(target = "typeName", source = "name")
     @Mapping(target = "typeSlug", source = "slug")
+    @Mapping(target = "parentType", source = "parent")
     ProductType mapToProductType(ProductTypeMappingPayload productTypeMappingPayload);
 }

@@ -25,6 +25,8 @@ public class ProductType {
     @MultiField(mainField = @Field(type = FieldType.Text, analyzer = "russian"),
             otherFields = @InnerField(suffix = "keyword", type = FieldType.Keyword))
     private String typeSlug;
+    @Field(type = FieldType.Nested)
+    private ProductType parentType;
     @Field(type = FieldType.Boolean)
     private Boolean isMain;
 }
