@@ -198,7 +198,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     function createProductImage(product) {
         const imageLink = document.createElement('a');
-        imageLink.href = `/catalog/${product.id}`;
+        imageLink.href = `/product/${product.id}`;
         const productImage = document.createElement('img');
         if (product.imagePaths.length > 0) {
             productImage.src = `/api/v1/product-image/${product.imagePaths[0]}`;
@@ -214,7 +214,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     function createProductNameLink(product) {
         const productNameContainer = document.createElement('div');
         const productNameLink = document.createElement('a');
-        productNameLink.href = `/catalog/${product.id}`;
+        productNameLink.href = `/product/${product.id}`;
         productNameLink.textContent = product.name;
         productNameContainer.appendChild(productNameLink);
         return productNameContainer;

@@ -22,6 +22,9 @@ public class RouteConfig {
                 .route("catalogHttp", predicateSpec -> predicateSpec
                         .path("/catalog/**")
                         .uri(ServiceUriEnum.PHARMACY_SERVICE.getUri()))
+                .route("product", predicateSpec -> predicateSpec
+                        .path("/product/**")
+                        .uri(ServiceUriEnum.PHARMACY_SERVICE.getUri()))
                 .route("loginHttp", predicateSpec -> predicateSpec
                         .path("/login/**")
                         .uri(ServiceUriEnum.PHARMACY_SERVICE.getUri()))
