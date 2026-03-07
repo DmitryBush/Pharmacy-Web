@@ -114,7 +114,7 @@ public class DynamicProductFilterRepositoryImpl implements DynamicProductFilterR
         return Optional.of(filter.type())
                 .filter(type -> !type.isBlank())
                 .map(criteria -> builder.nested(n -> n.path("type").query(q ->
-                        q.term(t -> t.field("type.typeSlug.keyword").value(criteria)))))
+                        q.term(t -> t.field("type.slugInheritanceChain").value(criteria)))))
                 .map(ObjectBuilder::build)
                 .stream()
                 .toList();

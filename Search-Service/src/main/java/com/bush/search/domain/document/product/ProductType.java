@@ -10,6 +10,8 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
 import org.springframework.data.elasticsearch.annotations.InnerField;
 import org.springframework.data.elasticsearch.annotations.MultiField;
 
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -25,8 +27,8 @@ public class ProductType {
     @MultiField(mainField = @Field(type = FieldType.Text, analyzer = "russian"),
             otherFields = @InnerField(suffix = "keyword", type = FieldType.Keyword))
     private String typeSlug;
-    @Field(type = FieldType.Nested)
-    private ProductType parentType;
+    @Field(type = FieldType.Keyword)
+    private List<String> slugInheritanceChain;
     @Field(type = FieldType.Boolean)
     private Boolean isMain;
 }
