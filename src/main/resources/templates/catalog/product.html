@@ -64,43 +64,43 @@
                         [(${product.manufacturer.name})], [(${product.manufacturer.country})]
                     </p>
                 </div>
-                <div>
+                <div th:unless="${product.composition.isEmpty()}">
                     <h4>Состав</h4>
                     <p style="white-space: pre-wrap;" th:text="${product.composition}"></p>
                 </div>
-                <div>
+                <div th:unless="${product.indication.isEmpty()}">
                     <h4>Показания</h4>
                     <p style="white-space: pre-wrap;" th:text="${product.indication}"></p>
                 </div>
-                <div>
+                <div th:unless="${product.contraindication.isEmpty()}">
                     <h4>Противопоказания</h4>
                     <p style="white-space: pre-wrap;" th:text="${product.contraindication}"></p>
                 </div>
-                <div>
+                <div th:unless="${product.sideEffect.isEmpty()}">
                     <h4>Побочные действия</h4>
                     <p style="white-space: pre-wrap;" th:text="${product.sideEffect}"></p>
                 </div>
-                <div>
+                <div th:unless="${product.interaction.isEmpty()}">
                     <h4>Взаимодействия</h4>
                     <p style="white-space: pre-wrap;" th:text="${product.interaction}"></p>
                 </div>
-                <div>
+                <div th:unless="${product.admissionCourse.isEmpty()}">
                     <h4>Курс приема</h4>
                     <p style="white-space: pre-wrap;" th:text="${product.admissionCourse}"></p>
                 </div>
-                <div>
+                <div th:unless="${product.overdose.isEmpty()}">
                     <h4>Передозировка</h4>
                     <p style="white-space: pre-wrap;" th:text="${product.overdose}"></p>
                 </div>
-                <div>
+                <div th:unless="${product.specialInstruction.isEmpty()}">
                     <h4>Специальные указания</h4>
                     <p style="white-space: pre-wrap;" th:text="${product.specialInstruction}"></p>
                 </div>
-                <div>
+                <div th:unless="${product.storageCondition.isEmpty()}">
                     <h4>Условия хранения</h4>
                     <p style="white-space: pre-wrap;" th:text="${product.storageCondition}"></p>
                 </div>
-                <div>
+                <div th:unless="${product.releaseForm.isEmpty()}">
                     <h4>Форма выпуска</h4>
                     <p style="white-space: pre-wrap;" th:text="${product.releaseForm}"></p>
                 </div>
