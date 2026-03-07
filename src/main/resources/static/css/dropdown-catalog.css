@@ -54,6 +54,11 @@
     font-weight: 600;
 }
 
+.category-item a {
+    color: inherit;
+    text-decoration: none;
+}
+
 .subcategory-container {
     flex: 1;
     min-height: 320px;
