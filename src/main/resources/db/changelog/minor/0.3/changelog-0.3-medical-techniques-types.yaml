@@ -1,0 +1,74 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert medical-techniques types
+      author: Dmitry Bush
+      changes:
+        - insert:
+            tableName: product_types
+            columns:
+              - column: { name: type_name, value: "Весы" }
+              - column: { name: type_slug, value: "scales" }
+              - column: { name: parent_id, value: "6" }
+
+        - insert:
+            tableName: product_types
+            columns:
+              - column: { name: type_name, value: "Ингаляторы и небулайзеры" }
+              - column: { name: type_slug, value: "inhalers" }
+              - column: { name: parent_id, value: "6" }
+
+        - insert:
+            tableName: product_types
+            columns:
+              - column: { name: type_name, value: "Иппликаторы/аппликаторы" }
+              - column: { name: type_slug, value: "applicator" }
+              - column: { name: parent_id, value: "6" }
+
+        - insert:
+            tableName: product_types
+            columns:
+              - column: { name: type_name, value: "Ирригаторы" }
+              - column: { name: type_slug, value: "irrigators" }
+              - column: { name: parent_id, value: "6" }
+
+        - insert:
+            tableName: product_types
+            columns:
+              - column: { name: type_name, value: "Массажеры" }
+              - column: { name: type_slug, value: "massagers" }
+              - column: { name: parent_id, value: "6" }
+
+        - insert:
+            tableName: product_types
+            columns:
+              - column: { name: type_name, value: "Прочая мед.техника" }
+              - column: { name: type_slug, value: "other-medical-products" }
+              - column: { name: parent_id, value: "6" }
+
+        - insert:
+            tableName: product_types
+            columns:
+              - column: { name: type_name, value: "Расходные материалы и аксессуары" }
+              - column: { name: type_slug, value: "technique-consumables" }
+              - column: { name: parent_id, value: "6" }
+
+        - insert:
+            tableName: product_types
+            columns:
+              - column: { name: type_name, value: "Стетоскопы" }
+              - column: { name: type_slug, value: "stethoscopes" }
+              - column: { name: parent_id, value: "6" }
+
+        - insert:
+            tableName: product_types
+            columns:
+              - column: { name: type_name, value: "Тонометры" }
+              - column: { name: type_slug, value: "tonometers" }
+              - column: { name: parent_id, value: "6" }
+
+        - insert:
+            tableName: product_types
+            columns:
+              - column: { name: type_name, value: "Глюкометры" }
+              - column: { name: type_slug, value: "glucometers" }
+              - column: { name: parent_id, value: "6" }

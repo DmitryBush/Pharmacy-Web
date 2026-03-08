@@ -1,0 +1,50 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert root product types
+      author: Dmitry Bush
+      changes:
+        - insert:
+            tableName: product_types
+            columns:
+              - column: { name: type_name, value: Лекарства }
+              - column: { name: type_slug, value: medicines }
+        - insert:
+            tableName: product_types
+            columns:
+              - column: { name: type_name, value: Витамины и БАДы }
+              - column: { name: type_slug, value: vitamins }
+        - insert:
+            tableName: product_types
+            columns:
+              - column: { name: type_name, value: Экспресс-тесты }
+              - column: { name: type_slug, value: express-tests }
+        - insert:
+            tableName: product_types
+            columns:
+              - column: { name: type_name, value: Гигиена }
+              - column: { name: type_slug, value: hygiene }
+        - insert:
+            tableName: product_types
+            columns:
+              - column: { name: type_name, value: Косметика }
+              - column: { name: type_slug, value: cosmetics }
+        - insert:
+            tableName: product_types
+            columns:
+              - column: { name: type_name, value: Медицинская техника }
+              - column: { name: type_slug, value: medical-techniques }
+        - insert:
+            tableName: product_types
+            columns:
+              - column: { name: type_name, value: Медицинские продукты }
+              - column: { name: type_slug, value: medical-products }
+        - insert:
+            tableName: product_types
+            columns:
+              - column: { name: type_name, value: Товары для мам и детей }
+              - column: { name: type_slug, value: child-products }
+        - insert:
+            tableName: product_types
+            columns:
+              - column: { name: type_name, value: Уход за больными }
+              - column: { name: type_slug, value: care-of-sick }
