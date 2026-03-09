@@ -17,7 +17,8 @@ public class SecurityConfig {
         return httpSecurity
                 .csrf(Customizer.withDefaults())
                 .authorizeHttpRequests(registry -> registry
-                        .requestMatchers("/login", "/register", "/catalog/**", "/", "/cart", "/error")
+                        .requestMatchers("/login", "/register", "/catalog/**", "/", "/cart", "/error",
+                                "product/**", "news/**")
                             .permitAll()
                         .requestMatchers(HttpMethod.GET, "/css/admin/**", "/js/admin/**")
                             .hasAnyRole("OPERATOR", "ADMIN")

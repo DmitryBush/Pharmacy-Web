@@ -1,0 +1,41 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert vitamins types
+      author: Dmitry Bush
+      changes:
+        - insert:
+            tableName: product_types
+            columns:
+              - column: { name: type_name, value: "Витамины моно" }
+              - column: { name: type_slug, value: "vitamins-mono" }
+              - column: { name: parent_id, value: "2" }
+        - insert:
+            tableName: product_types
+            columns:
+              - column: { name: type_name, value: "Поливитамины" }
+              - column: { name: type_slug, value: "polyvitamins" }
+              - column: { name: parent_id, value: "2" }
+        - insert:
+            tableName: product_types
+            columns:
+              - column: { name: type_name, value: "Витамины группы Д" }
+              - column: { name: type_slug, value: "vitamins-group-d" }
+              - column: { name: parent_id, value: "2" }
+        - insert:
+            tableName: product_types
+            columns:
+              - column: { name: type_name, value: "Витамины для детей" }
+              - column: { name: type_slug, value: "vitamins-for-children" }
+              - column: { name: parent_id, value: "2" }
+        - insert:
+            tableName: product_types
+            columns:
+              - column: { name: type_name, value: "Витамины для беременных" }
+              - column: { name: type_slug, value: "vitamins-for-pregnant-women" }
+              - column: { name: parent_id, value: "2" }
+        - insert:
+            tableName: product_types
+            columns:
+              - column: { name: type_name, value: "Витамины для мужчин" }
+              - column: { name: type_slug, value: "vitamins-for-men" }
+              - column: { name: parent_id, value: "2" }

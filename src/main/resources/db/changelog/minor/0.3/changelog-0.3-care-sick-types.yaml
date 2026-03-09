@@ -1,0 +1,60 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert care of sick types
+      author: Dmitry bush
+      changes:
+        - insert:
+            tableName: product_types
+            columns:
+              - column: { name: type_name, value: "Взрослые пеленки, простыни" }
+              - column: { name: type_slug, value: "adult-sheets" }
+              - column: { name: parent_id, value: "9" }
+
+        - insert:
+            tableName: product_types
+            columns:
+              - column: { name: type_name, value: "Взрослые подгузники" }
+              - column: { name: type_slug, value: "adult-diapers" }
+              - column: { name: parent_id, value: "9" }
+
+        - insert:
+            tableName: product_types
+            columns:
+              - column: { name: type_name, value: "Недержание женское" }
+              - column: { name: type_slug, value: "female-incontinence" }
+              - column: { name: parent_id, value: "9" }
+
+        - insert:
+            tableName: product_types
+            columns:
+              - column: { name: type_name, value: "Недержание мужское" }
+              - column: { name: type_slug, value: "male-incontinence" }
+              - column: { name: parent_id, value: "9" }
+
+        - insert:
+            tableName: product_types
+            columns:
+              - column: { name: type_name, value: "Резиновые изделия" }
+              - column: { name: type_slug, value: "rubber-products" }
+              - column: { name: parent_id, value: "9" }
+
+        - insert:
+            tableName: product_types
+            columns:
+              - column: { name: type_name, value: "Чулки и компрессионный трикотаж" }
+              - column: { name: type_slug, value: "stockings" }
+              - column: { name: parent_id, value: "9" }
+
+        - insert:
+            tableName: product_types
+            columns:
+              - column: { name: type_name, value: "Уход за лежачими больными" }
+              - column: { name: type_slug, value: "care-for-bedridden-patients" }
+              - column: { name: parent_id, value: "9" }
+
+        - insert:
+            tableName: product_types
+            columns:
+              - column: { name: type_name, value: "Энтеральное питание" }
+              - column: { name: type_slug, value: "enteral-nutrition" }
+              - column: { name: parent_id, value: "9" }

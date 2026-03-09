@@ -1,0 +1,137 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert medicine types
+      author: Dmitry Bush
+      changes:
+        - insert:
+            tableName: product_types
+            columns:
+              - column: { name: type_name, value: "Аллергия" }
+              - column: { name: type_slug, value: "allergy" }
+              - column: { name: parent_id, value: "1" }
+        - insert:
+            tableName: product_types
+            columns:
+              - column: { name: type_name, value: "Пищеварительная система" }
+              - column: { name: type_slug, value: "gastroenterology" }
+              - column: { name: parent_id, value: "1" }
+        - insert:
+            tableName: product_types
+            columns:
+              - column: { name: type_name, value: "Гематология" }
+              - column: { name: type_slug, value: "hematology" }
+              - column: { name: parent_id, value: "1" }
+        - insert:
+            tableName: product_types
+            columns:
+              - column: { name: type_name, value: "Гинекология" }
+              - column: { name: type_slug, value: "gynecology" }
+              - column: { name: parent_id, value: "1" }
+        - insert:
+            tableName: product_types
+            columns:
+              - column: { name: type_name, value: "Дерматовенерология" }
+              - column: { name: type_slug, value: "dermatovenereology" }
+              - column: { name: parent_id, value: "1" }
+        - insert:
+            tableName: product_types
+            columns:
+              - column: { name: type_name, value: "Инфекционное" }
+              - column: { name: type_slug, value: "infectious" }
+              - column: { name: parent_id, value: "1" }
+        - insert:
+            tableName: product_types
+            columns:
+              - column: { name: type_name, value: "Кардиология" }
+              - column: { name: type_slug, value: "cardiology" }
+              - column: { name: parent_id, value: "1" }
+        - insert:
+            tableName: product_types
+            columns:
+              - column: { name: type_name, value: "Наркология" }
+              - column: { name: type_slug, value: "narcology" }
+              - column: { name: parent_id, value: "1" }
+        - insert:
+            tableName: product_types
+            columns:
+              - column: { name: type_name, value: "Нервная система" }
+              - column: { name: type_slug, value: "neurology" }
+              - column: { name: parent_id, value: "1" }
+        - insert:
+            tableName: product_types
+            columns:
+              - column: { name: type_name, value: "Онкология" }
+              - column: { name: type_slug, value: "oncology" }
+              - column: { name: parent_id, value: "1" }
+        - insert:
+            tableName: product_types
+            columns:
+              - column: { name: type_name, value: "Оториноларингология" }
+              - column: { name: type_slug, value: "otorhinolaryngology" }
+              - column: { name: parent_id, value: "1" }
+        - insert:
+            tableName: product_types
+            columns:
+              - column: { name: type_name, value: "Офтальмология" }
+              - column: { name: type_slug, value: "ophthalmology" }
+              - column: { name: parent_id, value: "1" }
+        - insert:
+            tableName: product_types
+            columns:
+              - column: { name: type_name, value: "Психиатрия" }
+              - column: { name: type_slug, value: "psychiatry" }
+              - column: { name: parent_id, value: "1" }
+        - insert:
+            tableName: product_types
+            columns:
+              - column: { name: type_name, value: "Дыхательная система" }
+              - column: { name: type_slug, value: "pulmonology" }
+              - column: { name: parent_id, value: "1" }
+        - insert:
+            tableName: product_types
+            columns:
+              - column: { name: type_name, value: "Реанимация" }
+              - column: { name: type_slug, value: "resuscitation" }
+              - column: { name: parent_id, value: "1" }
+        - insert:
+            tableName: product_types
+            columns:
+              - column: { name: type_name, value: "Ревматология" }
+              - column: { name: type_slug, value: "rheumatology" }
+              - column: { name: parent_id, value: "1" }
+        - insert:
+            tableName: product_types
+            columns:
+              - column: { name: type_name, value: "Стоматология" }
+              - column: { name: type_slug, value: "dentistry" }
+              - column: { name: parent_id, value: "1" }
+        - insert:
+            tableName: product_types
+            columns:
+              - column: { name: type_name, value: "Терапия" }
+              - column: { name: type_slug, value: "therapy" }
+              - column: { name: parent_id, value: "1" }
+        - insert:
+            tableName: product_types
+            columns:
+              - column: { name: type_name, value: "Мочеполовая система" }
+              - column: { name: type_slug, value: "urology" }
+              - column: { name: parent_id, value: "1" }
+        - insert:
+            tableName: product_types
+            columns:
+              - column: { name: type_name, value: "Флебология" }
+              - column: { name: type_slug, value: "phlebology" }
+              - column: { name: parent_id, value: "1" }
+        - insert:
+            tableName: product_types
+            columns:
+              - column: { name: type_name, value: "Хирургия" }
+              - column: { name: type_slug, value: "surgery" }
+              - column: { name: parent_id, value: "1" }
+        - insert:
+            tableName: product_types
+            columns:
+              - column: { name: type_name, value: "Эндокринная система" }
+              - column: { name: type_slug, value: "endocrinology" }
+              - column: { name: parent_id, value: "1" }

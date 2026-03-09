@@ -1,0 +1,47 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert test types
+      author: Dmitry Bush
+      changes:
+        - insert:
+            tableName: product_types
+            columns:
+              - column: { name: type_name, value: "Тест-полоски для глюкометров" }
+              - column: { name: type_slug, value: "test-strips-for-glucometers" }
+              - column: { name: parent_id, value: "3" }
+        - insert:
+            tableName: product_types
+            columns:
+              - column: { name: type_name, value: "Тесты на беременность" }
+              - column: { name: type_slug, value: "pregnancy-tests" }
+              - column: { name: parent_id, value: "3" }
+        - insert:
+            tableName: product_types
+            columns:
+              - column: { name: type_name, value: "Тесты на ВИЧ, гепатит, сифилис" }
+              - column: { name: type_slug, value: "tests-for-hiv-hepatitis-syphilis" }
+              - column: { name: parent_id, value: "3" }
+        - insert:
+            tableName: product_types
+            columns:
+              - column: { name: type_name, value: "Тесты женские" }
+              - column: { name: type_slug, value: "women-tests" }
+              - column: { name: parent_id, value: "3" }
+        - insert:
+            tableName: product_types
+            columns:
+              - column: { name: type_name, value: "Тесты на различные инфекции" }
+              - column: { name: type_slug, value: "infection-tests" }
+              - column: { name: parent_id, value: "3" }
+        - insert:
+            tableName: product_types
+            columns:
+              - column: { name: type_name, value: "Тесты на овуляцию" }
+              - column: { name: type_slug, value: "ovulation-tests" }
+              - column: { name: parent_id, value: "3" }
+        - insert:
+            tableName: product_types
+            columns:
+              - column: { name: type_name, value: "Тесты на наркологию" }
+              - column: { name: type_slug, value: "drug-addiction-tests" }
+              - column: { name: parent_id, value: "3" }

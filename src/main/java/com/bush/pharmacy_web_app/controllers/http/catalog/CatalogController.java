@@ -1,4 +1,4 @@
-package com.bush.pharmacy_web_app.controllers.http;
+package com.bush.pharmacy_web_app.controllers.http.catalog;
 
 import com.bush.pharmacy_web_app.service.product.ProductService;
 import com.bush.pharmacy_web_app.service.product.ProductTypeService;
@@ -21,12 +21,8 @@ public class CatalogController {
         return "catalog/catalog";
     }
 
-    @GetMapping("/{id}")
-    public String getProduct(Model model,
-                             @PathVariable Long id) {
-        var product = service.findMedicineById(id).orElseThrow();
-
-        model.addAttribute("product", product);
-        return "catalog/product";
+    @GetMapping("/{typeSlug}")
+    public String showProductsByType(@PathVariable String typeSlug) {
+        return "catalog/catalog";
     }
 }

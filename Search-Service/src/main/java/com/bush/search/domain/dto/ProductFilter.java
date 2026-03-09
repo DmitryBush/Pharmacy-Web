@@ -12,5 +12,5 @@ public record ProductFilter(String name,
                             List<String> activeIngredients,
                             BigDecimal minPrice,
                             BigDecimal maxPrice,
-                            @NotNull Integer recipe) {
+                            Integer recipe) {
 }

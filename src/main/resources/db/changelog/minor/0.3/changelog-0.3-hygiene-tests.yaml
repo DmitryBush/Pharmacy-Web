@@ -1,0 +1,71 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert hygiene tests
+      author: Dmitry Bush
+      changes:
+        - insert:
+            tableName: product_types
+            columns:
+              - column: { name: type_name, value: "Санитайзеры" }
+              - column: { name: type_slug, value: "sanitizer" }
+              - column: { name: parent_id, value: "4" }
+        - insert:
+            tableName: product_types
+            columns:
+              - column: { name: type_name, value: "Бумажные изделия" }
+              - column: { name: type_slug, value: "paper-products" }
+              - column: { name: parent_id, value: "4" }
+        - insert:
+            tableName: product_types
+            columns:
+              - column: { name: type_name, value: "Влажные салфетки" }
+              - column: { name: type_slug, value: "wet-wipes" }
+              - column: { name: parent_id, value: "4" }
+        - insert:
+            tableName: product_types
+            columns:
+              - column: { name: type_name, value: "Интимная гигиена" }
+              - column: { name: type_slug, value: "intimate-hygiene" }
+              - column: { name: parent_id, value: "4" }
+        - insert:
+            tableName: product_types
+            columns:
+              - column: { name: type_name, value: "Потливость" }
+              - column: { name: type_slug, value: "sweating" }
+              - column: { name: parent_id, value: "4" }
+        - insert:
+            tableName: product_types
+            columns:
+              - column: { name: type_name, value: "Прокладки ежедневные" }
+              - column: { name: type_slug, value: "daily-pads" }
+              - column: { name: parent_id, value: "4" }
+        - insert:
+            tableName: product_types
+            columns:
+              - column: { name: type_name, value: "Прокладки на критичные дни" }
+              - column: { name: type_slug, value: "pads-for-critical-days" }
+              - column: { name: parent_id, value: "4" }
+        - insert:
+            tableName: product_types
+            columns:
+              - column: { name: type_name, value: "Тампоны" }
+              - column: { name: type_slug, value: "tampons" }
+              - column: { name: parent_id, value: "4" }
+        - insert:
+            tableName: product_types
+            columns:
+              - column: { name: type_name, value: "Приборы для ухода за полостью рта" }
+              - column: { name: type_slug, value: "oral-care-devices" }
+              - column: { name: parent_id, value: "4" }
+        - insert:
+            tableName: product_types
+            columns:
+              - column: { name: type_name, value: "Протезы зубные" }
+              - column: { name: type_slug, value: "dentures" }
+              - column: { name: parent_id, value: "4" }
+        - insert:
+            tableName: product_types
+            columns:
+              - column: { name: type_name, value: "Уход за полостью рта" }
+              - column: { name: type_slug, value: "oral-care" }
+              - column: { name: parent_id, value: "4" }

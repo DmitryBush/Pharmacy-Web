@@ -24,7 +24,6 @@ public class ProductType {
     private String slug;
     @OneToOne
     @JoinColumn(name = "parent_id")
-    @JsonIgnore
     private ProductType parent;
 
     @OneToMany(mappedBy = "parent")
