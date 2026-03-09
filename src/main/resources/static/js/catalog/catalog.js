@@ -44,53 +44,71 @@ document.addEventListener("DOMContentLoaded", async () => {
         unlockFilterButtons();
     }
 
-    function loadFilters(filterAggregation) {
-        createManufacturerFilters(filterAggregation);
-        createCountryFilters(filterAggregation);
-        createActiveIngredientFilters(filterAggregation);
+    function loadFilters(activeFilters, fullFilters) {
+        createManufacturerFilters(activeFilters, fullFilters);
+        createCountryFilters(activeFilters, fullFilters);
+        createActiveIngredientFilters(activeFilters, fullFilters);
     }
 
-    function createManufacturerFilters(filterAggregation) {
-        if (filterAggregation.manufacturers === undefined) {
+    function createManufacturerFilters(activeFilters, fullFilters) {
+        if (activeFilters.manufacturers === undefined || fullFilters.manufacturers === undefined) {
             throw Error('Integrity of the filter aggregation of manufacturers structure has been compromised');
         }
 
         const manufacturerFilterContainer = document.getElementById('manufacturer-filters-container');
         manufacturerFilterContainer.innerHTML = '';
-        const manufacturersMap = new Map(Object.entries(filterAggregation.manufacturers));
-        manufacturersMap.forEach((value, key) => {
+        const activeFiltersCountMap = new Map(Object.entries(activeFilters.manufacturers));
+        const fullFiltersCountMap = new Map(Object.entries(fullFilters.manufacturers));
+        fullFiltersCountMap.forEach((value, key) => {
             const item = document.createElement("li");
-            item.append(createLabelFilter('manufacturer', `${key} (${value})`, key));
+            if (activeFiltersCountMap.has(key)) {
+                item.append(createLabelFilter('manufacturer',
+                    `${key} (${activeFiltersCountMap.get(key)})`, key));
+            } else {
+                item.append(createLabelFilter('manufacturer', `${key} (${value})`, key));
+            }
             manufacturerFilterContainer.append(item);
         });
     }
 
-    function createCountryFilters(filterAggregation) {
-        if (filterAggregation.countries === undefined) {
+    function createCountryFilters(activeFilters, fullFilters) {
+        if (activeFilters.countries === undefined || fullFilters.countries === undefined) {
             throw Error('Integrity of the filter aggregation of countries structure has been compromised');
         }
 
         const countryFilterContainer = document.getElementById('country-filter-container');
         countryFilterContainer.innerHTML = '';
-        const countriesMap = new Map(Object.entries(filterAggregation.countries));
-        countriesMap.forEach((value, key) => {
+        const activeFiltersCountMap = new Map(Object.entries(activeFilters.countries));
+        const fullFiltersCountMap = new Map(Object.entries(fullFilters.countries));
+        fullFiltersCountMap.forEach((value, key) => {
             const item = document.createElement("li");
-            item.append(createLabelFilter('country', `${key} (${value})`, key));
+            if (activeFiltersCountMap.has(key)) {
+                item.append(createLabelFilter('manufacturer',
+                    `${key} (${activeFiltersCountMap.get(key)})`, key));
+            } else {
+                item.append(createLabelFilter('manufacturer', `${key} (${value})`, key));
+            }
             countryFilterContainer.append(item);
         });
     }
 
-    function createActiveIngredientFilters(filterAggregation) {
-        if (filterAggregation.activeIngredients === undefined) {
+    function createActiveIngredientFilters(activeFilters, fullFilters) {
+        if (activeFilters.activeIngredients === undefined || fullFilters.activeIngredients === undefined) {
             throw Error('Integrity of the filter aggregation of active ingredients structure has been compromised');
         }
 
         const activeIngredientFilterContainer = document.getElementById('active-ingredient-filter-container');
         activeIngredientFilterContainer.innerHTML = '';
-        const activeIngredientsMap = new Map(Object.entries(filterAggregation.activeIngredients));
-        activeIngredientsMap.forEach((value, key) => {
+        const activeFiltersCountMap = new Map(Object.entries(activeFilters.activeIngredients));
+        const fullFiltersCountMap = new Map(Object.entries(activeFilters.activeIngredients));
+        fullFiltersCountMap.forEach((value, key) => {
             const item = document.createElement("li");
-            item.append(createLabelFilter('ingredient', `${key} (${value})`, key));
+            if (activeFiltersCountMap.has(key)) {
+                item.append(createLabelFilter('manufacturer',
+                    `${key} (${activeFiltersCountMap.get(key)})`, key));
+            } else {
+                item.append(createLabelFilter('manufacturer', `${key} (${value})`, key));
+            }
             activeIngredientFilterContainer.append(item);
         });
     }
@@ -141,13 +159,16 @@ document.addEventListener("DOMContentLoaded", async () => {
     async function loadProducts() {
         productContainer.innerHTML = '';
 
+        const aggregationResponse = await (await restClient.fetchData(
+            `/api/v1/search/products/filter?${applyFiltersForAggregation()}`, 'GET', {}
+        )).json();
         const productResponse = await (await restClient.fetchData(`/api/v1/search/products/filter?${applyFilters()}`,
             'GET', {})).json();
         const pageStatistic = productResponse.pageResponse.page;
         catalogHeader.textContent = `Лекарства ${pageStatistic.totalElements} товаров`;
         paginationManager.initializePagination(pageStatistic.number, pageStatistic.size, pageStatistic.totalElements);
 
-        loadFilters(productResponse.filterAggregation);
+        loadFilters(productResponse.filterAggregation, aggregationResponse.filterAggregation);
         initializeFilterParams();
 
         productLoader.hideLoading();
@@ -169,12 +190,26 @@ document.addEventListener("DOMContentLoaded", async () => {
     function applyFilters() {
         const formData = new FormData(filterForm);
         const params = new URLSearchParams(formData);
+        applyPagination(params);
+        window.history.replaceState(null, null, `?${params.toString()}`);
+        applyTypeFilter(params);
+        return params.toString();
+    }
+
+    function applyFiltersForAggregation() {
+        const params = new URLSearchParams();
+        applyTypeFilter(params);
+        return params.toString();
+    }
+
+    function applyPagination(params) {
         params.set('sort', sortSelector.value);
         params.set('page', paginationManager.currentPage);
         params.set('size', paginationManager.pageSize);
-        window.history.replaceState(null, null, `?${params.toString()}`);
+    }
+
+    function applyTypeFilter(params) {
         params.set('type', getProductTypeFromPathname());
-        return params.toString();
     }
 
     function resetFilters() {

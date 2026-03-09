@@ -65,12 +65,11 @@ public class DynamicProductFilterRepositoryImpl implements DynamicProductFilterR
     private NativeQuery buildNativeQuery(BoolQuery boolQuery) {
         return NativeQuery.builder()
                 .withQuery(boolQuery._toQuery())
-                .withAggregation("globalManufacturers", createGlobalAggregation("manufacturers",
-                        "manufacturer", "manufacturer.name.keyword"))
-                .withAggregation("globalCountries", createGlobalAggregation("countries",
-                        "manufacturer.country", "manufacturer.country.countryName.keyword"))
-                .withAggregation("globalActiveIngredients",
-                        createGlobalAggregation("activeIngredients", "activeIngredient"))
+                .withAggregation("manufacturers", createNestedAggregation("manufacturer",
+                        "manufacturer.name.keyword"))
+                .withAggregation("countries", createNestedAggregation("manufacturer.country",
+                        "manufacturer.country.countryName.keyword"))
+                .withAggregation("activeIngredients", createAggregation("activeIngredient"))
                 .build();
     }
 
@@ -142,12 +141,16 @@ public class DynamicProductFilterRepositoryImpl implements DynamicProductFilterR
 
     private Query buildRecipeQuery(Integer recipe) {
         Query.Builder builder = new Query.Builder();
-        if (recipe.equals(1)) {
-            return builder.term(t -> t.field("recipe").value(true)).build();
-        } else if (recipe.equals(2)) {
-            return builder.term(t -> t.field("recipe").value(false)).build();
-        }
-        return null;
+        return Optional.ofNullable(recipe)
+                .map(integer -> {
+                    if (integer.equals(1)) {
+                        return builder.term(t -> t.field("recipe").value(true)).build();
+                    } else if (integer.equals(2)) {
+                        return builder.term(t -> t.field("recipe").value(false)).build();
+                    }
+                    return null;
+                })
+                .orElse(null);
     }
 
     private List<Query> createNestedFilterCriteriaQuery(List<String> filteringObjects, String path, String field) {
@@ -173,9 +176,9 @@ public class DynamicProductFilterRepositoryImpl implements DynamicProductFilterR
         if (aggregationContainer.getClass().isAssignableFrom(ElasticsearchAggregations.class)) {
             ElasticsearchAggregations esAggs = (ElasticsearchAggregations) aggregationContainer;
 
-            Map<String, Long> manufacturers = getGlobalNestedAggregation(esAggs.get("globalManufacturers"));
-            Map<String, Long> countries = getGlobalNestedAggregation(esAggs.get("globalCountries"));
-            Map<String, Long> activeIngredients = getGlobalAggregation(esAggs.get("globalActiveIngredients"));
+            Map<String, Long> manufacturers = getNestedAggregation(esAggs.get("manufacturers"));
+            Map<String, Long> countries = getNestedAggregation(esAggs.get("countries"));
+            Map<String, Long> activeIngredients = getAggregation(esAggs.get("activeIngredients"));
             return new ProductAggregation(manufacturers, countries, activeIngredients);
         }
         throw new IllegalArgumentException("Unknown aggregation container class");
@@ -190,6 +193,23 @@ public class DynamicProductFilterRepositoryImpl implements DynamicProductFilterR
     private Map<String, Long> getGlobalNestedAggregation(ElasticsearchAggregation aggregation) {
         return getGlobalAggregateStream(aggregation)
                 .flatMap(this::getNestedAggregateStream)
+                .flatMap(this::getStringTermsBucketStream)
+                .collect(Collectors.toMap(b -> b.key().stringValue(), MultiBucketBase::docCount));
+    }
+
+    private Map<String, Long> getNestedAggregation(ElasticsearchAggregation aggregation) {
+        return Optional.ofNullable(aggregation).stream()
+                .map(ElasticsearchAggregation::aggregation)
+                .map(org.springframework.data.elasticsearch.client.elc.Aggregation::getAggregate)
+                .flatMap(this::getNestedAggregateStream)
+                .flatMap(this::getStringTermsBucketStream)
+                .collect(Collectors.toMap(b -> b.key().stringValue(), MultiBucketBase::docCount));
+    }
+
+    private Map<String, Long> getAggregation(ElasticsearchAggregation aggregation) {
+        return Optional.ofNullable(aggregation).stream()
+                .map(ElasticsearchAggregation::aggregation)
+                .map(org.springframework.data.elasticsearch.client.elc.Aggregation::getAggregate)
                 .flatMap(this::getStringTermsBucketStream)
                 .collect(Collectors.toMap(b -> b.key().stringValue(), MultiBucketBase::docCount));
     }
