@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Категории</title>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
     <link href="/css/admin/admin-base.css" rel="stylesheet"/>
     <link href="/css/admin/categories-management.css" rel="stylesheet">
     <script src="/js/admin/categories-management.js" type="module"></script>

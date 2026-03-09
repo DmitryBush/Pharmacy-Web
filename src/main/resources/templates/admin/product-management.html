@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Управление товарами</title>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
     <link href="/css/admin/admin-base.css" rel="stylesheet"/>
     <link href="/css/admin/product-management.css" rel="stylesheet" type="text/css">
     <script src="/js/admin/product-management.js" type="module"></script>

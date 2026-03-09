@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Редактирование продукта</title>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
     <link href="/css/admin/admin-base.css" rel="stylesheet"/>
     <link href="/css/admin/editing-product.css" rel="stylesheet" type="text/css">
     <link href="/css/product/product.css" rel="stylesheet" type="text/css">
@@ -119,7 +121,7 @@
                         <label class="input-group" for="storage-conditions">Условия хранения</label>
                         <textarea class="input-group" id="storage-conditions"></textarea>
                     </div>
-                    <div id="supplierPart">
+                    <div id="supplierPart" class="supplierPart">
                         <details>
                             <summary class="section-header">
                                 <h2>Поставщик</h2>
@@ -181,7 +183,7 @@
                             </div>
                         </details>
                     </div>
-                    <div id="manufacturerPart">
+                    <div id="manufacturerPart" class="manufacturerPart">
                         <details>
                             <summary class="section-header">
                                 <h2>Производитель</h2>
@@ -199,7 +201,7 @@
                                     <input type="text" id="manufacturerName" class="input-group">
                                 </label>
                             </div>
-                            <div id="countryPart">
+                            <div id="countryPart" class="countryPart">
                                 <details>
                                     <summary class="section-header">
                                         <h3>Страна производителя</h3>

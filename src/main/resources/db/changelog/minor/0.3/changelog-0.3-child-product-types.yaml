@@ -1,0 +1,32 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert child products
+      author: Dmitry Bush
+      changes:
+        - insert:
+            tableName: product_types
+            columns:
+              - column: { name: type_name, value: "Детская гигиена" }
+              - column: { name: type_slug, value: "child-hygiene" }
+              - column: { name: parent_id, value: "8" }
+
+        - insert:
+            tableName: product_types
+            columns:
+              - column: { name: type_name, value: "Детские аксессуары" }
+              - column: { name: type_slug, value: "child-accessories" }
+              - column: { name: parent_id, value: "8" }
+
+        - insert:
+            tableName: product_types
+            columns:
+              - column: { name: type_name, value: "Детские подгузники и пеленки" }
+              - column: { name: type_slug, value: "child-diapers" }
+              - column: { name: parent_id, value: "8" }
+
+        - insert:
+            tableName: product_types
+            columns:
+              - column: { name: type_name, value: "Товары для мамы" }
+              - column: { name: type_slug, value: "products-for-mom" }
+              - column: { name: parent_id, value: "8" }

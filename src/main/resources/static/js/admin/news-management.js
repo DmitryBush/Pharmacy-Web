@@ -22,16 +22,15 @@ document.addEventListener('DOMContentLoaded', async () => {
     async function getNewsList() {
         const newsList = await restClient.fetchData(`/api/v1/news`, 'GET', {});
         const data = await newsList.json();
-        const content = data._embedded.newsReadDtoList;
-
         objectContainer.innerHTML = '';
-        if (content.length === 0) {
+        if (data._embedded === undefined) {
             const message = document.createElement('h3');
             message.textContent = 'Отсутствуют созданные статьи';
             objectContainer.appendChild(message);
-        } else {
-            content.forEach(news => createNews(news));
+            return;
         }
+        const content = data._embedded.newsReadDtoList;
+        content.forEach(news => createNews(news));
     }
 
     function createNews(news) {

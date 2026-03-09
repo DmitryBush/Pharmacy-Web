@@ -1,7 +1,7 @@
 package com.bush.pharmacy_web_app.controllers.http.admin;
 
-import com.bush.pharmacy_web_app.repository.medicine.filter.MedicineFilter;
-import com.bush.pharmacy_web_app.service.medicine.MedicineService;
+import com.bush.pharmacy_web_app.repository.product.filter.ProductFilter;
+import com.bush.pharmacy_web_app.service.product.ProductService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -18,14 +18,14 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/admin/product")
 @RequiredArgsConstructor
 public class ProductManagementController {
-    private final MedicineService medicineService;
+    private final ProductService productService;
     @GetMapping
     public String showProductList(Model model,
-                                  MedicineFilter medicineFilter,
+                                  ProductFilter productFilter,
                                   @PageableDefault(size = 30, sort = "price", direction = Sort.Direction.ASC) Pageable pageable,
                                   HttpServletRequest request,
                                   @AuthenticationPrincipal UserDetails userDetails) {
-        var page = medicineService.findAllPreviews(medicineFilter, pageable);
+        var page = productService.findAllPreviews(productFilter, pageable);
         var authorities = userDetails.getAuthorities()
                 .stream()
                 .map(GrantedAuthority::getAuthority)
@@ -53,7 +53,7 @@ public class ProductManagementController {
     @GetMapping("/{id}")
     public String getProduct(Model model, @PathVariable Long id, HttpServletRequest request,
                              @AuthenticationPrincipal UserDetails userDetails) {
-        var product = medicineService.findAdminDtoById(id)
+        var product = productService.findAdminDtoById(id)
                         .orElseThrow();
         var authorities = userDetails.getAuthorities()
                 .stream()

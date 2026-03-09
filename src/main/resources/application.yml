@@ -17,6 +17,10 @@ spring:
 
 
 storage:
+  object:
+    endpoint: http://127.0.0.1:9000
+    access-key: minioadmin
+    secret-key: minioadmin
   directory: files
   max-path-length: 4096
   MAX_PATH_SEGMENT_LENGTH: 255
@@ -25,5 +29,10 @@ time:
   timezone: Europe/Moscow
 
 featured-products:
-  update-cron: "* 30 0 * * *"
+  update-cron: "0 30 0 * * *"
   count: 8
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
