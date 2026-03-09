@@ -159,11 +159,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     async function loadProducts() {
         productContainer.innerHTML = '';
 
-        const aggregationResponse = await (await restClient.fetchData(
-            `/api/v1/search/products/filter?${applyFiltersForAggregation()}`, 'GET', {}
-        )).json();
-        const productResponse = await (await restClient.fetchData(`/api/v1/search/products/filter?${applyFilters()}`,
-            'GET', {})).json();
+        const [aggregationResponse, productResponse] = await Promise.all(
+            [fetchAllProducts(), fetchActiveFilterProducts()]);
         const pageStatistic = productResponse.pageResponse.page;
         catalogHeader.textContent = `Лекарства ${pageStatistic.totalElements} товаров`;
         paginationManager.initializePagination(pageStatistic.number, pageStatistic.size, pageStatistic.totalElements);
@@ -180,6 +177,18 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
         const productList = productResponse.pageResponse._embedded.productPreviewDtoList;
         productList.forEach(product => createProductElement(product));
+    }
+
+    async function fetchAllProducts() {
+        const response = await restClient.fetchData(
+            `/api/v1/search/products/filter?${applyFiltersForAggregation()}`, 'GET', {});
+        return response.json();
+    }
+
+    async function fetchActiveFilterProducts() {
+        const response = await restClient.fetchData(`/api/v1/search/products/filter?${applyFilters()}`,
+            'GET', {});
+        return response.json();
     }
 
     function getProductTypeFromPathname() {
