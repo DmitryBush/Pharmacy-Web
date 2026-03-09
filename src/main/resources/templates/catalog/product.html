@@ -17,7 +17,7 @@
                     <div class="carousel">
                         <div class="carousel-container">
                             <img th:each="image : ${product.imagePaths}"
-                                 th:src="@{/api/v1/product-image/{id}/{image}(id=${product.id},image=${image.path})}"
+                                 th:src="@{/api/v1/product-image/{id}(id=${image.id})}"
                                  th:alt="${product.name}"
                                  width="350px"
                                  class="product-image">
