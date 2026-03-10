@@ -21,6 +21,10 @@ Frontend:
 
 Database:
 - PostgreSQL
+- Elasticsearch
+
+S3:
+- MinIO
 
 ## Features
 ### Admin panel
@@ -71,11 +75,11 @@ Build and run the project
 - [x] Product type management
 - [x] Product management
 - [ ] Staff management
-- [ ] News management
+- [x] News management
 ### Client interface
 - [ ] Main page
-- [ ] News
-- [ ] Product catalog
+- [x] News
+- [x] Product catalog
 - [ ] Order creation
 - [ ] Shopping cart
 
