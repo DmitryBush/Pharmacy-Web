@@ -31,6 +31,7 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
 	implementation("org.liquibase:liquibase-core")
 	implementation("org.springframework.boot:spring-boot-starter-security")
+	implementation("org.bouncycastle:bcprov-jdk18on")
 	implementation("org.springframework.boot:spring-boot-starter-validation")
 	implementation("org.thymeleaf.extras:thymeleaf-extras-springsecurity6")
 	implementation("org.springframework.boot:spring-boot-starter-hateoas")
