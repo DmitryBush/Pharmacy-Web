@@ -4,6 +4,8 @@ import com.bush.pharmacy_web_app.repository.branch.PharmacyBranchRepository;
 import com.bush.pharmacy_web_app.model.dto.warehouse.PharmacyBranchReadDto;
 import com.bush.pharmacy_web_app.service.order.mapper.PharmacyBranchReadMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,5 +36,10 @@ public class PharmacyBranchService {
                 .stream()
                 .map(branchReadMapper::map)
                 .toList();
+    }
+
+    public Page<PharmacyBranchReadDto> findPharmacyBranches(Pageable pageable) {
+        return branchRepository.findAll(pageable)
+                .map(branchReadMapper::map);
     }
 }
