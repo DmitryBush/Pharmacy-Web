@@ -1,3 +1,12 @@
+.frame {
+    max-width: 1100px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
 .title-container {
     display: flex;
     gap: 1rem;
@@ -197,4 +206,52 @@ textarea {
 .toggle-btn.active {
     background-color: #007bff;
     color: white;
+}
+
+.time-input-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
+    min-width: 200px;
+}
+
+.time-input-group input[type="time"] {
+    width: auto;
+    flex: 1;
+    min-width: 120px;
+    padding: 10px 12px;
+    margin: 0.5rem;
+}
+
+.slider-wrapper {
+    position: relative;
+    width: 40px;
+    height: 24px;
+    background-color: #e2e8f0;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.slider-wrapper input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider-wrapper input:checked + .slider {
+    transform: translateX(16px);
+    background-color: #0078d4;
+}
+
+.slider {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 18px;
+    height: 18px;
+    background-color: white;
+    border-radius: 50%;
+    transition: transform 0.3s ease, background-color 0.3s ease;
 }

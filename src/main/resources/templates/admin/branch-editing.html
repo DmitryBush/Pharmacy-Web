@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Создание филиала</title>
+    <link href="/css/admin/admin-base.css" rel="stylesheet"/>
+    <link href="/css/admin/admin-form.css" rel="stylesheet"/>
+    <link href="/css/admin/branch-editing.css" rel="stylesheet"/>
+</head>
+<body>
+    <div th:replace="~{/admin/sidebar/sidebar.html :: sidebar}"></div>
+    <main class="main-content">
+        <div class="title-container" id="title-container">
+            <a href="/admin/branch" class="active item-btn" id="back-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" class="bi-arrow-left-short" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5"/>
+                </svg>
+            </a>
+            <h1 class="page-title">Создание филиала</h1>
+        </div>
+        <div class="frame">
+            <form id="branch-creation-form">
+                <label for="branch-name" class="input-group">
+                    Название филиала
+                    <input class="input-group" id="branch-name" type="text">
+                </label>
+                <label class="input-group" for="warehouse-limitations">
+                    Ограничение хранения склада (м3)
+                    <input class="input-group" id="warehouse-limitations" type="number" min="0">
+                </label>
+                <label class="input-group" for="branch-phone">
+                    Контактный номер филиала
+                    <input class="input-group" id="branch-phone" type="tel">
+                </label>
+                <div class="section">
+                    <h3>Адрес филиала</h3>
+                    <div>
+                        <label class="input-group" for="subject">
+                            Область
+                            <input class="input-group" id="subject" type="text" maxlength="30">
+                        </label>
+                        <label class="input-group" for="district">
+                            Район (опционально)
+                            <input class="input-group" id="district" type="text" maxlength="30">
+                        </label>
+                        <label class="input-group" for="settlement">
+                            Город
+                            <input class="input-group" id="settlement" type="text" maxlength="30">
+                        </label>
+                        <label class="input-group" for="street">
+                            Улица
+                            <input class="input-group" id="street" type="text" maxlength="30">
+                        </label>
+                        <label class="input-group" for="house">
+                            Дом
+                            <input class="input-group" id="house" type="text" maxlength="5">
+                        </label>
+                        <label class="input-group" for="apartment">
+                            Квартира (опционально)
+                            <input class="input-group" id="apartment" type="text" maxlength="5">
+                        </label>
+                        <label class="input-group" for="postal-code">
+                            Почтовый код
+                            <input class="input-group" id="postal-code" type="text" maxlength="6">
+                        </label>
+                    </div>
+                </div>
+                <div class="section">
+                    <h3>Рабочие часы филиала</h3>
+                    <div>
+                        <div class="day-row">
+                            <div class="time-input-group time-controls">
+                                <label class="input-group">
+                                    Понедельник
+                                    <input class="input-group" type="time" id="monday-open" value="08:00">
+                                    <span>—</span>
+                                    <input class="input-group" type="time" id="monday-close" value="21:00">
+                                </label>
+                            </div>
+                            <div class="time-shortcut">
+                                <label class="slider-wrapper">
+                                    <input type="checkbox">
+                                    <span class="slider"></span>
+                                </label>
+                                <span class="shortcut-label">Выходной</span>
+                                <label class="slider-wrapper">
+                                    <input type="checkbox">
+                                    <span class="slider"></span>
+                                </label>
+                                <span class="shortcut-label">Круглосуточно</span>
+                            </div>
+                        </div>
+                        <div class="day-row">
+                            <div class="time-input-group">
+                                <label class="input-group">
+                                    Вторник
+                                    <input class="input-group" type="time" id="tuesday-open" value="08:00">
+                                    <span>—</span>
+                                    <input class="input-group" type="time" id="tuesday-close" value="21:00">
+                                </label>
+                            </div>
+                            <div class="time-shortcut">
+                                <label class="slider-wrapper">
+                                    <input type="checkbox">
+                                    <span class="slider"></span>
+                                </label>
+                                <span class="shortcut-label">Выходной</span>
+                                <label class="slider-wrapper">
+                                    <input type="checkbox">
+                                    <span class="slider"></span>
+                                </label>
+                                <span class="shortcut-label">Круглосуточно</span>
+                            </div>
+                        </div>
+                        <div class="day-row">
+                            <div class="time-input-group">
+                                <label class="input-group">
+                                    Среда
+                                    <input class="input-group" type="time" id="wednesday-open" value="08:00">
+                                    <span>—</span>
+                                    <input class="input-group" type="time" id="wednesday-close" value="21:00">
+                                </label>
+                            </div>
+                            <div class="time-shortcut">
+                                <label class="slider-wrapper">
+                                    <input type="checkbox">
+                                    <span class="slider"></span>
+                                </label>
+                                <span class="shortcut-label">Выходной</span>
+                                <label class="slider-wrapper">
+                                    <input type="checkbox">
+                                    <span class="slider"></span>
+                                </label>
+                                <span class="shortcut-label">Круглосуточно</span>
+                            </div>
+                        </div>
+                        <div class="day-row">
+                            <div class="time-input-group">
+                                <label class="input-group">
+                                    Четверг
+                                    <input class="input-group" type="time" id="thursday-open" value="08:00">
+                                    <span>—</span>
+                                    <input class="input-group" type="time" id="thursday-close" value="21:00">
+                                </label>
+                            </div>
+                            <div class="time-shortcut">
+                                <label class="slider-wrapper">
+                                    <input type="checkbox">
+                                    <span class="slider"></span>
+                                </label>
+                                <span class="shortcut-label">Выходной</span>
+                                <label class="slider-wrapper">
+                                    <input type="checkbox">
+                                    <span class="slider"></span>
+                                </label>
+                                <span class="shortcut-label">Круглосуточно</span>
+                            </div>
+                        </div>
+                        <div class="day-row">
+                            <div class="time-input-group">
+                                <label class="input-group">
+                                    Пятница
+                                    <input class="input-group" type="time" id="friday-open" value="08:00">
+                                    <span>—</span>
+                                    <input class="input-group" type="time" id="friday-close" value="21:00">
+                                </label>
+                            </div>
+                            <div class="time-shortcut">
+                                <label class="slider-wrapper">
+                                    <input type="checkbox">
+                                    <span class="slider"></span>
+                                </label>
+                                <span class="shortcut-label">Выходной</span>
+                                <label class="slider-wrapper">
+                                    <input type="checkbox">
+                                    <span class="slider"></span>
+                                </label>
+                                <span class="shortcut-label">Круглосуточно</span>
+                            </div>
+                        </div>
+                        <div class="day-row">
+                            <div class="time-input-group">
+                                <label class="input-group">
+                                    Суббота
+                                    <input class="input-group" type="time" id="saturday-open" value="09:00">
+                                    <span>—</span>
+                                    <input class="input-group" type="time" id="saturday-close" value="21:00">
+                                </label>
+                            </div>
+                            <div class="time-shortcut">
+                                <label class="slider-wrapper">
+                                    <input type="checkbox">
+                                    <span class="slider"></span>
+                                </label>
+                                <span class="shortcut-label">Выходной</span>
+                                <label class="slider-wrapper">
+                                    <input type="checkbox">
+                                    <span class="slider"></span>
+                                </label>
+                                <span class="shortcut-label">Круглосуточно</span>
+                            </div>
+                        </div>
+                        <div class="day-row">
+                            <div class="time-input-group">
+                                <label class="input-group">
+                                    Воскресенье
+                                    <input class="input-group" type="time" id="sunday-open" value="09:00">
+                                    <span>—</span>
+                                    <input class="input-group" type="time" id="sunday-close" value="21:00">
+                                </label>
+                            </div>
+                            <div class="time-shortcut">
+                                <label class="slider-wrapper">
+                                    <input type="checkbox">
+                                    <span class="slider"></span>
+                                </label>
+                                <span class="shortcut-label">Выходной</span>
+                                <label class="slider-wrapper">
+                                    <input type="checkbox">
+                                    <span class="slider"></span>
+                                </label>
+                                <span class="shortcut-label">Круглосуточно</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </main>
+</body>
+</html>

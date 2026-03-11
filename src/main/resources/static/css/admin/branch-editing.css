@@ -1,0 +1,26 @@
+.day-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    padding: 0.5rem;
+}
+
+.hours-table {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.time-controls {
+    display: flex;
+    align-items: center;
+    flex-grow: 1;
+    gap: 1rem;
+}
+
+.time-shortcut {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
