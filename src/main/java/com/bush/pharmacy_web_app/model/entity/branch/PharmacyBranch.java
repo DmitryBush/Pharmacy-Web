@@ -5,6 +5,8 @@ import com.bush.pharmacy_web_app.model.entity.order.Order;
 import com.bush.pharmacy_web_app.model.entity.user.User;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -18,6 +20,7 @@ import java.util.Set;
 @ToString(exclude = {"items", "orders", "address", "supervisor", "userBranchAssigned"})
 @Entity
 @Table(name = "pharmacy_branches")
+@DynamicInsert
 public class PharmacyBranch {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,12 +28,13 @@ public class PharmacyBranch {
     private Long id;
     @Column(nullable = false, length = 32)
     private String name;
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "f_key_address_id", nullable = false)
     private Address address;
     @Column(name = "warehouse_limitation", nullable = false)
     private Integer warehouseLimitations;
     @Column(name = "is_active")
+    @ColumnDefault("true")
     private Boolean isActive;
     @OneToOne
     @JoinColumn(name = "user_supervisor")

@@ -14,5 +14,5 @@ public record PharmacyBranchCreateDto(@NotBlank @Length(min = 4, max = 32) Strin
                                       @NotNull @Positive Integer warehouseLimitations,
                                       @MobilePhone String contactPhone,
                                       @Validated AddressCreateDto address,
-                                      @NotNull @Validated List<PharmacyBranchWorkingHoursDto> workingHoursDtoList) {
+                                      @NotNull @Validated List<BranchWorkingHoursDto> workingHoursDtoList) {
 }

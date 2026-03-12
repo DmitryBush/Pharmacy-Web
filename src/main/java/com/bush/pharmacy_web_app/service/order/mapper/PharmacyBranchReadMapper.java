@@ -22,7 +22,7 @@ public class PharmacyBranchReadMapper implements DtoMapper<PharmacyBranch, Pharm
         AddressReadDto address = Optional.ofNullable(obj.getAddress())
                 .map(addressReadMapper::map).orElse(null);
         var supervisor = Optional.ofNullable(obj.getSupervisor())
-                .map(userInfoMapper::map).orElseThrow();
+                .map(userInfoMapper::map).orElse(null);
         var openingHours = Optional.ofNullable(obj.getOpeningHours())
                 .map(openingHoursMapper::map).orElseThrow();
 
