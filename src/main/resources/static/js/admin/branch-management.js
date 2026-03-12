@@ -42,7 +42,8 @@ document.addEventListener("DOMContentLoaded", async () => {
             branchContainer.appendChild(newsMessage);
             return;
         }
-        const branchList = branchResponse._embedded;
+        console.log(branchResponse);
+        const branchList = branchResponse._embedded.pharmacyBranchReadDtoList;
         branchList.forEach(branch => renderBranchCard(branch));
     }
 
@@ -67,13 +68,15 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         const branchLink = document.createElement('a');
         branchLink.classList.add('branch-link');
-        branchLink.href = ``;
+        branchLink.href = `/admin/branch/${branch.id}`;
         const branchTitle = document.createElement('h4');
+        branchTitle.classList.add('branch-title');
         branchTitle.textContent = branch.name;
         branchLink.appendChild(branchTitle);
+        branchHeader.appendChild(branchLink);
 
         const branchStatus = document.createElement('p');
-        if (branchStatus.status) {
+        if (branch.isActive) {
             branchStatus.textContent = 'Активен';
             branchStatus.classList.add('branch-status-active');
         } else {
@@ -83,6 +86,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         branchHeader.appendChild(branchStatus);
 
         const branchSettlement = document.createElement('p');
+        branchSettlement.classList.add('branch-city');
         branchSettlement.textContent = branch.address.settlement;
         branchHeader.appendChild(branchSettlement);
         return branchHeader;
@@ -93,33 +97,38 @@ document.addEventListener("DOMContentLoaded", async () => {
         branchBody.classList.add('branch-body');
 
         const address = document.createElement('p');
-        address.textContent = `<strong>Адрес</strong>: ${branch.address.subject}, ${branch.address.settlement}, ${branch.address.street},
+        address.innerHTML = `<strong>Адрес</strong>: ${branch.address.subject}, ${branch.address.settlement}, ${branch.address.street},
             ${branch.address.house}`;
         branchBody.appendChild(address);
 
-        branchBody.appendChild(renderHoursList());
+        branchBody.appendChild(renderHoursList(branch));
 
         const contactInfo = document.createElement('p');
-        contactInfo.textContent = `<strong>Контактный номер:</strong> ${branch.branchPhone}`;
+        contactInfo.innerHTML = `<strong>Контактный номер:</strong> ${branch.branchPhone}`;
         branchBody.appendChild(contactInfo);
 
         const branchDirector = document.createElement('p');
-        branchDirector.textContent = `<strong>Директор филиала:</strong> ${branch.supervisor.surname} 
-            ${branch.supervisor.name} ${branch.supervisor.lastName}`;
+        if (branch.supervisor !== undefined && branch.supervisor !== null) {
+            branchDirector.innerHTML = `<strong>Директор филиала:</strong> ${branch.supervisor.surname} 
+                ${branch.supervisor.name} ${branch.supervisor.lastName}`;
+        } else {
+            branchDirector.innerHTML = `<strong>Директор филиала:</strong> не закреплен`;
+        }
         branchBody.appendChild(branchDirector);
 
         const choiceButton = document.createElement('button');
         choiceButton.classList.add('branch-more-det');
         choiceButton.textContent = 'Изменить';
-        choiceButton.addEventListener('click', () => {
-            window.location.replace(``);
+        choiceButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.location.replace(`/admin/branch/${branch.id}`);
         });
         branchBody.appendChild(choiceButton);
 
         return branchBody;
     }
 
-    function renderHoursList() {
+    function renderHoursList(branch) {
         const workingHours = document.createElement('div');
         workingHours.classList.add('working-hours');
         const workingHoursText = document.createElement('strong');
@@ -127,7 +136,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         const workingHoursList = document.createElement('ul');
         workingHoursList.classList.add('hours-list');
-        branch.openningHours.forEach((workingHour) => {
+        branch.openingHours.forEach((workingHour) => {
             const hoursLi = document.createElement('li');
             hoursLi.textContent = workingHour;
             workingHoursList.appendChild(hoursLi);
