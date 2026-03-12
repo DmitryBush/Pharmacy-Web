@@ -8,10 +8,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.PagedModel;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -27,8 +29,9 @@ public class BranchAdminRestController {
         return ResponseEntity.ok(assembler.toModel(service.findPharmacyBranches(pageable)));
     }
 
-    @PostMapping
-    public ResponseEntity<PharmacyBranchReadDto> createPharmacyBranch(@Validated PharmacyBranchCreateDto branchCreateDto) {
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<PharmacyBranchReadDto> createPharmacyBranch(@RequestBody @Validated
+                                                                          PharmacyBranchCreateDto branchCreateDto) {
         return ResponseEntity.ok(service.createBranch(branchCreateDto));
     }
 }

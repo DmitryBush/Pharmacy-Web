@@ -49,6 +49,7 @@ public class PharmacyBranchService {
                 .map(branchReadMapper::map);
     }
 
+    @Transactional
     public PharmacyBranchReadDto createBranch(PharmacyBranchCreateDto createDto) {
         return Optional.ofNullable(createDto)
                 .map(branchCreateMapper::mapToPharmacyBranch)
