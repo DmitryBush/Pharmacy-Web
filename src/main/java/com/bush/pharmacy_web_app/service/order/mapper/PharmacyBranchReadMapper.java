@@ -1,7 +1,7 @@
 package com.bush.pharmacy_web_app.service.order.mapper;
 
 import com.bush.pharmacy_web_app.model.dto.address.AddressReadDto;
-import com.bush.pharmacy_web_app.model.dto.warehouse.PharmacyBranchReadDto;
+import com.bush.pharmacy_web_app.model.dto.branch.PharmacyBranchReadDto;
 import com.bush.pharmacy_web_app.model.entity.branch.PharmacyBranch;
 import com.bush.pharmacy_web_app.shared.mapper.DtoMapper;
 import com.bush.pharmacy_web_app.service.branch.mapper.OpeningHoursMapper;

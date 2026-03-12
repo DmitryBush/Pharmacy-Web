@@ -7,7 +7,7 @@ import com.bush.pharmacy_web_app.model.dto.product.ProductAdminReadDto;
 import com.bush.pharmacy_web_app.model.dto.product.ProductCreateDto;
 import com.bush.pharmacy_web_app.model.dto.product.ProductPreviewReadDto;
 import com.bush.pharmacy_web_app.model.dto.product.ProductReadDto;
-import com.bush.pharmacy_web_app.model.dto.warehouse.PharmacyBranchReadDto;
+import com.bush.pharmacy_web_app.model.dto.branch.PharmacyBranchReadDto;
 import com.bush.pharmacy_web_app.model.entity.Supplier;
 import com.bush.pharmacy_web_app.model.entity.manufacturer.Manufacturer;
 import com.bush.pharmacy_web_app.model.entity.product.Product;

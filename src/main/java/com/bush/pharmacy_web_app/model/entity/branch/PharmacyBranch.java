@@ -23,7 +23,7 @@ public class PharmacyBranch {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "branch_id", nullable = false)
     private Long id;
-    @Column(nullable = false)
+    @Column(nullable = false, length = 32)
     private String name;
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "f_key_address_id", nullable = false)
@@ -35,9 +35,9 @@ public class PharmacyBranch {
     @OneToOne
     @JoinColumn(name = "user_supervisor")
     private User supervisor;
-    @Column(name = "branch_phone")
+    @Column(name = "branch_phone", length = 18)
     private String branchPhone;
-    @OneToMany(mappedBy = "branch", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "branch", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<BranchOpeningHours> openingHours = new ArrayList<>();
 
     @OneToMany(mappedBy = "branch", fetch = FetchType.LAZY)
