@@ -3,9 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <title>Создание филиала</title>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
     <link href="/css/admin/admin-base.css" rel="stylesheet"/>
     <link href="/css/admin/admin-form.css" rel="stylesheet"/>
     <link href="/css/admin/branch-editing.css" rel="stylesheet"/>
+    <script src="/js/admin/branch-editing.js" type="module"></script>
 </head>
 <body>
     <div th:replace="~{/admin/sidebar/sidebar.html :: sidebar}"></div>
@@ -30,7 +33,11 @@
                 </label>
                 <label class="input-group" for="branch-phone">
                     Контактный номер филиала
-                    <input class="input-group" id="branch-phone" type="tel">
+                    <input class="input-group"
+                           id="branch-phone"
+                           placeholder="+7 (___) ___-__-__"
+                           pattern="^(\+7|8)\s\(\d{3}\)\s\d{3}-\d{2}-\d{2}$"
+                           type="tel">
                 </label>
                 <div class="section">
                     <h3>Адрес филиала</h3>
@@ -68,155 +75,155 @@
                 <div class="section">
                     <h3>Рабочие часы филиала</h3>
                     <div>
-                        <div class="day-row">
+                        <div class="day-row" data-day="MONDAY">
                             <div class="time-input-group time-controls">
                                 <label class="input-group">
                                     Понедельник
-                                    <input class="input-group" type="time" id="monday-open" value="08:00">
+                                    <input class="input-group" type="time" name="open-time" value="08:00">
                                     <span>—</span>
-                                    <input class="input-group" type="time" id="monday-close" value="21:00">
+                                    <input class="input-group" type="time" name="close-time" value="21:00">
                                 </label>
                             </div>
                             <div class="time-shortcut">
                                 <label class="slider-wrapper">
-                                    <input type="checkbox">
+                                    <input type="checkbox" name="day-off">
                                     <span class="slider"></span>
                                 </label>
                                 <span class="shortcut-label">Выходной</span>
                                 <label class="slider-wrapper">
-                                    <input type="checkbox">
+                                    <input type="checkbox" name="around-clock">
                                     <span class="slider"></span>
                                 </label>
                                 <span class="shortcut-label">Круглосуточно</span>
                             </div>
                         </div>
-                        <div class="day-row">
-                            <div class="time-input-group">
+                        <div class="day-row" data-day="TUESDAY">
+                            <div class="time-input-group time-controls">
                                 <label class="input-group">
                                     Вторник
-                                    <input class="input-group" type="time" id="tuesday-open" value="08:00">
+                                    <input class="input-group" type="time" name="open-time" value="08:00">
                                     <span>—</span>
-                                    <input class="input-group" type="time" id="tuesday-close" value="21:00">
+                                    <input class="input-group" type="time" name="close-time" value="21:00">
                                 </label>
                             </div>
                             <div class="time-shortcut">
                                 <label class="slider-wrapper">
-                                    <input type="checkbox">
+                                    <input type="checkbox" name="day-off">
                                     <span class="slider"></span>
                                 </label>
                                 <span class="shortcut-label">Выходной</span>
                                 <label class="slider-wrapper">
-                                    <input type="checkbox">
+                                    <input type="checkbox" name="around-clock">
                                     <span class="slider"></span>
                                 </label>
                                 <span class="shortcut-label">Круглосуточно</span>
                             </div>
                         </div>
-                        <div class="day-row">
-                            <div class="time-input-group">
+                        <div class="day-row" data-day="WEDNESDAY">
+                            <div class="time-input-group time-controls">
                                 <label class="input-group">
                                     Среда
-                                    <input class="input-group" type="time" id="wednesday-open" value="08:00">
+                                    <input class="input-group" type="time" name="open-time" value="08:00">
                                     <span>—</span>
-                                    <input class="input-group" type="time" id="wednesday-close" value="21:00">
+                                    <input class="input-group" type="time" name="close-time" value="21:00">
                                 </label>
                             </div>
                             <div class="time-shortcut">
                                 <label class="slider-wrapper">
-                                    <input type="checkbox">
+                                    <input type="checkbox" name="day-off">
                                     <span class="slider"></span>
                                 </label>
                                 <span class="shortcut-label">Выходной</span>
                                 <label class="slider-wrapper">
-                                    <input type="checkbox">
+                                    <input type="checkbox" name="around-clock">
                                     <span class="slider"></span>
                                 </label>
                                 <span class="shortcut-label">Круглосуточно</span>
                             </div>
                         </div>
-                        <div class="day-row">
-                            <div class="time-input-group">
+                        <div class="day-row" data-day="THURSDAY">
+                            <div class="time-input-group time-controls">
                                 <label class="input-group">
                                     Четверг
-                                    <input class="input-group" type="time" id="thursday-open" value="08:00">
+                                    <input class="input-group" type="time" name="open-time" value="08:00">
                                     <span>—</span>
-                                    <input class="input-group" type="time" id="thursday-close" value="21:00">
+                                    <input class="input-group" type="time" name="close-time" value="21:00">
                                 </label>
                             </div>
                             <div class="time-shortcut">
                                 <label class="slider-wrapper">
-                                    <input type="checkbox">
+                                    <input type="checkbox" name="day-off">
                                     <span class="slider"></span>
                                 </label>
                                 <span class="shortcut-label">Выходной</span>
                                 <label class="slider-wrapper">
-                                    <input type="checkbox">
+                                    <input type="checkbox" name="around-clock">
                                     <span class="slider"></span>
                                 </label>
                                 <span class="shortcut-label">Круглосуточно</span>
                             </div>
                         </div>
-                        <div class="day-row">
-                            <div class="time-input-group">
+                        <div class="day-row" data-day="FRIDAY">
+                            <div class="time-input-group time-controls">
                                 <label class="input-group">
                                     Пятница
-                                    <input class="input-group" type="time" id="friday-open" value="08:00">
+                                    <input class="input-group" type="time" name="open-time" value="08:00">
                                     <span>—</span>
-                                    <input class="input-group" type="time" id="friday-close" value="21:00">
+                                    <input class="input-group" type="time" name="close-time" value="21:00">
                                 </label>
                             </div>
                             <div class="time-shortcut">
                                 <label class="slider-wrapper">
-                                    <input type="checkbox">
+                                    <input type="checkbox" name="day-off">
                                     <span class="slider"></span>
                                 </label>
                                 <span class="shortcut-label">Выходной</span>
                                 <label class="slider-wrapper">
-                                    <input type="checkbox">
+                                    <input type="checkbox" name="around-clock">
                                     <span class="slider"></span>
                                 </label>
                                 <span class="shortcut-label">Круглосуточно</span>
                             </div>
                         </div>
-                        <div class="day-row">
-                            <div class="time-input-group">
+                        <div class="day-row" data-day="SATURDAY">
+                            <div class="time-input-group time-controls">
                                 <label class="input-group">
                                     Суббота
-                                    <input class="input-group" type="time" id="saturday-open" value="09:00">
+                                    <input class="input-group" type="time" name="open-time" value="09:00">
                                     <span>—</span>
-                                    <input class="input-group" type="time" id="saturday-close" value="21:00">
+                                    <input class="input-group" type="time" name="close-time" value="21:00">
                                 </label>
                             </div>
                             <div class="time-shortcut">
                                 <label class="slider-wrapper">
-                                    <input type="checkbox">
+                                    <input type="checkbox" name="day-off">
                                     <span class="slider"></span>
                                 </label>
                                 <span class="shortcut-label">Выходной</span>
                                 <label class="slider-wrapper">
-                                    <input type="checkbox">
+                                    <input type="checkbox" name="around-clock">
                                     <span class="slider"></span>
                                 </label>
                                 <span class="shortcut-label">Круглосуточно</span>
                             </div>
                         </div>
-                        <div class="day-row">
-                            <div class="time-input-group">
+                        <div class="day-row" data-day="SUNDAY">
+                            <div class="time-input-group time-controls">
                                 <label class="input-group">
                                     Воскресенье
-                                    <input class="input-group" type="time" id="sunday-open" value="09:00">
+                                    <input class="input-group" type="time" name="open-time" value="09:00">
                                     <span>—</span>
-                                    <input class="input-group" type="time" id="sunday-close" value="21:00">
+                                    <input class="input-group" type="time" name="close-time" value="21:00">
                                 </label>
                             </div>
                             <div class="time-shortcut">
                                 <label class="slider-wrapper">
-                                    <input type="checkbox">
+                                    <input type="checkbox" name="day-off">
                                     <span class="slider"></span>
                                 </label>
                                 <span class="shortcut-label">Выходной</span>
                                 <label class="slider-wrapper">
-                                    <input type="checkbox">
+                                    <input type="checkbox" name="around-clock">
                                     <span class="slider"></span>
                                 </label>
                                 <span class="shortcut-label">Круглосуточно</span>
