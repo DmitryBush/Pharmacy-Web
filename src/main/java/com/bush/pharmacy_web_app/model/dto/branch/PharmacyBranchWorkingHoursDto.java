@@ -7,5 +7,7 @@ import java.time.LocalTime;
 
 public record PharmacyBranchWorkingHoursDto(@NotNull DayOfWeek dayOfWeek,
                                             @NotNull LocalTime openTime,
-                                            @NotNull LocalTime closeTime) {
+                                            @NotNull LocalTime closeTime,
+                                            @NotNull Boolean dayOff,
+                                            @NotNull Boolean aroundClock) {
 }

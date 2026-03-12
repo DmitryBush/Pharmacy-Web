@@ -26,4 +26,8 @@ public class BranchOpeningHours {
     private LocalTime openTime;
     @Column(name = "close_time", nullable = false)
     private LocalTime closeTime;
+    @Column(name = "day_off")
+    private Boolean dayOff;
+    @Column(name = "around_the_clock")
+    private Boolean aroundClock;
 }

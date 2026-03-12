@@ -441,6 +441,8 @@ CREATE TABLE IF NOT EXISTS public.branches_opening_hours
     day_of_week smallint NOT NULL,
     open_time time without time zone NOT NULL,
     close_time time without time zone NOT NULL,
+    day_off BOOLEAN NOT NULL DEFAULT 'false',
+    around_the_clock BOOLEAN NOT NULL DEFAULT 'false',
     CONSTRAINT branches_opening_hours_pkey PRIMARY KEY (id),
     CONSTRAINT branches_opening_hours_branch_id_day_of_week_key UNIQUE (branch_id, day_of_week),
     CONSTRAINT branches_opening_hours_branch_id_fkey FOREIGN KEY (branch_id)
