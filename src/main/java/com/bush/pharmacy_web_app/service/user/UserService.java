@@ -74,7 +74,7 @@ public class UserService implements UserDetailsService {
         return userRepository.findById(username)
                 .map(customer -> new User(customer.getMobilePhone(),
                         customer.getPassword(),
-                        List.of(new SimpleGrantedAuthority(customer.getRole().getType().name()))))
+                        List.of(new SimpleGrantedAuthority("ROLE_" + customer.getRole().getType().name()))))
                 .orElseThrow(() -> new UsernameNotFoundException("Mistake in username or password"));
     }
 }

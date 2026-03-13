@@ -24,15 +24,15 @@ import java.util.Set;
 @DynamicInsert
 public class User {
     @Id
-    @Column(name = "mobile_phone", nullable = false, length = 15)
+    @Column(name = "mobile_phone", nullable = false, length = 18)
     private String mobilePhone;
-    @Column(nullable = false)
+    @Column(nullable = false, length = 25)
     private String name;
-    @Column(nullable = false)
+    @Column(nullable = false, length = 25)
     private String surname;
-    @Column(name = "last_name")
+    @Column(name = "last_name", length = 25)
     private String lastName;
-    @Column(nullable = false)
+    @Column(nullable = false, length = 256)
     private String password;
     @ManyToOne
     @JoinColumn(name = "f_key_role_id")
