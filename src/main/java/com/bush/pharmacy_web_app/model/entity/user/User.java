@@ -5,6 +5,8 @@ import com.bush.pharmacy_web_app.model.entity.order.Order;
 import com.bush.pharmacy_web_app.model.entity.user.role.Role;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -14,11 +16,12 @@ import java.util.Set;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(exclude = {"orders", "branchUserAssignments", "roles"})
-@ToString(exclude = {"orders", "branchUserAssignments", "roles"})
+@EqualsAndHashCode(exclude = {"orders", "branchUserAssignments"})
+@ToString(exclude = {"orders", "branchUserAssignments"})
 @Builder
 @Entity
 @Table(name = "users")
+@DynamicInsert
 public class User {
     @Id
     @Column(name = "mobile_phone", nullable = false, length = 15)
@@ -31,12 +34,10 @@ public class User {
     private String lastName;
     @Column(nullable = false)
     private String password;
-    @Builder.Default
-    @ManyToMany
-    @JoinTable(name = "user_roles",
-            joinColumns = @JoinColumn(name = "id_user", nullable = false),
-            inverseJoinColumns = @JoinColumn(name = "id_role", nullable = false))
-    private Set<Role> roles = new HashSet<>();
+    @ManyToOne
+    @JoinColumn(name = "f_key_role_id")
+    @ColumnDefault("3")
+    private Role role;
     @Builder.Default
     @ManyToMany
     @JoinTable(name = "branch_user_assignment",
