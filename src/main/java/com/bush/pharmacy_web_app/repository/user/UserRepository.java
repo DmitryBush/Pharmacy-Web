@@ -15,7 +15,7 @@ public interface UserRepository extends JpaRepository<User, String> {
 
     @Query("select u from User u " +
             "join u.role r " +
-            "where u.mobilePhone like concat(:mobilePhone, '%') and r.type = :type")
+            "where u.mobilePhone like concat(:mobilePhone, '%') and r.type = coalesce(:type,r.type)")
     Page<User> findAllByMobilePhoneAndRole(@Param("mobilePhone") String mobilePhone,
                                            @Param("type") RoleType type,
                                            Pageable pageable);

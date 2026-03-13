@@ -1,6 +1,7 @@
 package com.bush.pharmacy_web_app.service.user;
 
 import com.bush.pharmacy_web_app.model.dto.user.AdminUserReadDto;
+import com.bush.pharmacy_web_app.model.entity.user.role.Role;
 import com.bush.pharmacy_web_app.model.entity.user.role.RoleType;
 import com.bush.pharmacy_web_app.repository.user.UserFilter;
 import com.bush.pharmacy_web_app.repository.user.UserRepository;
@@ -38,7 +39,11 @@ public class UserService implements UserDetailsService {
     }
 
     public Page<AdminUserReadDto> findAllByFilter(Pageable pageable, UserFilter filter) {
-        return userRepository.findAllByMobilePhoneAndRole(filter.mobilePhone(), RoleType.valueOf(filter.role()), pageable)
+        RoleType roleType =  Optional.of(filter.role())
+                .filter(s -> !s.isBlank())
+                .map(RoleType::valueOf)
+                .orElse(null);
+        return userRepository.findAllByMobilePhoneAndRole(filter.mobilePhone(), roleType, pageable)
                 .map(adminUserReadMapper::map);
     }
 
