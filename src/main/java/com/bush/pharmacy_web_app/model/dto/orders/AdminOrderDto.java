@@ -1,6 +1,6 @@
 package com.bush.pharmacy_web_app.model.dto.orders;
 
-import com.bush.pharmacy_web_app.model.dto.user.AdminCustomerReadDto;
+import com.bush.pharmacy_web_app.model.dto.user.AdminUserReadDto;
 import com.bush.pharmacy_web_app.model.dto.branch.PharmacyBranchReadDto;
 
 import java.math.BigDecimal;
@@ -10,7 +10,7 @@ import java.util.List;
 public record AdminOrderDto(Long id,
                             OrderStatusDto statusOrder,
                             Instant date,
-                            AdminCustomerReadDto user,
+                            AdminUserReadDto user,
                             PharmacyBranchReadDto branch,
                             List<OrderItemReadDto> cartItems,
                             BigDecimal result) {

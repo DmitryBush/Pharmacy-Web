@@ -1,8 +1,12 @@
 package com.bush.pharmacy_web_app.service.user;
 
+import com.bush.pharmacy_web_app.model.dto.user.AdminUserReadDto;
+import com.bush.pharmacy_web_app.model.entity.user.role.RoleType;
+import com.bush.pharmacy_web_app.repository.user.UserFilter;
 import com.bush.pharmacy_web_app.repository.user.UserRepository;
 import com.bush.pharmacy_web_app.model.dto.user.CustomerCreateDto;
 import com.bush.pharmacy_web_app.model.dto.user.CustomerReadDto;
+import com.bush.pharmacy_web_app.service.user.mapper.AdminUserReadMapper;
 import com.bush.pharmacy_web_app.service.user.mapper.UserCreateMapper;
 import com.bush.pharmacy_web_app.service.user.mapper.UserReadMapper;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +28,8 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
+
+    private final AdminUserReadMapper adminUserReadMapper;
     private final UserReadMapper readMapper;
     private final UserCreateMapper createMapper;
 
@@ -31,9 +37,9 @@ public class UserService implements UserDetailsService {
         return userRepository.findAll().stream().map(readMapper::map).toList();
     }
 
-    public Page<CustomerReadDto> findAll(Pageable pageable) {
-        return userRepository.findAll(pageable)
-                .map(readMapper::map);
+    public Page<AdminUserReadDto> findAllByFilter(Pageable pageable, UserFilter filter) {
+        return userRepository.findAllByMobilePhoneAndRole(filter.mobilePhone(), RoleType.valueOf(filter.role()), pageable)
+                .map(adminUserReadMapper::map);
     }
 
     public Optional<CustomerReadDto> findById(String s) {
