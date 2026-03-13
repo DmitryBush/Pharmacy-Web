@@ -259,3 +259,70 @@ textarea {
 .context-action-container {
     border-top: 1px solid #E7E5E4;
 }
+
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+    margin: 1.5rem 0;
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.table-container table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #2b2d42;
+}
+
+.table-container th {
+    text-align: left;
+    padding: 1rem 1.2rem;
+    background-color: #f8fafc;
+    font-weight: 600;
+    color: #64748b;
+    border-bottom: 2px solid #e5e5e5;
+    white-space: nowrap;
+}
+
+.table-container td {
+    padding: 1rem 1.2rem;
+    border-bottom: 1px solid #e5e5e5;
+    vertical-align: middle;
+}
+
+.table-container tbody tr:nth-child(even) {
+    background-color: #fafafa;
+}
+
+.table-container tbody tr:hover {
+    background-color: #f1f5f9;
+}
+
+.table-container tbody:empty::after {
+    content: "Нет данных для отображения";
+    display: block;
+    padding: 2rem;
+    text-align: center;
+    color: #94a3b8;
+    font-style: italic;
+}
+
+.table-container .action-btn {
+    padding: 0.4rem 1rem;
+    font-size: 0.9rem;
+    margin: 0 0.2rem;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: inline-block;
+    text-align: center;
+}
+
+.table-container .action-btn:hover {
+    opacity: 0.85;
+    filter: brightness(0.95);
+}
