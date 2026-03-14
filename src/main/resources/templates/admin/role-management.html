@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Управление ролями</title>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
     <link href="/css/admin/admin-base.css" rel="stylesheet"/>
     <link href="/css/admin/admin-form.css" rel="stylesheet"/>
     <script src="/js/admin/role-management.js" type="module"></script>

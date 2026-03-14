@@ -78,12 +78,9 @@ document.addEventListener("DOMContentLoaded", async function () {
         tr.appendChild(tdActionButton);
 
         saveButton.addEventListener("click", async function () {
-            restClient.fetchData('/api/v1/admin/users/change/role', 'PATCH',
-                {'Content-Type': 'application/json'},
-                JSON.stringify({
-                    mobilePhone: userData.mobilePhone,
-                    role: role.value
-                }))
+            const selectedRole = role.querySelector("select").value;
+            restClient.fetchData(`/api/v1/admin/users/${encodeURIComponent(userData.mobilePhone)}/role`,
+                'PATCH', {'Content-Type': 'text/plain'}, selectedRole)
                 .then(() => notification.showNotification('Управление ролями',
                     'Обновление роли пользователя проведено успешно'))
                 .catch((error) => notification.showNotification('Управление ролями',
