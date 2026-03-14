@@ -13,6 +13,7 @@ import com.bush.pharmacy_web_app.service.user.mapper.UserReadMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,6 +21,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -29,6 +31,8 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
+
+    private final RoleService roleService;
 
     private final AdminUserReadMapper adminUserReadMapper;
     private final UserReadMapper readMapper;
@@ -87,5 +91,15 @@ public class UserService implements UserDetailsService {
                         customer.getPassword(),
                         List.of(new SimpleGrantedAuthority("ROLE_" + customer.getRole().getType().name()))))
                 .orElseThrow(() -> new UsernameNotFoundException("Mistake in username or password"));
+    }
+
+    @Transactional
+    public AdminUserReadDto updateRole(String mobilePhone, String roleName) {
+        Role role = roleService.findRoleByRoleType(RoleType.valueOf(roleName));
+        return userRepository.findById(mobilePhone)
+                .map(user -> createMapper.updateRole(user, role))
+                .map(userRepository::saveAndFlush)
+                .map(adminUserReadMapper::map)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST));
     }
 }
