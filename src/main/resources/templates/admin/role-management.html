@@ -5,6 +5,7 @@
     <title>Управление ролями</title>
     <link href="/css/admin/admin-base.css" rel="stylesheet"/>
     <link href="/css/admin/admin-form.css" rel="stylesheet"/>
+    <script src="/js/admin/role-management.js" type="module"></script>
 </head>
 <body>
     <div th:replace="~{/admin/sidebar/sidebar.html :: sidebar}"></div>
@@ -20,14 +21,15 @@
         <div class="frame">
             <label class="input-group" for="user-phone">
                 Поиск по номеру телефона
-                <input type="tel" class="input-group" placeholder="+7 (___) ___-__-__" id="user-phone">
+                <input type="tel" class="input-group" placeholder="+7 (___) ___-__-__" id="user-phone" maxlength="18">
             </label>
             <label class="input-group" for="role-filter">
                 Отфильтровать по роли
                 <select class="input-group" id="role-filter">
-                    <option>Все роли</option>
+                    <option value="">Все роли</option>
                     <option value="ADMIN">Администратор</option>
                     <option value="OPERATOR">Оператор</option>
+                    <option value="CUSTOMER">Покупатель</option>
                 </select>
             </label>
             <div class="table-container">
