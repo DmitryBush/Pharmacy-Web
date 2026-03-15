@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Управление ролями</title>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <link href="/css/admin/admin-base.css" rel="stylesheet"/>
+    <link href="/css/admin/admin-form.css" rel="stylesheet"/>
+    <script src="/js/admin/role-management.js" type="module"></script>
+</head>
+<body>
+    <div th:replace="~{/admin/sidebar/sidebar.html :: sidebar}"></div>
+    <main class="main-content">
+        <div class="title-container" id="title-container">
+            <a href="/admin/staff" class="active item-btn" id="back-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" class="bi-arrow-left-short" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5"/>
+                </svg>
+            </a>
+            <h1 class="page-title">Управление ролями пользователей</h1>
+        </div>
+        <div class="frame">
+            <label class="input-group" for="user-phone">
+                Поиск по номеру телефона
+                <input type="tel" class="input-group" placeholder="+7 (___) ___-__-__" id="user-phone" maxlength="18">
+            </label>
+            <label class="input-group" for="role-filter">
+                Отфильтровать по роли
+                <select class="input-group" id="role-filter">
+                    <option value="">Все роли</option>
+                    <option value="ADMIN">Администратор</option>
+                    <option value="OPERATOR">Оператор</option>
+                    <option value="CUSTOMER">Покупатель</option>
+                </select>
+            </label>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Пользователь</th>
+                            <th>Роль</th>
+                            <th>Действия</th>
+                        </tr>
+                    </thead>
+                    <tbody id="users-table-body"></tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

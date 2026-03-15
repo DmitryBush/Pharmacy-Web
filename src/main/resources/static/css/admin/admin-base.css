@@ -66,6 +66,22 @@ body {
     margin-right: 0.5rem;
 }
 
+.btn-accept {
+    background-color: #4CAF50;
+}
+
+.btn-reject {
+    background-color: #ef4444;
+}
+
+.btn-cancel {
+    background-color: #94a3b8;
+}
+
+.btn-accept:hover, .btn-cancel:hover, .btn-reject:hover {
+    opacity: 0.9;
+}
+
 .object {
     display: flex;
     align-items: center;

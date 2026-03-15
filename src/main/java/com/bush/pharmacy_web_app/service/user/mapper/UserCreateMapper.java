@@ -2,6 +2,8 @@ package com.bush.pharmacy_web_app.service.user.mapper;
 
 import com.bush.pharmacy_web_app.model.dto.user.CustomerCreateDto;
 import com.bush.pharmacy_web_app.model.entity.user.User;
+import com.bush.pharmacy_web_app.model.entity.user.role.Role;
+import com.bush.pharmacy_web_app.model.entity.user.role.RoleType;
 import com.bush.pharmacy_web_app.shared.mapper.DtoMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -32,5 +34,10 @@ public class UserCreateMapper implements DtoMapper<CustomerCreateDto, User> {
         toObj.setPassword(passwordEncoder.encode(fromObj.password()));
         toObj.setOrders(Collections.emptyList());
         return toObj;
+    }
+
+    public User updateRole(User user, Role role) {
+        user.setRole(role);
+        return user;
     }
 }
