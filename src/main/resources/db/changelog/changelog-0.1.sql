@@ -364,16 +364,6 @@ CREATE TABLE IF NOT EXISTS public.product_images
 );
 
 --changeset Bushuev:Users
-CREATE TABLE IF NOT EXISTS public.users
-(
-    name character varying(25) NOT NULL,
-    surname character varying(25) NOT NULL,
-    last_name character varying(25),
-    mobile_phone character varying(18) NOT NULL,
-    password character varying(256),
-    CONSTRAINT users_pkey PRIMARY KEY (mobile_phone)
-);
-
 CREATE TABLE IF NOT EXISTS public.roles
 (
     role_id integer NOT NULL GENERATED ALWAYS AS IDENTITY,
@@ -384,14 +374,21 @@ CREATE TABLE IF NOT EXISTS public.roles
 
 INSERT INTO roles (role_name) VALUES ('ADMIN'), ('OPERATOR'), ('CUSTOMER');
 
-CREATE TABLE IF NOT EXISTS public.user_roles
+CREATE EXTENSION IF NOT EXISTS pg_trgm;
+
+CREATE TABLE IF NOT EXISTS public.users
 (
-    id_user character varying(18) NOT NULL,
-    id_role integer NOT NULL,
-    CONSTRAINT user_roles_pkey PRIMARY KEY (id_user, id_role),
-    CONSTRAINT user_roles_id_role_fkey FOREIGN KEY (id_role) REFERENCES public.roles (role_id),
-    CONSTRAINT user_roles_id_user_fkey FOREIGN KEY (id_user) REFERENCES public.users (mobile_phone)
+    name character varying(25) NOT NULL,
+    surname character varying(25) NOT NULL,
+    last_name character varying(25),
+    mobile_phone character varying(18) NOT NULL,
+    password character varying(256) NOT NULL,
+    f_key_role_id integer NOT NULL default(3) references roles(role_id),
+    CONSTRAINT users_pkey PRIMARY KEY (mobile_phone)
 );
+
+CREATE INDEX IF NOT EXISTS idx_users_phone_trigram
+    ON public.users USING gin (mobile_phone gin_trgm_ops);
 
 --changeset Bushuev:Pharmacy_branch
 CREATE TABLE IF NOT EXISTS public.pharmacy_branches
