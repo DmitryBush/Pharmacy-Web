@@ -1,13 +1,19 @@
 package com.bush.pharmacy_web_app.service.user;
 
+import com.bush.pharmacy_web_app.model.dto.user.AdminUserReadDto;
+import com.bush.pharmacy_web_app.model.entity.user.role.Role;
+import com.bush.pharmacy_web_app.model.entity.user.role.RoleType;
+import com.bush.pharmacy_web_app.repository.user.UserFilter;
 import com.bush.pharmacy_web_app.repository.user.UserRepository;
 import com.bush.pharmacy_web_app.model.dto.user.CustomerCreateDto;
 import com.bush.pharmacy_web_app.model.dto.user.CustomerReadDto;
+import com.bush.pharmacy_web_app.service.user.mapper.AdminUserReadMapper;
 import com.bush.pharmacy_web_app.service.user.mapper.UserCreateMapper;
 import com.bush.pharmacy_web_app.service.user.mapper.UserReadMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,6 +21,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -24,6 +31,10 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
+
+    private final RoleService roleService;
+
+    private final AdminUserReadMapper adminUserReadMapper;
     private final UserReadMapper readMapper;
     private final UserCreateMapper createMapper;
 
@@ -31,9 +42,13 @@ public class UserService implements UserDetailsService {
         return userRepository.findAll().stream().map(readMapper::map).toList();
     }
 
-    public Page<CustomerReadDto> findAll(Pageable pageable) {
-        return userRepository.findAll(pageable)
-                .map(readMapper::map);
+    public Page<AdminUserReadDto> findAllByFilter(Pageable pageable, UserFilter filter) {
+        RoleType roleType =  Optional.of(filter.role())
+                .filter(s -> !s.isBlank())
+                .map(RoleType::valueOf)
+                .orElse(null);
+        return userRepository.findAllByMobilePhoneAndRole(filter.mobilePhone(), roleType, pageable)
+                .map(adminUserReadMapper::map);
     }
 
     public Optional<CustomerReadDto> findById(String s) {
@@ -74,10 +89,17 @@ public class UserService implements UserDetailsService {
         return userRepository.findById(username)
                 .map(customer -> new User(customer.getMobilePhone(),
                         customer.getPassword(),
-                        customer.getRoles()
-                                .stream()
-                                .map(role -> new SimpleGrantedAuthority("ROLE_"+ role.getType().name()))
-                                .toList()))
+                        List.of(new SimpleGrantedAuthority("ROLE_" + customer.getRole().getType().name()))))
                 .orElseThrow(() -> new UsernameNotFoundException("Mistake in username or password"));
+    }
+
+    @Transactional
+    public AdminUserReadDto updateRole(String mobilePhone, String roleName) {
+        Role role = roleService.findRoleByRoleType(RoleType.valueOf(roleName));
+        return userRepository.findById(mobilePhone)
+                .map(user -> createMapper.updateRole(user, role))
+                .map(userRepository::saveAndFlush)
+                .map(adminUserReadMapper::map)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST));
     }
 }

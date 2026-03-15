@@ -1,7 +1,7 @@
 package com.bush.pharmacy_web_app.service.order.mapper;
 
 import com.bush.pharmacy_web_app.model.dto.address.AddressReadDto;
-import com.bush.pharmacy_web_app.model.dto.warehouse.PharmacyBranchReadDto;
+import com.bush.pharmacy_web_app.model.dto.branch.PharmacyBranchReadDto;
 import com.bush.pharmacy_web_app.model.entity.branch.PharmacyBranch;
 import com.bush.pharmacy_web_app.shared.mapper.DtoMapper;
 import com.bush.pharmacy_web_app.service.branch.mapper.OpeningHoursMapper;
@@ -22,7 +22,7 @@ public class PharmacyBranchReadMapper implements DtoMapper<PharmacyBranch, Pharm
         AddressReadDto address = Optional.ofNullable(obj.getAddress())
                 .map(addressReadMapper::map).orElse(null);
         var supervisor = Optional.ofNullable(obj.getSupervisor())
-                .map(userInfoMapper::map).orElseThrow();
+                .map(userInfoMapper::map).orElse(null);
         var openingHours = Optional.ofNullable(obj.getOpeningHours())
                 .map(openingHoursMapper::map).orElseThrow();
 

@@ -1,4 +1,4 @@
-package com.bush.pharmacy_web_app.model.dto.warehouse;
+package com.bush.pharmacy_web_app.model.dto.branch;
 
 import com.bush.pharmacy_web_app.model.dto.address.AddressReadDto;
 import com.bush.pharmacy_web_app.model.dto.user.UserInfoDto;
