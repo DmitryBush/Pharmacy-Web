@@ -326,3 +326,12 @@ textarea {
     opacity: 0.85;
     filter: brightness(0.95);
 }
+
+.table-container .input-group {
+    display: inline-block;
+    padding: 0.4rem 1rem;
+    font-size: 0.9rem;
+    margin: 0 0.2rem;
+    cursor: pointer;
+    min-width: 120px;
+}

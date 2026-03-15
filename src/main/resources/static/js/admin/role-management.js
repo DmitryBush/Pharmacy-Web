@@ -99,6 +99,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     function renderRole(userData) {
         const tdRole = document.createElement("td");
         const rowRoleSelector = document.createElement('select');
+        rowRoleSelector.classList.add('input-group');
 
         const adminOption = document.createElement("option");
         adminOption.textContent = 'Администратор';
@@ -122,6 +123,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     function renderSaveButton() {
         const button = document.createElement("button");
+        button.classList.value = 'action-btn agree-btn';
         button.textContent = 'Сохранить';
         return button;
     }
