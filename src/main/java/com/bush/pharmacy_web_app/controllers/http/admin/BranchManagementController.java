@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class BranchManagementController {
 
     @GetMapping
-    public String getBranchManagementPage(Model model, HttpServletRequest request,
-                                          @AuthenticationPrincipal UserDetails userDetails) {
+    public String getBranchManagementPagesList(Model model, HttpServletRequest request,
+                                               @AuthenticationPrincipal UserDetails userDetails) {
         var authorities = userDetails.getAuthorities()
                 .stream()
                 .map(GrantedAuthority::getAuthority)
@@ -37,5 +37,18 @@ public class BranchManagementController {
         model.addAttribute("authorities", authorities);
         model.addAttribute("currentUri", request.getRequestURI());
         return "admin/branch-editing";
+    }
+
+    @GetMapping("/{id}")
+    public String getBranchInfoPage(Model model, HttpServletRequest request,
+                                    @AuthenticationPrincipal UserDetails userDetails) {
+        var authorities = userDetails.getAuthorities()
+                .stream()
+                .map(GrantedAuthority::getAuthority)
+                .toList();
+
+        model.addAttribute("authorities", authorities);
+        model.addAttribute("currentUri", request.getRequestURI());
+        return "admin/branch-info";
     }
 }
