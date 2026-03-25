@@ -13,5 +13,8 @@ public interface BranchUserAssignmentRepository extends JpaRepository<BranchUser
     @Query("select exists(select bu from BranchUserAssignment bu " +
             "where bu.id.user.id = :userId and bu.id.branch.id = :branchId)")
     Boolean checkUserBranchAccess(@Param("userId") String userId, @Param("branchId") Long branchId);
-    List<User> findByIdBranchId(Long id);
+    @Query("select u from BranchUserAssignment bu " +
+            "join User u on bu.id.user = u " +
+            "where bu.id.branch.id = :branchId")
+    List<User> findAssignedUsersByBranchId(@Param("branchId") Long id);
 }

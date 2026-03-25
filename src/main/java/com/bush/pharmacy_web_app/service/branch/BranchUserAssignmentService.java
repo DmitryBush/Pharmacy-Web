@@ -16,7 +16,7 @@ public class BranchUserAssignmentService {
     private final AdminUserReadMapper adminUserReadMapper;
 
     public List<AdminUserReadDto> findAssignedUsersByBranchId(Long id) {
-        return userAssignmentRepository.findByIdBranchId(id).stream()
+        return userAssignmentRepository.findAssignedUsersByBranchId(id).stream()
                 .map(adminUserReadMapper::map)
                 .toList();
     }
