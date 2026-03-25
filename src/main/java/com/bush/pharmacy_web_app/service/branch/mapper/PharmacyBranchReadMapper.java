@@ -14,6 +14,7 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING,
         uses = {AddressReadMapper.class, UserInfoMapper.class, OpeningHoursMapper.class})
 public interface PharmacyBranchReadMapper {
+    @Mapping(target = "supervisor", nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
     PharmacyBranchReadDto mapToPharmacyBranchReadDto(PharmacyBranch pharmacyBranch);
     @Mapping(target = "supervisor", nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
     @Mapping(target = "workingHoursList", source = "openingHours")
