@@ -9,6 +9,7 @@
     <link href="/css/admin/admin-form.css" rel="stylesheet"/>
     <link href="/css/admin/branch-info.css" rel="stylesheet"/>
     <link href="/css/admin/warehouse.css" rel="stylesheet"/>
+    <script src="/js/admin/branch-info.js" type="module"></script>
 </head>
 <body>
     <div th:replace="~{/admin/sidebar/sidebar.html :: sidebar}"></div>
@@ -19,103 +20,12 @@
                     <path fill-rule="evenodd" d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5"/>
                 </svg>
             </a>
-            <h1 class="page-title">Аптека на Большой Покровской</h1>
+            <h1 class="page-title" id="page-title">Загрузка...</h1>
         </div>
         <div class="page-container" id="page-container">
-            <div class="frame" id="base-info-container">
-                <div class="frame-header">
-                    <h2>Основная информация</h2>
-                    <a href="/admin/branch/1/general" class="branch-info-details-btn">Изменить</a>
-                </div>
-                <div class="info-grid">
-                    <div class="info-item">
-                        <div class="info-label">Название филиала</div>
-                        <div class="info-value">Аптека на Большой Покровской</div>
-                    </div>
-                    <div class="info-item">
-                        <div class="info-label">Состояние филиала</div>
-                        <div class="info-value">
-                            <span class="branch-status-active">Активен</span>
-                        </div>
-                    </div>
-                    <div class="info-item">
-                        <div class="info-label">Ограничение хранения склада</div>
-                        <div class="info-value">1000 м³</div>
-                    </div>
-                    <div class="info-item">
-                        <div class="info-label">Контактный телефон</div>
-                        <div class="info-value">+7 (999) 999-99-99</div>
-                    </div>
-                    <div class="info-item">
-                        <div class="info-label">Директор филиала</div>
-                        <div class="info-value">Не закреплен</div>
-                    </div>
-                </div>
-            </div>
-            <div class="frame" id="address-container">
-                <div class="frame-header">
-                    <h2>Адрес</h2>
-                    <a href="/admin/branch/1/address" class="branch-info-details-btn">Изменить</a>
-                </div>
-                <div class="info-grid">
-                    <div class="info-item">
-                        <div class="info-label">Область</div>
-                        <div class="info-value">Нижегородская</div>
-                    </div>
-                    <div class="info-item">
-                        <div class="info-label">Город</div>
-                        <div class="info-value">Нижний Новгород</div>
-                    </div>
-                    <div class="info-item">
-                        <div class="info-label">Улица</div>
-                        <div class="info-value">Большая покровская</div>
-                    </div>
-                    <div class="info-item">
-                        <div class="info-label">Дом</div>
-                        <div class="info-value">54</div>
-                    </div>
-                    <div class="info-item">
-                        <div class="info-label">Почтовый код</div>
-                        <div class="info-value">111111</div>
-                    </div>
-                </div>
-            </div>
-            <div class="frame" id="working-hours-container">
-                <div class="frame-header">
-                    <h2>Часы работы</h2>
-                    <a href="/admin/branch/1/working-hours" class="branch-info-details-btn">Изменить</a>
-                </div>
-                <div>
-                    <div class="info-row">
-                        <div class="info-label">Понедельник</div>
-                        <div class="info-value">08:00-21:00</div>
-                    </div>
-                    <div class="info-row">
-                        <div class="info-label">Вторник</div>
-                        <div class="info-value">08:00-21:00</div>
-                    </div>
-                    <div class="info-row">
-                        <div class="info-label">Среда</div>
-                        <div class="info-value">08:00-21:00</div>
-                    </div>
-                    <div class="info-row">
-                        <div class="info-label">Четверг</div>
-                        <div class="info-value">08:00-21:00</div>
-                    </div>
-                    <div class="info-row">
-                        <div class="info-label">Пятница</div>
-                        <div class="info-value">08:00-21:00</div>
-                    </div>
-                    <div class="info-row">
-                        <div class="info-label">Суббота</div>
-                        <div class="info-value">08:00-21:00</div>
-                    </div>
-                    <div class="info-row">
-                        <div class="info-label">Воскресенье</div>
-                        <div class="info-value">08:00-21:00</div>
-                    </div>
-                </div>
-            </div>
+            <div class="frame" id="base-info-container"></div>
+            <div class="frame" id="address-container"></div>
+            <div class="frame" id="working-hours-container"></div>
             <div class="frame" id="linked-users-container">
                 <div class="frame-header">
                     <h2>Прикрепленные сотрудники</h2>
