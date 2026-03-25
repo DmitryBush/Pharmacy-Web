@@ -50,7 +50,7 @@ public class WarehouseController {
                                    @PageableDefault Pageable pageable,
                                    @AuthenticationPrincipal UserDetails userDetails,
                                    @PathVariable Long id) {
-        var branch = pharmacyBranchService.findByBranchId(id).orElseThrow();
+        var branch = pharmacyBranchService.findBranchInfoById(id);
         var items = storageService.findAllItemsByBranchId(id, pageable);
 
         var countItems = items.stream()

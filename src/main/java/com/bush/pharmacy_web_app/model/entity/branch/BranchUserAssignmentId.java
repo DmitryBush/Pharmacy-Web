@@ -14,8 +14,8 @@ import lombok.NoArgsConstructor;
 public class BranchUserAssignmentId {
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User userId;
+    private User user;
     @ManyToOne
     @JoinColumn(name = "branch_id")
-    private PharmacyBranch branchId;
+    private PharmacyBranch branch;
 }

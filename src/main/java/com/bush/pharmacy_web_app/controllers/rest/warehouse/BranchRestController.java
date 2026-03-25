@@ -1,5 +1,6 @@
 package com.bush.pharmacy_web_app.controllers.rest.warehouse;
 
+import com.bush.pharmacy_web_app.model.dto.branch.PharmacyBranchInfoDto;
 import com.bush.pharmacy_web_app.model.dto.branch.PharmacyBranchReadDto;
 import com.bush.pharmacy_web_app.service.branch.PharmacyBranchService;
 import lombok.RequiredArgsConstructor;
@@ -20,9 +21,8 @@ public class BranchRestController {
     private final PharmacyBranchService pharmacyBranchService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<PharmacyBranchReadDto> getBranchById(@PathVariable Long id) {
-        return ResponseEntity.ok(pharmacyBranchService.findByBranchId(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND)));
+    public ResponseEntity<PharmacyBranchInfoDto> getBranchById(@PathVariable Long id) {
+        return ResponseEntity.ok(pharmacyBranchService.findBranchInfoById(id));
     }
 
     @GetMapping("/products/{medicineId}")
