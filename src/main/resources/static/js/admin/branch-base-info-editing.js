@@ -46,6 +46,7 @@ document.addEventListener("DOMContentLoaded", async e => {
     }
 
     async function saveForm() {
+        generalInfoForm.querySelectorAll('input[type=text]').forEach(e => e.value = e.value.trim());
         const formData = new FormData(generalInfoForm);
         const data = Object.fromEntries(formData);
         data.isActive = formData.get('isActive') === 'on';
