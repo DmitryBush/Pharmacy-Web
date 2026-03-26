@@ -64,4 +64,17 @@ public class BranchManagementController {
         model.addAttribute("currentUri", request.getRequestURI());
         return "admin/branch/branch-base-info-editing";
     }
+
+    @GetMapping("/{id}/address")
+    public String getBranchAddressEditingPage(Model model, HttpServletRequest request,
+                                              @AuthenticationPrincipal UserDetails userDetails) {
+        var authorities = userDetails.getAuthorities()
+                .stream()
+                .map(GrantedAuthority::getAuthority)
+                .toList();
+
+        model.addAttribute("authorities", authorities);
+        model.addAttribute("currentUri", request.getRequestURI());
+        return "admin/branch/branch-address-info-editing";
+    }
 }
