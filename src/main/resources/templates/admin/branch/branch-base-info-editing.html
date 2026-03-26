@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Изменение основной информации филиала</title>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <link href="/css/admin/admin-base.css" rel="stylesheet"/>
+    <link href="/css/admin/admin-form.css" rel="stylesheet"/>
+    <script src="/js/admin/branch-base-info-editing.js" type="module"></script>
+</head>
+<body>
+    <div th:replace="~{/admin/sidebar/sidebar.html :: sidebar}"></div>
+    <main class="main-content">
+        <div class="title-container" id="title-container">
+            <a href="/admin/branch" class="active item-btn" id="back-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" class="bi-arrow-left-short" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5"/>
+                </svg>
+            </a>
+            <h1 class="page-title">Изменение основной информации филиала</h1>
+        </div>
+        <div class="frame">
+            <form id="branch-general-info-editing-form">
+                <label for="name" class="input-group">
+                    Название филиала
+                    <input class="input-group" id="name" type="text">
+                </label>
+                <label class="input-group" for="warehouseLimitations">
+                    Ограничение хранения склада (м3)
+                    <input class="input-group" id="warehouseLimitations" type="number" min="0">
+                </label>
+                <label class="input-group" for="contactPhone">
+                    Контактный номер филиала
+                    <input class="input-group"
+                           id="contactPhone"
+                           placeholder="+7 (___) ___-__-__"
+                           pattern="^(\+7|8)\s\(\d{3}\)\s\d{3}-\d{2}-\d{2}$"
+                           type="tel">
+                </label>
+                <div class="slider-section">
+                    <span class="shortcut-label">Активен филиал</span>
+                    <label class="slider-wrapper">
+                        <input type="checkbox" name="isActive">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="context-action-container">
+                    <button type="submit" id="save-btn" class="action-btn agree-btn">Сохранить</button>
+                    <button type="button" id="cancel-btn" class="action-btn disagree-btn">Отмена</button>
+                </div>
+            </form>
+        </div>
+    </main>
+</body>
+</html>
