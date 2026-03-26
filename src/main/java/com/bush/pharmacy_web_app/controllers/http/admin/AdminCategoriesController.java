@@ -24,6 +24,6 @@ public class AdminCategoriesController {
 
         model.addAttribute("authorities", authorities);
         model.addAttribute("currentUri", request.getRequestURI());
-        return "admin/categories-management";
+        return "admin/categories/categories-management";
     }
 }

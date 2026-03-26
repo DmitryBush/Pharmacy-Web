@@ -23,7 +23,7 @@ public class BranchManagementController {
 
         model.addAttribute("authorities", authorities);
         model.addAttribute("currentUri", request.getRequestURI());
-        return "admin/branch-management";
+        return "admin/branch/branch-management";
     }
 
     @GetMapping("/create")
@@ -36,7 +36,7 @@ public class BranchManagementController {
 
         model.addAttribute("authorities", authorities);
         model.addAttribute("currentUri", request.getRequestURI());
-        return "admin/branch-editing";
+        return "admin/branch/branch-editing";
     }
 
     @GetMapping("/{id}")
@@ -49,6 +49,6 @@ public class BranchManagementController {
 
         model.addAttribute("authorities", authorities);
         model.addAttribute("currentUri", request.getRequestURI());
-        return "admin/branch-info";
+        return "admin/branch/branch-info";
     }
 }

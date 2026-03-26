@@ -42,7 +42,7 @@ public class AdminOrderController {
 
         model.addAttribute("authorities", authorities);
         model.addAttribute("currentUri", httpServletRequest.getRequestURI());
-        return "/admin/order";
+        return "/admin/order/order";
     }
 
     @PreAuthorize("@SecurityValidation.checkUserBranchAccess(#userDetails, #branchId)")
@@ -63,7 +63,7 @@ public class AdminOrderController {
         model.addAttribute("OrderStatus", OrderState.class);
         model.addAttribute("authorities", authorities);
         model.addAttribute("currentUri", httpRequest.getRequestURI());
-        return "/admin/order-list";
+        return "/admin/order/order-list";
     }
 
     @PreAuthorize("@SecurityValidation.checkUserBranchAccess(#userDetails, #branchId)")
@@ -84,6 +84,6 @@ public class AdminOrderController {
         model.addAttribute("OrderStatus", OrderState.class);
         model.addAttribute("authorities", authorities);
         model.addAttribute("currentUri", httpRequest.getRequestURI());
-        return "/admin/order-management";
+        return "/admin/order/order-management";
     }
 }

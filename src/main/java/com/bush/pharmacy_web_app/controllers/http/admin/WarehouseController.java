@@ -40,7 +40,7 @@ public class WarehouseController {
 
         model.addAttribute("authorities", authorities);
         model.addAttribute("currentUri", httpServletRequest.getRequestURI());
-        return "/admin/warehouse";
+        return "/admin/warehouse/warehouse";
     }
 
     @PreAuthorize("@SecurityValidation.checkUserBranchAccess(#userDetails, #id)")
@@ -68,7 +68,7 @@ public class WarehouseController {
         model.addAttribute("usedSpace", usedSpace);
         model.addAttribute("authorities", authorities);
         model.addAttribute("currentUri", httpServletRequest.getRequestURI());
-        return "/admin/warehouse-info";
+        return "/admin/warehouse/warehouse-info";
     }
 
     @PreAuthorize("@SecurityValidation.checkUserBranchAccess(#userDetails, #id)")
@@ -85,7 +85,7 @@ public class WarehouseController {
         model.addAttribute("currentUri", httpServletRequest.getRequestURI());
         model.addAttribute("branchId", id);
         model.addAttribute("authorities", authorities);
-        return "/admin/warehouse-receipt";
+        return "/admin/warehouse/warehouse-receipt";
     }
 
     @PreAuthorize("@SecurityValidation.checkUserBranchAccess(#userDetails, #id)")
@@ -102,7 +102,7 @@ public class WarehouseController {
         model.addAttribute("currentUri", httpServletRequest.getRequestURI());
         model.addAttribute("branchId", id);
         model.addAttribute("authorities", authorities);
-        return "/admin/warehouse-sale";
+        return "/admin/warehouse/warehouse-sale";
     }
 
     @GetMapping("/{id}/history")
@@ -118,6 +118,6 @@ public class WarehouseController {
         model.addAttribute("currentUri", httpServletRequest.getRequestURI());
         model.addAttribute("branchId", id);
         model.addAttribute("authorities", authorities);
-        return "/admin/transaction-history";
+        return "/admin/warehouse/transaction-history";
     }
 }
