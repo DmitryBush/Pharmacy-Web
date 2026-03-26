@@ -3,6 +3,7 @@ package com.bush.pharmacy_web_app.controllers.rest.admin;
 import com.bush.pharmacy_web_app.model.dto.branch.PharmacyBranchCreateDto;
 import com.bush.pharmacy_web_app.model.dto.branch.PharmacyBranchInfoDto;
 import com.bush.pharmacy_web_app.model.dto.branch.PharmacyBranchReadDto;
+import com.bush.pharmacy_web_app.model.dto.branch.PharmacyBranchUpdateDto;
 import com.bush.pharmacy_web_app.model.dto.user.AdminUserReadDto;
 import com.bush.pharmacy_web_app.service.branch.BranchUserAssignmentService;
 import com.bush.pharmacy_web_app.service.branch.PharmacyBranchService;
@@ -15,6 +16,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -50,5 +52,12 @@ public class BranchAdminRestController {
     public ResponseEntity<PharmacyBranchReadDto> createPharmacyBranch(@RequestBody @Validated
                                                                           PharmacyBranchCreateDto branchCreateDto) {
         return ResponseEntity.ok(pharmacyBranchService.createBranch(branchCreateDto));
+    }
+
+    @PatchMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<PharmacyBranchInfoDto> updatePharmacyBranch(@PathVariable Long id,
+                                                                      @RequestBody PharmacyBranchUpdateDto branchCreateDto) {
+        return ResponseEntity.ok(pharmacyBranchService.updateBranch(id, branchCreateDto));
     }
 }

@@ -2,6 +2,7 @@ package com.bush.pharmacy_web_app.service.branch;
 
 import com.bush.pharmacy_web_app.model.dto.branch.PharmacyBranchCreateDto;
 import com.bush.pharmacy_web_app.model.dto.branch.PharmacyBranchInfoDto;
+import com.bush.pharmacy_web_app.model.dto.branch.PharmacyBranchUpdateDto;
 import com.bush.pharmacy_web_app.repository.branch.PharmacyBranchRepository;
 import com.bush.pharmacy_web_app.model.dto.branch.PharmacyBranchReadDto;
 import com.bush.pharmacy_web_app.service.branch.mapper.PharmacyBranchCreateMapper;
@@ -58,5 +59,14 @@ public class PharmacyBranchService {
                 .map(branchRepository::save)
                 .map(branchReadMapper::mapToPharmacyBranchReadDto)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST));
+    }
+
+    @Transactional
+    public PharmacyBranchInfoDto updateBranch(Long id, PharmacyBranchUpdateDto dto) {
+        return branchRepository.findById(id)
+                .map(branch -> branchCreateMapper.updatePharmacyBranch(branch, dto))
+                .map(branchRepository::saveAndFlush)
+                .map(branchReadMapper::mapToPharmacyBranchInfoDto)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 }
