@@ -35,7 +35,8 @@ public interface PharmacyBranchCreateMapper {
             nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     @Mapping(target = "isActive", source = "dto.isActive", nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS,
             nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    @Mapping(target = "address", source = "dto.address", nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS,
+    @Mapping(target = "address", source = "dto.address", qualifiedByName = "updateAddress",
+            nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS,
             nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     @Mapping(target = "branchPhone", source = "dto.contactPhone", nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS,
             nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
