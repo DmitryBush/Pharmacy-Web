@@ -24,16 +24,17 @@
             <form id="branch-general-info-editing-form">
                 <label for="name" class="input-group">
                     Название филиала
-                    <input class="input-group" id="name" type="text">
+                    <input class="input-group" id="name" name="name" type="text">
                 </label>
                 <label class="input-group" for="warehouseLimitations">
                     Ограничение хранения склада (м3)
-                    <input class="input-group" id="warehouseLimitations" type="number" min="0">
+                    <input class="input-group" id="warehouseLimitations" name="warehouseLimitations" type="number" min="0">
                 </label>
                 <label class="input-group" for="contactPhone">
                     Контактный номер филиала
                     <input class="input-group"
                            id="contactPhone"
+                           name="contactPhone"
                            placeholder="+7 (___) ___-__-__"
                            pattern="^(\+7|8)\s\(\d{3}\)\s\d{3}-\d{2}-\d{2}$"
                            type="tel">

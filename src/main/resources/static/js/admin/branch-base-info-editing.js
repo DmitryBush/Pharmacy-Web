@@ -47,7 +47,9 @@ document.addEventListener("DOMContentLoaded", async e => {
 
     async function saveForm() {
         const formData = new FormData(generalInfoForm);
+        const data = Object.fromEntries(formData);
+        data.isActive = formData.get('isActive') === 'on';
         await restClient.fetchData(`/api/v1/admin/branches/1`, 'PATCH',
-            {'Content-type': 'application/json'}, JSON.stringify(formData));
+            {'Content-Type': 'application/json'}, JSON.stringify(data));
     }
 });
