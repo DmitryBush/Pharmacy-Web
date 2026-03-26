@@ -7,6 +7,7 @@
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
     <link href="/css/admin/admin-base.css" rel="stylesheet"/>
     <link href="/css/admin/admin-form.css" rel="stylesheet"/>
+    <script src="/js/admin/branch-address-info-editing.js" type="module"></script>
 </head>
 <body>
     <div th:replace="~{/admin/sidebar/sidebar.html :: sidebar}"></div>
@@ -23,31 +24,31 @@
             <form id="branch-address-info-editing-form">
                 <label class="input-group" for="subject">
                     Область
-                    <input class="input-group" id="subject" type="text" maxlength="30">
+                    <input class="input-group" id="subject" name="subject" type="text" maxlength="30">
                 </label>
                 <label class="input-group" for="district">
                     Район (опционально)
-                    <input class="input-group" id="district" type="text" maxlength="30">
+                    <input class="input-group" id="district" name="district" type="text" maxlength="30">
                 </label>
                 <label class="input-group" for="settlement">
                     Город
-                    <input class="input-group" id="settlement" type="text" maxlength="30">
+                    <input class="input-group" id="settlement" name="settlement" type="text" maxlength="30">
                 </label>
                 <label class="input-group" for="street">
                     Улица
-                    <input class="input-group" id="street" type="text" maxlength="30">
+                    <input class="input-group" id="street" name="street" type="text" maxlength="30">
                 </label>
                 <label class="input-group" for="house">
                     Дом
-                    <input class="input-group" id="house" type="text" maxlength="5">
+                    <input class="input-group" id="house" name="house" type="text" maxlength="5">
                 </label>
                 <label class="input-group" for="apartment">
                     Квартира (опционально)
-                    <input class="input-group" id="apartment" type="text" maxlength="5">
+                    <input class="input-group" id="apartment" name="apartment" type="text" maxlength="5">
                 </label>
                 <label class="input-group" for="postal-code">
                     Почтовый код
-                    <input class="input-group" id="postal-code" type="text" maxlength="6">
+                    <input class="input-group" id="postal-code" name="postalCode" type="text" maxlength="6">
                 </label>
                 <div class="context-action-container">
                     <button type="submit" id="save-btn" class="action-btn agree-btn">Сохранить</button>
