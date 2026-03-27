@@ -1,11 +1,13 @@
 package com.bush.pharmacy_web_app.controllers.rest.admin;
 
+import com.bush.pharmacy_web_app.model.dto.branch.BranchWorkingHoursDto;
 import com.bush.pharmacy_web_app.model.dto.branch.PharmacyBranchCreateDto;
 import com.bush.pharmacy_web_app.model.dto.branch.PharmacyBranchInfoDto;
 import com.bush.pharmacy_web_app.model.dto.branch.PharmacyBranchReadDto;
 import com.bush.pharmacy_web_app.model.dto.branch.PharmacyBranchUpdateDto;
 import com.bush.pharmacy_web_app.model.dto.user.AdminUserReadDto;
 import com.bush.pharmacy_web_app.service.branch.BranchUserAssignmentService;
+import com.bush.pharmacy_web_app.service.branch.BranchWorkingHoursService;
 import com.bush.pharmacy_web_app.service.branch.PharmacyBranchService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -31,6 +33,7 @@ import java.util.List;
 public class BranchAdminRestController {
     private final PharmacyBranchService pharmacyBranchService;
     private final BranchUserAssignmentService userAssignmentService;
+    private final BranchWorkingHoursService workingHoursService;
 
     @GetMapping
     public ResponseEntity<PagedModel<EntityModel<PharmacyBranchReadDto>>> getBranches(Pageable pageable,
@@ -46,6 +49,17 @@ public class BranchAdminRestController {
     @GetMapping("/{id}/users")
     public ResponseEntity<List<AdminUserReadDto>> findAssignedUsersToBranch(@PathVariable Long id) {
         return ResponseEntity.ok(userAssignmentService.findAssignedUsersByBranchId(id));
+    }
+
+    @GetMapping("/{id}/working-hours")
+    public ResponseEntity<List<BranchWorkingHoursDto>> findWorkingHoursByBranchId(@PathVariable Long id) {
+        return ResponseEntity.ok(workingHoursService.findWorkingHoursByBranchId(id));
+    }
+
+    @PatchMapping("/{id}/working-hours")
+    public ResponseEntity<List<BranchWorkingHoursDto>> updateWorkingHoursByBranchId(@PathVariable Long id,
+                                                                                    @RequestBody List<BranchWorkingHoursDto> dto) {
+        return ResponseEntity.ok(workingHoursService.updateWorkingHoursByBranchId(id, dto));
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)

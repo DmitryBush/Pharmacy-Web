@@ -15,7 +15,7 @@ import org.mapstruct.NullValueCheckStrategy;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING,
-        uses = AddressCreateMapper.class)
+        uses = {AddressCreateMapper.class, BranchWorkingHoursCreateMapper.class})
 public interface PharmacyBranchCreateMapper {
     @Mapping(target = "branchPhone", source = "contactPhone")
     @Mapping(target = "openingHours", source = "workingHoursDtoList")
@@ -40,20 +40,13 @@ public interface PharmacyBranchCreateMapper {
             nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     @Mapping(target = "branchPhone", source = "dto.contactPhone", nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS,
             nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    @Mapping(target = "openingHours",
-            source = "dto.workingHoursDtoList",
-            nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS,
-            nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @Mapping(target = "openingHours", ignore = true)
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "supervisor", ignore = true)
     @Mapping(target = "items", ignore = true)
     @Mapping(target = "orders", ignore = true)
     @Mapping(target = "userBranchAssigned", ignore = true)
     PharmacyBranch updatePharmacyBranch(@MappingTarget PharmacyBranch pharmacyBranch, PharmacyBranchUpdateDto dto);
-
-    @Mapping(target = "id", ignore = true)
-    @Mapping(target = "branch", ignore = true)
-    BranchOpeningHours mapToBranchOpeningHours(BranchWorkingHoursDto workingHoursDto);
 
     @AfterMapping
     default void linkBranchToOpeningHours(@MappingTarget PharmacyBranch branch) {
