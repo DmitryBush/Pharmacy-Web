@@ -59,7 +59,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             if (row.querySelector('input[name="day-off"]').checked) {
                 workingHours.push({
                     dayOfWeek: row.dataset.day,
-                    openTime: `00:00}`,
+                    openTime: `00:00`,
                     closeTime: `00:00`,
                     dayOff: true,
                     aroundClock: false
