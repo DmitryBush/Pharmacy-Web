@@ -41,22 +41,23 @@ public class BranchAdminRestController {
         return ResponseEntity.ok(assembler.toModel(pharmacyBranchService.findPharmacyBranches(pageable)));
     }
 
-    @GetMapping("/{id}")
+    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<PharmacyBranchInfoDto> findPharmacyBranchById(@PathVariable Long id) {
         return ResponseEntity.ok(pharmacyBranchService.findBranchInfoById(id));
     }
 
-    @GetMapping("/{id}/users")
+    @GetMapping(value = "/{id}/users", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<AdminUserReadDto>> findAssignedUsersToBranch(@PathVariable Long id) {
         return ResponseEntity.ok(userAssignmentService.findAssignedUsersByBranchId(id));
     }
 
-    @GetMapping("/{id}/working-hours")
+    @GetMapping(value = "/{id}/working-hours", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<BranchWorkingHoursDto>> findWorkingHoursByBranchId(@PathVariable Long id) {
         return ResponseEntity.ok(workingHoursService.findWorkingHoursByBranchId(id));
     }
 
-    @PatchMapping("/{id}/working-hours")
+    @PatchMapping(value = "/{id}/working-hours", consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<BranchWorkingHoursDto>> updateWorkingHoursByBranchId(@PathVariable Long id,
                                                                                     @RequestBody List<BranchWorkingHoursDto> dto) {
         return ResponseEntity.ok(workingHoursService.updateWorkingHoursByBranchId(id, dto));
