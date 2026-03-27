@@ -13,8 +13,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         e.preventDefault();
         try {
             await saveForm();
-            notification.showNotification('Управление филиалами',
-                'Обновление основной информации филиала произошло успешно');
+            notification.showNotification('Управление филиалами', 'Обновление адреса произошло успешно');
             setTimeout(() => window.location.replace('/admin/branch/1'), 1500);
         } catch (e) {
             console.error(e);
