@@ -77,4 +77,17 @@ public class BranchManagementController {
         model.addAttribute("currentUri", request.getRequestURI());
         return "admin/branch/branch-address-info-editing";
     }
+
+    @GetMapping("/{id}/working-hours")
+    public String getBranchWorkingHoursEditingPage(Model model, HttpServletRequest request,
+                                                   @AuthenticationPrincipal UserDetails userDetails) {
+        var authorities = userDetails.getAuthorities()
+                .stream()
+                .map(GrantedAuthority::getAuthority)
+                .toList();
+
+        model.addAttribute("authorities", authorities);
+        model.addAttribute("currentUri", request.getRequestURI());
+        return "admin/branch/branch-working-hours-info-editing";
+    }
 }
