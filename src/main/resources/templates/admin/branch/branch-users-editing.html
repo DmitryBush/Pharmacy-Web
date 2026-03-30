@@ -7,10 +7,19 @@
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
     <link href="/css/admin/admin-base.css" rel="stylesheet"/>
     <link href="/css/admin/admin-form.css" rel="stylesheet"/>
+    <link href="/css/search/search.css" rel="stylesheet"/>
+    <script src="/js/admin/branch-users-editing.js" type="module"></script>
 </head>
 <body>
     <div th:replace="~{/admin/sidebar/sidebar.html :: sidebar}"></div>
     <main class="main-content">
+        <div class="search-backdrop" style="display: none" id="search-backdrop"></div>
+        <div id="search-container" class="search-container" style="display: none">
+            <label for="search-field">
+                <input id="search-field" class="search-field" type="text" placeholder="Поиск">
+            </label>
+            <div id="search-result-container" class="search-result-container"></div>
+        </div>
         <div class="title-container" id="title-container">
             <a href="/admin/branch" class="active item-btn" id="back-btn">
                 <svg xmlns="http://www.w3.org/2000/svg" class="bi-arrow-left-short" viewBox="0 0 16 16">
@@ -26,6 +35,7 @@
                     <thead>
                         <tr>
                             <th>Пользователь</th>
+                            <th>Телефон</th>
                             <th>Роль</th>
                             <th>Действие</th>
                         </tr>
