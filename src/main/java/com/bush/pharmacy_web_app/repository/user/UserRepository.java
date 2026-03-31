@@ -9,14 +9,16 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface UserRepository extends JpaRepository<User, String> {
     Page<User> findAll(Pageable pageable);
 
     @Query("select u from User u " +
             "join u.role r " +
-            "where u.mobilePhone like concat(:mobilePhone, '%') and r.type = coalesce(:type,r.type)")
+            "where u.mobilePhone like concat(:mobilePhone, '%') and r.type in :type")
     Page<User> findAllByMobilePhoneAndRole(@Param("mobilePhone") String mobilePhone,
-                                           @Param("type") RoleType type,
+                                           @Param("type") List<RoleType> type,
                                            Pageable pageable);
 }
