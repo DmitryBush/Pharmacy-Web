@@ -102,4 +102,8 @@ public class UserService implements UserDetailsService {
                 .map(adminUserReadMapper::map)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST));
     }
+
+    public com.bush.pharmacy_web_app.model.entity.user.User getUserReferenceById(String userId) {
+        return userRepository.getReferenceById(userId);
+    }
 }

@@ -14,9 +14,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.PagedModel;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -49,6 +51,18 @@ public class BranchAdminRestController {
     @GetMapping(value = "/{id}/users", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<AdminUserReadDto>> findAssignedUsersToBranch(@PathVariable Long id) {
         return ResponseEntity.ok(userAssignmentService.findAssignedUsersByBranchId(id));
+    }
+
+    @PatchMapping(value = "/{id}/users", consumes = MediaType.TEXT_PLAIN_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<AdminUserReadDto> assignUserToBranch(@PathVariable Long branchId,
+                                                               @RequestBody String userId) {
+        return new ResponseEntity<>(userAssignmentService.assignUserToBranch(branchId, userId), HttpStatus.CREATED);
+    }
+
+    @DeleteMapping(value = "/{branchId}/users", consumes = MediaType.TEXT_PLAIN_VALUE)
+    public ResponseEntity<Void> unlinkUserFromBranch(@PathVariable Long branchId, @RequestBody String mobilePhone) {
+        userAssignmentService.unlinkUserFromBranch(branchId, mobilePhone);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping(value = "/{id}/working-hours", produces = MediaType.APPLICATION_JSON_VALUE)

@@ -47,7 +47,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         actionBtn.addEventListener('click', async e => {
             e.preventDefault();
             try {
-                await restClient.fetchData(``, 'DELETE');
+                await restClient.fetchData(`/api/v1/admin/branches/1`, 'DELETE',
+                    {'Content-Type': 'text/plain'}, user.mobilePhone);
                 notification.showNotification('Управление филиалами',
                     `Сотрудник ${user.surname} ${user.name} успешно откреплен от филиала`);
                 document.removeChild(tableRow);

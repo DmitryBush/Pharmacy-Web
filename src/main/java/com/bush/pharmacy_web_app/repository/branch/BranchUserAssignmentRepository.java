@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface BranchUserAssignmentRepository extends JpaRepository<BranchUserAssignment, BranchUserAssignmentId> {
     @Query("select exists(select bu from BranchUserAssignment bu " +
@@ -17,4 +18,10 @@ public interface BranchUserAssignmentRepository extends JpaRepository<BranchUser
             "join User u on bu.id.user = u " +
             "where bu.id.branch.id = :branchId")
     List<User> findAssignedUsersByBranchId(@Param("branchId") Long id);
+    @Query("select bua from BranchUserAssignment bua " +
+            "join User u on bua.id.user = u " +
+            "join PharmacyBranch b on bua.id.branch = b " +
+            "where u.id = :userId and b.id = :branchId")
+    Optional<BranchUserAssignment> findAssignmentByUserIdAndBranchId(@Param("branchId") Long branchId,
+                                                                     @Param("userId") String userId);
 }
