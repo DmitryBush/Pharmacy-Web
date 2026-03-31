@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
@@ -40,7 +41,7 @@ public class BranchManagementController {
     }
 
     @GetMapping("/{id}")
-    public String getBranchInfoPage(Model model, HttpServletRequest request,
+    public String getBranchInfoPage(Model model, HttpServletRequest request, @PathVariable Long id,
                                     @AuthenticationPrincipal UserDetails userDetails) {
         var authorities = userDetails.getAuthorities()
                 .stream()
@@ -49,11 +50,12 @@ public class BranchManagementController {
 
         model.addAttribute("authorities", authorities);
         model.addAttribute("currentUri", request.getRequestURI());
+        model.addAttribute("branchId", id);
         return "admin/branch/branch-info";
     }
 
     @GetMapping("/{id}/general")
-    public String getBranchGeneralInfoEditingPage(Model model, HttpServletRequest request,
+    public String getBranchGeneralInfoEditingPage(Model model, HttpServletRequest request, @PathVariable Long id,
                                                   @AuthenticationPrincipal UserDetails userDetails) {
         var authorities = userDetails.getAuthorities()
                 .stream()
@@ -62,11 +64,12 @@ public class BranchManagementController {
 
         model.addAttribute("authorities", authorities);
         model.addAttribute("currentUri", request.getRequestURI());
+        model.addAttribute("branchId", id);
         return "admin/branch/branch-base-info-editing";
     }
 
     @GetMapping("/{id}/address")
-    public String getBranchAddressEditingPage(Model model, HttpServletRequest request,
+    public String getBranchAddressEditingPage(Model model, HttpServletRequest request, @PathVariable Long id,
                                               @AuthenticationPrincipal UserDetails userDetails) {
         var authorities = userDetails.getAuthorities()
                 .stream()
@@ -75,11 +78,12 @@ public class BranchManagementController {
 
         model.addAttribute("authorities", authorities);
         model.addAttribute("currentUri", request.getRequestURI());
+        model.addAttribute("branchId", id);
         return "admin/branch/branch-address-info-editing";
     }
 
     @GetMapping("/{id}/working-hours")
-    public String getBranchWorkingHoursEditingPage(Model model, HttpServletRequest request,
+    public String getBranchWorkingHoursEditingPage(Model model, HttpServletRequest request, @PathVariable Long id,
                                                    @AuthenticationPrincipal UserDetails userDetails) {
         var authorities = userDetails.getAuthorities()
                 .stream()
@@ -88,11 +92,12 @@ public class BranchManagementController {
 
         model.addAttribute("authorities", authorities);
         model.addAttribute("currentUri", request.getRequestURI());
+        model.addAttribute("branchId", id);
         return "admin/branch/branch-working-hours-info-editing";
     }
 
     @GetMapping("/{id}/users")
-    public String getBranchLinkedUsersEditingPage(Model model, HttpServletRequest request,
+    public String getBranchLinkedUsersEditingPage(Model model, HttpServletRequest request, @PathVariable Long id,
                                                   @AuthenticationPrincipal UserDetails userDetails) {
         var authorities = userDetails.getAuthorities()
                 .stream()
@@ -101,6 +106,7 @@ public class BranchManagementController {
 
         model.addAttribute("authorities", authorities);
         model.addAttribute("currentUri", request.getRequestURI());
+        model.addAttribute("branchId", id);
         return "admin/branch/branch-users-editing";
     }
 }

@@ -5,6 +5,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     const restClient = new RestClient();
     const notification = new Notification();
 
+    const branchId = document.querySelector('meta[name=branchId]').content;
+
     const addressForm = document.getElementById('branch-address-info-editing-form');
     const saveBtn = document.getElementById('save-btn');
     const cancelBtn = document.getElementById('cancel-btn');
@@ -14,7 +16,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         try {
             await saveForm();
             notification.showNotification('Управление филиалами', 'Обновление адреса произошло успешно');
-            setTimeout(() => window.location.replace('/admin/branch/1'), 1500);
+            setTimeout(() => window.location.replace(`/admin/branch/${branchId}`), 1500);
         } catch (e) {
             console.error(e);
             notification.showNotification('Управление филиалами',
@@ -22,7 +24,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     });
 
-    cancelBtn.addEventListener('click',()=> window.location.replace('/admin/branch/1'));
+    cancelBtn.addEventListener('click',()=> window.location.replace(`/admin/branch/${branchId}`));
 
     try {
         await initializePage();
@@ -33,7 +35,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     async function initializePage() {
-        const branchData = await (await restClient.fetchData(`/api/v1/branches/1`, 'GET')).json();
+        const branchData = await (await restClient.fetchData(`/api/v1/branches/${branchId}`, 'GET')).json();
         fillForm(branchData);
     }
 
@@ -52,7 +54,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     function saveForm() {
         addressForm.querySelectorAll('input').forEach(e=> e.value = e.value.trim());
         const formData = new FormData(addressForm);
-        restClient.fetchData(`/api/v1/admin/branches/1`, 'PATCH',
+        restClient.fetchData(`/api/v1/admin/branches/${branchId}`, 'PATCH',
             {'Content-Type': 'application/json'}, JSON.stringify({address: Object.fromEntries(formData)}));
     }
 });

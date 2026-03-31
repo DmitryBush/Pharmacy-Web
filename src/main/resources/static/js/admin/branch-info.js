@@ -7,6 +7,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     const restClient = new RestClient();
     const notification = new Notification();
 
+    const branchId = document.querySelector('meta[name=branchId]').content;
+
     const pageTitle = document.getElementById('page-title');
     const baseInfoContainer = document.getElementById("base-info-container");
     const addressContainer = document.getElementById("address-container");
@@ -33,7 +35,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     async function getBranchInfo() {
-        const branchInfoResponse = await restClient.fetchData(`/api/v1/admin/branches/1`, 'GET');
+        const branchInfoResponse = await restClient
+            .fetchData(`/api/v1/admin/branches/${branchId}`, 'GET');
         const branchInfoData = await branchInfoResponse.json();
         initializeBaseInfo(branchInfoData);
         initializeAddress(branchInfoData.address);
@@ -41,7 +44,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     async function getLinkedUsers() {
-        const linkedUsersResponse = await restClient.fetchData(`/api/v1/admin/branches/1/users`, 'GET');
+        const linkedUsersResponse = await restClient
+            .fetchData(`/api/v1/admin/branches/${branchId}/users`, 'GET');
         const linkedUsers = await linkedUsersResponse.json();
         linkedUsers.forEach((user) => renderLinkedUserRows(user));
     }
@@ -71,7 +75,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     function initializeBaseInfo(branchInfo) {
         baseInfoLoader.hideLoading();
         const baseInfoHeader = createFrameHeader('Основная информация',
-            '/admin/branch/1/general');
+            `/admin/branch/${branchId}/general`);
 
         const infoGridContainer = document.createElement("div");
         infoGridContainer.classList.add('info-grid');
@@ -155,7 +159,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     function initializeAddress(branchAddress) {
         addressLoader.hideLoading();
         const baseInfoHeader = createFrameHeader('Адрес',
-            '/admin/branch/1/address');
+            `/admin/branch/${branchId}/address`);
 
         const infoGridContainer = document.createElement("div");
         infoGridContainer.classList.add('info-grid');
@@ -173,7 +177,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     function initializeWorkingHours(branchWorkingHours) {
         workingHoursLoader.hideLoading();
         const baseInfoHeader = createFrameHeader('Рабочие часы',
-            '/admin/branch/1/working-hours');
+            `/admin/branch/${branchId}/working-hours`);
 
         const infoGridContainer = document.createElement("div");
         branchWorkingHours.forEach((workingHour) => {

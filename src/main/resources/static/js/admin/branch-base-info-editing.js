@@ -5,6 +5,8 @@ document.addEventListener("DOMContentLoaded", async e => {
     const restClient = new RestClient();
     const notification = new Notification();
 
+    const branchId = document.querySelector('meta[name=branchId]').content;
+
     const generalInfoForm = document.getElementById('branch-general-info-editing-form');
 
     const saveBtn = document.getElementById('save-btn');
@@ -16,14 +18,14 @@ document.addEventListener("DOMContentLoaded", async e => {
             await saveForm();
             notification.showNotification('Управление филиалами',
                 'Обновление основной информации филиала произошло успешно');
-            setTimeout(() => window.location.replace('/admin/branch/1'), 1500);
+            setTimeout(() => window.location.replace(`/admin/branch/${branchId}`), 1500);
         } catch (e) {
             console.error(e);
             notification.showNotification('Управление филиалами',
                 `Произошла ошибка при обновлении основной информации филиала. Код ${e}`);
         }
     });
-    cancelBtn.addEventListener('click', e => window.location.replace('/admin/branch/1'));
+    cancelBtn.addEventListener('click', ()=> window.location.replace(`/admin/branch/${branchId}`));
 
     try {
         await initializePage();
@@ -34,7 +36,7 @@ document.addEventListener("DOMContentLoaded", async e => {
     }
 
     async function initializePage() {
-        const branchInfo = await (await restClient.fetchData(`/api/v1/admin/branches/1`, 'GET')).json();
+        const branchInfo = await (await restClient.fetchData(`/api/v1/admin/branches/${branchId}`, 'GET')).json();
         fillForm(branchInfo);
     }
 
@@ -50,7 +52,7 @@ document.addEventListener("DOMContentLoaded", async e => {
         const formData = new FormData(generalInfoForm);
         const data = Object.fromEntries(formData);
         data.isActive = formData.get('isActive') === 'on';
-        await restClient.fetchData(`/api/v1/admin/branches/1`, 'PATCH',
+        await restClient.fetchData(`/api/v1/admin/branches/${branchId}`, 'PATCH',
             {'Content-Type': 'application/json'}, JSON.stringify(data));
     }
 });

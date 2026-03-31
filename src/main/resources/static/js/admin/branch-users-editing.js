@@ -6,6 +6,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     const restClient = new RestClient();
     const notification = new Notification();
 
+    const branchId = document.querySelector('meta[name=branchId]').content;
+
     const linkedUsersSet = new Set();
     const userTableBody = document.getElementById('users-table-body');
 
@@ -31,7 +33,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     async function initializeTable() {
-        const tableBodyContent = await (await restClient.fetchData(`/api/v1/admin/branches/1/users`, 'GET')).json();
+        const tableBodyContent = await (await restClient
+            .fetchData(`/api/v1/admin/branches/${branchId}/users`, 'GET')).json();
         tableBodyContent.forEach(element => renderTableRow(element));
     }
 
@@ -47,7 +50,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         actionBtn.addEventListener('click', async e => {
             e.preventDefault();
             try {
-                await restClient.fetchData(`/api/v1/admin/branches/1/users`, 'DELETE',
+                await restClient.fetchData(`/api/v1/admin/branches/${branchId}/users`, 'DELETE',
                     {'Content-Type': 'text/plain'}, user.mobilePhone);
                 notification.showNotification('Управление филиалами',
                     `Сотрудник ${user.surname} ${user.name} успешно откреплен от филиала`);
@@ -158,7 +161,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     function linkUserToBranch(result) {
-        restClient.fetchData(`/api/v1/admin/branches/1/users`, 'PATCH',
+        restClient.fetchData(`/api/v1/admin/branches/${branchId}/users`, 'PATCH',
             {'Content-Type': 'text/plain'}, result.mobilePhone)
             .then(() => {
                 notification.showNotification('Управление филиалами',

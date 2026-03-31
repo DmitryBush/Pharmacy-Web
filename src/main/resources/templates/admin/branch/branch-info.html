@@ -5,6 +5,7 @@
     <title></title>
     <meta name="_csrf" th:content="${_csrf.token}"/>
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <meta name="branchId" th:content="${branchId}">
     <link href="/css/admin/admin-base.css" rel="stylesheet"/>
     <link href="/css/admin/admin-form.css" rel="stylesheet"/>
     <link href="/css/admin/branch-info.css" rel="stylesheet"/>
@@ -29,7 +30,7 @@
             <div class="frame" id="linked-users-container">
                 <div class="frame-header">
                     <h2>Прикрепленные сотрудники</h2>
-                    <a href="/admin/branch/1/users" class="branch-info-details-btn">Изменить</a>
+                    <a th:href="@{/admin/branch/{id}/users(id=${branchId})}" class="branch-info-details-btn">Изменить</a>
                 </div>
                 <div class="table-container">
                     <table>
