@@ -11,6 +11,7 @@ import com.bush.pharmacy_web_app.service.user.mapper.AdminUserReadMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
@@ -33,6 +34,7 @@ public class BranchUserAssignmentService {
                 .toList();
     }
 
+    @Transactional
     public AdminUserReadDto assignUserToBranch(Long branchId, String userId) {
         final User user = userService.getUserReferenceById(userId);
         final PharmacyBranch branch = branchService.getReferenceById(branchId);

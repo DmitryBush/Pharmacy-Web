@@ -54,9 +54,9 @@ public class BranchAdminRestController {
     }
 
     @PatchMapping(value = "/{id}/users", consumes = MediaType.TEXT_PLAIN_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<AdminUserReadDto> assignUserToBranch(@PathVariable Long branchId,
+    public ResponseEntity<AdminUserReadDto> assignUserToBranch(@PathVariable Long id,
                                                                @RequestBody String userId) {
-        return new ResponseEntity<>(userAssignmentService.assignUserToBranch(branchId, userId), HttpStatus.CREATED);
+        return new ResponseEntity<>(userAssignmentService.assignUserToBranch(id, userId), HttpStatus.CREATED);
     }
 
     @DeleteMapping(value = "/{branchId}/users", consumes = MediaType.TEXT_PLAIN_VALUE)
