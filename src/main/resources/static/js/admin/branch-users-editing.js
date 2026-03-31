@@ -47,11 +47,11 @@ document.addEventListener("DOMContentLoaded", async () => {
         actionBtn.addEventListener('click', async e => {
             e.preventDefault();
             try {
-                await restClient.fetchData(`/api/v1/admin/branches/1`, 'DELETE',
+                await restClient.fetchData(`/api/v1/admin/branches/1/users`, 'DELETE',
                     {'Content-Type': 'text/plain'}, user.mobilePhone);
                 notification.showNotification('Управление филиалами',
                     `Сотрудник ${user.surname} ${user.name} успешно откреплен от филиала`);
-                document.removeChild(tableRow);
+                tableRow.remove();
                 linkedUsersSet.delete(user.mobilePhone);
             } catch (e) {
                 console.error(e);
@@ -150,19 +150,20 @@ document.addEventListener("DOMContentLoaded", async () => {
                     throw new Error('Произошла критическая ошибка при подготовке ресурсов. ' +
                         'Обратитесь к вашему администратору');
                 }
-                div.onclick = () => linkUserToBranch(result.mobilePhone);
+                div.onclick = () => linkUserToBranch(result);
 
                 resultsContainer.appendChild(div);
             }
         });
     }
 
-    function linkUserToBranch(mobilePhone) {
+    function linkUserToBranch(result) {
         restClient.fetchData(`/api/v1/admin/branches/1/users`, 'PATCH',
-            {'Content-Type': 'text/plain'}, mobilePhone)
+            {'Content-Type': 'text/plain'}, result.mobilePhone)
             .then(() => {
                 notification.showNotification('Управление филиалами',
                     'Сотрудник прикреплен к филиалу успешно');
+                renderTableRow(result);
                 closeSearch();
             })
             .catch(error => {
