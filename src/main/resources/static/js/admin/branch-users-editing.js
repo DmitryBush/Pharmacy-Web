@@ -6,6 +6,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const restClient = new RestClient();
     const notification = new Notification();
 
+    const linkedUsersSet = new Set();
     const userTableBody = document.getElementById('users-table-body');
 
     let DEBOUNCE_DELAY = 300;
@@ -36,6 +37,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     function renderTableRow(user) {
         const tableRow = document.createElement('tr');
+        linkedUsersSet.add(user.mobilePhone);
         tableRow.appendChild(renderName(user));
         tableRow.appendChild(renderMobilePhone(user));
         tableRow.appendChild(renderRole(user));
@@ -49,6 +51,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 notification.showNotification('Управление филиалами',
                     `Сотрудник ${user.surname} ${user.name} успешно откреплен от филиала`);
                 document.removeChild(tableRow);
+                linkedUsersSet.delete(user.mobilePhone);
             } catch (e) {
                 console.error(e);
                 notification.showNotification('Управление филиалами',
@@ -137,17 +140,19 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
 
         results.content.forEach(result => {
-            const div = document.createElement('div');
-            div.className = 'result-item';
-            div.textContent = `${result.surname} ${result.name} ${result.lastName} - ${result.mobilePhone}`;
+            if (!linkedUsersSet.has(result.mobilePhone)) {
+                const div = document.createElement('div');
+                div.className = 'result-item';
+                div.textContent = `${result.surname} ${result.name} ${result.lastName} - ${result.mobilePhone}`;
 
-            if (!/^(\+7|8)\s\(\d{3}\)\s\d{3}-\d{2}-\d{2}$/.test(result.mobilePhone)) {
-                throw new Error('Произошла критическая ошибка при подготовке ресурсов. ' +
-                    'Обратитесь к вашему администратору');
+                if (!/^(\+7|8)\s\(\d{3}\)\s\d{3}-\d{2}-\d{2}$/.test(result.mobilePhone)) {
+                    throw new Error('Произошла критическая ошибка при подготовке ресурсов. ' +
+                        'Обратитесь к вашему администратору');
+                }
+                div.onclick = () => linkUserToBranch(result.mobilePhone);
+
+                resultsContainer.appendChild(div);
             }
-            div.onclick = () => linkUserToBranch(result.mobilePhone);
-
-            resultsContainer.appendChild(div);
         });
     }
 
