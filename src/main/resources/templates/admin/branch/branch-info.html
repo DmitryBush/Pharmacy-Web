@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <meta name="branchId" th:content="${branchId}">
+    <link href="/css/admin/admin-base.css" rel="stylesheet"/>
+    <link href="/css/admin/admin-form.css" rel="stylesheet"/>
+    <link href="/css/admin/branch-info.css" rel="stylesheet"/>
+    <link href="/css/admin/warehouse.css" rel="stylesheet"/>
+    <script src="/js/admin/branch-info.js" type="module"></script>
+</head>
+<body>
+    <div th:replace="~{/admin/sidebar/sidebar.html :: sidebar}"></div>
+    <main class="main-content">
+        <div class="title-container" id="title-container">
+            <a href="/admin/branch" class="active item-btn" id="back-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" class="bi-arrow-left-short" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5"/>
+                </svg>
+            </a>
+            <h1 class="page-title" id="page-title">Загрузка...</h1>
+        </div>
+        <div class="page-container" id="page-container">
+            <div class="frame" id="base-info-container"></div>
+            <div class="frame" id="address-container"></div>
+            <div class="frame" id="working-hours-container"></div>
+            <div class="frame" id="linked-users-container">
+                <div class="frame-header">
+                    <h2>Прикрепленные сотрудники</h2>
+                    <a th:href="@{/admin/branch/{id}/users(id=${branchId})}" class="branch-info-details-btn">Изменить</a>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Пользователь</th>
+                                <th>Роль</th>
+                            </tr>
+                        </thead>
+                        <tbody id="users-table-body"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

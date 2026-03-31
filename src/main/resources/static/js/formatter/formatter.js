@@ -50,3 +50,50 @@ export function formatPhone(input) {
     input.value = formatted;
     input.setSelectionRange(newCursorPosition, newCursorPosition);
 }
+
+export function getDayText(day) {
+    if (day === 'MONDAY') {
+        return 'Понедельник';
+    } else if (day === 'TUESDAY') {
+        return 'Вторник';
+    } else  if (day === 'WEDNESDAY') {
+        return 'Среда';
+    } else  if (day === 'THURSDAY') {
+        return 'Четверг';
+    } else  if (day === 'FRIDAY') {
+        return 'Пятница';
+    } else  if (day === 'SATURDAY') {
+        return 'Суббота';
+    } else  if (day === 'SUNDAY') {
+        return 'Воскресенье';
+    }
+    throw new Error(`Unknown day: ${day}`);
+}
+
+export function getTimeText(workingHour) {
+    if (workingHour.dayOff) {
+        return 'Выходной';
+    } else if (workingHour.aroundClock) {
+        return 'Круглосуточно';
+    } else {
+        const formatter = new Intl.DateTimeFormat([], {
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+        const openTime = new Date(`1970-01-01T${workingHour.openTime}`);
+        const closeTime = new Date(`1970-01-01T${workingHour.closeTime}`);
+        return `${formatter.format(openTime)} - ${formatter.format(closeTime)}`;
+    }
+}
+
+export function getRoleText(role) {
+    if (role === 'ADMIN') {
+        return 'Администратор';
+    } else if (role === 'OPERATOR') {
+        return 'Оператор';
+    } else if (role === 'CUSTOMER') {
+        return 'Покупатель';
+    } else {
+        return 'Покупатель';
+    }
+}

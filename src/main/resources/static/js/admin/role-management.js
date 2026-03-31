@@ -60,7 +60,11 @@ document.addEventListener("DOMContentLoaded", async function () {
     function getParams() {
         const params = new URLSearchParams();
         params.set('mobilePhone', userPhone.value);
-        params.set('role', roleSelect.value);
+        if (roleSelect.value.length > 0) {
+            params.set('role', roleSelect.value);
+        } else {
+            params.set('role', 'ADMIN,OPERATOR,CUSTOMER');
+        }
         params.set('page', paginationManager.currentPage);
         params.set('size', paginationManager.pageSize);
         return params.toString();

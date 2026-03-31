@@ -27,7 +27,7 @@ public class NewsManagementController {
 
         model.addAttribute("authorities", authorities);
         model.addAttribute("currentUri", request.getRequestURI());
-        return "/admin/news-management";
+        return "/admin/news/news-management";
     }
 
     @GetMapping("/creation")
@@ -41,7 +41,7 @@ public class NewsManagementController {
 
         model.addAttribute("authorities", authorities);
         model.addAttribute("currentUri", request.getRequestURI());
-        return "/admin/editing-news";
+        return "/admin/news/editing-news";
     }
 
     @GetMapping("/{slug}")
@@ -57,6 +57,6 @@ public class NewsManagementController {
         model.addAttribute("authorities", authorities);
         model.addAttribute("currentUri", request.getRequestURI());
         model.addAttribute("newsSlug", slug);
-        return "/admin/editing-news";
+        return "/admin/news/editing-news";
     }
 }

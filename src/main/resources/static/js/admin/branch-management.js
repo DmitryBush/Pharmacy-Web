@@ -133,6 +133,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         workingHours.classList.add('working-hours');
         const workingHoursText = document.createElement('strong');
         workingHoursText.textContent = 'Часы работы:';
+        workingHours.appendChild(workingHoursText);
 
         const workingHoursList = document.createElement('ul');
         workingHoursList.classList.add('hours-list');
@@ -141,6 +142,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             hoursLi.textContent = workingHour;
             workingHoursList.appendChild(hoursLi);
         });
+        workingHours.appendChild(workingHoursList);
         return workingHours;
     }
 });
