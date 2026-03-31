@@ -43,10 +43,10 @@ public class UserService implements UserDetailsService {
     }
 
     public Page<AdminUserReadDto> findAllByFilter(Pageable pageable, UserFilter filter) {
-        RoleType roleType =  Optional.of(filter.role())
+        List<RoleType> roleType =  filter.role().stream()
                 .filter(s -> !s.isBlank())
                 .map(RoleType::valueOf)
-                .orElse(null);
+                .toList();
         return userRepository.findAllByMobilePhoneAndRole(filter.mobilePhone(), roleType, pageable)
                 .map(adminUserReadMapper::map);
     }
@@ -101,5 +101,9 @@ public class UserService implements UserDetailsService {
                 .map(userRepository::saveAndFlush)
                 .map(adminUserReadMapper::map)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST));
+    }
+
+    public com.bush.pharmacy_web_app.model.entity.user.User getUserReferenceById(String userId) {
+        return userRepository.getReferenceById(userId);
     }
 }

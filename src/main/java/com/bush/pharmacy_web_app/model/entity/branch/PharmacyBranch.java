@@ -48,6 +48,6 @@ public class PharmacyBranch {
     private List<StorageItems> items = new ArrayList<>();
     @OneToMany(mappedBy = "branch", fetch = FetchType.LAZY)
     private List<Order> orders = new ArrayList<>();
-    @ManyToMany(mappedBy = "branchUserAssignments")
+    @ManyToMany(mappedBy = "branchUserAssignments", fetch = FetchType.LAZY)
     private Set<User> userBranchAssigned = new HashSet<>();
 }

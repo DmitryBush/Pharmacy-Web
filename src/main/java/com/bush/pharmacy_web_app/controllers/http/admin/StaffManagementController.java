@@ -22,7 +22,7 @@ public class StaffManagementController {
 
         model.addAttribute("authorities", authorities);
         model.addAttribute("currentUri", request.getRequestURI());
-        return "admin/staff-management";
+        return "admin/user/staff-management";
     }
 
     @GetMapping("/role")
@@ -34,6 +34,6 @@ public class StaffManagementController {
 
         model.addAttribute("authorities", authorities);
         model.addAttribute("currentUri", request.getRequestURI());
-        return "admin/role-management";
+        return "admin/user/role-management";
     }
 }

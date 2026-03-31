@@ -1,10 +1,13 @@
 package com.bush.pharmacy_web_app.service.branch;
 
 import com.bush.pharmacy_web_app.model.dto.branch.PharmacyBranchCreateDto;
+import com.bush.pharmacy_web_app.model.dto.branch.PharmacyBranchInfoDto;
+import com.bush.pharmacy_web_app.model.dto.branch.PharmacyBranchUpdateDto;
+import com.bush.pharmacy_web_app.model.entity.branch.PharmacyBranch;
 import com.bush.pharmacy_web_app.repository.branch.PharmacyBranchRepository;
 import com.bush.pharmacy_web_app.model.dto.branch.PharmacyBranchReadDto;
 import com.bush.pharmacy_web_app.service.branch.mapper.PharmacyBranchCreateMapper;
-import com.bush.pharmacy_web_app.service.order.mapper.PharmacyBranchReadMapper;
+import com.bush.pharmacy_web_app.service.branch.mapper.PharmacyBranchReadMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -25,28 +28,29 @@ public class PharmacyBranchService {
     private final PharmacyBranchCreateMapper branchCreateMapper;
     private final PharmacyBranchReadMapper branchReadMapper;
 
-    public Optional<PharmacyBranchReadDto> findByBranchId(Long id) {
-        return branchRepository.findById(id)
-                .map(branchReadMapper::map);
+    public PharmacyBranchInfoDto findBranchInfoById(Long id) {
+        return branchRepository.findBranchInfoById(id)
+                .map(branchReadMapper::mapToPharmacyBranchInfoDto)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
     public List<PharmacyBranchReadDto> findBranchesWithMedicineLocated(Long productId) {
         return branchRepository.findBranchesWithMedicineLocated(productId)
                 .stream()
-                .map(branchReadMapper::map)
+                .map(branchReadMapper::mapToPharmacyBranchReadDto)
                 .toList();
     }
 
     public List<PharmacyBranchReadDto> findUserAssignedBranches(String userId) {
         return branchRepository.findUserAssignedBranches(userId)
                 .stream()
-                .map(branchReadMapper::map)
+                .map(branchReadMapper::mapToPharmacyBranchReadDto)
                 .toList();
     }
 
     public Page<PharmacyBranchReadDto> findPharmacyBranches(Pageable pageable) {
         return branchRepository.findAll(pageable)
-                .map(branchReadMapper::map);
+                .map(branchReadMapper::mapToPharmacyBranchReadDto);
     }
 
     @Transactional
@@ -54,7 +58,20 @@ public class PharmacyBranchService {
         return Optional.ofNullable(createDto)
                 .map(branchCreateMapper::mapToPharmacyBranch)
                 .map(branchRepository::save)
-                .map(branchReadMapper::map)
+                .map(branchReadMapper::mapToPharmacyBranchReadDto)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST));
+    }
+
+    @Transactional
+    public PharmacyBranchInfoDto updateBranch(Long id, PharmacyBranchUpdateDto dto) {
+        return branchRepository.findById(id)
+                .map(branch -> branchCreateMapper.updatePharmacyBranch(branch, dto))
+                .map(branchRepository::saveAndFlush)
+                .map(branchReadMapper::mapToPharmacyBranchInfoDto)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    }
+
+    public PharmacyBranch getReferenceById(Long id) {
+        return branchRepository.getReferenceById(id);
     }
 }

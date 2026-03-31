@@ -34,7 +34,7 @@ public class ProductManagementController {
         model.addAttribute("products", page);
         model.addAttribute("authorities", authorities);
         model.addAttribute("currentUri", request.getRequestURI());
-        return "admin/product-management";
+        return "admin/product/product-management";
     }
 
     @GetMapping("/creation")
@@ -47,7 +47,7 @@ public class ProductManagementController {
 
         model.addAttribute("authorities", authorities);
         model.addAttribute("currentUri", request.getRequestURI());
-        return "/admin/creating-product";
+        return "/admin/product/creating-product";
     }
 
     @GetMapping("/{id}")
@@ -63,6 +63,6 @@ public class ProductManagementController {
         model.addAttribute("product", product);
         model.addAttribute("authorities", authorities);
         model.addAttribute("currentUri", request.getRequestURI());
-        return "admin/editing-product";
+        return "admin/product/editing-product";
     }
 }
