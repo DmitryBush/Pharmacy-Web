@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Корзина</title>
+    <link href="/css/base.css" rel="stylesheet"/>
+    <link href="/css/cart/cart.css" rel="stylesheet"/>
+</head>
+<body>
+    <div th:replace="~{/page-header.html :: page-header}"></div>
+    <div class="cr-wrapper">
+        <main class="cr-container">
+            <h1 class="cr-page-title">Корзина</h1>
+            <div class="cr-layout">
+                <div class="cr-items">
+                    <div class="cr-item">
+                        <div class="cr-item-img">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <rect x="3" y="3" width="18" height="18" rx="2"/>
+                                <circle cx="8.5" cy="8.5" r="1.5"/>
+                                <path d="M21 15l-5-5L5 21"/>
+                            </svg>
+                        </div>
+                        <div class="cr-item-info">
+                            <span class="cr-item-name">СУПРАСТИН табл. 25 мг №20</span>
+                            <span class="cr-item-variant">Противоаллергические</span>
+                            <div class="cr-qty">
+                                <button type="button">−</button>
+                                <span>1</span>
+                                <button type="button">+</button>
+                            </div>
+                        </div>
+                        <div class="cr-item-actions">
+                            <span class="cr-item-price">4 990 ₽</span>
+                            <button class="cr-remove" type="button">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                                    <line x1="18" y1="6" x2="6" y2="18"/>
+                                    <line x1="6" y1="6" x2="18" y2="18"/>
+                                </svg>
+                                Удалить
+                            </button>
+                        </div>
+                    </div>
+                    <div class="cr-item">
+                        <div class="cr-item-img">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <rect x="3" y="3" width="18" height="18" rx="2"/>
+                                <circle cx="8.5" cy="8.5" r="1.5"/>
+                                <path d="M21 15l-5-5L5 21"/>
+                            </svg>
+                        </div>
+                        <div class="cr-item-info">
+                            <span class="cr-item-name">СУПРАСТИН табл. 25 мг №20</span>
+                            <span class="cr-item-variant">Противоаллергические</span>
+                            <div class="cr-qty">
+                                <button type="button">−</button>
+                                <span>1</span>
+                                <button type="button">+</button>
+                            </div>
+                        </div>
+                        <div class="cr-item-actions">
+                            <span class="cr-item-price">7 500 ₽</span>
+                            <button class="cr-remove" type="button">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                                    <line x1="18" y1="6" x2="6" y2="18"/>
+                                    <line x1="6" y1="6" x2="18" y2="18"/>
+                                </svg>
+                                Удалить
+                            </button>
+                        </div>
+                    </div>
+                    <div class="cr-item">
+                        <div class="cr-item-img">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <rect x="3" y="3" width="18" height="18" rx="2"/>
+                                <circle cx="8.5" cy="8.5" r="1.5"/>
+                                <path d="M21 15l-5-5L5 21"/>
+                            </svg>
+                        </div>
+                        <div class="cr-item-info">
+                            <span class="cr-item-name">СУПРАСТИН табл. 25 мг №20</span>
+                            <span class="cr-item-variant">Противоаллергические</span>
+                            <div class="cr-qty">
+                                <button type="button">−</button>
+                                <span>1</span>
+                                <button type="button">+</button>
+                            </div>
+                        </div>
+                        <div class="cr-item-actions">
+                            <span class="cr-item-price">9 980 ₽</span>
+                            <button class="cr-remove" type="button">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                                    <line x1="18" y1="6" x2="6" y2="18"/>
+                                    <line x1="6" y1="6" x2="18" y2="18"/>
+                                </svg>
+                                Удалить
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <aside class="cr-summary">
+                    <h2 class="cr-summary-title">Итого</h2>
+
+                    <div class="cr-row">
+                        <span class="cr-row-label">Итог (4 товара)</span>
+                        <span class="cr-row-value">22 470 ₽</span>
+                    </div>
+                    <div class="cr-row">
+                        <span class="cr-row-label">Доставка</span>
+                        <span class="cr-row-value">Бесплатно</span>
+                    </div>
+                    <div class="cr-row cr-discount">
+                        <span class="cr-row-label">Скидка</span>
+                        <span class="cr-row-value">−2 247 ₽</span>
+                    </div>
+                    <div class="cr-row cr-row-total">
+                        <span>К оплате</span>
+                        <span class="cr-row-value">20 223 ₽</span>
+                    </div>
+                    <!--TODO Implement a promo code system-->
+<!--                    <div class="cr-promo">-->
+<!--                        <label class="cr-promo-label">Промокод</label>-->
+<!--                        <div class="cr-promo-group">-->
+<!--                            <input type="text" class="cr-promo-input" placeholder="Введите код">-->
+<!--                            <button class="cr-promo-btn" type="button">Применить</button>-->
+<!--                        </div>-->
+<!--                    </div>-->
+                    <button class="cr-checkout" type="button">Оформить заказ</button>
+                </aside>
+            </div>
+        </main>
+    </div>
+    <div th:replace="~{/page-footer.html :: page-footer}"></div>
+</body>
+</html>

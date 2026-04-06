@@ -1,0 +1,359 @@
+.cr-wrapper * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.cr-wrapper {
+    color: #1a1a1a;
+    line-height: 1.6;
+    min-height: 100vh;
+}
+
+.cr-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 48px 24px;
+}
+
+.cr-page-title {
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    margin-bottom: 40px;
+}
+
+/* ===== LAYOUT ===== */
+.cr-layout {
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: 48px;
+    align-items: start;
+}
+
+/* ===== CART ITEMS ===== */
+.cr-items {
+    display: flex;
+    flex-direction: column;
+}
+
+.cr-item {
+    display: grid;
+    grid-template-columns: 100px 1fr auto;
+    gap: 24px;
+    align-items: center;
+    padding: 24px 0;
+    border-bottom: 1px solid #eee;
+    animation: cr-fadeIn 0.3s ease;
+}
+
+@keyframes cr-fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.cr-item-img {
+    width: 100px;
+    height: 100px;
+    background: #f0f0f0;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.cr-item-img svg {
+    width: 40px;
+    height: 40px;
+    color: #ccc;
+}
+
+.cr-item-info {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.cr-item-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: #1a1a1a;
+}
+
+.cr-item-variant {
+    font-size: 13px;
+    color: #888;
+}
+
+.cr-item-price-mobile {
+    display: none;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.cr-qty {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    overflow: hidden;
+    width: fit-content;
+}
+
+.cr-qty button {
+    width: 36px;
+    height: 36px;
+    border: none;
+    background: #fff;
+    cursor: pointer;
+    font-size: 16px;
+    color: #555;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s, color 0.15s;
+    font-family: inherit;
+}
+
+.cr-qty button:hover {
+    background: #f5f5f5;
+    color: #1a1a1a;
+}
+
+.cr-qty button:active {
+    background: #eee;
+}
+
+.cr-qty span {
+    width: 40px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 600;
+    border-left: 1px solid #e0e0e0;
+    border-right: 1px solid #e0e0e0;
+    height: 36px;
+    line-height: 36px;
+}
+
+.cr-item-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 12px;
+}
+
+.cr-item-price {
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.cr-remove {
+    border: none;
+    background: none;
+    color: #bbb;
+    cursor: pointer;
+    font-size: 13px;
+    transition: color 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px;
+    font-family: inherit;
+}
+
+.cr-remove:hover {
+    color: #e74c3c;
+}
+
+.cr-remove svg {
+    width: 14px;
+    height: 14px;
+}
+
+.cr-summary {
+    background: #fff;
+    border: 1px solid #e8e8e8;
+    border-radius: 12px;
+    padding: 32px;
+    position: sticky;
+    top: 24px;
+}
+
+.cr-summary-title {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 24px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #eee;
+}
+
+.cr-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    font-size: 14px;
+    color: #666;
+}
+
+.cr-row-total {
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid #eee;
+    font-size: 18px;
+    font-weight: 700;
+    color: #1a1a1a;
+}
+
+.cr-row-label {
+    color: #666;
+}
+
+.cr-row-value {
+    font-weight: 500;
+}
+
+.cr-row-total .cr-row-value {
+    color: #1a1a1a;
+}
+
+.cr-discount .cr-row-value {
+    color: #27ae60;
+}
+
+.cr-promo {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+}
+
+.cr-promo-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin-bottom: 8px;
+    display: block;
+}
+
+.cr-promo-group {
+    display: flex;
+    gap: 8px;
+}
+
+.cr-promo-input {
+    flex: 1;
+    padding: 10px 14px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s;
+    font-family: inherit;
+}
+
+.cr-promo-input:focus {
+    border-color: #1a1a1a;
+}
+
+.cr-promo-input::placeholder {
+    color: #ccc;
+}
+
+.cr-promo-btn {
+    padding: 10px 20px;
+    background: #1a1a1a;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s;
+    white-space: nowrap;
+    font-family: inherit;
+}
+
+.cr-promo-btn:hover {
+    background: #333;
+}
+
+.cr-checkout {
+    width: 100%;
+    padding: 16px;
+    background: #1a1a1a;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 24px;
+    transition: background 0.2s, transform 0.1s;
+    letter-spacing: 0.2px;
+    font-family: inherit;
+}
+
+.cr-checkout:hover {
+    background: #333;
+}
+
+.cr-checkout:active {
+    transform: scale(0.98);
+}
+
+.cr-secure {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin-top: 16px;
+    font-size: 12px;
+    color: #aaa;
+}
+
+.cr-secure svg {
+    width: 12px;
+    height: 12px;
+}
+
+.cr-empty {
+    text-align: center;
+    padding: 80px 24px;
+}
+
+.cr-empty svg {
+    width: 64px;
+    height: 64px;
+    color: #ddd;
+    margin-bottom: 24px;
+}
+
+.cr-empty h2 {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.cr-empty p {
+    color: #888;
+    font-size: 14px;
+    margin-bottom: 32px;
+}
+
+.cr-empty-btn {
+    display: inline-block;
+    padding: 14px 32px;
+    background: #1a1a1a;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    transition: background 0.15s;
+}
+
+.cr-empty-btn:hover {
+    background: #333;
+}
