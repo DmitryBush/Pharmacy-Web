@@ -1,6 +1,6 @@
 plugins {
     java
-    id("org.springframework.boot") version "3.5.11"
+    id("org.springframework.boot") version "3.5.13"
     id("io.spring.dependency-management") version "1.1.7"
 }
 
@@ -18,11 +18,12 @@ repositories {
     mavenCentral()
 }
 
-extra["springCloudVersion"] = "2025.0.1"
+extra["springCloudVersion"] = "2025.0.2"
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-server")
+    implementation("com.google.guava:guava:33.5.0-jre")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
