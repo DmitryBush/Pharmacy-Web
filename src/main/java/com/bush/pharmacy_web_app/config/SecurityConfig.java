@@ -51,6 +51,7 @@ public class SecurityConfig {
                             .hasRole("ADMIN")
                         .requestMatchers("/api/*/management/**")
                             .hasAnyRole("ADMIN", "OPERATOR")
+                        .requestMatchers("/api/*/carts/**").authenticated()
                         .requestMatchers(HttpMethod.GET, "/api/**").permitAll()
                         .requestMatchers("/api/**").authenticated()
                         .anyRequest().authenticated())
@@ -61,6 +62,8 @@ public class SecurityConfig {
                         .deleteCookies("JSESSIONID"))
                 .build();
     }
+
+
 
     @Bean
     public AuthenticationProvider authenticationProvider(UserService userService) {
