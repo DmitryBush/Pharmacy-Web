@@ -25,10 +25,10 @@ document.addEventListener("DOMContentLoaded", async () => {
             }
         ];
         createCartItems();
-        createSummaryLayout(items);
+        renderSummaryLayout();
     }
 
-    function createSummaryLayout() {
+    function renderSummaryLayout() {
         const aside = document.createElement("aside");
         aside.classList.add("cr-summary");
 
@@ -37,19 +37,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         title.textContent = 'Итого';
         aside.appendChild(title);
 
-        let totalPrice = 0;
-        let itemCount = 0;
-        mainContainer.querySelectorAll('.cr-items').forEach(item => {
-            const price = parseInt(item.querySelector('.cr-item-price').textContent);
-            const quantity = parseInt(item.querySelector('.cr-quantity-field').textContent);
-            totalPrice += price * quantity;
-            itemCount += quantity;
-        });
-
-        aside.appendChild(createResultGroup(itemCount, totalPrice));
+        aside.appendChild(createResultGroup());
         aside.appendChild(createDeliveryGroup());
         aside.appendChild(createDiscountGroup());
-        aside.appendChild(createTotalGroup(totalPrice));
+        aside.appendChild(createTotalGroup());
 
         const placeOrderButton = document.createElement("button");
         placeOrderButton.type = "button";
@@ -57,19 +48,39 @@ document.addEventListener("DOMContentLoaded", async () => {
         placeOrderButton.textContent = 'Оформить заказ';
         aside.appendChild(placeOrderButton);
         mainContainer.appendChild(aside);
+
+        updateSummaryValues();
     }
 
-    function createResultGroup(itemCount, totalPrice) {
+    function updateSummaryValues() {
+        let totalPrice = 0;
+        let itemCount = 0;
+        mainContainer.querySelectorAll('.cr-item').forEach(item => {
+            const price = parseInt(item.querySelector('.cr-item-price').textContent);
+            const quantity = parseInt(item.querySelector('.cr-quantity-field').textContent);
+            totalPrice += price * quantity;
+            itemCount += quantity;
+        });
+
+        document.querySelector('#result-label').textContent = `Итог (${itemCount} товар)`;
+        document.querySelector('#result-value').textContent = `${totalPrice} ₽`;
+
+        document.querySelector('#discount-value').textContent = `- 0 ₽`;
+
+        document.querySelector('#total-value').textContent = `${totalPrice} ₽`;
+    }
+
+    function createResultGroup() {
         const resultGroup = document.createElement("div");
         resultGroup.classList.add('cr-row');
 
         const resultLabel = document.createElement('span');
         resultLabel.classList.add('cr-row-label');
-        resultLabel.textContent = `Итог (${itemCount} товар)`;
+        resultLabel.id = 'result-label';
         resultGroup.appendChild(resultLabel);
         const resultSummary = document.createElement("span");
-        resultSummary.textContent = `${totalPrice} ₽`;
         resultSummary.classList.add('cr-row-value');
+        resultSummary.id = 'result-value';
         resultGroup.appendChild(resultSummary);
         return resultGroup;
     }
@@ -81,10 +92,12 @@ document.addEventListener("DOMContentLoaded", async () => {
         const deliveryLabel = document.createElement('span');
         deliveryLabel.textContent = `Доставка`;
         deliveryLabel.classList.add('cr-row-label');
+        deliveryLabel.id = 'delivery-label';
         deliveryGroup.appendChild(deliveryLabel);
         const resultSummary = document.createElement("span");
         resultSummary.textContent = `Бесплатно`;
         resultSummary.classList.add('cr-row-value');
+        resultSummary.id = 'result-value';
         deliveryGroup.appendChild(resultSummary);
         return deliveryGroup;
     }
@@ -99,12 +112,13 @@ document.addEventListener("DOMContentLoaded", async () => {
         discountGroup.appendChild(discountLabel);
         const discountSummary = document.createElement("span");
         discountSummary.textContent = `- 0 ₽`;
+        discountSummary.id = 'discount-value';
         discountSummary.classList.add('cr-row-value');
         discountGroup.appendChild(discountSummary);
         return discountGroup;
     }
 
-    function createTotalGroup(totalPrice) {
+    function createTotalGroup() {
         const totalGroup = document.createElement("div");
         totalGroup.classList.add('cr-row');
 
@@ -113,8 +127,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         totalLabel.classList.add('cr-row-label');
         totalGroup.appendChild(totalLabel);
         const totalSummary = document.createElement("span");
-        totalSummary.textContent = `${totalPrice} ₽`;
         totalSummary.classList.add('cr-row-value');
+        totalSummary.id = 'total-value';
         totalGroup.appendChild(totalSummary);
         return totalGroup;
     }
@@ -143,6 +157,12 @@ document.addEventListener("DOMContentLoaded", async () => {
         cartItem.appendChild(createCartItemImage(item.medicine.imagePaths));
         cartItem.appendChild(createCartItemInfo(item));
         cartItem.appendChild(createCartItemAction(item.medicine.price));
+
+        cartItem.querySelector('button[class=cr-remove]').addEventListener('click', (e) => {
+            e.preventDefault();
+            cartItem.remove();
+            updateSummaryValues();
+        });
         return cartItem;
     }
 
@@ -210,6 +230,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 decrementButton.disabled = true;
             }
             quantityField.textContent = String(quantity);
+            updateSummaryValues();
         });
         incrementButton.addEventListener('click', () => {
             let quantity = parseInt(quantityField.textContent);
@@ -220,6 +241,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 quantity++;
             }
             quantityField.textContent = String(quantity);
+            updateSummaryValues();
         });
         return quantityCounter;
     }
