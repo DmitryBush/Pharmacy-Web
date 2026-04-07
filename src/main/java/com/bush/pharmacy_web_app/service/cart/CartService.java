@@ -27,22 +27,26 @@ public class CartService {
     private final UserService userService;
 
     private final CartCreateMapper cartCreateMapper;
-    private final CartReadMapper cartItemReadMapper;
+    private final CartReadMapper cartReadMapper;
 
-    public CartReadDto findCartByUserId(String userId) {
-        return cartRepository.findCartByUserMobilePhone(userId)
-                .or(() -> Optional.of(new Cart()))
-                .map(cartItemReadMapper::mapToCartReadDto)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    @Transactional
+    public CartReadDto findCartByUserId(String userMobilePhone) {
+        User user = userService.getUserReferenceById(userMobilePhone);
+        return cartRepository.findCartByUserMobilePhone(userMobilePhone)
+                .map(cartReadMapper::mapToCartReadDto)
+                .orElseGet(() -> cartReadMapper.mapToCartReadDto(createCart(user)));
+    }
+
+    private Cart createCart(User user) {
+        Cart cart = cartCreateMapper.createCart(user);
+        return cartRepository.saveAndFlush(cart);
     }
 
     @Transactional
     public void changeItemQuantity(String userId, CartUpdateDto updateDto) {
         User user = userService.getUserReferenceById(userId);
         Cart cart = cartRepository.findCartByUserMobilePhone(userId)
-                .or(() -> Optional.ofNullable(cartCreateMapper.createCart(user)))
-                .map(cartRepository::saveAndFlush)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST));
+                .orElseGet(() -> createCart(user));
         cartItemRepository.changeItemQuantity(cart.getId(), updateDto.item().productId(), updateDto.item().quantity());
     }
 
