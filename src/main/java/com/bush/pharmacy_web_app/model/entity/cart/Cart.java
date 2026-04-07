@@ -23,6 +23,6 @@ public class Cart {
     @JoinColumn(name = "f_key_user_id", nullable = false)
     private User user;
 
-    @OneToMany(mappedBy = "cart")
+    @OneToMany(mappedBy = "id.cart", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<CartItems> cartItemsList = new ArrayList<>();
 }

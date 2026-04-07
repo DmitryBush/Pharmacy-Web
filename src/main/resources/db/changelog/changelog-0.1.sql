@@ -507,11 +507,10 @@ CREATE TABLE IF NOT EXISTS public.carts
 
 CREATE TABLE IF NOT EXISTS public.cart_items
 (
-    obj_id bigint NOT NULL GENERATED ALWAYS AS IDENTITY,
     obj_amount integer DEFAULT 0,
     f_key_product_id bigint NOT NULL,
-    f_key_cart_id bigint,
-    CONSTRAINT shopping_carts_pkey PRIMARY KEY (obj_id),
+    f_key_cart_id bigint NOT NULL,
+    CONSTRAINT shopping_carts_pkey PRIMARY KEY (f_key_cart_id, f_key_product_id),
     CONSTRAINT cart_items_f_key_cart_id_fkey FOREIGN KEY (f_key_cart_id)
         REFERENCES public.carts (cart_id),
     CONSTRAINT shopping_carts_f_key_product_id_fkey FOREIGN KEY (f_key_product_id)
