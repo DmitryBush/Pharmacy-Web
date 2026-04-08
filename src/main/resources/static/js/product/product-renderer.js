@@ -1,10 +1,10 @@
-export function renderProductElement(product, productContainer) {
+export function renderProductElement(product, productContainer, isinCart = false) {
     const productCard = document.createElement('div');
     productCard.classList.add('product-card');
 
     productCard.appendChild(createProductImage(product));
     productCard.appendChild(createProductNameLink(product));
-    productCard.appendChild(createProductPriceContainer(product));
+    productCard.appendChild(createProductPriceContainer(product, isinCart));
     productContainer.appendChild(productCard);
 }
 
@@ -32,13 +32,26 @@ function createProductNameLink(product) {
     return productNameContainer;
 }
 
-function createProductPriceContainer(product) {
+function createProductPriceContainer(product, isInCart) {
     const productPriceContainer = document.createElement('div');
     const productPrice = document.createElement('p');
     productPrice.textContent = `${product.price} ₽`;
     const buyButton = document.createElement('button');
-    buyButton.textContent = 'Купить'
+    isInCart ? markAsInCart(buyButton) : markAsNotInCart(buyButton);
+
     productPriceContainer.appendChild(productPrice);
     productPriceContainer.appendChild(buyButton);
     return productPriceContainer;
+}
+
+function markAsInCart(buyButton) {
+    buyButton.textContent = 'В корзине';
+    buyButton.classList.add('in-cart');
+    buyButton.addEventListener('click', () => markAsNotInCart(buyButton));
+}
+
+function markAsNotInCart(buyButton) {
+    buyButton.textContent = 'Купить';
+    buyButton.classList.remove('in-cart');
+    buyButton.addEventListener('click', () => markAsInCart(buyButton));
 }
