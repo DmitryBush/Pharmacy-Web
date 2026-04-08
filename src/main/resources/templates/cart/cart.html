@@ -10,9 +10,10 @@
 <body>
     <div th:replace="~{/page-header.html :: page-header}"></div>
     <div class="cr-wrapper">
-        <main class="cr-container">
+        <main class="cr-container" id="main-container">
             <h1 class="cr-page-title">Корзина</h1>
-            <div class="cr-layout" id="main-container"></div>
+            <div class="cr-layout" id="cart-grid-container"></div>
+            <div class="cr-empty" id="empty-cart-container"></div>
         </main>
     </div>
     <div th:replace="~{/page-footer.html :: page-footer}"></div>

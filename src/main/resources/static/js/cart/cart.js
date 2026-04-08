@@ -3,7 +3,10 @@ import RestClient from "../RestClient.js";
 document.addEventListener("DOMContentLoaded", async () => {
     const restClient = new RestClient();
 
-    const mainContainer = document.getElementById("main-container");
+    let totalCartItemsCounter = 0;
+
+    const emptyCartContainer = document.getElementById("empty-cart-container");
+    const gridContainer = document.getElementById("cart-grid-container");
 
     try {
         await initialize();
@@ -11,7 +14,11 @@ document.addEventListener("DOMContentLoaded", async () => {
         console.error(error);
     }
 
-    async function initialize(){
+    async function initialize() {
+        await fetchCartItems();
+    }
+
+    async function fetchCartItems() {
         const items = [
             {
                 amount: 2,
@@ -24,8 +31,12 @@ document.addEventListener("DOMContentLoaded", async () => {
                 }
             }
         ];
-        createCartItems();
-        renderSummaryLayout();
+        if (items.length > 0) {
+            createCartItems();
+            renderSummaryLayout();
+        } else {
+            renderEmptyCart();
+        }
     }
 
     function renderSummaryLayout() {
@@ -47,27 +58,67 @@ document.addEventListener("DOMContentLoaded", async () => {
         placeOrderButton.classList.add("cr-checkout");
         placeOrderButton.textContent = 'Оформить заказ';
         aside.appendChild(placeOrderButton);
-        mainContainer.appendChild(aside);
+        gridContainer.appendChild(aside);
 
         updateSummaryValues();
     }
 
     function updateSummaryValues() {
-        let totalPrice = 0;
-        let itemCount = 0;
-        mainContainer.querySelectorAll('.cr-item').forEach(item => {
-            const price = parseInt(item.querySelector('.cr-item-price').textContent);
-            const quantity = parseInt(item.querySelector('.cr-quantity-field').textContent);
-            totalPrice += price * quantity;
-            itemCount += quantity;
-        });
+        if (totalCartItemsCounter > 0) {
+            let totalPrice = 0;
+            let itemCount = 0;
+            gridContainer.querySelectorAll('.cr-item').forEach(item => {
+                const price = parseInt(item.querySelector('.cr-item-price').textContent);
+                const quantity = parseInt(item.querySelector('.cr-quantity-field').textContent);
+                totalPrice += price * quantity;
+                itemCount += quantity;
+            });
+            document.querySelector('#result-label').textContent = `Итог (${itemCount} товар)`;
+            document.querySelector('#result-value').textContent = `${totalPrice} ₽`;
 
-        document.querySelector('#result-label').textContent = `Итог (${itemCount} товар)`;
-        document.querySelector('#result-value').textContent = `${totalPrice} ₽`;
+            document.querySelector('#discount-value').textContent = `- 0 ₽`;
 
-        document.querySelector('#discount-value').textContent = `- 0 ₽`;
+            document.querySelector('#total-value').textContent = `${totalPrice} ₽`;
+        } else {
+            gridContainer.innerHTML = '';
+            renderEmptyCart();
+        }
+    }
 
-        document.querySelector('#total-value').textContent = `${totalPrice} ₽`;
+    function renderEmptyCart() {
+        emptyCartContainer.innerHTML = '';
+        emptyCartContainer.innerHTML = `
+        <svg class="cr-empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" 
+                stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+            <line x1="3" y1="6" x2="21" y2="6"/>
+            <path d="M16 10a4 4 0 01-8 0"/>
+        </svg>
+        `;
+
+        const emptyCartTitle = document.createElement("h2");
+        emptyCartTitle.classList.add("cr-empty-title");
+        emptyCartTitle.textContent = 'Ваша корзина пока пуста';
+        emptyCartContainer.appendChild(emptyCartTitle);
+
+        const emptyCartDescription = document.createElement("p");
+        emptyCartDescription.classList.add("cr-empty-desc");
+        emptyCartDescription.textContent = 'Добавьте товары из каталога, чтобы оформить заказ';
+        emptyCartContainer.appendChild(emptyCartDescription);
+
+        const catalogLink = document.createElement("a");
+        catalogLink.classList.add("cr-empty-btn");
+        catalogLink.textContent = 'Перейти в каталог';
+        catalogLink.href = '/catalog';
+        emptyCartContainer.appendChild(catalogLink);
+
+        const mainPageLinkContainer = document.createElement("div");
+        mainPageLinkContainer.classList.add("cr-back-link");
+        const mainPageLink = document.createElement("a");
+        mainPageLink.href = '/';
+        mainPageLink.textContent = '← Вернуться на главную';
+        mainPageLinkContainer.appendChild(mainPageLink);
+        emptyCartContainer.appendChild(mainPageLinkContainer);
     }
 
     function createResultGroup() {
@@ -147,7 +198,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             }
         }
         itemsContainer.appendChild(createCartItem(response));
-        mainContainer.appendChild(itemsContainer);
+        gridContainer.appendChild(itemsContainer);
     }
 
     function createCartItem(item) {
@@ -161,8 +212,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         cartItem.querySelector('button[class=cr-remove]').addEventListener('click', (e) => {
             e.preventDefault();
             cartItem.remove();
+            totalCartItemsCounter--;
             updateSummaryValues();
         });
+        totalCartItemsCounter++;
         return cartItem;
     }
 
