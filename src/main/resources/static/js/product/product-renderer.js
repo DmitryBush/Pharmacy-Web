@@ -43,7 +43,9 @@ export default class ProductRenderer {
         const productPrice = document.createElement('p');
         productPrice.textContent = `${product.price} ₽`;
         const buyButton = document.createElement('button');
-        this.cartItemsList.has(product.id) ? this.markAsInCart(buyButton) : this.markAsNotInCart(buyButton);
+        this.cartItemsList.has(product.id)
+            ? this.renderButtonAsInCart(buyButton)
+            : this.renderButtonAsNotInCart(buyButton);
 
         productPriceContainer.appendChild(productPrice);
         productPriceContainer.appendChild(buyButton);
@@ -60,6 +62,10 @@ export default class ProductRenderer {
                 }
             }));
         this.cartItemsList.add(this.product.id);
+        this.renderButtonAsInCart(buyButton);
+    }
+
+    renderButtonAsInCart(buyButton) {
         buyButton.textContent = 'В корзине';
         buyButton.classList.add('in-cart');
         buyButton.addEventListener('click', () => this.markAsNotInCart(buyButton));
@@ -68,6 +74,10 @@ export default class ProductRenderer {
     async markAsNotInCart(buyButton) {
         await this.restClient.fetchData(`/api/v1/carts/me/${this.product.id}`, 'DELETE');
         this.cartItemsList.delete(this.product.id);
+        this.renderButtonAsNotInCart(buyButton);
+    }
+
+    renderButtonAsNotInCart(buyButton) {
         buyButton.textContent = 'Купить';
         buyButton.classList.remove('in-cart');
         buyButton.addEventListener('click', () => this.markAsInCart(buyButton));

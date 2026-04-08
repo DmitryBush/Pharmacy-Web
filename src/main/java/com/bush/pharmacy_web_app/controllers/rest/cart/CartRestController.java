@@ -36,7 +36,7 @@ public class CartRestController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @DeleteMapping(value = "/me/items/{productId}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = "/me/items/{productId}")
     public ResponseEntity<Void> removeItemFromCart(@AuthenticationPrincipal UserDetails userDetails,
                                                    @PathVariable Long productId) {
         cartService.deleteItemFromCart(userDetails.getUsername(), productId);
