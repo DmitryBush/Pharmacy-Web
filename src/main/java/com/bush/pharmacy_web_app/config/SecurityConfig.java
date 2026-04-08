@@ -5,10 +5,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
-import org.springframework.security.config.annotation.authentication.configurers.userdetails.DaoAuthenticationConfigurer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
@@ -37,11 +37,10 @@ public class SecurityConfig {
                 .csrf(Customizer.withDefaults())
                 .authorizeHttpRequests(registry -> registry
                         .requestMatchers("/login", "/register", "/catalog/**", "/", "/cart", "/error",
-                                "product/**", "news/**")
-                            .permitAll()
+                                "product/**", "news/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/css/admin/**", "/js/admin/**")
                             .hasAnyRole("OPERATOR", "ADMIN")
-                        .requestMatchers(HttpMethod.GET,"/css/**", "/js/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/css/**", "/js/**").permitAll()
                         .requestMatchers("/admin/dashboard", "/admin/orders/**", "/admin/warehouse/**")
                             .hasAnyRole("ADMIN", "OPERATOR")
                         .requestMatchers("/admin/product", "/admin/categories").hasRole("ADMIN")
@@ -60,9 +59,17 @@ public class SecurityConfig {
                 .logout(logout -> logout.logoutUrl("/logout")
                         .logoutSuccessUrl("/")
                         .deleteCookies("JSESSIONID"))
+                .exceptionHandling(exceptionConfigurer -> exceptionConfigurer
+                        .authenticationEntryPoint((request, response,
+                                                   authException) -> {
+                            if (request.getRequestURI().startsWith("/api/")) {
+                                response.sendError(HttpStatus.UNAUTHORIZED.value());
+                            } else {
+                                response.sendRedirect("/login");
+                            }
+                        }))
                 .build();
     }
-
 
 
     @Bean
