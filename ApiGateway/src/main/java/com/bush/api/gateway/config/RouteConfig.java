@@ -73,6 +73,9 @@ public class RouteConfig {
                 .route("icon", predicateSpec -> predicateSpec
                         .path("/api/*/icons/**")
                         .uri(ServiceUriEnum.PHARMACY_SERVICE.getUri()))
+                .route("cart", predicateSpec -> predicateSpec
+                        .path("/api/*/carts/**")
+                        .uri(ServiceUriEnum.PHARMACY_SERVICE.getUri()))
                 .route("product-admin", predicateSpec -> predicateSpec
                         .path("/api/*/admin/products/**")
                         .uri(ServiceUriEnum.PHARMACY_SERVICE.getUri()))
