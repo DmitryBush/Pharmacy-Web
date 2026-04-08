@@ -1,10 +1,13 @@
 import RestClient from "../RestClient.js";
 import Loader from "../loader/loader.js";
 import PaginationManager from "../pagination/pagination.js";
-import {renderProductElement} from "../product/product-renderer.js";
+import ProductRenderer from "../product/product-renderer.js";
+import {getCartProductsSet} from "../cart/cart-utils.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
     const restClient = new RestClient();
+
+    let cartItemsSet = new Set();
 
     const catalogHeader = document.getElementById("catalog-header");
 
@@ -41,6 +44,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     async function initialize() {
         lockFilterButtons();
         productLoader.showLoading();
+        cartItemsSet = await getCartProductsSet();
         await loadProducts();
         unlockFilterButtons();
     }
@@ -177,7 +181,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             return;
         }
         const productList = productResponse.pageResponse._embedded.productPreviewDtoList;
-        productList.forEach(product => renderProductElement(product, productContainer));
+        productList.forEach(product => new ProductRenderer(product, productContainer, cartItemsSet));
     }
 
     async function fetchAllProducts() {

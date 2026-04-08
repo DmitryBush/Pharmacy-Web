@@ -1,9 +1,12 @@
 import RestClient from "./RestClient.js";
 import Loader from "./loader/loader.js";
-import {renderProductElement} from "./product/product-renderer.js";
+import ProductRenderer from "./product/product-renderer.js";
+import {getCartProductsSet} from "./cart/cart-utils.js";
 
 document.addEventListener('DOMContentLoaded', async () => {
     const restClient = new RestClient();
+
+    let cartItemsSet = new Set();
 
     const dailyProductsContainer = document.getElementById('product-container');
     const dailyProductsLoader = new Loader(dailyProductsContainer);
@@ -19,6 +22,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     async function initialize() {
         showLoadingAnimation();
+        cartItemsSet = getCartProductsSet();
         loadDailyProducts();
         loadNews();
     }
@@ -33,7 +37,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             'GET', {})).json();
 
         dailyProductsLoader.hideLoading();
-        dailyProducts.forEach((dailyProduct) => renderProductElement(dailyProduct, dailyProductsContainer));
+        dailyProducts.forEach(dailyProduct => new ProductRenderer(dailyProduct, dailyProductsContainer, cartItemsSet));
     }
 
     async function loadNews() {
