@@ -1,57 +1,75 @@
-export function renderProductElement(product, productContainer, isinCart = false) {
-    const productCard = document.createElement('div');
-    productCard.classList.add('product-card');
+import RestClient from "../RestClient.js";
 
-    productCard.appendChild(createProductImage(product));
-    productCard.appendChild(createProductNameLink(product));
-    productCard.appendChild(createProductPriceContainer(product, isinCart));
-    productContainer.appendChild(productCard);
-}
+export default class ProductRenderer {
+    constructor(product, productContainer, cartItemsArray) {
+        this.restClient = new RestClient();
+        this.cartItemsList = cartItemsArray;
+        this.product = product;
+        const productCard = document.createElement('div');
+        productCard.classList.add('product-card');
 
-function createProductImage(product) {
-    const imageLink = document.createElement('a');
-    imageLink.href = `/product/${product.id}`;
-    const productImage = document.createElement('img');
-    if (product.imagePaths.length > 0) {
-        productImage.src = `/api/v1/product-image/${product.imagePaths[0]}`;
-        productImage.alt = product.name;
-        productImage.setAttribute('width', '200px');
-    } else {
-        productImage.classList.add('.image-unavailable');
+        productCard.appendChild(this.createProductImage(product));
+        productCard.appendChild(this.createProductNameLink(product));
+        productCard.appendChild(this.createProductPriceContainer(product));
+        productContainer.appendChild(productCard);
     }
-    imageLink.appendChild(productImage);
-    return imageLink;
-}
 
-function createProductNameLink(product) {
-    const productNameContainer = document.createElement('div');
-    const productNameLink = document.createElement('a');
-    productNameLink.href = `/product/${product.id}`;
-    productNameLink.textContent = product.name;
-    productNameContainer.appendChild(productNameLink);
-    return productNameContainer;
-}
+    createProductImage(product) {
+        const imageLink = document.createElement('a');
+        imageLink.href = `/product/${product.id}`;
+        const productImage = document.createElement('img');
+        if (product.imagePaths.length > 0) {
+            productImage.src = `/api/v1/product-image/${product.imagePaths[0]}`;
+            productImage.alt = product.name;
+            productImage.setAttribute('width', '200px');
+        } else {
+            productImage.classList.add('.image-unavailable');
+        }
+        imageLink.appendChild(productImage);
+        return imageLink;
+    }
 
-function createProductPriceContainer(product, isInCart) {
-    const productPriceContainer = document.createElement('div');
-    const productPrice = document.createElement('p');
-    productPrice.textContent = `${product.price} ₽`;
-    const buyButton = document.createElement('button');
-    isInCart ? markAsInCart(buyButton) : markAsNotInCart(buyButton);
+    createProductNameLink(product) {
+        const productNameContainer = document.createElement('div');
+        const productNameLink = document.createElement('a');
+        productNameLink.href = `/product/${product.id}`;
+        productNameLink.textContent = product.name;
+        productNameContainer.appendChild(productNameLink);
+        return productNameContainer;
+    }
 
-    productPriceContainer.appendChild(productPrice);
-    productPriceContainer.appendChild(buyButton);
-    return productPriceContainer;
-}
+    createProductPriceContainer(product) {
+        const productPriceContainer = document.createElement('div');
+        const productPrice = document.createElement('p');
+        productPrice.textContent = `${product.price} ₽`;
+        const buyButton = document.createElement('button');
+        this.cartItemsList.has(product.id) ? this.markAsInCart(buyButton) : this.markAsNotInCart(buyButton);
 
-function markAsInCart(buyButton) {
-    buyButton.textContent = 'В корзине';
-    buyButton.classList.add('in-cart');
-    buyButton.addEventListener('click', () => markAsNotInCart(buyButton));
-}
+        productPriceContainer.appendChild(productPrice);
+        productPriceContainer.appendChild(buyButton);
+        return productPriceContainer;
+    }
 
-function markAsNotInCart(buyButton) {
-    buyButton.textContent = 'Купить';
-    buyButton.classList.remove('in-cart');
-    buyButton.addEventListener('click', () => markAsInCart(buyButton));
+    async markAsInCart(buyButton) {
+        await this.restClient.fetchData(`/api/v1/carts/me/items`, 'PATCH',
+            {'Content-Type': 'application/json'},
+            JSON.stringify({
+                item: {
+                    productId: this.product.id,
+                    quantity: 1
+                }
+            }));
+        this.cartItemsList.add(this.product.id);
+        buyButton.textContent = 'В корзине';
+        buyButton.classList.add('in-cart');
+        buyButton.addEventListener('click', () => this.markAsNotInCart(buyButton));
+    }
+
+    async markAsNotInCart(buyButton) {
+        await this.restClient.fetchData(`/api/v1/carts/me/${this.product.id}`, 'DELETE');
+        this.cartItemsList.delete(this.product.id);
+        buyButton.textContent = 'Купить';
+        buyButton.classList.remove('in-cart');
+        buyButton.addEventListener('click', () => this.markAsInCart(buyButton));
+    }
 }
