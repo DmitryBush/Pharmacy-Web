@@ -15,6 +15,8 @@ import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+import java.util.Objects;
+
 
 @Configuration
 @EnableWebSecurity
@@ -54,8 +56,32 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/**").permitAll()
                         .requestMatchers("/api/**").authenticated()
                         .anyRequest().authenticated())
-                .formLogin(login -> login.loginPage("/login")
-                        .defaultSuccessUrl("/").permitAll())
+                .formLogin(login -> login
+                        .loginPage("/login")
+                        .successHandler(((request, response,
+                                          authentication) -> {
+                            if ("XMLHttpRequest".equals(request.getHeader("X-Requested-With"))) {
+                                response.sendError(HttpStatus.NO_CONTENT.value());
+                            } else {
+                                String targetUrl = response.getHeader("Referer");
+                                if ("/login".equals(targetUrl) || Objects.isNull(targetUrl)) {
+                                    targetUrl = "/";
+                                }
+                                response.setStatus(HttpStatus.FOUND.value());
+                                response.setHeader("Location", targetUrl);
+                            }
+                        })
+                        )
+                        .failureHandler(((request, response,
+                                          exception) -> {
+                            if ("XMLHttpRequest".equals(request.getHeader("X-Requested-With"))) {
+                                response.sendError(HttpStatus.UNAUTHORIZED.value());
+                            } else {
+                                response.sendRedirect("/login?error");
+                            }
+                        })
+                        )
+                )
                 .logout(logout -> logout.logoutUrl("/logout")
                         .logoutSuccessUrl("/")
                         .deleteCookies("JSESSIONID"))
