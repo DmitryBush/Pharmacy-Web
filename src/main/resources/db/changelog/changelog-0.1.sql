@@ -498,7 +498,7 @@ CREATE TABLE IF NOT EXISTS public.storage
 CREATE TABLE IF NOT EXISTS public.carts
 (
     cart_id bigint NOT NULL GENERATED ALWAYS AS IDENTITY,
-    f_key_user_id character varying(15) NOT NULL,
+    f_key_user_id character varying(18) NOT NULL,
     CONSTRAINT carts_pkey PRIMARY KEY (cart_id),
     CONSTRAINT carts_f_key_user_id_key UNIQUE (f_key_user_id),
     CONSTRAINT carts_f_key_user_id_fkey FOREIGN KEY (f_key_user_id)
