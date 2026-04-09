@@ -1,4 +1,5 @@
 import RestClient from "../RestClient.js";
+import {withAuth} from "../login/auth.js";
 
 export default class ProductRenderer {
     constructor(product, productContainer, cartItemsArray) {
@@ -68,7 +69,7 @@ export default class ProductRenderer {
     renderButtonAsInCart(buyButton) {
         buyButton.textContent = 'В корзине';
         buyButton.classList.add('in-cart');
-        buyButton.addEventListener('click', () => this.markAsNotInCart(buyButton));
+        buyButton.addEventListener('click', withAuth(() => this.markAsNotInCart(buyButton)));
     }
 
     async markAsNotInCart(buyButton) {
@@ -80,6 +81,6 @@ export default class ProductRenderer {
     renderButtonAsNotInCart(buyButton) {
         buyButton.textContent = 'Купить';
         buyButton.classList.remove('in-cart');
-        buyButton.addEventListener('click', () => this.markAsInCart(buyButton));
+        buyButton.addEventListener('click', withAuth(() => this.markAsInCart(buyButton)));
     }
 }
