@@ -43,6 +43,9 @@ public class RouteConfig {
                 .route("adminHttp", predicateSpec -> predicateSpec
                         .path("/admin/**")
                         .uri(ServiceUriEnum.PHARMACY_SERVICE.getUri()))
+                .route("auth", predicateSpec -> predicateSpec
+                        .path("/api/*/auth/**")
+                        .uri(ServiceUriEnum.PHARMACY_SERVICE.getUri()))
                 .route("catalog", predicateSpec -> predicateSpec
                         .path("/api/*/catalog/**")
                         .uri(ServiceUriEnum.PHARMACY_SERVICE.getUri()))
