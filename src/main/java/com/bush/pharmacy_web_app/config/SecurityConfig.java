@@ -1,6 +1,7 @@
 package com.bush.pharmacy_web_app.config;
 
 import com.bush.pharmacy_web_app.service.user.UserService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,7 +16,7 @@ import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
-import java.util.Objects;
+import java.util.Optional;
 
 
 @Configuration
@@ -63,12 +64,13 @@ public class SecurityConfig {
                             if ("XMLHttpRequest".equals(request.getHeader("X-Requested-With"))) {
                                 response.sendError(HttpStatus.NO_CONTENT.value());
                             } else {
-                                String targetUrl = response.getHeader("Referer");
-                                if ("/login".equals(targetUrl) || Objects.isNull(targetUrl)) {
-                                    targetUrl = "/";
-                                }
-                                response.setStatus(HttpStatus.FOUND.value());
-                                response.setHeader("Location", targetUrl);
+                                HttpSession session = request.getSession();
+                                String targetUri = Optional.ofNullable(session.getAttribute("originLoginUri"))
+                                        .map(attribute -> (String) attribute)
+                                        .or(() -> Optional.ofNullable(request.getHeader("Referer")))
+                                        .or(() -> Optional.ofNullable(request.getHeader("Referrer")))
+                                        .orElse("/");
+                                response.sendRedirect(targetUri);
                             }
                         })
                         )
@@ -91,6 +93,8 @@ public class SecurityConfig {
                             if (request.getRequestURI().startsWith("/api/")) {
                                 response.sendError(HttpStatus.UNAUTHORIZED.value());
                             } else {
+                                HttpSession session = request.getSession();
+                                session.setAttribute("originLoginUri", request.getRequestURI());
                                 response.sendRedirect("/login");
                             }
                         }))
