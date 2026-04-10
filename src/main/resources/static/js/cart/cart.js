@@ -233,7 +233,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         cartItem.appendChild(createCartItemImage(item.medicine.imagePaths));
         cartItem.appendChild(createCartItemInfo(item));
-        cartItem.appendChild(createCartItemAction(item.medicine.price));
+        cartItem.appendChild(createCartItemAction(item.medicine));
 
         cartItem.querySelector('button[class=cr-remove]').addEventListener('click', (e) => {
             e.preventDefault();
@@ -279,11 +279,11 @@ document.addEventListener("DOMContentLoaded", async () => {
         itemType.textContent = info.medicine.type;
         cartItemInfo.appendChild(itemType);
 
-        cartItemInfo.appendChild(createCartItemQuantity(info.amount));
+        cartItemInfo.appendChild(createCartItemQuantity(info));
         return cartItemInfo;
     }
 
-    function createCartItemQuantity(quantity) {
+    function createCartItemQuantity(info) {
         const quantityCounter = document.createElement("div");
         quantityCounter.classList.add('cr-qty');
 
@@ -294,7 +294,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         const quantityField = document.createElement("span");
         quantityField.classList.add('cr-quantity-field');
-        quantityField.textContent = quantity;
+        quantityField.textContent = info.amount;
         quantityCounter.appendChild(quantityField);
 
         const incrementButton = document.createElement("button");
@@ -302,7 +302,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         incrementButton.textContent = '+';
         quantityCounter.appendChild(incrementButton);
 
-        decrementButton.addEventListener('click', () => {
+        decrementButton.addEventListener('click', async () => {
             let quantity = parseInt(quantityField.textContent);
             if (quantity > 2) {
                 quantity--;
@@ -310,10 +310,11 @@ document.addEventListener("DOMContentLoaded", async () => {
                 quantity--;
                 decrementButton.disabled = true;
             }
+            await updateCartItem(quantity, info.medicine.id);
             quantityField.textContent = String(quantity);
             updateSummaryValues();
         });
-        incrementButton.addEventListener('click', () => {
+        incrementButton.addEventListener('click', async () => {
             let quantity = parseInt(quantityField.textContent);
             if (quantity <= 1) {
                 quantity++;
@@ -321,19 +322,31 @@ document.addEventListener("DOMContentLoaded", async () => {
             } else if (quantity > 1) {
                 quantity++;
             }
+            await updateCartItem(quantity, info.medicine.id);
             quantityField.textContent = String(quantity);
             updateSummaryValues();
         });
         return quantityCounter;
     }
 
-    function createCartItemAction(price) {
+    async function updateCartItem(quantity, productId) {
+        await restClient.fetchData(`/api/v1/carts/me/items`, 'PATCH',
+            {'Content-type': 'application/json'},
+            JSON.stringify({
+                item: {
+                    quantity: quantity,
+                    productId: productId
+                }
+            }));
+    }
+
+    function createCartItemAction(product) {
         const cartItemActions = document.createElement("div");
         cartItemActions.classList.add("cr-item-actions");
 
         const itemPrice = document.createElement("span");
         itemPrice.classList.add("cr-item-price");
-        itemPrice.textContent = `${price} ₽`;
+        itemPrice.textContent = `${product.price} ₽`;
         cartItemActions.appendChild(itemPrice);
 
         const deleteButton = document.createElement("button");
@@ -346,6 +359,11 @@ document.addEventListener("DOMContentLoaded", async () => {
         </svg>
         Удалить
         `;
+        deleteButton.addEventListener('click', async (e) => {
+            e.preventDefault();
+            await restClient.fetchData(`/api/v1/carts/me/items/${product.id}`, 'DELETE');
+            updateSummaryValues();
+        })
         cartItemActions.appendChild(deleteButton);
         return cartItemActions;
     }
