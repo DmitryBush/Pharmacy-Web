@@ -73,7 +73,7 @@ export default class ProductRenderer {
     }
 
     async markAsNotInCart(buyButton) {
-        await this.restClient.fetchData(`/api/v1/carts/me/${this.product.id}`, 'DELETE');
+        await this.restClient.fetchData(`/api/v1/carts/me/items/${this.product.id}`, 'DELETE');
         this.cartItemsList.delete(this.product.id);
         this.renderButtonAsNotInCart(buyButton);
     }
