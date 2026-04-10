@@ -258,6 +258,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         } else {
             const image = document.createElement("img");
             image.src = `/api/v1/product-image/${imagePaths[0].id}`;
+            image.width = 100;
+            image.height = 100;
             itemImageContainer.appendChild(image);
         }
         return itemImageContainer;
