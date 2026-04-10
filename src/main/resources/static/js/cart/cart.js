@@ -21,8 +21,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     async function fetchCartItems() {
         try {
             const items = await (await restClient.fetchData(`/api/v1/carts/me`, 'GET')).json();
-            if (items.length > 0) {
-                createCartItems(items);
+            if (items.cartItems.length > 0) {
+                createCartItems(items.cartItems);
                 renderSummaryLayout();
             } else {
                 renderEmptyCart();
@@ -257,7 +257,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             </svg>`;
         } else {
             const image = document.createElement("img");
-            image.src = `/api/v1/product-image/${imagePaths[0]}`;
+            image.src = `/api/v1/product-image/${imagePaths[0].id}`;
             itemImageContainer.appendChild(image);
         }
         return itemImageContainer;
@@ -331,7 +331,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         const itemPrice = document.createElement("span");
         itemPrice.classList.add("cr-item-price");
-        itemPrice.textContent = price;
+        itemPrice.textContent = `${price} ₽`;
         cartItemActions.appendChild(itemPrice);
 
         const deleteButton = document.createElement("button");
