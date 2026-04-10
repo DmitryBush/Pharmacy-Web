@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     let totalCartItemsCounter = 0;
 
-    const emptyCartContainer = document.getElementById("empty-cart-container");
+    const authWarningContainer = document.getElementById("empty-cart-container");
     const gridContainer = document.getElementById("cart-grid-container");
 
     try {
@@ -19,23 +19,16 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     async function fetchCartItems() {
-        const items = [
-            {
-                amount: 2,
-                medicine: {
-                    id: 1,
-                    name: 'СУПРАСТИН табл. 25 мг №20',
-                    type: 'Противоаллергические',
-                    price: 4990,
-                    imagePaths: []
-                }
+        try {
+            const items = await (await restClient.fetchData(`/api/v1/carts/me`, 'GET')).json();
+            if (items.length > 0) {
+                createCartItems(items);
+                renderSummaryLayout();
+            } else {
+                renderEmptyCart();
             }
-        ];
-        if (items.length > 0) {
-            createCartItems();
-            renderSummaryLayout();
-        } else {
-            renderEmptyCart();
+        } catch (error) {
+            renderAuthWarning();
         }
     }
 
@@ -86,8 +79,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     function renderEmptyCart() {
-        emptyCartContainer.innerHTML = '';
-        emptyCartContainer.innerHTML = `
+        authWarningContainer.innerHTML = '';
+        authWarningContainer.innerHTML = `
         <svg class="cr-empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" 
                 stroke-linecap="round" stroke-linejoin="round">
             <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
@@ -99,18 +92,18 @@ document.addEventListener("DOMContentLoaded", async () => {
         const emptyCartTitle = document.createElement("h2");
         emptyCartTitle.classList.add("cr-empty-title");
         emptyCartTitle.textContent = 'Ваша корзина пока пуста';
-        emptyCartContainer.appendChild(emptyCartTitle);
+        authWarningContainer.appendChild(emptyCartTitle);
 
         const emptyCartDescription = document.createElement("p");
         emptyCartDescription.classList.add("cr-empty-desc");
         emptyCartDescription.textContent = 'Добавьте товары из каталога, чтобы оформить заказ';
-        emptyCartContainer.appendChild(emptyCartDescription);
+        authWarningContainer.appendChild(emptyCartDescription);
 
         const catalogLink = document.createElement("a");
         catalogLink.classList.add("cr-empty-btn");
         catalogLink.textContent = 'Перейти в каталог';
         catalogLink.href = '/catalog';
-        emptyCartContainer.appendChild(catalogLink);
+        authWarningContainer.appendChild(catalogLink);
 
         const mainPageLinkContainer = document.createElement("div");
         mainPageLinkContainer.classList.add("cr-back-link");
@@ -118,7 +111,50 @@ document.addEventListener("DOMContentLoaded", async () => {
         mainPageLink.href = '/';
         mainPageLink.textContent = '← Вернуться на главную';
         mainPageLinkContainer.appendChild(mainPageLink);
-        emptyCartContainer.appendChild(mainPageLinkContainer);
+        authWarningContainer.appendChild(mainPageLinkContainer);
+    }
+
+    function renderAuthWarning() {
+        authWarningContainer.innerHTML = `
+        <svg class="cr-auth-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+            <path d="M7 11V7a5 5 0 0110 0v4"></path>
+        </svg>
+        `;
+
+        const authWarningTitle = document.createElement("h2");
+        authWarningTitle.classList.add("cr-empty-title");
+        authWarningTitle.textContent = 'Требуется вход в аккаунт';
+        authWarningContainer.appendChild(authWarningTitle);
+
+        const emptyCartDescription = document.createElement("p");
+        emptyCartDescription.classList.add("cr-empty-desc");
+        emptyCartDescription.textContent = 'Для управления корзиной и оформления заказа ' +
+            'необходимо войти в аккаунт или создать новый';
+        authWarningContainer.appendChild(emptyCartDescription);
+
+        const actionButtonContainer = document.createElement("div");
+        actionButtonContainer.classList.add("cr-auth-actions");
+        const loginButton = document.createElement("a");
+        loginButton.href = '/login';
+        loginButton.classList.add("cr-empty-btn");
+        loginButton.textContent = 'Войти';
+        const registerButton = document.createElement("a");
+        registerButton.href = '/register';
+        registerButton.classList.add("cr-auth-btn");
+        registerButton.classList.add("cr-auth-btn--secondary");
+        registerButton.textContent = "Зарегистрироваться";
+        actionButtonContainer.appendChild(loginButton);
+        actionButtonContainer.appendChild(registerButton);
+        authWarningContainer.appendChild(actionButtonContainer);
+
+        const mainPageLinkContainer = document.createElement("div");
+        mainPageLinkContainer.classList.add("cr-back-link");
+        const mainPageLink = document.createElement("a");
+        mainPageLink.href = '/';
+        mainPageLink.textContent = '← Вернуться на главную';
+        mainPageLinkContainer.appendChild(mainPageLink);
+        authWarningContainer.appendChild(mainPageLinkContainer);
     }
 
     function createResultGroup() {
@@ -184,20 +220,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         return totalGroup;
     }
 
-    function createCartItems() {
+    function createCartItems(cartItems) {
         const itemsContainer = document.createElement("div");
         itemsContainer.classList.add("cr-items");
-        const response = {
-            amount: 2,
-            medicine: {
-                id: 1,
-                name: 'СУПРАСТИН табл. 25 мг №20',
-                type: 'Противоаллергические',
-                price: 4990,
-                imagePaths: []
-            }
-        }
-        itemsContainer.appendChild(createCartItem(response));
+        cartItems.forEach((item) => itemsContainer.appendChild(createCartItem(item)));
         gridContainer.appendChild(itemsContainer);
     }
 

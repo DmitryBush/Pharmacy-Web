@@ -385,3 +385,40 @@
     padding: 60px 20px;
     animation: cr-fadeIn 0.4s ease;
 }
+
+.cr-auth-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 14px 28px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.2s, border-color 0.2s, transform 0.1s;
+    cursor: pointer;
+    font-family: inherit;
+    border: 1px solid transparent;
+}
+
+.cr-auth-btn:active {
+    transform: scale(0.98);
+}
+
+.cr-auth-btn--secondary {
+    background: #fff;
+    color: #1a1a1a;
+    border-color: #e0e0e0;
+}
+
+.cr-auth-btn--secondary:hover {
+    border-color: #1a1a1a;
+}
+
+.cr-auth-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 24px;
+}
