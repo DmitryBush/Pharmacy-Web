@@ -90,6 +90,7 @@
 }
 
 .form-group {
+    margin-bottom: 5px;
 }
 
 .form-label {
@@ -103,11 +104,12 @@
 .form-input {
     width: 100%;
     padding: 12px 14px;
+    box-sizing: border-box;
     font-size: 15px;
     color: #0f172a;
     background: rgba(255, 255, 255, 0.5);
     border: 1px solid rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
+    border-radius: 12px;
     outline: none;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     font-family: inherit;
@@ -129,13 +131,13 @@
 
 .btn-primary {
     width: 100%;
-    padding: 13px;
+    padding: 12px;
     font-size: 15px;
     font-weight: 500;
     color: #ffffff;
     background: #0f172a;
     border: none;
-    border-radius: 10px;
+    border-radius: 12px;
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     font-family: inherit;
