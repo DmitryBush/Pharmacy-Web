@@ -1,28 +1,20 @@
 package com.bush.pharmacy_web_app.model.entity.cart;
 
-import com.bush.pharmacy_web_app.model.entity.product.Product;
 import jakarta.persistence.*;
 import lombok.*;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString(exclude = {"cart"})
+@ToString
 @Builder
 @Entity
-@Table(name = "cart_items")
+@Table(name = "cart_items", uniqueConstraints = {
+        @UniqueConstraint(name = "shopping_carts_pkey", columnNames = {"f_key_product_id", "f_key_cart_id"})
+})
 public class CartItems {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "obj_id", nullable = false)
-    private Long id;
+    @EmbeddedId
+    private CartItemId id;
     @Column(name = "obj_amount")
     private Integer amount;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "f_key_product_id", nullable = false)
-    private Product product;
-    @ManyToOne
-    @JoinColumn(name = "f_key_cart_id")
-    private Cart cart;
 }

@@ -1,169 +1,202 @@
-/* Fluent Design System */
-body {
-    margin: 0;
-    padding: 0;
-    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-    background: #f3f2f1;
+.overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.1);
+    backdrop-filter: blur(12px);
     display: flex;
-    justify-content: center;
     align-items: center;
-    min-height: 100vh;
-    color: #201f1e;
+    justify-content: center;
+    z-index: 1000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease;
 }
 
-.main-content {
-    background: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0 16px 32px rgba(0, 0, 0, 0.08);
-    width: 440px;
-    max-height: 80vh;
-    padding: 40px;
+.overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.modal {
+    width: 100%;
+    max-width: 440px;
+    max-height: 550px;
     overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    padding: 40px 32px;
+    margin: 20px;
+    background: rgba(246, 246, 246, 0.84);
+    backdrop-filter: blur(32px) saturate(180%);
+    -webkit-backdrop-filter: blur(32px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+    position: relative;
+    transform: scale(0.95) translateY(10px);
+    opacity: 0;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-@supports (scrollbar-width: thin) {
-    .main-content {
-        scrollbar-width: thin;
-        scrollbar-color: #0078d4 transparent;
-    }
+.modal:before {
+    border-radius: 16px;
+    background: linear-gradient(
+            to bottom right,
+            rgba(255, 255, 255, 1) 0%,
+            rgba(0, 0, 0, 0) 100%
+    );
+    pointer-events: none;
+    z-index: -1;
 }
 
-.main-content::-webkit-scrollbar {
-    width: 8px;
+.overlay.active .modal {
+    transform: scale(1) translateY(0);
+    opacity: 1;
 }
 
-.main-content::-webkit-scrollbar-track {
+.close-modal-login-btn {
+    position: absolute;
+    top: 16px;
+    right: 16px;
     background: transparent;
+    border: none;
+    font-size: 24px;
+    color: #64748b;
+    cursor: pointer;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.main-content::-webkit-scrollbar-thumb {
-    background-color: #0078d4;
-    border-radius: 4px;
+.close-modal-login-btn:hover {
+    background: rgba(0, 0, 0, 0.05);
+    color: #0f172a;
 }
 
-.login-header {
-    text-align: center;
+.modal h2 {
+    font-size: 24px;
+    font-weight: 600;
+    color: #0f172a;
+    margin-bottom: 8px;
+    letter-spacing: -0.5px;
+}
+
+.subtitle {
+    font-size: 14px;
+    color: #64748b;
     margin-bottom: 32px;
 }
 
-.login-header h1 {
-    font-size: 24px;
-    font-weight: 600;
-    color: #242424;
-    margin: 0 0 8px 0;
+.form-group {
+    margin-bottom: 5px;
 }
 
-.login-form {
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-}
-
-.login-form label {
+.form-label {
     display: block;
-    font-size: 14px;
-    font-weight: 600;
+    font-size: 13px;
+    font-weight: 500;
+    color: #0f172a;
     margin-bottom: 8px;
-    color: #605e5c;
 }
 
-.login-form input {
-    width: 90%;
-    padding: 12px;
-    border: 1px solid #edebe9;
-    border-radius: 4px;
-    font-size: 14px;
-    transition: all 0.2s ease;
-    background: #faf9f8;
-}
-
-.login-form input:focus {
+.form-input {
+    width: 100%;
+    padding: 12px 14px;
+    box-sizing: border-box;
+    font-size: 15px;
+    color: #0f172a;
+    background: rgba(255, 255, 255, 0.5);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
     outline: none;
-    border-color: #0078d4;
-    box-shadow: 0 0 0 2px rgba(0, 120, 212, 0.3);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    font-family: inherit;
 }
 
-.login-form input::placeholder {
-    color: #a19f9d;
+.form-input::placeholder {
+    color: #94a3b8;
 }
 
-.login-form button[type="submit"] {
-    background: #0078d4;
-    color: white;
+.form-input:focus {
+    border-color: #3b82f6;
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 0 0 4px  rgba(59, 130, 246, 0.25);
+}
+
+.form-actions {
+    margin-top: 24px;
+}
+
+.btn-primary {
+    width: 100%;
+    padding: 12px;
+    font-size: 15px;
+    font-weight: 500;
+    color: #ffffff;
+    background: #0f172a;
     border: none;
-    padding: 12px 20px;
-    border-radius: 4px;
-    font-size: 14px;
-    font-weight: 600;
+    border-radius: 12px;
     cursor: pointer;
-    transition:
-            background 0.2s ease,
-            transform 0.1s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    font-family: inherit;
 }
 
-.login-form button[type="submit"]:hover {
-    background: #106ebe;
+.btn-primary:hover {
+    background: #334155;
+    transform: translateY(-1px);
 }
 
-.login-form button[type="submit"]:active {
-    transform: scale(0.98);
+.btn-primary:active {
+    transform: translateY(0);
 }
 
-.login-form a {
-    color: #0078d4;
+.form-footer {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 13px;
+    color: #64748b;
+}
+
+.form-footer a {
+    color: #0f172a;
     text-decoration: none;
-    font-weight: 600;
-    transition: color 0.2s ease;
+    font-weight: 500;
+    transition: color 0.2s;
 }
 
-.login-form a:hover {
-    color: #004578;
+.form-footer a:hover {
+    color: #3b82f6;
     text-decoration: underline;
 }
 
-.login-form > div[th\\:if] p {
-                               background: #fed9cc;
-                               color: #bc2f26;
-                               padding: 12px;
-                               border-radius: 4px;
-                               font-size: 14px;
-                               margin: 0;
-                               border: 1px solid #f4c7b8;
-                               display: flex;
-                               align-items: center;
-                               gap: 8px;
-                           }
-
-/* Адаптивный дизайн */
-@media (max-width: 480px) {
-    .main-content {
-        width: 100%;
-        margin: 16px;
-        padding: 24px;
-        max-height: 80vh;
-        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
-    }
-
-    .login-form input {
-        padding: 10px;
-    }
+.trigger-wrapper {
+    z-index: 5;
+    text-align: center;
 }
 
-/* Fluent Motion */
-@keyframes fluentEnter {
-    from {
-        opacity: 0;
-        transform: translateY(-10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+.trigger-btn {
+    padding: 14px 28px;
+    font-size: 15px;
+    font-weight: 500;
+    color: #0f172a;
+    background: rgba(255, 255, 255, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    border-radius: 10px;
+    cursor: pointer;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    font-family: inherit;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
 }
 
-.main-content {
-    animation: fluentEnter 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+.trigger-btn:hover {
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+    transform: translateY(-2px);
+}
+
+.trigger-btn.hidden {
+    display: none;
 }

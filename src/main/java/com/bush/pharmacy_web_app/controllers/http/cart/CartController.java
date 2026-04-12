@@ -1,4 +1,4 @@
-package com.bush.pharmacy_web_app.controllers.http.customer;
+package com.bush.pharmacy_web_app.controllers.http.cart;
 
 import com.bush.pharmacy_web_app.service.cart.CartService;
 import lombok.RequiredArgsConstructor;
@@ -17,12 +17,6 @@ public class CartController {
 
     @GetMapping
     public String showCart(Model model, @AuthenticationPrincipal UserDetails userDetails) {
-        var cart = cartService.findById(1L)
-                .orElse(null);
-        if (userDetails != null)
-            model.addAttribute("cart", cart);
-        else
-            model.addAttribute("cart", null);
-        return "user/cart";
+        return "cart/cart";
     }
 }
