@@ -1,4 +1,6 @@
 import RestClient from "../RestClient.js";
+import {LoginModal} from "../login/login-modal.js";
+import {RegisterModal} from "../login/register-modal.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
     const restClient = new RestClient();
@@ -135,15 +137,21 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         const actionButtonContainer = document.createElement("div");
         actionButtonContainer.classList.add("cr-auth-actions");
-        const loginButton = document.createElement("a");
-        loginButton.href = '/login';
+        const loginButton = document.createElement("button");
         loginButton.classList.add("cr-empty-btn");
         loginButton.textContent = 'Войти';
-        const registerButton = document.createElement("a");
-        registerButton.href = '/register';
+        loginButton.addEventListener('click', () => {
+            const loginModal = LoginModal.getInstance();
+            loginModal.show();
+        });
+        const registerButton = document.createElement("button");
         registerButton.classList.add("cr-auth-btn");
         registerButton.classList.add("cr-auth-btn--secondary");
         registerButton.textContent = "Зарегистрироваться";
+        registerButton.addEventListener('click', () => {
+            const registerModal = RegisterModal.getInstance();
+            registerModal.show();
+        });
         actionButtonContainer.appendChild(loginButton);
         actionButtonContainer.appendChild(registerButton);
         authWarningContainer.appendChild(actionButtonContainer);
