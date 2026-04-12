@@ -1,7 +1,8 @@
-package com.bush.pharmacy_web_app.config;
+package com.bush.pharmacy_web_app.config.security;
 
 import com.bush.pharmacy_web_app.service.user.UserService;
 import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,6 +22,7 @@ import java.util.Optional;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
     // Configuration parameters for Argon2
     @Value("${spring.security.encryption-config.salt-length}")
@@ -33,6 +35,10 @@ public class SecurityConfig {
     private Integer memory;
     @Value("${spring.security.encryption-config.iterations}")
     private Integer iterations;
+
+    private final CustomAuthenticationSuccessHandler authenticationSuccessHandler;
+    private final CustomAuthenticationFailureHandler authenticationFailureHandler;
+    private final AuthenticationExceptionHandler authenticationExceptionHandler;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
@@ -59,45 +65,14 @@ public class SecurityConfig {
                         .anyRequest().authenticated())
                 .formLogin(login -> login
                         .loginPage("/login")
-                        .successHandler(((request, response,
-                                          authentication) -> {
-                            if ("XMLHttpRequest".equals(request.getHeader("X-Requested-With"))) {
-                                response.sendError(HttpStatus.NO_CONTENT.value());
-                            } else {
-                                HttpSession session = request.getSession();
-                                String targetUri = Optional.ofNullable(session.getAttribute("originLoginUri"))
-                                        .map(attribute -> (String) attribute)
-                                        .or(() -> Optional.ofNullable(request.getHeader("Referer")))
-                                        .or(() -> Optional.ofNullable(request.getHeader("Referrer")))
-                                        .orElse("/");
-                                response.sendRedirect(targetUri);
-                            }
-                        })
-                        )
-                        .failureHandler(((request, response,
-                                          exception) -> {
-                            if ("XMLHttpRequest".equals(request.getHeader("X-Requested-With"))) {
-                                response.sendError(HttpStatus.UNAUTHORIZED.value());
-                            } else {
-                                response.sendRedirect("/login?error");
-                            }
-                        })
-                        )
+                        .successHandler(authenticationSuccessHandler)
+                        .failureHandler(authenticationFailureHandler)
                 )
                 .logout(logout -> logout.logoutUrl("/logout")
                         .logoutSuccessUrl("/")
                         .deleteCookies("JSESSIONID"))
                 .exceptionHandling(exceptionConfigurer -> exceptionConfigurer
-                        .authenticationEntryPoint((request, response,
-                                                   authException) -> {
-                            if (request.getRequestURI().startsWith("/api/")) {
-                                response.sendError(HttpStatus.UNAUTHORIZED.value());
-                            } else {
-                                HttpSession session = request.getSession();
-                                session.setAttribute("originLoginUri", request.getRequestURI());
-                                response.sendRedirect("/login");
-                            }
-                        }))
+                        .authenticationEntryPoint(authenticationExceptionHandler))
                 .build();
     }
 
