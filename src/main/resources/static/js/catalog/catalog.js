@@ -1,9 +1,13 @@
 import RestClient from "../RestClient.js";
 import Loader from "../loader/loader.js";
 import PaginationManager from "../pagination/pagination.js";
+import ProductRenderer from "../product/product-renderer.js";
+import {getCartProductsSet} from "../cart/cart-utils.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
     const restClient = new RestClient();
+
+    let cartItemsSet = new Set();
 
     const catalogHeader = document.getElementById("catalog-header");
 
@@ -40,6 +44,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     async function initialize() {
         lockFilterButtons();
         productLoader.showLoading();
+        cartItemsSet = await getCartProductsSet();
         await loadProducts();
         unlockFilterButtons();
     }
@@ -176,7 +181,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             return;
         }
         const productList = productResponse.pageResponse._embedded.productPreviewDtoList;
-        productList.forEach(product => createProductElement(product));
+        productList.forEach(product => new ProductRenderer(product, productContainer, cartItemsSet));
     }
 
     async function fetchAllProducts() {
@@ -228,51 +233,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         params.set('page', paginationManager.currentPage);
         params.set('size', paginationManager.pageSize);
         window.history.replaceState(null, null, `?${params.toString()}`);
-    }
-
-    function createProductElement(product) {
-        const productCard = document.createElement('div');
-        productCard.classList.add('product-card');
-
-        productCard.appendChild(createProductImage(product));
-        productCard.appendChild(createProductNameLink(product));
-        productCard.appendChild(createProductPriceContainer(product));
-        productContainer.appendChild(productCard);
-    }
-
-    function createProductImage(product) {
-        const imageLink = document.createElement('a');
-        imageLink.href = `/product/${product.id}`;
-        const productImage = document.createElement('img');
-        if (product.imagePaths.length > 0) {
-            productImage.src = `/api/v1/product-image/${product.imagePaths[0]}`;
-            productImage.alt = product.name;
-            productImage.setAttribute('width', '200px');
-        } else {
-            productImage.classList.add('.image-unavailable');
-        }
-        imageLink.appendChild(productImage);
-        return imageLink;
-    }
-
-    function createProductNameLink(product) {
-        const productNameContainer = document.createElement('div');
-        const productNameLink = document.createElement('a');
-        productNameLink.href = `/product/${product.id}`;
-        productNameLink.textContent = product.name;
-        productNameContainer.appendChild(productNameLink);
-        return productNameContainer;
-    }
-
-    function createProductPriceContainer(product) {
-        const productPriceContainer = document.createElement('div');
-        const productPrice = document.createElement('p');
-        productPrice.textContent = `${product.price} ₽`;
-        const buyButton = document.createElement('button');
-        buyButton.textContent = 'Купить'
-        productPriceContainer.appendChild(productPrice);
-        productPriceContainer.appendChild(buyButton);
-        return productPriceContainer;
     }
 
     function lockFilterButtons() {

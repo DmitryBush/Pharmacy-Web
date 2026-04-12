@@ -1,8 +1,12 @@
 import RestClient from "./RestClient.js";
 import Loader from "./loader/loader.js";
+import ProductRenderer from "./product/product-renderer.js";
+import {getCartProductsSet} from "./cart/cart-utils.js";
 
 document.addEventListener('DOMContentLoaded', async () => {
     const restClient = new RestClient();
+
+    let cartItemsSet = new Set();
 
     const dailyProductsContainer = document.getElementById('product-container');
     const dailyProductsLoader = new Loader(dailyProductsContainer);
@@ -18,6 +22,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     async function initialize() {
         showLoadingAnimation();
+        cartItemsSet = getCartProductsSet();
         loadDailyProducts();
         loadNews();
     }
@@ -32,39 +37,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             'GET', {})).json();
 
         dailyProductsLoader.hideLoading();
-        dailyProducts.forEach((dailyProduct) => {
-            const productCard = document.createElement('div');
-            productCard.classList.add('product-card');
-
-            const imageLink = document.createElement('a');
-            imageLink.href = `/catalog/${dailyProduct.id}`;
-            imageLink.innerHTML = `<img src="/api/v1/product-image/${dailyProduct.imagePaths[0].id}"
-                                        width="200px"
-                                        alt="${dailyProduct.name}">`;
-
-            const nameLinkContainer = document.createElement('div');
-            const nameLink = document.createElement('a');
-            nameLink.href = `/catalog/${dailyProduct.id}`;
-            nameLink.textContent = dailyProduct.name;
-
-            nameLinkContainer.appendChild(nameLink);
-
-            const actionContainer = document.createElement('div');
-
-            const price = document.createElement('p');
-            price.textContent = `${dailyProduct.price} ₽`;
-            const buyButton = document.createElement('button');
-            buyButton.textContent = 'Купить';
-
-            actionContainer.appendChild(price);
-            actionContainer.appendChild(buyButton);
-
-            productCard.append(imageLink);
-            productCard.append(nameLinkContainer);
-            productCard.append(actionContainer);
-
-            dailyProductsContainer.append(productCard);
-        });
+        dailyProducts.forEach(dailyProduct => new ProductRenderer(dailyProduct, dailyProductsContainer, cartItemsSet));
     }
 
     async function loadNews() {

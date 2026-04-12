@@ -7,6 +7,8 @@
 <body>
     <div class="container">
         <header th:fragment="page-header" class="page-header">
+            <meta name="_csrf" th:content="${_csrf.token}"/>
+            <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
             <a href="/">
                 <img src="/api/v1/icons/header/logo.png" loading="lazy" class="logo" alt="Аптека" width="128px" height="25px">
             </a>
@@ -175,7 +177,15 @@
             </div>
             <link href="/css/page-header.css" rel="stylesheet">
             <link href="/css/dropdown-catalog.css" rel="stylesheet">
+            <link href="/css/login/login.css" rel="stylesheet">
             <script src="/js/dropdown-catalog.js"></script>
+            <script type="module">
+                import {LoginModal} from "/js/login/login-modal.js";
+
+                document.addEventListener("DOMContentLoaded", () => {
+                    LoginModal.getInstance();
+                });
+            </script>
         </header>
     </div>
 </body>

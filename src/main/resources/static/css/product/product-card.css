@@ -43,3 +43,30 @@
 .product-card button:hover {
     background: #10893E;
 }
+
+.product-card button.in-cart {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    background: #f4f9f6;
+    color: #27ae60;
+    border: 1px solid #cde6d6;
+    font-weight: 500;
+    padding: 10px 16px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.product-card button.in-cart::before {
+    content: "✓";
+    font-size: 1.1em;
+    line-height: 1;
+}
+
+.product-card button.in-cart:hover {
+    background: #e8f2eb;
+    border-color: #a3d9b5;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(39, 174, 96, 0.15);
+}

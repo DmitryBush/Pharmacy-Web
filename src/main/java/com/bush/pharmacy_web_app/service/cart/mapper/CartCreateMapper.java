@@ -1,39 +1,15 @@
 package com.bush.pharmacy_web_app.service.cart.mapper;
 
-import com.bush.pharmacy_web_app.repository.user.UserRepository;
-import com.bush.pharmacy_web_app.model.dto.cart.CartCreateDto;
 import com.bush.pharmacy_web_app.model.entity.cart.Cart;
-import com.bush.pharmacy_web_app.shared.mapper.DtoMapper;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
+import com.bush.pharmacy_web_app.model.entity.user.User;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingConstants;
 
-import java.util.Collections;
-import java.util.Optional;
-
-@Component
-@RequiredArgsConstructor
-public class CartCreateMapper implements DtoMapper<CartCreateDto, Cart> {
-    private final UserRepository userRepository;
-    private final CartItemsCreateMapper cartItemsCreateMapper;
-    @Override
-    public Cart map(CartCreateDto obj) {
-        return copyObj(obj, new Cart());
-    }
-
-    @Override
-    public Cart map(CartCreateDto fromObj, Cart toObj) {
-        return DtoMapper.super.map(fromObj, toObj);
-    }
-
-    private Cart copyObj(CartCreateDto fromObj, Cart toObj) {
-        var user = userRepository.findById(fromObj.user().mobilePhone())
-                .orElseThrow();
-        var cartItems = Optional.ofNullable(fromObj.cartItemsList())
-                        .map(item -> item.stream().map(cartItemsCreateMapper::map).toList())
-                        .orElse(Collections.emptyList());
-
-        toObj.setUser(user);
-        toObj.setCartItemsList(cartItems);
-        return toObj;
-    }
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
+public interface CartCreateMapper {
+    @Mapping(target = "user", source = "user")
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "cartItemsList", ignore = true)
+    Cart createCart(User user);
 }

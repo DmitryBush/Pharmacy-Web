@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Корзина</title>
+    <link href="/css/base.css" rel="stylesheet"/>
+    <link href="/css/cart/cart.css" rel="stylesheet"/>
+    <script src="/js/cart/cart.js" type="module"></script>
+</head>
+<body>
+    <div th:replace="~{/page-header.html :: page-header}"></div>
+    <div class="cr-wrapper">
+        <main class="cr-container" id="main-container">
+            <h1 class="cr-page-title">Корзина</h1>
+            <div class="cr-layout" id="cart-grid-container"></div>
+            <div class="cr-empty" id="empty-cart-container"></div>
+        </main>
+    </div>
+    <div th:replace="~{/page-footer.html :: page-footer}"></div>
+</body>
+</html>

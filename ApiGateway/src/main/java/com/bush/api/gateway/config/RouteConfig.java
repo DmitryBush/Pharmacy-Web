@@ -43,6 +43,9 @@ public class RouteConfig {
                 .route("adminHttp", predicateSpec -> predicateSpec
                         .path("/admin/**")
                         .uri(ServiceUriEnum.PHARMACY_SERVICE.getUri()))
+                .route("auth", predicateSpec -> predicateSpec
+                        .path("/api/*/auth/**")
+                        .uri(ServiceUriEnum.PHARMACY_SERVICE.getUri()))
                 .route("catalog", predicateSpec -> predicateSpec
                         .path("/api/*/catalog/**")
                         .uri(ServiceUriEnum.PHARMACY_SERVICE.getUri()))
@@ -72,6 +75,9 @@ public class RouteConfig {
                         .uri(ServiceUriEnum.PHARMACY_SERVICE.getUri()))
                 .route("icon", predicateSpec -> predicateSpec
                         .path("/api/*/icons/**")
+                        .uri(ServiceUriEnum.PHARMACY_SERVICE.getUri()))
+                .route("cart", predicateSpec -> predicateSpec
+                        .path("/api/*/carts/**")
                         .uri(ServiceUriEnum.PHARMACY_SERVICE.getUri()))
                 .route("product-admin", predicateSpec -> predicateSpec
                         .path("/api/*/admin/products/**")
