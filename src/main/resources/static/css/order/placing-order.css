@@ -1,0 +1,260 @@
+.cr-wrapper * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.cr-wrapper {
+    color: #1a1a1a;
+    line-height: 1.6;
+    min-height: 100vh;
+}
+
+/* ===== MAIN CONTAINER ===== */
+.cr-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 48px 24px;
+}
+
+.cr-page-title {
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    margin-bottom: 40px;
+}
+
+/* ===== CHECKOUT LAYOUT ===== */
+.cr-checkout-layout {
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: 48px;
+    align-items: start;
+}
+
+.cr-checkout-main {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
+
+/* ===== SECTIONS ===== */
+.cr-section {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.cr-section-title {
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.cr-branch-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.cr-branch-card {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 18px 20px;
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+}
+
+.cr-branch-card:hover {
+    border-color: #bbb;
+}
+
+/* Modern :has() for radio selection */
+.cr-branch-card:has(input:checked) {
+    border-color: #1a1a1a;
+    background: #fafafa;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+.cr-branch-radio {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.cr-branch-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.cr-branch-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: #1a1a1a;
+}
+
+.cr-branch-address {
+    font-size: 14px;
+    color: #555;
+}
+
+.cr-branch-hours {
+    font-size: 13px;
+    color: #888;
+    margin-top: 2px;
+}
+
+.cr-branch-distance {
+    font-size: 13px;
+    color: #888;
+    white-space: nowrap;
+    align-self: flex-end;
+}
+
+/* ===== ORDER ITEMS ===== */
+.cr-order-items {
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    border: 1px solid #e8e8e8;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.cr-order-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 20px;
+    border-bottom: 1px solid #eee;
+}
+
+.cr-order-item:last-child {
+    border-bottom: none;
+}
+
+.cr-order-item-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.cr-order-item-name {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.cr-order-item-variant {
+    font-size: 13px;
+    color: #888;
+}
+
+.cr-order-item-qty {
+    font-size: 13px;
+    color: #666;
+    min-width: 24px;
+    text-align: center;
+}
+
+.cr-order-item-price {
+    font-size: 15px;
+    font-weight: 700;
+}
+
+/* ===== ORDER SUMMARY (REUSED) ===== */
+.cr-summary {
+    background: #fff;
+    border: 1px solid #e8e8e8;
+    border-radius: 12px;
+    padding: 32px;
+    position: sticky;
+    top: 24px;
+}
+
+.cr-summary-title {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 24px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #eee;
+}
+
+.cr-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    font-size: 14px;
+    color: #666;
+}
+
+.cr-row-total {
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid #eee;
+    font-size: 18px;
+    font-weight: 700;
+    color: #1a1a1a;
+}
+
+.cr-row-label { color: #666; }
+.cr-row-value { font-weight: 500; }
+.cr-row-total .cr-row-value { color: #1a1a1a; }
+
+.cr-checkout {
+    width: 100%;
+    padding: 16px;
+    background: #1a1a1a;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 24px;
+    transition: background 0.2s, transform 0.1s;
+    letter-spacing: 0.2px;
+    font-family: inherit;
+}
+
+.cr-checkout:hover { background: #333; }
+.cr-checkout:active { transform: scale(0.98); }
+
+.cr-secure {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin-top: 16px;
+    font-size: 12px;
+    color: #aaa;
+}
+
+.cr-secure svg { width: 12px; height: 12px; }
+
+/* ===== BACK LINK ===== */
+.cr-continue {
+    text-align: center;
+    margin-top: 48px;
+}
+
+.cr-continue a {
+    color: #888;
+    text-decoration: none;
+    font-size: 14px;
+    transition: color 0.15s, border-color 0.15s;
+    border-bottom: 1px solid transparent;
+}
+
+.cr-continue a:hover {
+    color: #1a1a1a;
+    border-bottom-color: #1a1a1a;
+}
