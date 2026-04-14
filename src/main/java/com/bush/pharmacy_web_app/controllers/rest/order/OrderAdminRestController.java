@@ -10,6 +10,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.UUID;
+
 @RestController
 @RequestMapping("/api/v1/management/orders")
 @RequiredArgsConstructor
@@ -17,14 +19,14 @@ public class OrderAdminRestController {
     private final OrderService orderService;
 
     @GetMapping("/{id}/state")
-    public OrderState getOrderState(@PathVariable Long id) {
+    public OrderState getOrderState(@PathVariable UUID id) {
         return orderService.findOrderStateById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
     @PreAuthorize("hasAnyRole('OPERATOR', 'ADMIN')")
     @PostMapping("/{id}/state")
-    public ResponseEntity<Void> requestStateChange(@PathVariable Long id, @RequestBody OrderStateChangeDto dto) {
+    public ResponseEntity<Void> requestStateChange(@PathVariable UUID id, @RequestBody OrderStateChangeDto dto) {
         try {
             if (orderService.processEvent(id, dto.event()))
                 return ResponseEntity.accepted().build();

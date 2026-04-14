@@ -9,6 +9,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.UUID;
+
 @SpringBootTest
 class OrderServiceTest {
     @Autowired
@@ -18,7 +20,7 @@ class OrderServiceTest {
     @Transactional
     @Rollback
     void testProcessEvent() {
-        var result = orderService.processEvent(17L, OrderEvent.OPERATOR_COMPLETES_ORDER);
+        var result = orderService.processEvent(UUID.randomUUID(), OrderEvent.OPERATOR_COMPLETES_ORDER);
 
         Assertions.assertTrue(result);
     }
@@ -27,7 +29,7 @@ class OrderServiceTest {
     @Transactional
     @Rollback
     void testInvalidStateTransition() {
-        var result = orderService.processEvent(16L, OrderEvent.LOGISTIC_ISSUE);
+        var result = orderService.processEvent(UUID.randomUUID(), OrderEvent.LOGISTIC_ISSUE);
 
         Assertions.assertFalse(result);
     }

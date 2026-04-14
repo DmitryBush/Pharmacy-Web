@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.UUID;
+
 @Controller
 @RequestMapping("/admin/orders")
 @RequiredArgsConstructor
@@ -49,7 +51,7 @@ public class AdminOrderController {
     @GetMapping("branch/{branchId}")
     public String getOrdersList(Model model,
                             HttpServletRequest httpRequest,
-                            @PageableDefault(size = 15) Pageable pageable,
+                            @PageableDefault(size = 15, sort = "id") Pageable pageable,
                             @PathVariable Long branchId,
                             @AuthenticationPrincipal UserDetails userDetails) {
         var orders = orderService.findAllOrdersByBranch(branchId, pageable);
@@ -68,7 +70,7 @@ public class AdminOrderController {
 
     @PreAuthorize("@SecurityValidation.checkUserBranchAccess(#userDetails, #branchId)")
     @GetMapping("branch/{branchId}/order/{id}")
-    public String getOrder(@PathVariable Long id,
+    public String getOrder(@PathVariable UUID id,
                            @PathVariable Long branchId,
                            Model model,
                            HttpServletRequest httpRequest,

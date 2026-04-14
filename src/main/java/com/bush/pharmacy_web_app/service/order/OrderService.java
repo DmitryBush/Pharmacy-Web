@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @Transactional(readOnly = true)
@@ -32,17 +33,17 @@ public class OrderService {
     private final OrderStateInterceptorListener stateInterceptorListener;
     public static final String ORDER_HEADER = "orderId";
 
-    public Page<AdminOrderDto> findAllOrdersByBranch(Long id, Pageable pageable) {
-        return orderRepository.findByBranchId(id, pageable)
+    public Page<AdminOrderDto> findAllOrdersByBranch(Long branchId, Pageable pageable) {
+        return orderRepository.findByBranchId(branchId, pageable)
                 .map(adminOrderReadMapper::map);
     }
 
-    public Optional<AdminOrderDto> findOrderById(Long id) {
+    public Optional<AdminOrderDto> findOrderById(UUID id) {
         return orderRepository.findById(id)
                 .map(adminOrderReadMapper::map);
     }
 
-    public Optional<OrderState> findOrderStateById(Long id) {
+    public Optional<OrderState> findOrderStateById(UUID id) {
         return orderRepository.findById(id)
                 .map(Order::getStatus);
     }
@@ -55,15 +56,15 @@ public class OrderService {
      * @return If true, then the state was changed.
      */
     @Transactional
-    public Boolean processEvent(Long orderId, OrderEvent event) {
+    public Boolean processEvent(UUID orderId, OrderEvent event) {
         return build(orderId)
                 .sendEvent(MessageBuilder.createMessage(event, new MessageHeaders(Map.of(ORDER_HEADER, orderId))));
     }
 
-    private StateMachine<OrderState, OrderEvent> build(Long orderId) {
+    private StateMachine<OrderState, OrderEvent> build(UUID orderId) {
         var order = orderRepository.findById(orderId)
                 .orElseThrow();
-        var sm = stateMachineFactory.getStateMachine(Long.toString(orderId));
+        var sm = stateMachineFactory.getStateMachine(orderId);
 
         sm.stop();
 
