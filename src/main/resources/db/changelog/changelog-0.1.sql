@@ -408,7 +408,7 @@ CREATE TABLE IF NOT EXISTS public.pharmacy_branches
 --changeset Bushuev:Orders
 CREATE TABLE IF NOT EXISTS public.orders
 (
-    order_id bigint NOT NULL GENERATED ALWAYS AS IDENTITY,
+    order_id UUID NOT NULL,
     status_order smallint,
     date timestamp with time zone NOT NULL,
     f_key_user_id character varying(15) NOT NULL,
@@ -424,7 +424,7 @@ CREATE TABLE IF NOT EXISTS public.order_items
     obj_amount integer DEFAULT 1,
     obj_price numeric(10,2) NOT NULL,
     f_key_product_id bigint NOT NULL,
-    f_key_order_id bigint NOT NULL,
+    f_key_order_id UUID NOT NULL,
     CONSTRAINT order_items_pkey PRIMARY KEY (obj_id),
     CONSTRAINT order_items_f_key_product_id_fkey FOREIGN KEY (f_key_product_id) REFERENCES public.products (product_id),
     CONSTRAINT order_items_f_key_order_id_fkey FOREIGN KEY (f_key_order_id) REFERENCES public.orders (order_id)
@@ -456,7 +456,7 @@ CREATE TABLE IF NOT EXISTS public.branch_reservation
     f_key_product_id bigint NOT NULL,
     f_key_branch_id bigint NOT NULL,
     f_key_user_id character varying(15) NOT NULL,
-    f_key_order_id bigint,
+    f_key_order_id UUID,
     CONSTRAINT branch_reservation_pkey PRIMARY KEY (id),
     CONSTRAINT branch_reservation_f_key_branch_id_fkey FOREIGN KEY (f_key_branch_id)
         REFERENCES public.pharmacy_branches (branch_id),
@@ -550,7 +550,7 @@ CREATE TABLE IF NOT EXISTS public.transaction_history
     completed_at timestamp with time zone NOT NULL,
     f_key_transaction_type integer NOT NULL,
     f_key_branch_id bigint NOT NULL,
-    f_key_order_id bigint,
+    f_key_order_id UUID,
     CONSTRAINT transaction_history_pkey PRIMARY KEY (id),
     CONSTRAINT transaction_history_f_key_branch_id_fkey FOREIGN KEY (f_key_branch_id)
         REFERENCES public.pharmacy_branches (branch_id),
