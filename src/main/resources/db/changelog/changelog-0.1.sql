@@ -411,7 +411,7 @@ CREATE TABLE IF NOT EXISTS public.orders
     order_id UUID NOT NULL,
     status_order smallint,
     date timestamp with time zone NOT NULL,
-    f_key_user_id character varying(15) NOT NULL,
+    f_key_user_id character varying(18) NOT NULL,
     f_key_branch_id bigint NOT NULL,
     CONSTRAINT orders_pkey PRIMARY KEY (order_id),
     CONSTRAINT orders_f_key_branch_id_fkey FOREIGN KEY (f_key_branch_id) REFERENCES public.pharmacy_branches (branch_id),
@@ -455,7 +455,7 @@ CREATE TABLE IF NOT EXISTS public.branch_reservation
     expires_at timestamp with time zone NOT NULL,
     f_key_product_id bigint NOT NULL,
     f_key_branch_id bigint NOT NULL,
-    f_key_user_id character varying(15) NOT NULL,
+    f_key_user_id character varying(18) NOT NULL,
     f_key_order_id UUID,
     CONSTRAINT branch_reservation_pkey PRIMARY KEY (id),
     CONSTRAINT branch_reservation_f_key_branch_id_fkey FOREIGN KEY (f_key_branch_id)
