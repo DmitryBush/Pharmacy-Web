@@ -74,4 +74,10 @@ public class PharmacyBranchService {
     public PharmacyBranch getReferenceById(Long id) {
         return branchRepository.getReferenceById(id);
     }
+
+    public List<PharmacyBranchInfoDto> findAllPharmacies() {
+        return branchRepository.findAll().stream()
+                .map(branchReadMapper::mapToPharmacyBranchInfoDto)
+                .toList();
+    }
 }
