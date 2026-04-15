@@ -18,4 +18,7 @@ public interface OrderRepository extends JpaRepository<Order, UUID> {
     @Query(value = "SELECT o FROM Order o LEFT JOIN o.branch b WHERE b.id = :branchId",
             countQuery = "SELECT COUNT(o) FROM Order o where o.branch.id = :branchId")
     Page<Order> findByBranchId(@Param("branchId") Long branchId, Pageable pageable);
+    @Query(value = "select o from Order o where o.user.id = :userId",
+            countQuery = "select count(o) from Order o where o.user.id = :userId")
+    Page<Order> findAllUserOrders(@Param("userId") String userId, Pageable pageable);
 }

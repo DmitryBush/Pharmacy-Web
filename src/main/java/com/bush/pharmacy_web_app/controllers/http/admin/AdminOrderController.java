@@ -75,7 +75,7 @@ public class AdminOrderController {
                            Model model,
                            HttpServletRequest httpRequest,
                            @AuthenticationPrincipal UserDetails userDetails) {
-        var order = orderService.findOrderById(id)
+        var order = orderService.findAdminOrderInfoById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         var authorities = userDetails.getAuthorities()
                 .stream()

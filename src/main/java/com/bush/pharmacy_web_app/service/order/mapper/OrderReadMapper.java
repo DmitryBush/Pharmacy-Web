@@ -29,8 +29,8 @@ public class OrderReadMapper implements DtoMapper<Order, OrderReadDto> {
         BigDecimal result = cart.stream()
                 .map(lamb -> lamb.medicine().price().multiply(BigDecimal.valueOf(lamb.amount())))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
+        String userId = obj.getUser().getMobilePhone();
 
-        return new OrderReadDto(obj.getId(), status, obj.getDate(),
-                branch, cart, result);
+        return new OrderReadDto(obj.getId(), status, obj.getDate(), userId, branch, cart, result);
     }
 }

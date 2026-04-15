@@ -10,6 +10,7 @@ import java.util.UUID;
 public record OrderReadDto(UUID id,
                            OrderStatusDto statusOrder,
                            Instant date,
+                           String userId,
                            PharmacyBranchReadDto branch,
                            List<OrderItemReadDto> cartItems,
                            BigDecimal result) {

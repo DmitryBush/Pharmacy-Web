@@ -24,16 +24,12 @@ public class OrderAdminRestController {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
-    @PreAuthorize("hasAnyRole('OPERATOR', 'ADMIN')")
     @PostMapping("/{id}/state")
     public ResponseEntity<Void> requestStateChange(@PathVariable UUID id, @RequestBody OrderStateChangeDto dto) {
-        try {
-            if (orderService.processEvent(id, dto.event()))
-                return ResponseEntity.accepted().build();
-            else
-                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
+        if (orderService.changeOrderStatusByEvent(id, dto.event())) {
+            return ResponseEntity.accepted().build();
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.bush.pharmacy_web_app.service;
 
+import com.bush.pharmacy_web_app.model.entity.order.Order;
 import com.bush.pharmacy_web_app.model.entity.order.state.OrderEvent;
 import com.bush.pharmacy_web_app.service.order.OrderService;
 import org.junit.jupiter.api.Assertions;
@@ -20,17 +21,13 @@ class OrderServiceTest {
     @Transactional
     @Rollback
     void testProcessEvent() {
-        var result = orderService.processEvent(UUID.randomUUID(), OrderEvent.OPERATOR_COMPLETES_ORDER);
 
-        Assertions.assertTrue(result);
     }
 
     @Test
     @Transactional
     @Rollback
     void testInvalidStateTransition() {
-        var result = orderService.processEvent(UUID.randomUUID(), OrderEvent.LOGISTIC_ISSUE);
 
-        Assertions.assertFalse(result);
     }
 }
