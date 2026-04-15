@@ -372,7 +372,8 @@ CREATE TABLE IF NOT EXISTS public.roles
     CONSTRAINT roles_role_name_key UNIQUE (role_name)
 );
 
-INSERT INTO roles (role_name) VALUES ('ADMIN'), ('OPERATOR'), ('CUSTOMER'), ('LOGISTICS');
+INSERT INTO roles (role_name) VALUES ('ROLE_ADMIN'), ('ROLE_OPERATOR'), ('ROLE_CUSTOMER'),
+                                     ('ROLE_LOGISTICS');
 
 CREATE EXTENSION IF NOT EXISTS pg_trgm;
 
