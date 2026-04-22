@@ -52,6 +52,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         placeOrderButton.type = "button";
         placeOrderButton.classList.add("cr-checkout");
         placeOrderButton.textContent = 'Оформить заказ';
+        placeOrderButton.addEventListener("click", () => window.location.replace('/order/place'));
         aside.appendChild(placeOrderButton);
         gridContainer.appendChild(aside);
 
