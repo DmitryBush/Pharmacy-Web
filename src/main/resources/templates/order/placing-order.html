@@ -6,77 +6,16 @@
     <link href="/css/base.css" rel="stylesheet"/>
     <link href="/css/order/placing-order.css" rel="stylesheet"/>
     <link href="/css/cart/cart-item.css" rel="stylesheet"/>
+    <link href="/css/warning/warning.css" rel="stylesheet"/>
+    <script src="/js/order/placing-order.js" type="module"></script>
 </head>
 <body>
     <div th:replace="~{/page-header.html :: page-header}"></div>
     <div class="cr-wrapper">
         <main class="cr-container" id="main-container">
             <h1 class="cr-page-title">Оформление заказа</h1>
-            <div class="cr-checkout-layout">
-                <div class="cr-checkout-main">
-                    <!-- Branch Selection -->
-                    <div class="cr-section">
-                        <h2 class="cr-section-title">Выберите филиал</h2>
-                        <div class="cr-branch-list">
-                            <label class="cr-branch-card">
-                                <input type="radio" name="cr-branch" class="cr-branch-radio" checked>
-                                <div class="cr-branch-info">
-                                    <span class="cr-branch-name">Аптека на большой покровской</span>
-                                    <span class="cr-branch-address">ул. Большая Покровска, 54</span>
-                                    <span class="cr-branch-hours">Ежедневно 10:00–22:00</span>
-                                </div>
-                            </label>
-                        </div>
-                    </div>
-                    <!-- Order Items -->
-                    <div class="cr-section">
-                        <h2 class="cr-section-title">Ваш заказ</h2>
-                        <div class="cr-item">
-                            <div class="cr-item-img">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                                    <rect x="3" y="3" width="18" height="18" rx="2"/>
-                                    <circle cx="8.5" cy="8.5" r="1.5"/>
-                                    <path d="M21 15l-5-5L5 21"/>
-                                </svg>
-                            </div>
-                            <div class="cr-item-info">
-                                <span class="cr-item-name">
-                                    Пример названия
-                                </span>
-                                <span class="cr-item-type">
-                                    Пример типа
-                                </span>
-                            </div>
-                            <div class="cr-item-actions">
-                                <span class="cr-item-price">157 ₽</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <aside class="cr-summary">
-                    <h2 class="cr-summary-title">Итого</h2>
-                    <div class="cr-row">
-                        <span class="cr-row-label">Итог (1 товар)</span>
-                        <span class="cr-row-value">157 ₽</span>
-                    </div>
-                    <div class="cr-row">
-                        <span class="cr-row-label">Доставка</span>
-                        <span class="cr-row-value">Бесплатно</span>
-                    </div>
-                    <div class="cr-row">
-                        <span class="cr-row-label">Скидка</span>
-                        <span class="cr-row-value">- 0 ₽</span>
-                    </div>
-                    <div class="cr-row cr-row-total">
-                        <span>К оплате</span>
-                        <span class="cr-row-value">157 ₽</span>
-                    </div>
-                    <button class="cr-checkout" type="button">Создать заказ</button>
-                </aside>
-            </div>
-            <div class="cr-continue">
-                <a href="/cart">← Вернуться в корзину</a>
-            </div>
+            <div class="cr-checkout-layout" id="order-layout"></div>
+            <div class="cr-empty" id="empty-order-container"></div>
         </main>
     </div>
     <div th:replace="~{/page-footer.html :: page-footer}"></div>
