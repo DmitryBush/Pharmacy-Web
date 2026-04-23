@@ -60,12 +60,15 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         const branchesContainer = document.createElement('div');
         branchesContainer.classList.add('cr-branch-list');
-        branches.forEach(branch => {
+        branches.forEach((branch, index) => {
             const branchCard = document.createElement('label');
             branchCard.classList.add('cr-branch-card');
             const input = document.createElement('input');
             input.type = 'radio';
             input.name = 'cr-branch';
+            if (index === 0) {
+                input.checked = true;
+            }
             input.classList.add('cr-branch-radio');
             branchCard.append(input);
 
