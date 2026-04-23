@@ -68,9 +68,9 @@ public class CartService {
     public void deleteItemsInBatchFromCart(String userId, List<Long> productIdList) {
         Cart cart = cartRepository.findCartByUserMobilePhone(userId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-        Set<CartItems> itemBatchDelete = cart.getCartItemsList().stream()
+        List<CartItems> itemBatchDelete = cart.getCartItemsList().stream()
                 .filter(cartItems -> productIdList.contains(cartItems.getId().getProduct().getId()))
-                .collect(Collectors.toUnmodifiableSet());
+                .toList();
         cartItemRepository.deleteAllInBatch(itemBatchDelete);
     }
 }
