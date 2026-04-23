@@ -13,4 +13,9 @@ public class CustomerOrderController {
     public String placeOrder(Model model) {
         return "order/placing-order";
     }
+
+    @GetMapping
+    public String getCustomerOrdersPage() {
+        return "order/order";
+    }
 }

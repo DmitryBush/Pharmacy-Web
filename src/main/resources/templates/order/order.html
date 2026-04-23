@@ -3,46 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <title>Заказы</title>
+    <link href="/css/base.css" rel="stylesheet"/>
+    <link href="/css/order/order.css" rel="stylesheet"/>
+    <link href="/css/cart/cart-item.css" rel="stylesheet"/>
+    <link href="/css/warning/warning.css" rel="stylesheet"/>
 </head>
 <body>
-    <h1>Заказы</h1>
-    <div th:each="order : ${ordersPage.content}">
-        <div>
-            <p><b>Заказ</b> "[(${order.id})]" от [(${order.date})]</p>
-        </div>
-        <div>
-            <p>Статус заказа: [(${order.statusOrder})]</p>
-            <p>Филиал получения: [(${order.branch.address.settlement})],
-                [(${order.branch.address.street})],
-                [(${order.branch.address.house})]
-            </p>
-        </div>
-        <div th:each="item: ${order.cartItems}">
-            <div>
-                <a th:href="@{/catalog/{id}(id=${item.medicine.id})}">
-                    <img src="https://cdn.kama-med.ru/images/products/1/6479/373201231/bint-elast.jpg"
-                         width="200px"
-                         th:alt="${item.medicine.name}">
-                </a>
-            </div>
-            <div>
-                <a th:href="@{/catalog/{id}(id=${item.medicine.id})}">
-                    [(${item.medicine.name})]
-                </a>
-                <p>Производитель: [(${item.medicine.manufacturer.name})]</p>
-            </div>
-            <div>
-                <div>
-                    <p>Цена: [(${item.price})] ₽</p>
+    <div th:replace="~{/page-header.html :: page-header}"></div>
+    <div class="cr-wrapper">
+        <main class="cr-container" id="main-container">
+            <h1 class="cr-page-title">Заказы</h1>
+            <div class="cr-order-list">
+                <div class="cr-order-card">
+                    <div class="cr-order-header">
+                        <span class="cr-order-number">#ORD-784321</span>
+                        <span class="cr-order-date">15 октября 2024</span>
+                        <span class="cr-order-status cr-order-status--processing">В обработке</span>
+                    </div>
+                    <div class="cr-order-body">
+                        <div class="cr-order-items">
+                            <span class="cr-order-item-name">Беспроводные наушники × 1</span>
+                            <span class="cr-order-item-name">Кожаный рюкзак × 1</span>
+                            <span class="cr-order-item-name">Кроссовки Urban Run × 2</span>
+                        </div>
+                        <div class="cr-order-total">22 470 ₽</div>
+                    </div>
+                    <div class="cr-order-footer">
+                        <a href="#" class="cr-btn cr-btn--secondary">Отследить</a>
+                        <a href="#" class="cr-btn cr-btn--outline">Чек</a>
+                    </div>
                 </div>
-                <div>
-                    <p>[(${item.amount})] шт. x [(${item.medicine.price})] ₽</p>
-                </div>
+
             </div>
-        </div>
-        <div>
-            <p><b>Итого:</b> [(${order.result})] ₽</p>
-        </div>
+            <div class="cr-empty" id="empty-order-container"></div>
+        </main>
     </div>
+    <div th:replace="~{/page-footer.html :: page-footer}"></div>
 </body>
 </html>
