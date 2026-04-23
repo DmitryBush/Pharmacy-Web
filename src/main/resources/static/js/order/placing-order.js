@@ -1,6 +1,6 @@
 import RestClient from "../RestClient.js";
 import {renderAuthWarning, renderEmptyCart} from "../warning/Warning.js";
-import {getDayText, getTimeText} from "../formatter/formatter.js";
+import {getShortDayText, getTimeText} from "../formatter/formatter.js";
 
 document.addEventListener('DOMContentLoaded', async () => {
     const restClient = new RestClient();
@@ -83,14 +83,12 @@ document.addEventListener('DOMContentLoaded', async () => {
             branchAddress.textContent = `${branch.address.subject} ${branch.address.settlement} 
             ${branch.address.street} ${branch.address.house}`;
             branchInfoContainer.append(branchAddress);
-            const branchHours = document.createElement('span');
-            branchHours.classList.add('cr-branch-hours');
-            let workingHourText = '';
             branch.workingHoursList.forEach(workingHour => {
-                workingHourText += `${getDayText(workingHour.dayOfWeek)}: ${getTimeText(workingHour)}\n`;
+                const branchHours = document.createElement('span');
+                branchHours.classList.add('cr-branch-hours');
+                branchHours.textContent = `${getShortDayText(workingHour.dayOfWeek)}: ${getTimeText(workingHour)}`;
+                branchInfoContainer.append(branchHours);
             });
-            branchHours.textContent = workingHourText;
-            branchInfoContainer.append(branchHours);
             branchCard.append(branchInfoContainer);
 
             branchesContainer.appendChild(branchCard);

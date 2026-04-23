@@ -70,6 +70,25 @@ export function getDayText(day) {
     throw new Error(`Unknown day: ${day}`);
 }
 
+export function getShortDayText(day) {
+    if (day === 'MONDAY') {
+        return 'Пн';
+    } else if (day === 'TUESDAY') {
+        return 'Вт';
+    } else  if (day === 'WEDNESDAY') {
+        return 'Ср';
+    } else  if (day === 'THURSDAY') {
+        return 'Чт';
+    } else  if (day === 'FRIDAY') {
+        return 'Пт';
+    } else  if (day === 'SATURDAY') {
+        return 'Сб';
+    } else  if (day === 'SUNDAY') {
+        return 'Вс';
+    }
+    throw new Error(`Unknown day: ${day}`);
+}
+
 export function getTimeText(workingHour) {
     if (workingHour.dayOff) {
         return 'Выходной';
