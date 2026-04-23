@@ -176,6 +176,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const summaryContainerTitle = document.createElement('h2');
         summaryContainerTitle.classList.add('cr-summary-title');
         summaryContainerTitle.textContent = 'Итого';
+        summaryContainer.append(summaryContainerTitle);
 
         summaryContainer.append(renderResultSummary());
         summaryContainer.append(renderDeliverySummary());
