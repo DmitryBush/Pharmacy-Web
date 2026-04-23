@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         console.error(e);
     }
 
-    async function initialize(){
+    async function initialize() {
         try {
             const cartDto = await fetchCartItems();
             if (cartDto.cartItems.length > 0) {
@@ -31,11 +31,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
-    async function fetchCartItems(){
+    async function fetchCartItems() {
         return await (await restClient.fetchData(`/api/v1/carts/me`, 'GET')).json();
     }
 
-    async function fetchBranches(){
+    async function fetchBranches() {
         return await (await restClient.fetchData(`/api/v1/branches`, 'GET')).json();
     }
 
@@ -192,11 +192,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         createOrderButton.type = 'button';
         createOrderButton.textContent = 'Оформить заказ';
         createOrderButton.addEventListener('click', () => placeOrder()
-                .then(async () => {
-                    await deleteOrderItemsFromCart();
-                    window.location.replace('/');
-                })
-                .catch((err) => console.log(err)));
+            .then(async () => {
+                await deleteOrderItemsFromCart();
+                window.location.replace('/');
+            })
+            .catch((err) => console.log(err)));
         summaryContainer.append(createOrderButton);
         return summaryContainer;
     }
@@ -280,7 +280,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             }));
     }
 
-    async function deleteOrderItemsFromCart(){
+    async function deleteOrderItemsFromCart() {
         let orderItems = [];
         document.querySelectorAll('.cr-item').forEach(item => {
             orderItems.push(parseInt(item.dataset.id));
