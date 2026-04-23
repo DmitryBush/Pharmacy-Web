@@ -4,6 +4,7 @@ import com.bush.adapter.uuid.UuidTimeEpochGeneratorAdapter;
 import com.bush.pharmacy_web_app.model.entity.branch.PharmacyBranch;
 import com.bush.pharmacy_web_app.model.entity.order.state.OrderState;
 import com.bush.pharmacy_web_app.model.entity.user.User;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Enumerated;
@@ -55,7 +56,7 @@ public class Order {
     @ManyToOne
     @JoinColumn(name = "f_key_branch_id", nullable = false)
     private PharmacyBranch branch;
-    @OneToMany(mappedBy = "order")
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     @Builder.Default
     private List<OrderItem> orderItemList = new ArrayList<>();
 }
