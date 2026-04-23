@@ -1,5 +1,5 @@
 import RestClient from "../RestClient.js";
-import {renderAuthWarning, renderEmptyCart, renderSuccessfulOrderPlace} from "../warning/Warning.js";
+import {renderAuthWarning, renderEmptyCart, renderErrorWarning, renderSuccessfulWarning} from "../warning/Warning.js";
 import {getShortDayText, getTimeText} from "../formatter/formatter.js";
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -27,7 +27,14 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
         } catch (error) {
             console.error(error);
-            renderAuthWarning(emptyOrderContainer, 'Для оформления заказа необходимо войти в аккаунт или создать новый');
+            if (error.message === '401') {
+                renderAuthWarning(emptyOrderContainer,
+                    'Для оформления заказа необходимо войти в аккаунт или создать новый');
+            } else {
+                renderErrorWarning(emptyOrderContainer, 'Не удалось оформить заказ',
+                    'Произошла ошибка при инициализации заказа. ' +
+                    'Ваши товары всё ещё сохранены в корзине и доступны для повторной попытки');
+            }
         }
     }
 
@@ -195,9 +202,16 @@ document.addEventListener('DOMContentLoaded', async () => {
             .then(async (response) => {
                 await deleteOrderItemsFromCart();
                 orderLayout.innerHTML = '';
-                renderSuccessfulOrderPlace(emptyOrderContainer, `Ваш номер заказа - ${response.id}`);
+                renderSuccessfulWarning(emptyOrderContainer, 'Заказ успешно оформлен',
+                    `Ваш номер заказа - ${response.id}`, '/order', 'Перейти к заказам');
             })
-            .catch((err) => console.log(err)));
+            .catch((err) => {
+                console.error(err);
+                orderLayout.innerHTML = '';
+                renderErrorWarning(emptyOrderContainer, 'Не удалось оформить заказ',
+                    'Произошла ошибка при обработке заказа. ' +
+                    'Ваши товары всё ещё сохранены в корзине и доступны для повторной попытки')
+            }));
         summaryContainer.append(createOrderButton);
         return summaryContainer;
     }

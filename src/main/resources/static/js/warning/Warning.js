@@ -85,7 +85,7 @@ export function renderEmptyCart(warningContainer, warningDescription) {
     warningContainer.appendChild(mainPageLinkContainer);
 }
 
-export function renderSuccessfulOrderPlace(warningContainer, warningDescription) {
+export function renderSuccessfulWarning(warningContainer, warningTitle, warningDescription, actionHref, actionText) {
     warningContainer.innerHTML = '';
     warningContainer.innerHTML = `
         <svg class="cr-success-icon" viewBox="0 0 24 24" fill="none" stroke="#27ae60" 
@@ -97,7 +97,7 @@ export function renderSuccessfulOrderPlace(warningContainer, warningDescription)
 
     const emptyCartTitle = document.createElement("h2");
     emptyCartTitle.classList.add("cr-empty-title");
-    emptyCartTitle.textContent = 'Заказ успешно оформлен';
+    emptyCartTitle.textContent = warningTitle;
     warningContainer.appendChild(emptyCartTitle);
 
     const emptyCartDescription = document.createElement("p");
@@ -107,8 +107,44 @@ export function renderSuccessfulOrderPlace(warningContainer, warningDescription)
 
     const catalogLink = document.createElement("a");
     catalogLink.classList.add("cr-empty-btn");
-    catalogLink.textContent = 'Перейти в заказы';
-    catalogLink.href = '/order';
+    catalogLink.textContent = actionText;
+    catalogLink.href = actionHref;
+    warningContainer.appendChild(catalogLink);
+
+    const mainPageLinkContainer = document.createElement("div");
+    mainPageLinkContainer.classList.add("cr-back-link");
+    const mainPageLink = document.createElement("a");
+    mainPageLink.href = '/';
+    mainPageLink.textContent = '← Вернуться на главную';
+    mainPageLinkContainer.appendChild(mainPageLink);
+    warningContainer.appendChild(mainPageLinkContainer);
+}
+
+export function renderErrorWarning(warningContainer, warningTitle, warningDescription) {
+    warningContainer.innerHTML = '';
+    warningContainer.innerHTML = `
+        <svg class="cr-fail-icon" viewBox="0 0 24 24" fill="none" stroke="#e74c3c" stroke-width="2" 
+            stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="15" y1="9" x2="9" y2="15"></line>
+            <line x1="9" y1="9" x2="15" y2="15"></line>
+        </svg>
+        `;
+
+    const emptyCartTitle = document.createElement("h2");
+    emptyCartTitle.classList.add("cr-empty-title");
+    emptyCartTitle.textContent = warningTitle;
+    warningContainer.appendChild(emptyCartTitle);
+
+    const emptyCartDescription = document.createElement("p");
+    emptyCartDescription.classList.add("cr-empty-desc");
+    emptyCartDescription.textContent = warningDescription;
+    warningContainer.appendChild(emptyCartDescription);
+
+    const catalogLink = document.createElement("a");
+    catalogLink.classList.add("cr-empty-btn");
+    catalogLink.textContent = 'Обновить страницу';
+    catalogLink.href = window.location;
     warningContainer.appendChild(catalogLink);
 
     const mainPageLinkContainer = document.createElement("div");
