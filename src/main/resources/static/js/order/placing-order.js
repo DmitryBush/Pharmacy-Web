@@ -64,6 +64,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             const branchCard = document.createElement('label');
             branchCard.classList.add('cr-branch-card');
             const input = document.createElement('input');
+            input.dataset.id = branch.id;
             input.type = 'radio';
             input.name = 'cr-branch';
             if (index === 0) {
@@ -109,6 +110,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         cartItems.forEach(cartItem => {
             const item = document.createElement('div');
+            item.dataset.id = cartItem.medicine.id;
+            item.dataset.price = cartItem.medicine.price;
+            item.dataset.quantity = cartItem.amount;
             item.classList.add("cr-item");
             item.append(renderItemImage(cartItem));
             item.append(renderItemInfo(cartItem));
@@ -187,6 +191,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         createOrderButton.classList.add('cr-checkout');
         createOrderButton.type = 'button';
         createOrderButton.textContent = 'Оформить заказ';
+        createOrderButton.addEventListener('click', () => placeOrder()
+                .then(async () => {
+                    await deleteOrderItemsFromCart();
+                    window.location.replace('/');
+                })
+                .catch((err) => console.log(err)));
         summaryContainer.append(createOrderButton);
         return summaryContainer;
     }
@@ -251,5 +261,34 @@ document.addEventListener('DOMContentLoaded', async () => {
         totalSummaryValue.classList.add('cr-row-value');
         totalSummaryValue.textContent = resultPrice;
         return totalSummaryContainer;
+    }
+
+    async function placeOrder() {
+        const branchId = parseInt(document.querySelector('.cr-branch-radio:checked').dataset.id);
+        let orderItems = [];
+        document.querySelectorAll('.cr-item').forEach(item => {
+            orderItems.push({
+                productId: parseInt(item.dataset.id),
+                quantity: parseInt(item.dataset.quantity),
+                price: item.dataset.price
+            });
+        });
+        await restClient.fetchData(`/api/v1/orders/me`, 'POST', {'Content-Type': 'application/json'},
+            JSON.stringify({
+                branchId: branchId,
+                orderItems: orderItems
+            }));
+    }
+
+    async function deleteOrderItemsFromCart(){
+        let orderItems = [];
+        document.querySelectorAll('.cr-item').forEach(item => {
+            orderItems.push(parseInt(item.dataset.id));
+        });
+        await restClient.fetchData(`/api/v1/carts/me/items/batch-delete`, 'POST',
+            {'Content-Type': 'application/json'},
+            JSON.stringify({
+                productIdList: orderItems
+            }));
     }
 });
