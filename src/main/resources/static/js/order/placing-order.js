@@ -80,8 +80,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             branchInfoContainer.append(branchName);
             const branchAddress = document.createElement('span');
             branchAddress.classList.add('cr-branch-address');
-            branchAddress.textContent = `${branch.address.subject} ${branch.address.settlement} 
-            ${branch.address.street} ${branch.address.house}`;
+            branchAddress.textContent = `${branch.address.subject}, ${branch.address.settlement}, 
+            ${branch.address.street}, ${branch.address.house}`;
             branchInfoContainer.append(branchAddress);
             branch.workingHoursList.forEach(workingHour => {
                 const branchHours = document.createElement('span');
@@ -201,7 +201,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         const summaryResultValue = document.createElement('span');
         summaryResultValue.classList.add('cr-row-value');
-        summaryResultValue.textContent = resultPrice;
+        summaryResultValue.textContent = `${resultPrice} ₽`;
         summaryContainer.append(summaryResultValue);
         return summaryContainer;
     }
