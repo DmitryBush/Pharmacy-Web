@@ -84,3 +84,38 @@ export function renderEmptyCart(warningContainer, warningDescription) {
     mainPageLinkContainer.appendChild(mainPageLink);
     warningContainer.appendChild(mainPageLinkContainer);
 }
+
+export function renderSuccessfulOrderPlace(warningContainer, warningDescription) {
+    warningContainer.innerHTML = '';
+    warningContainer.innerHTML = `
+        <svg class="cr-success-icon" viewBox="0 0 24 24" fill="none" stroke="#27ae60" 
+        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M8 12l3 3 5-5"></path>
+        </svg>
+        `;
+
+    const emptyCartTitle = document.createElement("h2");
+    emptyCartTitle.classList.add("cr-empty-title");
+    emptyCartTitle.textContent = 'Заказ успешно оформлен';
+    warningContainer.appendChild(emptyCartTitle);
+
+    const emptyCartDescription = document.createElement("p");
+    emptyCartDescription.classList.add("cr-empty-desc");
+    emptyCartDescription.textContent = warningDescription;
+    warningContainer.appendChild(emptyCartDescription);
+
+    const catalogLink = document.createElement("a");
+    catalogLink.classList.add("cr-empty-btn");
+    catalogLink.textContent = 'Перейти в заказы';
+    catalogLink.href = '/order';
+    warningContainer.appendChild(catalogLink);
+
+    const mainPageLinkContainer = document.createElement("div");
+    mainPageLinkContainer.classList.add("cr-back-link");
+    const mainPageLink = document.createElement("a");
+    mainPageLink.href = '/';
+    mainPageLink.textContent = '← Вернуться на главную';
+    mainPageLinkContainer.appendChild(mainPageLink);
+    warningContainer.appendChild(mainPageLinkContainer);
+}

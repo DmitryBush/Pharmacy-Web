@@ -1,5 +1,5 @@
 import RestClient from "../RestClient.js";
-import {renderAuthWarning, renderEmptyCart} from "../warning/Warning.js";
+import {renderAuthWarning, renderEmptyCart, renderSuccessfulOrderPlace} from "../warning/Warning.js";
 import {getShortDayText, getTimeText} from "../formatter/formatter.js";
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -192,9 +192,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         createOrderButton.type = 'button';
         createOrderButton.textContent = 'Оформить заказ';
         createOrderButton.addEventListener('click', () => placeOrder()
-            .then(async () => {
+            .then(async (response) => {
                 await deleteOrderItemsFromCart();
-                window.location.replace('/');
+                orderLayout.innerHTML = '';
+                renderSuccessfulOrderPlace(emptyOrderContainer, `Ваш номер заказа - ${response.id}`);
             })
             .catch((err) => console.log(err)));
         summaryContainer.append(createOrderButton);
@@ -273,11 +274,12 @@ document.addEventListener('DOMContentLoaded', async () => {
                 price: item.dataset.price
             });
         });
-        await restClient.fetchData(`/api/v1/orders/me`, 'POST', {'Content-Type': 'application/json'},
+        return (await restClient.fetchData(`/api/v1/orders/me`, 'POST',
+            {'Content-Type': 'application/json'},
             JSON.stringify({
                 branchId: branchId,
                 orderItems: orderItems
-            }));
+            }))).json();
     }
 
     async function deleteOrderItemsFromCart() {
