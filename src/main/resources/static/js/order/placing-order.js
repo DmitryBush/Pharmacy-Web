@@ -40,8 +40,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     function renderOrderPlacePage(cartItems, branches) {
-        orderLayout.append(renderBranchSection(branches));
-        orderLayout.append(renderItemSection(cartItems));
+        const mainContainer = document.createElement("div");
+        mainContainer.classList.add("cr-checkout-main");
+        mainContainer.append(renderBranchSection(branches));
+        mainContainer.append(renderItemSection(cartItems));
+        orderLayout.append(mainContainer);
         orderLayout.append(renderSummarySection());
     }
 
@@ -81,8 +84,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             branchHours.classList.add('cr-branch-hours');
             let workingHourText = '';
             branch.workingHoursList.forEach(workingHour => {
-                workingHourText += `${getDayText(workingHour.dayOfWeek)}: 
-                ${getTimeText(workingHour.openTime)} - ${getTimeText(workingHour.closeTime)}`
+                workingHourText += `${getDayText(workingHour.dayOfWeek)}: ${getTimeText(workingHour)}\n`;
             });
             branchHours.textContent = workingHourText;
             branchInfoContainer.append(branchHours);
@@ -106,12 +108,13 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         cartItems.forEach(cartItem => {
             const item = document.createElement('div');
+            item.classList.add("cr-item");
             item.append(renderItemImage(cartItem));
             item.append(renderItemInfo(cartItem));
             item.append(renderItemPrice(cartItem));
             orderSection.append(item);
 
-            resultPrice += item.amount * item.medicine.price;
+            resultPrice += cartItem.amount * cartItem.medicine.price;
         });
         return orderSection;
     }
@@ -121,8 +124,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         imageContainer.classList.add('cr-item-image');
         if (item.medicine.imagePaths.length > 0) {
             const image = document.createElement('img');
-            image.src = `/api/v1/product-image/${item.medicine.imagePaths[0]}`;
+            image.src = `/api/v1/product-image/${item.medicine.imagePaths[0].id}`;
             image.alt = item.medicine.name;
+            image.width = 100;
+            image.height = 100;
             imageContainer.appendChild(image);
         } else {
             imageContainer.innerHTML = `
@@ -158,7 +163,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         const itemPrice = document.createElement('span');
         itemPrice.classList.add('cr-item-price');
-        itemPrice.textContent = `${item.amount} x ${item.price}`;
+        itemPrice.textContent = `${item.amount} x ${item.medicine.price} ₽`;
         priceContainer.append(itemPrice);
         return priceContainer;
     }
@@ -179,6 +184,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const createOrderButton = document.createElement('button');
         createOrderButton.classList.add('cr-checkout');
         createOrderButton.type = 'button';
+        createOrderButton.textContent = 'Оформить заказ';
         summaryContainer.append(createOrderButton);
         return summaryContainer;
     }
