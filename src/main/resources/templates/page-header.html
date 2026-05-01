@@ -170,9 +170,9 @@
                     <img src="/api/v1/icons/header/basket2.png" loading="lazy" alt="Корзина">
                     <span>Корзина</span>
                 </a>
-                <a href="user" class="icon-btn">
-                    <img src="/api/v1/icons/header/person.png" loading="lazy" alt="Пользователь">
-                    <span>Войти</span>
+                <a href="/order" class="icon-btn">
+                    <img src="/api/v1/icons/header/bag.png" loading="lazy" alt="Пользователь">
+                    <span>Заказы</span>
                 </a>
             </div>
             <link href="/css/page-header.css" rel="stylesheet">
@@ -181,9 +181,11 @@
             <script src="/js/dropdown-catalog.js"></script>
             <script type="module">
                 import {LoginModal} from "/js/login/login-modal.js";
+                import {RegisterModal} from "/js/login/register-modal.js";
 
                 document.addEventListener("DOMContentLoaded", () => {
                     LoginModal.getInstance();
+                    RegisterModal.getInstance();
                 });
             </script>
         </header>

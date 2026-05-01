@@ -1,8 +1,13 @@
+.cr-wrapper * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 .cr-wrapper {
     color: #1a1a1a;
     line-height: 1.6;
     min-height: 100vh;
-    box-sizing: border-box;
 }
 
 .cr-container {
