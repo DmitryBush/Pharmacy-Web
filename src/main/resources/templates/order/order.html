@@ -7,34 +7,14 @@
     <link href="/css/order/order.css" rel="stylesheet"/>
     <link href="/css/cart/cart-item.css" rel="stylesheet"/>
     <link href="/css/warning/warning.css" rel="stylesheet"/>
+    <script src="/js/order/order.js" type="module"></script>
 </head>
 <body>
     <div th:replace="~{/page-header.html :: page-header}"></div>
     <div class="cr-wrapper">
         <main class="cr-container" id="main-container">
             <h1 class="cr-page-title">Заказы</h1>
-            <div class="cr-order-list">
-                <div class="cr-order-card">
-                    <div class="cr-order-header">
-                        <span class="cr-order-number">#ORD-784321</span>
-                        <span class="cr-order-date">15 октября 2024</span>
-                        <span class="cr-order-status cr-order-status--processing">В обработке</span>
-                    </div>
-                    <div class="cr-order-body">
-                        <div class="cr-order-items">
-                            <span class="cr-order-item-name">Беспроводные наушники × 1</span>
-                            <span class="cr-order-item-name">Кожаный рюкзак × 1</span>
-                            <span class="cr-order-item-name">Кроссовки Urban Run × 2</span>
-                        </div>
-                        <div class="cr-order-total">22 470 ₽</div>
-                    </div>
-                    <div class="cr-order-footer">
-                        <a href="#" class="cr-btn cr-btn--secondary">Отследить</a>
-                        <a href="#" class="cr-btn cr-btn--outline">Чек</a>
-                    </div>
-                </div>
-
-            </div>
+            <div class="cr-order-list" id="order-list"></div>
             <div class="cr-empty" id="empty-order-container"></div>
         </main>
     </div>
