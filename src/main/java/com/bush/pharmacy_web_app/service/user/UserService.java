@@ -38,10 +38,6 @@ public class UserService implements UserDetailsService {
     private final UserReadMapper readMapper;
     private final UserCreateMapper createMapper;
 
-    public List<CustomerReadDto> findAll() {
-        return userRepository.findAll().stream().map(readMapper::map).toList();
-    }
-
     public Page<AdminUserReadDto> findAllByFilter(Pageable pageable, UserFilter filter) {
         List<RoleType> roleType =  filter.role().stream()
                 .filter(s -> !s.isBlank())

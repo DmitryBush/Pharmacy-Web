@@ -7,5 +7,4 @@ import java.util.List;
 public record CustomerReadDto(String mobilePhone,
                               String name,
                               String surname,
-                              String lastName,
-                              List<OrderReadDto> orders) { }
+                              String lastName) { }

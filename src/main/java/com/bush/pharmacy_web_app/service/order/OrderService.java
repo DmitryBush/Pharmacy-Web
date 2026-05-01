@@ -101,13 +101,13 @@ public class OrderService {
 
     public Page<OrderReadDto> findAllUserOrders(String userId, Pageable pageable) {
         return orderRepository.findAllUserOrders(userId, pageable)
-                .map(orderReadMapper::map);
+                .map(orderReadMapper::mapToOrderReadDto);
     }
 
     @PostAuthorize("returnObject.userId.equals(authentication.principal.username)")
     public OrderReadDto findUserOrderById(UUID uuid) {
         return orderRepository.findById(uuid)
-                .map(orderReadMapper::map)
+                .map(orderReadMapper::mapToOrderReadDto)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
@@ -122,7 +122,7 @@ public class OrderService {
         return Optional.of(createDto)
                 .map(dto -> orderCreateMapper.mapToOrder(dto, user, branch, orderItems))
                 .map(orderRepository::save)
-                .map(orderReadMapper::map)
+                .map(orderReadMapper::mapToOrderReadDto)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST));
     }
 

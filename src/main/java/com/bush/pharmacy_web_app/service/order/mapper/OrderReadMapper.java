@@ -1,36 +1,43 @@
 package com.bush.pharmacy_web_app.service.order.mapper;
 
+import com.bush.pharmacy_web_app.model.dto.orders.OrderItemReadDto;
 import com.bush.pharmacy_web_app.model.dto.orders.OrderReadDto;
+import com.bush.pharmacy_web_app.model.dto.orders.OrderStatusDto;
 import com.bush.pharmacy_web_app.model.entity.order.Order;
-import com.bush.pharmacy_web_app.shared.mapper.DtoMapper;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
+import com.bush.pharmacy_web_app.model.entity.order.OrderItem;
+import com.bush.pharmacy_web_app.model.entity.order.state.OrderState;
+import com.bush.pharmacy_web_app.service.branch.mapper.PharmacyBranchReadMapper;
+import com.bush.pharmacy_web_app.service.cart.mapper.CartItemReadMapper;
+import com.bush.pharmacy_web_app.service.product.mapper.ProductReadMapper;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingConstants;
+import org.mapstruct.Named;
 
 import java.math.BigDecimal;
-import java.util.Optional;
 
-@Component
-@RequiredArgsConstructor
-public class OrderReadMapper implements DtoMapper<Order, OrderReadDto> {
-    private final PharmacyBranchReadMapper branchReadMapper;
-    private final OrderItemReadMapper orderReadMapper;
-    private final OrderStatusReadMapper orderStatusReadMapper;
-    @Override
-    public OrderReadDto map(Order obj) {
-        var status = Optional.ofNullable(obj.getStatus())
-                .map(orderStatusReadMapper::map)
-                .orElseThrow();
-        var branch = Optional.ofNullable(obj.getBranch())
-                .map(branchReadMapper::map)
-                .orElse(null);
-        var cart = Optional.ofNullable(obj.getOrderItemList())
-                .map(itemList -> itemList.stream().map(orderReadMapper::map).toList())
-                .orElseThrow();
-        BigDecimal result = cart.stream()
-                .map(lamb -> lamb.medicine().price().multiply(BigDecimal.valueOf(lamb.amount())))
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-        String userId = obj.getUser().getMobilePhone();
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING,
+        uses = {PharmacyBranchReadMapper.class, CartItemReadMapper.class, ProductReadMapper.class})
+public interface OrderReadMapper {
+    @Mapping(target = "userId", source = "user.mobilePhone")
+    @Mapping(target = "statusOrder", source = "status")
+    @Mapping(target = "cartItems", source = "orderItemList")
+    @Mapping(target = "result", source = "order", qualifiedByName = "countResultOrderPrice")
+    OrderReadDto mapToOrderReadDto(Order order);
 
-        return new OrderReadDto(obj.getId(), status, obj.getDate(), userId, branch, cart, result);
+    @Mapping(target = "id", expression = "java(status.ordinal())")
+    @Mapping(target = "name", expression = "java(status.name())")
+    OrderStatusDto mapToOrderStatusDto(OrderState status);
+
+    @Mapping(target = "medicine", source = "product")
+    OrderItemReadDto mapToOrderItemReadDto(OrderItem item);
+
+    @Named("countResultOrderPrice")
+    default BigDecimal countResultOrderPrice(Order order) {
+        BigDecimal result = BigDecimal.ZERO;
+        for (OrderItem item : order.getOrderItemList()) {
+            result = result.add(item.getPrice().multiply(BigDecimal.valueOf(item.getAmount())));
+        }
+        return result;
     }
 }
