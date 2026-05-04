@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         objectContainer.innerHTML = '';
         if (data._embedded === undefined) {
             const message = document.createElement('h3');
-            message.textContent = 'Отсутствуют созданные статьи';
+            message.textContent = 'Отсутствуют созданные новости';
             objectContainer.appendChild(message);
             return;
         }
