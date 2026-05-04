@@ -2,6 +2,7 @@
     display: grid;
     grid-template-columns: 100px 1fr auto;
     gap: 24px;
+    margin-bottom: 1rem;
     align-items: center;
     padding: 18px 18px;
     animation: cr-fadeIn 0.3s ease;

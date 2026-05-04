@@ -70,7 +70,7 @@
 
 /* Modern :has() for radio selection */
 .cr-branch-card:has(input:checked) {
-    border-color: #1a1a1a;
+    border-color: #0078D7;
     background: #fafafa;
     box-shadow: 0 2px 8px rgba(0,0,0,0.04);
 }
@@ -207,7 +207,7 @@
 .cr-checkout {
     width: 100%;
     padding: 16px;
-    background: #1a1a1a;
+    background: #0078D7;
     color: #fff;
     border: none;
     border-radius: 10px;
@@ -220,7 +220,7 @@
     font-family: inherit;
 }
 
-.cr-checkout:hover { background: #333; }
+.cr-checkout:hover { background: #0063B1; }
 .cr-checkout:active { transform: scale(0.98); }
 
 .cr-secure {
