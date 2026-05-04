@@ -63,7 +63,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         if (roleSelect.value.length > 0) {
             params.set('role', roleSelect.value);
         } else {
-            params.set('role', 'ADMIN,OPERATOR,CUSTOMER');
+            params.set('role', 'ROLE_ADMIN,ROLE_OPERATOR,ROLE_CUSTOMER');
         }
         params.set('page', paginationManager.currentPage);
         params.set('size', paginationManager.pageSize);
@@ -107,17 +107,17 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         const adminOption = document.createElement("option");
         adminOption.textContent = 'Администратор';
-        adminOption.value = 'ADMIN';
+        adminOption.value = 'ROLE_ADMIN';
         rowRoleSelector.appendChild(adminOption);
 
         const operatorOption = document.createElement("option");
         operatorOption.textContent = 'Оператор';
-        operatorOption.value = 'OPERATOR';
+        operatorOption.value = 'ROLE_OPERATOR';
         rowRoleSelector.appendChild(operatorOption);
 
         const customerOption = document.createElement("option");
         customerOption.textContent = 'Покупатель';
-        customerOption.value = 'CUSTOMER';
+        customerOption.value = 'ROLE_CUSTOMER';
         rowRoleSelector.appendChild(customerOption);
 
         rowRoleSelector.value = userData.role;

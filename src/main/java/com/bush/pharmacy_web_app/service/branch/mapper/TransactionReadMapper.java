@@ -17,7 +17,7 @@ public class TransactionReadMapper implements DtoMapper<TransactionHistory, Tran
     @Override
     public TransactionReadDto map(TransactionHistory obj) {
         var order = Optional.ofNullable(obj.getOrder())
-                .map(orderReadMapper::map)
+                .map(orderReadMapper::mapToOrderReadDto)
                 .orElse(null);
         var transactionItems = obj.getItems().stream()
                 .map(itemReadDto::map)

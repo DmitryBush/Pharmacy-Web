@@ -14,7 +14,7 @@
                     <span>Главная</span>
                 </a>
             </li>
-            <li th:if="${authorities.contains('ROLE_' + T(com.bush.pharmacy_web_app.model.entity.user.role.RoleType).ADMIN.name())}"
+            <li th:if="${authorities.contains(T(com.bush.pharmacy_web_app.model.entity.user.role.RoleType).ROLE_ADMIN.name())}"
                 th:classappend="${currentUri.matches('^/admin/product/?(\\?.*)?$')} ? 'menu-item active' : 'menu-item'">
                 <a href="/admin/product">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
@@ -42,7 +42,7 @@
                     <span>Склад</span>
                 </a>
             </li>
-            <li th:if="${authorities.contains('ROLE_' + T(com.bush.pharmacy_web_app.model.entity.user.role.RoleType).ADMIN.name())}"
+            <li th:if="${authorities.contains(T(com.bush.pharmacy_web_app.model.entity.user.role.RoleType).ROLE_ADMIN.name())}"
                 th:classappend="${currentUri.matches('^/admin/categories/?(\\?.*)?$')} ? 'menu-item active' : 'menu-item'">
                 <a href="/admin/categories">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
@@ -52,7 +52,7 @@
                     <span>Категории</span>
                 </a>
             </li>
-            <li th:if="${authorities.contains('ROLE_' + T(com.bush.pharmacy_web_app.model.entity.user.role.RoleType).ADMIN.name())}"
+            <li th:if="${authorities.contains(T(com.bush.pharmacy_web_app.model.entity.user.role.RoleType).ROLE_ADMIN.name())}"
                 th:classappend="${currentUri.matches('^/admin/news/?(\\?.*)?$')} ? 'menu-item active' : 'menu-item'">
                 <a href="/admin/news">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
@@ -62,7 +62,7 @@
                     <span>Новости</span>
                 </a>
             </li>
-            <li th:if="${authorities.contains('ROLE_' + T(com.bush.pharmacy_web_app.model.entity.user.role.RoleType).ADMIN.name())}"
+            <li th:if="${authorities.contains(T(com.bush.pharmacy_web_app.model.entity.user.role.RoleType).ROLE_ADMIN.name())}"
                 th:classappend="${currentUri.matches('^/admin/staff/?(\\?.*)?$')} ? 'menu-item active' : 'menu-item'">
                 <a href="/admin/staff">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
@@ -72,7 +72,7 @@
                     <span>Персонал</span>
                 </a>
             </li>
-            <li th:if="${authorities.contains('ROLE_' + T(com.bush.pharmacy_web_app.model.entity.user.role.RoleType).ADMIN.name())}"
+            <li th:if="${authorities.contains(T(com.bush.pharmacy_web_app.model.entity.user.role.RoleType).ROLE_ADMIN.name())}"
                 th:classappend="${currentUri.matches('^/admin/branch/?(\\?.*)?$')} ? 'menu-item active' : 'menu-item'">
                 <a href="/admin/branch">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">

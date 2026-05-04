@@ -3,6 +3,7 @@ package com.bush.pharmacy_web_app.service.cart;
 import com.bush.pharmacy_web_app.model.dto.cart.CartReadDto;
 import com.bush.pharmacy_web_app.model.dto.cart.CartUpdateDto;
 import com.bush.pharmacy_web_app.model.entity.cart.Cart;
+import com.bush.pharmacy_web_app.model.entity.cart.CartItems;
 import com.bush.pharmacy_web_app.model.entity.user.User;
 import com.bush.pharmacy_web_app.repository.user.cart.CartItemRepository;
 import com.bush.pharmacy_web_app.repository.user.cart.CartRepository;
@@ -15,7 +16,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -58,5 +62,15 @@ public class CartService {
         if (executionResult == 0) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
+    }
+
+    @Transactional
+    public void deleteItemsInBatchFromCart(String userId, List<Long> productIdList) {
+        Cart cart = cartRepository.findCartByUserMobilePhone(userId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        List<CartItems> itemBatchDelete = cart.getCartItemsList().stream()
+                .filter(cartItems -> productIdList.contains(cartItems.getId().getProduct().getId()))
+                .toList();
+        cartItemRepository.deleteAllInBatch(itemBatchDelete);
     }
 }

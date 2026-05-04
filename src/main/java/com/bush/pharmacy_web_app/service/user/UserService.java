@@ -38,10 +38,6 @@ public class UserService implements UserDetailsService {
     private final UserReadMapper readMapper;
     private final UserCreateMapper createMapper;
 
-    public List<CustomerReadDto> findAll() {
-        return userRepository.findAll().stream().map(readMapper::map).toList();
-    }
-
     public Page<AdminUserReadDto> findAllByFilter(Pageable pageable, UserFilter filter) {
         List<RoleType> roleType =  filter.role().stream()
                 .filter(s -> !s.isBlank())
@@ -89,7 +85,7 @@ public class UserService implements UserDetailsService {
         return userRepository.findById(username)
                 .map(customer -> new User(customer.getMobilePhone(),
                         customer.getPassword(),
-                        List.of(new SimpleGrantedAuthority("ROLE_" + customer.getRole().getType().name()))))
+                        List.of(new SimpleGrantedAuthority(customer.getRole().getType().name()))))
                 .orElseThrow(() -> new UsernameNotFoundException("Mistake in username or password"));
     }
 

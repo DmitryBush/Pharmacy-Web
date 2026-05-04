@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     async function initialize() {
         showLoadingAnimation();
-        cartItemsSet = getCartProductsSet();
+        cartItemsSet = await getCartProductsSet();
         loadDailyProducts();
         loadNews();
     }

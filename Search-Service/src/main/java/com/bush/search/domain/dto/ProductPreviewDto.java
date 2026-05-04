@@ -7,6 +7,6 @@ public record ProductPreviewDto(Long id,
                                 String name,
                                 String type,
                                 BigDecimal price,
-                                List<Long> imagePaths,
+                                List<ProductImageDto> imagePaths,
                                 ManufacturerReadDto manufacturer) {
 }

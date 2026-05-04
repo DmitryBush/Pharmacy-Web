@@ -20,11 +20,17 @@ export default class ProductRenderer {
         imageLink.href = `/product/${product.id}`;
         const productImage = document.createElement('img');
         if (product.imagePaths.length > 0) {
-            productImage.src = `/api/v1/product-image/${product.imagePaths[0]}`;
+            productImage.src = `/api/v1/product-image/${product.imagePaths[0].id}`;
             productImage.alt = product.name;
             productImage.setAttribute('width', '200px');
         } else {
-            productImage.classList.add('.image-unavailable');
+            imageLink.innerHTML = `
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <rect x="3" y="3" width="18" height="18" rx="2"/>
+                <circle cx="8.5" cy="8.5" r="1.5"/>
+                <path d="M21 15l-5-5L5 21"/>
+            </svg>
+            `;
         }
         imageLink.appendChild(productImage);
         return imageLink;

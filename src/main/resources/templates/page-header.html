@@ -159,7 +159,7 @@
                 <button class="search-button">
                     <img src="/api/v1/icons/header/search-icon.png" loading="lazy" alt="Поиск" width="25px" height="25px">
                 </button>
-                <div id="search-result-container" class="search-result-container"></div>
+                <div id="search-result-container" class="search-results"></div>
             </div>
             <div class="user-actions">
                 <a href="/wishlist" class="icon-btn">
@@ -170,20 +170,28 @@
                     <img src="/api/v1/icons/header/basket2.png" loading="lazy" alt="Корзина">
                     <span>Корзина</span>
                 </a>
-                <a href="user" class="icon-btn">
-                    <img src="/api/v1/icons/header/person.png" loading="lazy" alt="Пользователь">
-                    <span>Войти</span>
+                <a href="/order" class="icon-btn">
+                    <img src="/api/v1/icons/header/bag.png" loading="lazy" alt="Пользователь">
+                    <span>Заказы</span>
                 </a>
             </div>
             <link href="/css/page-header.css" rel="stylesheet">
             <link href="/css/dropdown-catalog.css" rel="stylesheet">
+            <link href="/css/search/header-search.css " rel="stylesheet">
             <link href="/css/login/login.css" rel="stylesheet">
             <script src="/js/dropdown-catalog.js"></script>
             <script type="module">
                 import {LoginModal} from "/js/login/login-modal.js";
+                import {RegisterModal} from "/js/login/register-modal.js";
+                import {Search} from "/js/search/search.js";
 
                 document.addEventListener("DOMContentLoaded", () => {
+                    const searchField = document.getElementById('search-field');
+                    const searchResultContainer = document.getElementById('search-result-container');
+                    Search.getInstance(searchField, searchResultContainer);
+
                     LoginModal.getInstance();
+                    RegisterModal.getInstance();
                 });
             </script>
         </header>
