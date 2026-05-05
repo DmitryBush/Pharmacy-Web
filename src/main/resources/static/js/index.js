@@ -8,11 +8,13 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     let cartItemsSet = new Set();
 
+    const dailyProductsSection = document.getElementById("daily-product-section");
     const dailyProductsContainer = document.getElementById('product-container');
-    const dailyProductsLoader = new Loader(dailyProductsContainer);
+    const dailyProductsLoader = new Loader(dailyProductsSection);
 
+    const newsSection = document.getElementById('news-section');
     const newsContainer = document.getElementById('news-container');
-    const newsLoader = new Loader(newsContainer);
+    const newsLoader = new Loader(newsSection);
 
     try {
         await initialize();
