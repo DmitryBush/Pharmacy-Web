@@ -49,7 +49,7 @@ public class DynamicProductFilterRepositoryImpl implements DynamicProductFilterR
     @Override
     public FilterResultTuple<Page<Product>, ProductAggregation> findProductsByFilter(ProductFilter filter, Pageable pageable) {
         BoolQuery boolQuery = getBoolQuery(filter);
-        NativeQuery nativeQuery = buildNativeQuery(boolQuery);
+        NativeQuery nativeQuery = buildNativeQuery(boolQuery, pageable);
 
         SearchHits<Product> productSearchHits = elasticsearchClient.search(nativeQuery, Product.class);
         return new FilterResultTuple<>(buildPage(productSearchHits, pageable),
@@ -62,7 +62,7 @@ public class DynamicProductFilterRepositoryImpl implements DynamicProductFilterR
     }
 
     @Nonnull
-    private NativeQuery buildNativeQuery(BoolQuery boolQuery) {
+    private NativeQuery buildNativeQuery(BoolQuery boolQuery, Pageable pageable) {
         return NativeQuery.builder()
                 .withQuery(boolQuery._toQuery())
                 .withAggregation("manufacturers", createNestedAggregation("manufacturer",
@@ -70,6 +70,7 @@ public class DynamicProductFilterRepositoryImpl implements DynamicProductFilterR
                 .withAggregation("countries", createNestedAggregation("manufacturer.country",
                         "manufacturer.country.countryName.keyword"))
                 .withAggregation("activeIngredients", createAggregation("activeIngredient"))
+                .withPageable(pageable)
                 .build();
     }
 
