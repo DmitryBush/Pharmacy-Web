@@ -11,15 +11,14 @@ import com.bush.pharmacy_web_app.service.cart.mapper.CartCreateMapper;
 import com.bush.pharmacy_web_app.service.cart.mapper.CartReadMapper;
 import com.bush.pharmacy_web_app.service.user.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -33,6 +32,7 @@ public class CartService {
     private final CartCreateMapper cartCreateMapper;
     private final CartReadMapper cartReadMapper;
 
+    @Cacheable(cacheNames = "cart", key = "#userMobilePhone")
     @Transactional
     public CartReadDto findCartByUserId(String userMobilePhone) {
         User user = userService.getUserReferenceById(userMobilePhone);
@@ -46,6 +46,7 @@ public class CartService {
         return cartRepository.saveAndFlush(cart);
     }
 
+    @CacheEvict(cacheNames = "cart", key = "#userId")
     @Transactional
     public void changeItemQuantity(String userId, CartUpdateDto updateDto) {
         User user = userService.getUserReferenceById(userId);
@@ -54,6 +55,7 @@ public class CartService {
         cartItemRepository.changeItemQuantity(cart.getId(), updateDto.item().productId(), updateDto.item().quantity());
     }
 
+    @CacheEvict(cacheNames = "cart", key = "#userId")
     @Transactional
     public void deleteItemFromCart(String userId, Long productId) {
         Cart cart = cartRepository.findCartByUserMobilePhone(userId)
@@ -64,6 +66,7 @@ public class CartService {
         }
     }
 
+    @CacheEvict(cacheNames = "cart", key = "#userId")
     @Transactional
     public void deleteItemsInBatchFromCart(String userId, List<Long> productIdList) {
         Cart cart = cartRepository.findCartByUserMobilePhone(userId)

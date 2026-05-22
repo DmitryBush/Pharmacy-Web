@@ -32,8 +32,7 @@ public class ProductCategoryRestController {
     @PatchMapping("/{id}")
     public ResponseEntity<ProductTypeDto> updateCategory(@PathVariable Integer id,
                                                          @RequestBody ProductTypeUpdateDto updateDto) {
-        return ResponseEntity.ok(productTypeService.updatePartlyType(id, updateDto)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST)));
+        return ResponseEntity.ok(productTypeService.updatePartlyType(id, updateDto));
     }
 
     @DeleteMapping("/{id}")

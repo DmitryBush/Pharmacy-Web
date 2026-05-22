@@ -21,6 +21,14 @@ spring:
       parallelism: 1
       memory: 47104
       iterations: 1
+  data:
+    redis:
+      host: localhost
+      port: 6379
+  cache:
+    type: redis
+  threads:
+    virtual: enabled
 
 
 storage:

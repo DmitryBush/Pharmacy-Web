@@ -18,6 +18,9 @@ import com.bush.pharmacy_web_app.service.product.ProductService;
 import com.bush.pharmacy_web_app.service.product.mapper.MedicinePreviewReadMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -25,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -47,18 +51,24 @@ public class TransactionService {
     private final StorageService storageService;
     private final ProductService productService;
 
+    @Cacheable(cacheNames = "branchTransaction", key = "#branchId")
     public List<TransactionReadDto> findAllTransactionsByBranchId(Long branchId) {
         return transactionRepository.findByBranchId(branchId).stream()
                 .map(transactionReadMapper::map)
-                .toList();
+                .collect(Collectors.toList());
     }
 
+    @Cacheable(cacheNames = "bestSellingProduct")
     public List<ProductPreviewReadDto> findBestSellingProducts() {
         return transactionRepository.findBestSellingProducts(featuredProductCount).stream()
                 .map(medicinePreviewReadMapper::map)
-                .toList();
+                .collect(Collectors.toList());
     }
 
+    @Caching(evict = {
+            @CacheEvict(cacheNames = "branchTransaction", key = "#branchId"),
+            @CacheEvict(cacheNames = "bestSellingProduct", allEntries = true)
+    })
     @PreAuthorize("hasAnyRole('ADMIN', 'OPERATOR') and " +
             "@SecurityValidation.checkUserBranchAccess(#userDetails, #transactionInfo.branchId)")
     @Transactional
@@ -106,6 +116,10 @@ public class TransactionService {
                 .map(transactionRepository::save);
     }
 
+    @Caching(evict = {
+            @CacheEvict(cacheNames = "branchTransaction", key = "#branchId"),
+            @CacheEvict(cacheNames = "bestSellingProduct", allEntries = true)
+    })
     @PreAuthorize("hasAnyRole('ADMIN', 'OPERATOR') and " +
             "@SecurityValidation.checkUserBranchAccess(#userDetails, #transactionInfo.branchId)")
     @Transactional

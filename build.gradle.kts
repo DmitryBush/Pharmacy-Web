@@ -26,6 +26,7 @@ repositories {
 extra["springCloudVersion"] = "2024.0.3"
 
 dependencies {
+	implementation("org.springframework.boot:spring-boot-starter-actuator")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
@@ -35,6 +36,8 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-validation")
 	implementation("org.thymeleaf.extras:thymeleaf-extras-springsecurity6")
 	implementation("org.springframework.boot:spring-boot-starter-hateoas")
+	implementation("org.springframework.boot:spring-boot-starter-cache")
+	implementation("org.springframework.boot:spring-boot-starter-data-redis")
 	implementation("org.springframework.statemachine:spring-statemachine-core:4.0.1")
 	implementation("org.springframework.boot:spring-boot-actuator")
 	implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")

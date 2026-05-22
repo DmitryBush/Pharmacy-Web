@@ -18,14 +18,12 @@ public class ProductImageRestController {
 
     @GetMapping(value = "/{id}/{filename:.+}", produces = {MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE})
     public ResponseEntity<Resource> findImage(@PathVariable Long id, @PathVariable String filename) {
-        return ResponseEntity.ok(imageService.findProductImageByIdAndName(id, filename)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND)));
+        return ResponseEntity.ok(imageService.findProductImageByIdAndName(id, filename));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Resource> findImageById(@PathVariable Long id) {
-        return ResponseEntity.ok(imageService.findImageById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND)));
+        return ResponseEntity.ok(imageService.findImageById(id));
     }
 
     @PreAuthorize("hasRole('ADMIN')")

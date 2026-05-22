@@ -6,6 +6,7 @@ import com.bush.pharmacy_web_app.model.entity.news.NewsType;
 import com.bush.pharmacy_web_app.repository.news.NewsTypeRepository;
 import com.bush.pharmacy_web_app.service.news.mapper.NewsTypeMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +20,7 @@ public class NewsTypeService {
 
     private final NewsTypeMapper typeMapper;
 
+    @Cacheable(cacheNames = "newsTypeList")
     public List<NewsTypeDto> findAllNewsTypes() {
         return typeRepository.findAll().stream()
                 .map(typeMapper::mapToNewsTypeDto)

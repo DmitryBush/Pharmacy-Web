@@ -7,7 +7,9 @@ import com.bush.pharmacy_web_app.shared.mapper.DtoMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -18,6 +20,6 @@ public class NewsReadMapper implements DtoMapper<News, NewsReadDto> {
     @Override
     public NewsReadDto map(News obj) {
         return new NewsReadDto(obj.getCreationTime(), newsTypeMapper.mapToNewsTypeDto(obj.getType()), obj.getTitle(),
-                obj.getSlug(), obj.getBody(), obj.getNewsImageList().stream().map(imageReadMapper::map).toList());
+                obj.getSlug(), obj.getBody(), obj.getNewsImageList().stream().map(imageReadMapper::map).collect(Collectors.toCollection(ArrayList::new)));
     }
 }

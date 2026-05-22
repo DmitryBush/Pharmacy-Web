@@ -9,6 +9,8 @@ import com.bush.pharmacy_web_app.repository.branch.BranchUserAssignmentRepositor
 import com.bush.pharmacy_web_app.service.user.UserService;
 import com.bush.pharmacy_web_app.service.user.mapper.AdminUserReadMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,12 +30,14 @@ public class BranchUserAssignmentService {
     private final UserService userService;
     private final PharmacyBranchService branchService;
 
+    @Cacheable(cacheNames = "assignedUsers", key = "#id")
     public List<AdminUserReadDto> findAssignedUsersByBranchId(Long id) {
         return userAssignmentRepository.findAssignedUsersByBranchId(id).stream()
                 .map(adminUserReadMapper::map)
                 .toList();
     }
 
+    @CacheEvict(cacheNames = "assignedUsers", key = "#id")
     @Transactional
     public AdminUserReadDto assignUserToBranch(Long branchId, String userId) {
         final User user = userService.getUserReferenceById(userId);
@@ -47,6 +51,7 @@ public class BranchUserAssignmentService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST));
     }
 
+    @CacheEvict(cacheNames = "assignedUsers", key = "#id")
     public void unlinkUserFromBranch(Long branchId, String userId) {
         userAssignmentRepository.findAssignmentByUserIdAndBranchId(branchId, userId)
                 .ifPresentOrElse(userAssignmentRepository::delete,

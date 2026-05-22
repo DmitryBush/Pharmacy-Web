@@ -10,6 +10,8 @@ import com.bush.pharmacy_web_app.service.storage.BucketConstantEnum;
 import com.bush.pharmacy_web_app.service.storage.ObjectStorageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -39,10 +41,8 @@ public class ProductImageService {
                 .toList();
     }
 
-    public Optional<Resource> findImageById(Long id) {
-        return imageRepository.findById(id)
-                .map(ProductImage::getPath)
-                .map(path -> storageService.loadResource(BucketConstantEnum.PRODUCT, path));
+    public Resource findImageById(Long id) {
+        return storageService.loadResource(BucketConstantEnum.PRODUCT, findProductImageById(id).getPath());
     }
 
     @Transactional(propagation = Propagation.MANDATORY)
@@ -57,6 +57,7 @@ public class ProductImageService {
         return image;
     }
 
+    @CacheEvict(cacheNames = {"productImage", "productImage:path"}, key = "id")
     @Transactional
     public void deleteImage(Long id) {
         imageRepository.findById(id)
@@ -72,13 +73,20 @@ public class ProductImageService {
         storageService.delete(BucketConstantEnum.PRODUCT, productImage.getPath());
     }
 
-    public Optional<Resource> findProductImageByIdAndName(Long id, String filename) {
-        return findImageByMedicineIdAndPath(id, filename)
-                .map(path -> storageService.loadResource(BucketConstantEnum.PRODUCT, path));
+    public Resource findProductImageByIdAndName(Long id, String filename) {
+        return storageService.loadResource(BucketConstantEnum.PRODUCT, findImagePathByMedicineIdAndPath(id, filename));
     }
 
-    private Optional<String> findImageByMedicineIdAndPath(Long id, String filename) {
+    @Cacheable(cacheNames = "productImage", key = "#id")
+    private ProductImage findProductImageById(Long id) {
+        return imageRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    }
+
+    @Cacheable(cacheNames = "productImage:path", key = "#id + #filename")
+    private String findImagePathByMedicineIdAndPath(Long id, String filename) {
         return imageRepository.findByProductIdAndPath(id, filename)
-                .map(ProductImage::getPath);
+                .map(ProductImage::getPath)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 }

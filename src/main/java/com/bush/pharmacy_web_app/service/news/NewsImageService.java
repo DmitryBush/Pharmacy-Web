@@ -11,6 +11,8 @@ import com.bush.pharmacy_web_app.service.news.mapper.NewsImageReadMapper;
 import com.bush.pharmacy_web_app.service.storage.BucketConstantEnum;
 import com.bush.pharmacy_web_app.service.storage.ObjectStorageService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -34,11 +36,17 @@ public class NewsImageService {
 
     private final ObjectStorageService objectStorageService;
 
-    public Resource findImageById(Long imageId) {
+    public Resource getImageById(Long imageId) {
         return Optional.ofNullable(imageId)
-                .flatMap(imageRepository::findById)
+                .map(this::findImageById)
                 .map(NewsImage::getImageLinkPath)
                 .map(link -> objectStorageService.loadResource(BucketConstantEnum.NEWS, link))
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    }
+
+    @Cacheable(cacheNames = "newsImage", key = "#imageId")
+    private NewsImage findImageById(Long imageId) {
+        return imageRepository.findById(imageId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
@@ -69,6 +77,7 @@ public class NewsImageService {
                 objectStorageService.delete(BucketConstantEnum.NEWS, image.getImageLinkPath()));
     }
 
+    @CacheEvict(cacheNames = "newsImage", key = "#imageId")
     @Transactional
     public void deleteNewsImageById(Long id) {
         Optional.ofNullable(id)

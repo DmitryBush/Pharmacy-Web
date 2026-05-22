@@ -9,6 +9,8 @@ import com.bush.pharmacy_web_app.model.dto.branch.PharmacyBranchReadDto;
 import com.bush.pharmacy_web_app.service.branch.mapper.PharmacyBranchCreateMapper;
 import com.bush.pharmacy_web_app.service.branch.mapper.PharmacyBranchReadMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -28,6 +30,7 @@ public class PharmacyBranchService {
     private final PharmacyBranchCreateMapper branchCreateMapper;
     private final PharmacyBranchReadMapper branchReadMapper;
 
+    @Cacheable(cacheNames = "branchInfo", key = "#id")
     public PharmacyBranchInfoDto findBranchInfoById(Long id) {
         return branchRepository.findBranchInfoById(id)
                 .map(branchReadMapper::mapToPharmacyBranchInfoDto)
@@ -62,6 +65,7 @@ public class PharmacyBranchService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST));
     }
 
+    @CacheEvict(cacheNames = "branchInfo", key = "#id")
     @Transactional
     public PharmacyBranchInfoDto updateBranch(Long id, PharmacyBranchUpdateDto dto) {
         return branchRepository.findById(id)

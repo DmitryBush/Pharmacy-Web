@@ -20,8 +20,7 @@ public class OrderAdminRestController {
 
     @GetMapping("/{id}/state")
     public OrderState getOrderState(@PathVariable UUID id) {
-        return orderService.findOrderStateById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        return orderService.findOrderStateById(id);
     }
 
     @PostMapping("/{id}/state")

@@ -1,13 +1,17 @@
 package com.bush.pharmacy_web_app.service.product;
 
+import com.bush.pharmacy_web_app.model.dto.product.ProductTypeDto;
 import com.bush.pharmacy_web_app.model.dto.product.ProductTypeUpdateDto;
 import com.bush.pharmacy_web_app.model.entity.product.ProductType;
 import com.bush.pharmacy_web_app.repository.product.ProductTypeRepository;
-import com.bush.pharmacy_web_app.model.dto.product.ProductTypeDto;
 import com.bush.pharmacy_web_app.service.product.mapper.type.MedicineTypeCreateMapper;
 import com.bush.pharmacy_web_app.service.product.mapper.type.MedicineTypeReadMapper;
 import com.bush.pharmacy_web_app.service.product.mapper.type.MedicineTypeUpdateMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +19,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -44,13 +49,15 @@ public class ProductTypeService {
                 .toList();
     }
 
+    @Cacheable(cacheNames = "productTypesByParent", key = "#parent", condition = "#parent != null")
     public List<ProductTypeDto> findAllTypesByParent(String parent) {
         return productTypeRepository.findByParentName(parent)
                 .stream()
                 .map(typeReadMapper::map)
-                .toList();
+                .collect(Collectors.toList());
     }
 
+    @Cacheable(cacheNames = "productTypeByName", key = "#type")
     public ProductTypeDto findByTypeName(String type) {
         return productTypeRepository.findByName(type)
                 .map(typeReadMapper::map)
@@ -61,14 +68,7 @@ public class ProductTypeService {
         return productTypeRepository.getReferenceById(id);
     }
 
-    protected ProductType findOrCreate(ProductTypeDto typeDto) {
-        return productTypeRepository.findByName(typeDto.name())
-                .orElseGet(() -> Optional.of(typeDto)
-                        .map(typeCreateMapper::map)
-                        .map(productTypeRepository::save)
-                        .orElseThrow());
-    }
-
+    @CacheEvict(cacheNames = "productTypesByParent", allEntries = true)
     @Transactional
     public Optional<ProductTypeDto> createDto(ProductTypeDto createDto) {
         return Optional.ofNullable(createDto)
@@ -77,14 +77,29 @@ public class ProductTypeService {
                 .map(typeReadMapper::map);
     }
 
+    @Caching(evict = {
+            @CacheEvict(cacheNames = "productType", key = "#id"),
+            @CacheEvict(cacheNames = "productTypesByParent", allEntries = true),
+            @CacheEvict(cacheNames = "productTypeByName", allEntries = true)
+    }
+    )
+    @CachePut(cacheNames = "productType", key = "#id")
+    @CacheEvict(cacheNames = {"productType", "productType#parent"}, key = "#id")
     @Transactional
-    public Optional<ProductTypeDto> updatePartlyType(Integer id, ProductTypeUpdateDto updateDto) {
+    public ProductTypeDto updatePartlyType(Integer id, ProductTypeUpdateDto updateDto) {
         return productTypeRepository.findById(id)
                 .map(type -> typeUpdateMapper.map(updateDto, type))
                 .map(productTypeRepository::saveAndFlush)
-                .map(typeReadMapper::map);
+                .map(typeReadMapper::map)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
+    @Caching(evict = {
+            @CacheEvict(cacheNames = "productType", key = "#id"),
+            @CacheEvict(cacheNames = "productTypesByParent", allEntries = true),
+            @CacheEvict(cacheNames = "productTypeByName", allEntries = true)
+    }
+    )
     @Transactional
     public Boolean deleteType(Integer id) {
         return productTypeRepository.findById(id)

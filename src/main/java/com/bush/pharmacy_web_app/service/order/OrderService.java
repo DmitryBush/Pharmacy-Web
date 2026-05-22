@@ -18,6 +18,8 @@ import com.bush.pharmacy_web_app.service.order.mapper.OrderReadMapper;
 import com.bush.pharmacy_web_app.service.product.ProductService;
 import com.bush.pharmacy_web_app.service.user.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -61,14 +63,18 @@ public class OrderService {
                 .map(adminOrderReadMapper::map);
     }
 
-    public Optional<AdminOrderDto> findAdminOrderInfoById(UUID id) {
+    @Cacheable(cacheNames = "AdminOrderDto", key = "id")
+    public AdminOrderDto findAdminOrderInfoById(UUID id) {
         return orderRepository.findById(id)
-                .map(adminOrderReadMapper::map);
+                .map(adminOrderReadMapper::map)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
-    public Optional<OrderState> findOrderStateById(UUID id) {
+    @Cacheable(cacheNames = "OrderState", key = "id")
+    public OrderState findOrderStateById(UUID id) {
         return orderRepository.findById(id)
-                .map(Order::getStatus);
+                .map(Order::getStatus)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
     /**
@@ -104,6 +110,7 @@ public class OrderService {
                 .map(orderReadMapper::mapToOrderReadDto);
     }
 
+    @Cacheable(cacheNames = "OrderReadDto", key = "uuid")
     @PostAuthorize("returnObject.userId.equals(authentication.principal.username)")
     public OrderReadDto findUserOrderById(UUID uuid) {
         return orderRepository.findById(uuid)
@@ -126,6 +133,7 @@ public class OrderService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST));
     }
 
+    @CacheEvict(cacheNames = {"OrderReadDto", "AdminOrderDto", "OrderState"}, key = "orderId")
     @PreAuthorize("T(com.bush.pharmacy_web_app.model.entity.order.state.OrderEventPermissionMapping)" +
             ".canOrderEventProcessed(authentication.principal.authorities,#event)")
     @Transactional
@@ -139,6 +147,7 @@ public class OrderService {
         }
     }
 
+    @CacheEvict(cacheNames = {"OrderReadDto", "AdminOrderDto", "OrderState"}, key = "orderId")
     @PreAuthorize("T(com.bush.pharmacy_web_app.model.entity.order.state.OrderEventPermissionMapping)" +
             ".canOrderEventProcessed(authentication.principal.authorities,#event)")
     @Transactional

@@ -9,6 +9,8 @@ import com.bush.pharmacy_web_app.service.news.mapper.NewsCreateMapper;
 import com.bush.pharmacy_web_app.service.news.mapper.NewsReadMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -46,12 +48,14 @@ public class NewsService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST));
     }
 
+    @Cacheable(cacheNames = "news", key = "#slug")
     public NewsReadDto getNewsBySlug(String slug) {
         return newsRepository.findBySlug(slug)
                 .map(newsReadMapper::map)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
+    @CacheEvict(cacheNames = "news", key = "#slug")
     @Transactional
     public NewsReadDto updateNewsBySlug(String slug, NewsCreateDto createDto) {
         NewsType newsType = newsTypeService.getReferenceById(createDto.type());
@@ -63,6 +67,7 @@ public class NewsService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
+    @CacheEvict(cacheNames = "news", key = "#slug")
     @Transactional
     public void deleteNewsBySlug(String slug) {
         newsRepository.findBySlug(slug)

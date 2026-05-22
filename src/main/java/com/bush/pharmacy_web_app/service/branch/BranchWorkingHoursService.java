@@ -6,6 +6,8 @@ import com.bush.pharmacy_web_app.repository.branch.BranchWorkingHoursRepository;
 import com.bush.pharmacy_web_app.service.branch.mapper.BranchWorkingHoursCreateMapper;
 import com.bush.pharmacy_web_app.service.branch.mapper.BranchWorkingHoursReadMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,12 +23,14 @@ public class BranchWorkingHoursService {
     private final BranchWorkingHoursCreateMapper workingHoursCreateMapper;
     private final BranchWorkingHoursReadMapper workingHoursReadMapper;
 
+    @Cacheable(cacheNames = "BranchWorkingHours", key = "#branchId")
     public List<BranchWorkingHoursDto> findWorkingHoursByBranchId(Long branchId) {
         return branchWorkingHoursRepository.findByBranchId(branchId).stream()
                 .map(workingHoursReadMapper::mapToBranchWorkingHoursDto)
                 .toList();
     }
 
+    @CacheEvict(cacheNames = "BranchWorkingHours", key = "#branchId")
     public List<BranchWorkingHoursDto> updateWorkingHoursByBranchId(Long branchId, List<BranchWorkingHoursDto> hoursDtoList) {
         Map<DayOfWeek, BranchWorkingHoursDto> updateMap = hoursDtoList.stream()
                 .collect(Collectors.toMap(BranchWorkingHoursDto::dayOfWeek, Function.identity(),

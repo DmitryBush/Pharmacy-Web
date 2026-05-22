@@ -107,6 +107,20 @@ services:
     command: server /data
     volumes:
       - object-storage-data:/data
+  redis:
+    image: redis:8.2.6-alpine
+    ports:
+      - "6379:6379"
+    restart: unless-stopped
+    command: redis-server --save 60 1 --loglevel warning
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+    volumes:
+      - redis_data:/data
 
 volumes:
   db_data:
@@ -118,3 +132,4 @@ volumes:
   debezium_reindex_log_1:
   debezium_reindex_config_1:
   object-storage-data:
+  redis_data:

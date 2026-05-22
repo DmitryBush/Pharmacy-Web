@@ -23,6 +23,8 @@ import com.bush.pharmacy_web_app.service.product.mapper.ProductReadMapper;
 import com.bush.pharmacy_web_app.service.supplier.SupplierService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -73,17 +75,20 @@ public class ProductService {
                 .toList();
     }
 
+    @Cacheable(cacheNames = "product:ProductReadDto", key = "#id")
     public Optional<ProductReadDto> findMedicineById(Long id) {
         return productRepository.findById(id)
                 .map(productReadMapper::mapToMedicineReadDto);
     }
 
+    @Cacheable(cacheNames = "product:ProductPreviewReadDto", key = "#id")
     public ProductPreviewReadDto findProductPreviewById(Long id) {
         return productRepository.findById(id)
                 .map(productReadMapper::mapToMedicinePreviewReadDto)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
+    @Cacheable(cacheNames = "product:ProductAdminReadDto", key = "#id")
     public Optional<ProductAdminReadDto> findAdminDtoById(Long id) {
         return productRepository.findById(id)
                 .map(productReadMapper::mapToMedicineAdminReadDto);
@@ -93,13 +98,6 @@ public class ProductService {
         return productRepository.findByNameContainingIgnoreCase(name)
                 .stream()
                 .map(productReadMapper::mapToMedicinePreviewReadDto)
-                .toList();
-    }
-
-    public List<PharmacyBranchReadDto> findBranchesMedicineLocated(Long medicineId) {
-        return branchRepository.findBranchesWithMedicineLocated(medicineId)
-                .stream()
-                .map(pharmacyBranchReadMapper::mapToPharmacyBranchReadDto)
                 .toList();
     }
 
@@ -119,7 +117,7 @@ public class ProductService {
             outboxService.createRecord(new OutboxRecordDto<>("product", CrudOperationType.C, product));
             return productReadMapper.mapToMedicinePreviewReadDto(product);
         } catch (Exception e) {
-            log.error("Caught exception while saving product - {}", e.getMessage());
+            log.error("Caught exception while saving product - {}", e.getMessage(), e);
             product.getImage().forEach(imageService::deleteImage);
             throw new RuntimeException(e);
         }
@@ -140,6 +138,8 @@ public class ProductService {
                 .filter(file -> !file.isEmpty());
     }
 
+    @CacheEvict(cacheNames = {"product:ProductReadDto", "product:ProductPreviewReadDto", "product:ProductAdminReadDto"},
+            key = "#id")
     @Transactional
     public ProductPreviewReadDto updateMedicine(Long id, ProductCreateDto createDto, List<MultipartFile> images) {
         Supplier supplier = supplierService.getReferenceById(supplierService
@@ -166,6 +166,8 @@ public class ProductService {
         }
     }
 
+    @CacheEvict(cacheNames = {"product:ProductReadDto", "product:ProductPreviewReadDto", "product:ProductAdminReadDto"},
+            key = "#id")
     @Transactional
     public boolean deleteMedicine(Long id) {
         return productRepository.findById(id)
