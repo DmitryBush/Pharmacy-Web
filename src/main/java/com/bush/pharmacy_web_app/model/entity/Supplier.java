@@ -17,9 +17,9 @@ import java.util.List;
 @Table(name = "suppliers")
 public class Supplier {
     @Id
-    @Column(nullable = false)
+    @Column(nullable = false, length = 12)
     private String itn;
-    @Column(name = "supplier_name", nullable = false)
+    @Column(name = "supplier_name", nullable = false, length = 256)
     private String name;
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "f_key_address_id", nullable = false)

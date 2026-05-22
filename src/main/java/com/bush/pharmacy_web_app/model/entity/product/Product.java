@@ -25,7 +25,7 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "product_id", nullable = false)
     private Long id;
-    @Column(name = "product_name", nullable = false)
+    @Column(name = "product_name", nullable = false, length = 256)
     private String name;
     @Builder.Default
     @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REMOVE}, mappedBy = "id.product")
@@ -38,9 +38,9 @@ public class Product {
     @Column(nullable = false)
     private Boolean recipe;
 
-    @Column(name = "active_ingredient", nullable = false, length = 25)
+    @Column(name = "active_ingredient", nullable = false, length = 128)
     private String activeIngredient;
-    @Column(name = "expiration", nullable = false, length = 25)
+    @Column(name = "expiration", nullable = false, length = 64)
     private String expirationDate;
     private String composition;
     @Column(name = "indications")

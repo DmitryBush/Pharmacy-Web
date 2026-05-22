@@ -4,12 +4,12 @@
 CREATE TABLE IF NOT EXISTS public.addresses
 (
     address_id bigint NOT NULL GENERATED ALWAYS AS IDENTITY,
-    subject character varying(30) NOT NULL,
-    district character varying(30),
-    settlement character varying(30) NOT NULL,
-    street character varying(30) NOT NULL,
-    house character varying(5) NOT NULL,
-    apartment character varying(5),
+    subject character varying(128) NOT NULL,
+    district character varying(128),
+    settlement character varying(128) NOT NULL,
+    street character varying(256) NOT NULL,
+    house character varying(32) NOT NULL,
+    apartment character varying(10),
     postal_code character varying(6) NOT NULL,
     CONSTRAINT suppliers_addreses_pkey PRIMARY KEY (address_id)
 );
@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS public.addresses
 CREATE TABLE IF NOT EXISTS public.suppliers
 (
     itn character varying(12) NOT NULL,
-    supplier_name character varying(50) NOT NULL,
+    supplier_name character varying(256) NOT NULL,
     f_key_address_id bigint NOT NULL,
     CONSTRAINT suppliers_pkey PRIMARY KEY (itn),
     CONSTRAINT suppliers_fkey_address_id_fkey FOREIGN KEY (f_key_address_id) REFERENCES public.addresses (address_id)
@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS public.suppliers
 CREATE TABLE IF NOT EXISTS public.country
 (
     country_id bigint NOT NULL GENERATED ALWAYS AS IDENTITY,
-    country character varying(50) NOT NULL,
+    country character varying(64) NOT NULL,
     CONSTRAINT country_pkey PRIMARY KEY (country_id),
     CONSTRAINT country_country_key UNIQUE (country)
 );
@@ -297,7 +297,7 @@ CREATE TABLE IF NOT EXISTS public.manufacturers
 (
     manufacturer_id bigint NOT NULL GENERATED ALWAYS AS IDENTITY,
     f_key_country_id bigint NOT NULL,
-    manufacturer_name character varying(64) NOT NULL,
+    manufacturer_name character varying(256) NOT NULL,
     CONSTRAINT manufacturers_pkey PRIMARY KEY (manufacturer_id),
     CONSTRAINT manufacturers_f_key_country_id_fkey FOREIGN KEY (f_key_country_id) REFERENCES public.country (country_id)
 );
@@ -307,7 +307,7 @@ CREATE TABLE IF NOT EXISTS public.product_types
 (
     type_id integer NOT NULL GENERATED ALWAYS AS IDENTITY,
     type_name character varying(64) NOT NULL UNIQUE,
-    type_slug VARCHAR(64) NOT NULL UNIQUE,
+    type_slug VARCHAR(128) NOT NULL UNIQUE,
     parent_id integer,
     CONSTRAINT product_types_pkey PRIMARY KEY (type_id),
     CONSTRAINT product_types_parent_id_fkey FOREIGN KEY (parent_id) REFERENCES public.product_types (type_id)
@@ -316,12 +316,12 @@ CREATE TABLE IF NOT EXISTS public.product_types
 CREATE TABLE IF NOT EXISTS public.products
 (
     product_id bigint NOT NULL GENERATED ALWAYS AS IDENTITY,
-    product_name character varying(128) NOT NULL,
+    product_name character varying(256) NOT NULL,
     price numeric(10,2) NOT NULL,
     f_key_supplier_itn character varying(12) NOT NULL,
     recipe boolean NOT NULL,
-    active_ingredient character varying(25),
-    expiration character varying(20),
+    active_ingredient character varying(128),
+    expiration character varying(64),
     composition text,
     indications text,
     contraindications text,
