@@ -373,15 +373,15 @@ CREATE TABLE IF NOT EXISTS public.roles
 );
 
 INSERT INTO roles (role_name) VALUES ('ROLE_ADMIN'), ('ROLE_OPERATOR'), ('ROLE_CUSTOMER'),
-                                     ('ROLE_LOGISTICS');
+                                     ('ROLE_LOGISTICS'), ('ROLE_ROOT');
 
 CREATE EXTENSION IF NOT EXISTS pg_trgm;
 
 CREATE TABLE IF NOT EXISTS public.users
 (
-    name character varying(25) NOT NULL,
-    surname character varying(25) NOT NULL,
-    last_name character varying(25),
+    name character varying(32) NOT NULL,
+    surname character varying(32) NOT NULL,
+    last_name character varying(32),
     mobile_phone character varying(18) NOT NULL,
     password character varying(256) NOT NULL,
     f_key_role_id integer NOT NULL default(3) references roles(role_id),
@@ -396,7 +396,7 @@ CREATE TABLE IF NOT EXISTS public.pharmacy_branches
 (
     branch_id bigint NOT NULL GENERATED ALWAYS AS IDENTITY,
     f_key_address_id bigint NOT NULL,
-    name character varying(32),
+    name character varying(255),
     warehouse_limitation integer,
     branch_phone character varying(18),
     user_supervisor character varying(18),
@@ -578,13 +578,13 @@ CREATE TABLE IF NOT EXISTS public.transaction_items
 CREATE TABLE IF NOT EXISTS public.news_type
 (
     type_id SMALLINT NOT NULL PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    type character varying(25) NOT NULL UNIQUE
+    type character varying(32) NOT NULL UNIQUE
 );
 
 CREATE TABLE IF NOT EXISTS public.news
 (
     id bigint NOT NULL GENERATED ALWAYS AS IDENTITY,
-    slug character varying(64) NOT NULL,
+    slug character varying(255) NOT NULL,
     created_time timestamp with time zone NOT NULL,
     title character varying(255) NOT NULL,
     body text NOT NULL,

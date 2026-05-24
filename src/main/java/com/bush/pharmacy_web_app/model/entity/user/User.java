@@ -26,11 +26,11 @@ public class User {
     @Id
     @Column(name = "mobile_phone", nullable = false, length = 18)
     private String mobilePhone;
-    @Column(nullable = false, length = 25)
+    @Column(nullable = false, length = 32)
     private String name;
-    @Column(nullable = false, length = 25)
+    @Column(nullable = false, length = 32)
     private String surname;
-    @Column(name = "last_name", length = 25)
+    @Column(name = "last_name", length = 32)
     private String lastName;
     @Column(nullable = false, length = 256)
     private String password;

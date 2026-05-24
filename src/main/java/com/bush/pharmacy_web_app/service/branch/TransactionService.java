@@ -59,8 +59,9 @@ public class TransactionService {
                 .toList();
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN', 'OPERATOR') and " +
-            "@SecurityValidation.checkUserBranchAccess(#userDetails, #transactionInfo.branchId)")
+    @PreAuthorize("(hasAnyRole('ADMIN', 'OPERATOR') and " +
+            "@SecurityValidation.checkUserBranchAccess(#userDetails, #transactionInfo.branchId)) " +
+            "or hasRole('ROOT')")
     @Transactional
     public List<StorageItemsReadDto> createReceiptTransaction(UserDetails userDetails,
                                                               TransactionCreateDto transactionInfo) {
@@ -106,8 +107,9 @@ public class TransactionService {
                 .map(transactionRepository::save);
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN', 'OPERATOR') and " +
-            "@SecurityValidation.checkUserBranchAccess(#userDetails, #transactionInfo.branchId)")
+    @PreAuthorize("(hasAnyRole('ADMIN', 'OPERATOR') and " +
+            "@SecurityValidation.checkUserBranchAccess(#userDetails, #transactionInfo.branchId)) " +
+            "or hasRole('ROOT')")
     @Transactional
     public List<StorageItemsReadDto> createSaleTransaction(UserDetails userDetails,
                                                            TransactionCreateDto transactionInfo) {
