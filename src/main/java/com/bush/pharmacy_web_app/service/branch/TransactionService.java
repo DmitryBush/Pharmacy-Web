@@ -4,7 +4,6 @@ import com.bush.pharmacy_web_app.model.dto.product.ProductPreviewReadDto;
 import com.bush.pharmacy_web_app.model.dto.product.ProductReadDto;
 import com.bush.pharmacy_web_app.model.dto.warehouse.*;
 import com.bush.pharmacy_web_app.model.entity.branch.transaction.TransactionItem;
-import com.bush.pharmacy_web_app.model.entity.branch.transaction.TransactionItemId;
 import com.bush.pharmacy_web_app.model.entity.branch.transaction.TransactionName;
 import com.bush.pharmacy_web_app.model.entity.branch.transaction.TransactionType;
 import com.bush.pharmacy_web_app.repository.branch.PharmacyBranchRepository;
@@ -65,7 +64,7 @@ public class TransactionService {
     @Transactional
     public List<StorageItemsReadDto> createReceiptTransaction(UserDetails userDetails,
                                                               TransactionCreateDto transactionInfo) {
-        var transactionType = typeRepository.getReferenceById(TransactionName.RECEIVING.ordinal());
+        var transactionType = typeRepository.getReferenceById(TransactionName.RECEIVING.ordinal() + 1);
         createTransaction(transactionInfo, transactionType);
 
         var inventoryRequestDto = new InventoryRequestDto(transactionInfo.branchId(), transactionInfo.transactionItemsList());
@@ -86,9 +85,7 @@ public class TransactionService {
                                 .price(productService.findMedicineById(item.medicineId())
                                         .map(ProductReadDto::price)
                                         .orElseThrow())
-                                .id(TransactionItemId.builder()
-                                        .product(productRepository.getReferenceById(item.medicineId()))
-                                        .build())
+                                .product(productRepository.getReferenceById(item.medicineId()))
                                 .build())
                         .toList())
                 .orElseThrow(IllegalArgumentException::new);
@@ -99,7 +96,7 @@ public class TransactionService {
                     transaction.setBranch(branch);
                     transaction.setOrder(order);
                     transaction.setItems(transactionItems.stream()
-                            .peek(transactionItem -> transactionItem.getId().setTransaction(transaction))
+                            .peek(transactionItem -> transactionItem.setTransaction(transaction))
                             .toList()
                     );
                     return transaction;
@@ -113,7 +110,7 @@ public class TransactionService {
     @Transactional
     public List<StorageItemsReadDto> createSaleTransaction(UserDetails userDetails,
                                                            TransactionCreateDto transactionInfo) {
-        var transactionType = typeRepository.getReferenceById(TransactionName.SALE.ordinal());
+        var transactionType = typeRepository.getReferenceById(TransactionName.SALE.ordinal() + 1);
         createTransaction(transactionInfo, transactionType);
 
         var inventoryRequestDto = new InventoryRequestDto(transactionInfo.branchId(), transactionInfo.transactionItemsList());

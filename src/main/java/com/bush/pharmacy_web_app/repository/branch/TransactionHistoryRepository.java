@@ -12,8 +12,8 @@ public interface TransactionHistoryRepository extends JpaRepository<TransactionH
 
     @Query("SELECT m, SUM(ti.amount) as totalSold " +
             "FROM TransactionItem ti " +
-            "JOIN ti.id.product m " +
-            "JOIN ti.id.transaction th " +
+            "JOIN ti.product m " +
+            "JOIN ti.transaction th " +
             "JOIN th.type tt " +
             "WHERE tt.transactionName = 'SALE' " +
             "GROUP BY m " +
