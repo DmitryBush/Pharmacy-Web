@@ -545,6 +545,8 @@ CREATE TABLE IF NOT EXISTS public.transaction_types
     CONSTRAINT transaction_types_transaction_name_key UNIQUE (transaction_name)
 );
 
+INSERT INTO public.transaction_types(transaction_name) VALUES ('RECEIVING'), ('SALE');
+
 CREATE TABLE IF NOT EXISTS public.transaction_history
 (
     id bigint NOT NULL GENERATED ALWAYS AS IDENTITY,
