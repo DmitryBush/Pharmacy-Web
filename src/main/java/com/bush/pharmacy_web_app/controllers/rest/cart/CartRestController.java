@@ -1,11 +1,17 @@
 package com.bush.pharmacy_web_app.controllers.rest.cart;
 
 import com.bush.pharmacy_web_app.model.dto.cart.CartBatchDeleteDto;
+import com.bush.pharmacy_web_app.model.dto.cart.CartItemReadDto;
 import com.bush.pharmacy_web_app.model.dto.cart.CartReadDto;
 import com.bush.pharmacy_web_app.model.dto.cart.CartUpdateDto;
 import com.bush.pharmacy_web_app.service.cart.CartService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -28,8 +34,10 @@ public class CartRestController {
     private final CartService cartService;
 
     @GetMapping(value = "/me", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<CartReadDto> getCartByUserId(@AuthenticationPrincipal UserDetails userDetails) {
-        return ResponseEntity.ok(cartService.findCartByUserId(userDetails.getUsername()));
+    public PagedModel<EntityModel<CartItemReadDto>> getCartByUserId(@AuthenticationPrincipal UserDetails userDetails,
+                                                                    @PageableDefault(sort = "id", size = 15) Pageable pageable,
+                                                                    PagedResourcesAssembler<CartItemReadDto> assembler) {
+        return assembler.toModel(cartService.findCartByUserId(userDetails.getUsername(), pageable));
     }
 
     @PatchMapping(value = "/me/items", consumes = MediaType.APPLICATION_JSON_VALUE)
