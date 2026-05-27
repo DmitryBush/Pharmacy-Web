@@ -5,11 +5,16 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 
-@Data
+@Getter
+@Setter
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -17,6 +22,7 @@ import java.math.BigDecimal;
 @Table(name = "transaction_items")
 public class TransactionItem {
     @EmbeddedId
+    @EqualsAndHashCode.Include
     private TransactionItemId id;
 
     @MapsId("productId")

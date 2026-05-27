@@ -4,6 +4,7 @@ import com.bush.pharmacy_web_app.model.dto.product.ProductPreviewReadDto;
 import com.bush.pharmacy_web_app.model.dto.product.ProductReadDto;
 import com.bush.pharmacy_web_app.model.dto.warehouse.*;
 import com.bush.pharmacy_web_app.model.entity.branch.transaction.TransactionItem;
+import com.bush.pharmacy_web_app.model.entity.branch.transaction.TransactionItemId;
 import com.bush.pharmacy_web_app.model.entity.branch.transaction.TransactionName;
 import com.bush.pharmacy_web_app.model.entity.branch.transaction.TransactionType;
 import com.bush.pharmacy_web_app.repository.branch.PharmacyBranchRepository;
@@ -86,6 +87,7 @@ public class TransactionService {
                                         .map(ProductReadDto::price)
                                         .orElseThrow())
                                 .product(productRepository.getReferenceById(item.medicineId()))
+                                .id(new TransactionItemId(item.medicineId(), null))
                                 .build())
                         .toList())
                 .orElseThrow(IllegalArgumentException::new);
