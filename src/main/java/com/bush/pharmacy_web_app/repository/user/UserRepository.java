@@ -25,7 +25,8 @@ public interface UserRepository extends JpaRepository<User, String> {
                                            Pageable pageable);
 
     @Query("select u from User u " +
-            "join fetch u.role")
+            "join fetch u.role " +
+            "where u.mobilePhone = :s")
     @Override
     Optional<User> findById(String s);
 }
