@@ -94,7 +94,7 @@ public class SecurityConfig {
 
     public Customizer<CsrfConfigurer<HttpSecurity>> setUpCsrfProtection() {
         Set<String> profilesSet = Set.of(environment.getActiveProfiles());
-        if (profilesSet.contains("dev")) {
+        if (profilesSet.contains("dev") || profilesSet.contains("load")) {
             return configurer -> configurer
                     .ignoringRequestMatchers("/api/**", "/login/**", "/register/**", "/logout/**");
         }

@@ -4,15 +4,18 @@ spring:
       max-file-size=5MB
       max-request-size=512KB
   datasource:
-    url: jdbc:postgresql://localhost:5432/pharmacies
+    url: jdbc:postgresql://192.168.0.169:5432/pharmacies
     username: postgres
     password: postgres
     driver-class-name: org.postgresql.Driver
+    hikari:
+      minimum-idle: 16
+      maximum-pool-size: 50
   jpa:
     open-in-view: false
     properties.hibernate:
       show_sql: false
-      format_sql: true
+      format_sql: false
       hbm2ddl.auto: validate
   security:
     encryption-config:
@@ -27,7 +30,7 @@ spring:
 
 storage:
   object:
-    endpoint: http://127.0.0.1:9000
+    endpoint: http://192.168.0.169:9000
     access-key: minioadmin
     secret-key: minioadmin
   directory: files
