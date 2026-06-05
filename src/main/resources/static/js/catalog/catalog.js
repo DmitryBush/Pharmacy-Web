@@ -168,7 +168,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             [fetchAllProducts(), fetchActiveFilterProducts()]);
         const pageStatistic = productResponse.pageResponse.page;
         catalogHeader.textContent = `Лекарства ${pageStatistic.totalElements} товаров`;
-        paginationManager.initializePagination(pageStatistic.number, pageStatistic.size, pageStatistic.totalElements);
+        paginationManager.initializePagination(pageStatistic.number, pageStatistic.size, pageStatistic.totalPages);
 
         loadFilters(productResponse.filterAggregation, aggregationResponse.filterAggregation);
         initializeFilterParams();
