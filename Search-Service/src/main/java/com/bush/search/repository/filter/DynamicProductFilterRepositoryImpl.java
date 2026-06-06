@@ -186,9 +186,18 @@ public class DynamicProductFilterRepositoryImpl implements DynamicProductFilterR
         Query.Builder builder = new Query.Builder();
         return Optional.ofNullable(filteringObjects).stream()
                 .flatMap(Collection::stream)
-                .map(filterCriteria -> builder.multiMatch(t -> t.query(filterCriteria)
-                        .fields("%s^3.0".formatted(field), "%s.suggest^1.0".formatted(field))
-                        .fuzziness("AUTO")))
+                .map(filterCriteria -> {
+                    if (filterCriteria.length() > 1) {
+                        return builder.multiMatch(t -> t.query(filterCriteria)
+                                .fields("%s^3.0".formatted(field), "%s.suggest^1.0".formatted(field))
+                                .fuzziness("AUTO"));
+                    } else {
+                        return builder.prefix(p -> p
+                                .field("%s.keyword".formatted(field))
+                                .value(filterCriteria)
+                                .caseInsensitive(true));
+                    }
+                })
                 .map(ObjectBuilder::build)
                 .toList();
     }

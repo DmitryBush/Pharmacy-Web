@@ -30,7 +30,8 @@ public class Product {
             mainField = @Field(type = FieldType.Text, analyzer = "russian"),
             otherFields = {
                     @InnerField(suffix = "suggest", type = FieldType.Text,
-                            analyzer = "russian_ngram", searchAnalyzer = "russian")
+                            analyzer = "russian_ngram", searchAnalyzer = "russian"),
+                    @InnerField(suffix = "keyword", type = FieldType.Keyword)
             }
     )
     private String name;
