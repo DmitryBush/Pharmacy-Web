@@ -1,4 +1,5 @@
 import RestClient from "../RestClient.js";
+import {formatPhone} from "../formatter/formatter.js";
 
 export class RegisterModal {
     constructor() {
@@ -96,6 +97,9 @@ export class RegisterModal {
         this.overlay = this.modal;
 
         closeBtn.addEventListener('click', () => this.hide());
+
+        document.getElementById('username')
+            .addEventListener('input', event => formatPhone(event.target));
 
         this.overlay.addEventListener('click', (e) => {
             if (e.target === this.overlay) {
