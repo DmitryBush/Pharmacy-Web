@@ -57,7 +57,6 @@ export class Search {
 
     _displayResults(items) {
         this.resultItemContainer.innerHTML = '';
-        console.log(items);
 
         if (items.pageResponse._embedded === undefined) {
             this.resultItemContainer.classList.remove('active');
@@ -68,7 +67,17 @@ export class Search {
         items.pageResponse._embedded.productPreviewDtoList.forEach(result => {
             const div = document.createElement('div');
             div.className = 'result-item';
-            div.textContent = result.name;
+
+            if (result.imagePaths.length > 0) {
+                const image = document.createElement('img');
+                image.src = `/api/v1/product-image/${result.imagePaths[0].id}`;
+                image.width = 50;
+                image.height = 50;
+                div.appendChild(image);
+            }
+            const name = document.createElement('span');
+            name.textContent = result.name;
+            div.appendChild(name);
 
             div.onclick = () => window.location.replace(`/product/${encodeURIComponent(result.id)}`);
 
