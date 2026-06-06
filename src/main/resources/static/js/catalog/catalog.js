@@ -204,6 +204,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     function applyFilters() {
         const formData = new FormData(filterForm);
         const params = new URLSearchParams(formData);
+        applyNameSearch(params);
         applyPagination(params);
         window.history.replaceState(null, null, `?${params.toString()}`);
         applyTypeFilter(params);
@@ -212,6 +213,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     function applyFiltersForAggregation() {
         const params = new URLSearchParams();
+        applyNameSearch(params);
         applyTypeFilter(params);
         return params.toString();
     }
@@ -220,6 +222,13 @@ document.addEventListener("DOMContentLoaded", async () => {
         params.set('sort', sortSelector.value);
         params.set('page', paginationManager.currentPage);
         params.set('size', paginationManager.pageSize);
+    }
+
+    function applyNameSearch(params) {
+        const currentParams = new URLSearchParams(window.location.search);
+        if (currentParams.get('name') !== '' || currentParams.get('name') !== undefined) {
+            params.set('name', currentParams.get('name'));
+        }
     }
 
     function applyTypeFilter(params) {

@@ -9,6 +9,9 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
+import org.springframework.data.elasticsearch.annotations.InnerField;
+import org.springframework.data.elasticsearch.annotations.MultiField;
+import org.springframework.data.elasticsearch.annotations.Setting;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -17,12 +20,19 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Document(indexName = "product")
+@Setting(settingPath = "elasticsearch/es-settings.json")
 public class Product {
     @Id
     private String id;
     @Field(type = FieldType.Long)
     private Long productId;
-    @Field(type = FieldType.Text, analyzer = "russian")
+    @MultiField(
+            mainField = @Field(type = FieldType.Text, analyzer = "russian"),
+            otherFields = {
+                    @InnerField(suffix = "suggest", type = FieldType.Text,
+                            analyzer = "russian_ngram", searchAnalyzer = "russian")
+            }
+    )
     private String name;
     @Field(type = FieldType.Nested, store = true)
     private List<ProductType> type;

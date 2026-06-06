@@ -30,6 +30,7 @@ import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.stereotype.Repository;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -98,6 +99,7 @@ public class DynamicProductFilterRepositoryImpl implements DynamicProductFilterR
 
     private BoolQuery getBoolQuery(ProductFilter filter) {
         return BoolQuery.of(builder -> builder
+                .should(createNameQuery(filter))
                 .filter(createTypeQuery(filter))
                 .filter(createNestedFilterCriteriaQuery(filter.manufacturers(), "manufacturer",
                         "manufacturer.name.keyword"))
@@ -107,6 +109,13 @@ public class DynamicProductFilterRepositoryImpl implements DynamicProductFilterR
                 .filter(createPriceQuery(filter))
                 .filter(createRecipeQuery(filter))
         );
+    }
+
+    private List<Query> createNameQuery(ProductFilter filter) {
+        return Optional.ofNullable(filter.name())
+                .filter(name -> !name.isBlank())
+                .map(name -> createMatchQuery(List.of(name), "name"))
+                .orElse(Collections.emptyList());
     }
 
     private List<Query> createTypeQuery(ProductFilter filter) {
@@ -169,6 +178,17 @@ public class DynamicProductFilterRepositoryImpl implements DynamicProductFilterR
         return Optional.ofNullable(filteringObjects).stream()
                 .flatMap(Collection::stream)
                 .map(filterCriteria -> builder.term(t -> t.field(field).value(filterCriteria)))
+                .map(ObjectBuilder::build)
+                .toList();
+    }
+
+    private List<Query> createMatchQuery(List<String> filteringObjects, String field) {
+        Query.Builder builder = new Query.Builder();
+        return Optional.ofNullable(filteringObjects).stream()
+                .flatMap(Collection::stream)
+                .map(filterCriteria -> builder.multiMatch(t -> t.query(filterCriteria)
+                        .fields("%s^3.0".formatted(field), "%s.suggest^1.0".formatted(field))
+                        .fuzziness("AUTO")))
                 .map(ObjectBuilder::build)
                 .toList();
     }
