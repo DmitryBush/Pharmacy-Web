@@ -226,10 +226,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     function applyNameSearch(params) {
         const currentParams = new URLSearchParams(window.location.search);
-        if (currentParams.get('name') !== ''
-            || currentParams.get('name') !== undefined
-            || currentParams.get('name') !== null) {
+        if (currentParams.has('name')) {
             params.set('name', currentParams.get('name'));
+        } else {
+            params.set('name', '');
         }
     }
 

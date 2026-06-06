@@ -156,7 +156,7 @@
             </div>
             <div class="search-container">
                 <input id="search-field" class="search-field" type="text" placeholder="Поиск по препарату">
-                <button class="search-button">
+                <button class="search-button" id="search-button">
                     <img src="/api/v1/icons/header/search-icon.png" loading="lazy" alt="Поиск" width="25px" height="25px">
                 </button>
                 <div id="search-result-container" class="search-results"></div>
@@ -184,7 +184,16 @@
                 document.addEventListener("DOMContentLoaded", () => {
                     const searchField = document.getElementById('search-field');
                     const searchResultContainer = document.getElementById('search-result-container');
+                    const searchButton = document.getElementById('search-button');
+                    searchField.addEventListener('keydown', (e) => {
+                        if (e.key === 'Enter') {
+                            window.location.replace(`/catalog?name=${encodeURIComponent(searchField.value)}`);
+                        }
+                    });
+                    searchButton.addEventListener('click',
+                        () => window.location.replace(`/catalog?name=${encodeURIComponent(searchField.value)}`));
                     Search.getInstance(searchField, searchResultContainer);
+
 
                     LoginModal.getInstance();
                     RegisterModal.getInstance();
