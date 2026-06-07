@@ -16,8 +16,8 @@ public interface PharmacyBranchRepository extends JpaRepository<PharmacyBranch, 
     List<PharmacyBranch> findBranchesWithMedicineLocated(@Param("id") Long id);
 
     @Query("select b from PharmacyBranch b " +
-            "join BranchUserAssignment ba on b = ba.id.branch " +
-            "where ba.id.user.id = :userId")
+            "join BranchUserAssignment ba on b = ba.branch " +
+            "where ba.user.id = :userId")
     List<PharmacyBranch> findUserAssignedBranches(@Param("userId") String userId);
 
     @Query("select b from PharmacyBranch b " +

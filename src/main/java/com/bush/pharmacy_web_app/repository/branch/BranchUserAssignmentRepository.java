@@ -12,15 +12,17 @@ import java.util.Optional;
 
 public interface BranchUserAssignmentRepository extends JpaRepository<BranchUserAssignment, BranchUserAssignmentId> {
     @Query("select exists(select bu from BranchUserAssignment bu " +
-            "where bu.id.user.id = :userId and bu.id.branch.id = :branchId)")
+            "where bu.user.id = :userId and bu.branch.id = :branchId)")
     Boolean checkUserBranchAccess(@Param("userId") String userId, @Param("branchId") Long branchId);
     @Query("select u from BranchUserAssignment bu " +
-            "join User u on bu.id.user = u " +
-            "where bu.id.branch.id = :branchId")
+            "join bu.user u " +
+            "join fetch u.role r " +
+            "where bu.branch.id = :branchId")
     List<User> findAssignedUsersByBranchId(@Param("branchId") Long id);
     @Query("select bua from BranchUserAssignment bua " +
-            "join User u on bua.id.user = u " +
-            "join PharmacyBranch b on bua.id.branch = b " +
+            "join fetch bua.user u " +
+            "join fetch u.role r " +
+            "join fetch bua.branch b " +
             "where u.id = :userId and b.id = :branchId")
     Optional<BranchUserAssignment> findAssignmentByUserIdAndBranchId(@Param("branchId") Long branchId,
                                                                      @Param("userId") String userId);

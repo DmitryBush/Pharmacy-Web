@@ -11,7 +11,7 @@ spring:
   jpa:
     open-in-view: false
     properties.hibernate:
-      show_sql: false
+      show_sql: true
       format_sql: true
       hbm2ddl.auto: validate
   security:

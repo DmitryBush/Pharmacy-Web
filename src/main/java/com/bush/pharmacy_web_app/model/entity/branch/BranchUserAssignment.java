@@ -1,5 +1,6 @@
 package com.bush.pharmacy_web_app.model.entity.branch;
 
+import com.bush.pharmacy_web_app.model.entity.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,4 +18,13 @@ public class BranchUserAssignment {
     private BranchUserAssignmentId id;
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
+
+    @MapsId("userId")
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+    @MapsId("branchId")
+    @ManyToOne
+    @JoinColumn(name = "branch_id")
+    private PharmacyBranch branch;
 }
