@@ -33,9 +33,11 @@ public class CartService {
     private final CartItemReadMapper cartItemReadMapper;
 
     @Transactional
-    public Page<CartItemReadDto> findCartByUserId(String userMobilePhone, Pageable pageable) {
+    public List<CartItemReadDto> findCartByUserId(String userMobilePhone, Pageable pageable) {
         return cartRepository.findPaginatedCartByUserMobilePhone(userMobilePhone, pageable)
-                .map(cartItemReadMapper::mapToCartItemReadDto);
+                .stream()
+                .map(cartItemReadMapper::mapToCartItemReadDto)
+                .toList();
     }
 
     private Cart createCart(User user) {
@@ -48,7 +50,11 @@ public class CartService {
         User user = userService.getUserReferenceById(userId);
         Cart cart = cartRepository.findCartByUserMobilePhone(userId)
                 .orElseGet(() -> createCart(user));
-        cartItemRepository.changeItemQuantity(cart.getId(), updateDto.item().productId(), updateDto.item().quantity());
+        if (cart.getCartItemsList().size() < 50) {
+            cartItemRepository.changeItemQuantity(cart.getId(), updateDto.item().productId(), updateDto.item().quantity());
+        } else {
+            throw new ResponseStatusException(HttpStatus.CONFLICT);
+        }
     }
 
     @Transactional

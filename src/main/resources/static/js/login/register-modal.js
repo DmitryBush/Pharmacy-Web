@@ -144,7 +144,7 @@ export class RegisterModal {
                         btn.style.background = '';
                         window.location.reload();
                     }, 1000);
-                }, 1200);
+                }, 10);
             } catch (error) {
                 setTimeout(() => {
                     btn.textContent = 'Произошла ошибка. Пожалуйста, повторите позже';
@@ -154,7 +154,7 @@ export class RegisterModal {
                         btn.textContent = btnOriginalText;
                         btn.style.background = '';
                     }, 1000);
-                }, 1200);
+                }, 10);
             }
         })
     }
