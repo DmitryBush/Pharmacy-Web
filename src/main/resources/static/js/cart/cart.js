@@ -22,8 +22,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     async function fetchCartItems() {
         try {
             const items = await (await restClient.fetchData(`/api/v1/carts/me`, 'GET')).json();
-            if (items.cartItems.length > 0) {
-                createCartItems(items.cartItems);
+            if (items.length > 0) {
+                createCartItems(items);
                 renderSummaryLayout();
             } else {
                 renderEmptyCart(authWarningContainer, 'Добавьте товары из каталога, чтобы оформить заказ');

@@ -12,7 +12,7 @@ import java.util.Optional;
 
 public interface CartRepository extends JpaRepository<Cart, Long> {
     @Query("select ci from Cart c " +
-            "left join c.cartItemsList ci " +
+            "join c.cartItemsList ci " +
             "where c.user.mobilePhone = :mobilePhone")
     List<CartItems> findPaginatedCartByUserMobilePhone(@Param("mobilePhone") String mobilePhone, Pageable pageable);
 
