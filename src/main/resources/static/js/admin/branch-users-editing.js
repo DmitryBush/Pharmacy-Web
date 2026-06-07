@@ -126,7 +126,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         try {
             const params = new URLSearchParams();
             params.set('mobilePhone', searchTerm);
-            params.set('role', 'OPERATOR,ADMIN');
+            params.set('role', 'ROLE_OPERATOR,ROLE_ADMIN,ROLE_ROOT');
             const data = await
                 (await restClient.fetchData(`/api/v1/search/employees/filter?${params.toString()}`,
                     'GET')).json();

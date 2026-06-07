@@ -106,14 +106,18 @@ export function getTimeText(workingHour) {
 }
 
 export function getRoleText(role) {
-    if (role === 'ADMIN') {
+    if (role === 'ROLE_ADMIN') {
         return 'Администратор';
-    } else if (role === 'OPERATOR') {
+    } else if (role === 'ROLE_OPERATOR') {
         return 'Оператор';
-    } else if (role === 'CUSTOMER') {
+    } else if (role === 'ROLE_CUSTOMER') {
         return 'Покупатель';
+    } else if (role === 'ROLE_LOGISTICS') {
+        return 'Логист';
+    } else if (role === 'ROLE_ROOT') {
+        return 'Суперпользователь';
     } else {
-        return 'Покупатель';
+        return 'Неизвестная роль';
     }
 }
 

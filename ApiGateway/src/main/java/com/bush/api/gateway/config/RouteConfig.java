@@ -107,6 +107,9 @@ public class RouteConfig {
                 .route("type-search", predicateSpec -> predicateSpec
                         .path("/api/*/search/type/**")
                         .uri(ServiceUriEnum.PHARMACY_SERVICE.getUri()))
+                .route("employee-search", predicateSpec -> predicateSpec
+                        .path("/api/*/search/employees/**")
+                        .uri(ServiceUriEnum.PHARMACY_SERVICE.getUri()))
                 .route("css", predicateSpec -> predicateSpec
                         .path("/css/**")
                         .uri(ServiceUriEnum.PHARMACY_SERVICE.getUri()))

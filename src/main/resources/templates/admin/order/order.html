@@ -37,7 +37,7 @@
                         <p>
                             <strong>Контактный номер:</strong> [(${branch.branchPhone})]
                         </p>
-                        <p>
+                        <p th:if="${branch.supervisor != null}">
                             <strong>Директор филиала:</strong> [(${branch.supervisor.surname})] [(${branch.supervisor.name})]
                             [(${branch.supervisor.lastName})]
                         </p>

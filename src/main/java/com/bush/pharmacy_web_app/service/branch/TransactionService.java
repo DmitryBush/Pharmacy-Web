@@ -60,7 +60,7 @@ public class TransactionService {
     }
 
     @PreAuthorize("(hasAnyRole('ADMIN', 'OPERATOR') and " +
-            "@SecurityValidation.checkUserBranchAccess(#userDetails, #transactionInfo.branchId)) " +
+            "@SecurityValidation.checkUserBranchAccess(#transactionInfo.branchId)) " +
             "or hasRole('ROOT')")
     @Transactional
     public List<StorageItemsReadDto> createReceiptTransaction(UserDetails userDetails,
@@ -107,7 +107,7 @@ public class TransactionService {
     }
 
     @PreAuthorize("(hasAnyRole('ADMIN', 'OPERATOR') and " +
-            "@SecurityValidation.checkUserBranchAccess(#userDetails, #transactionInfo.branchId)) " +
+            "@SecurityValidation.checkUserBranchAccess(#transactionInfo.branchId)) " +
             "or hasRole('ROOT')")
     @Transactional
     public List<StorageItemsReadDto> createSaleTransaction(UserDetails userDetails,
