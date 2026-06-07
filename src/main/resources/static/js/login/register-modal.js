@@ -121,6 +121,7 @@ export class RegisterModal {
             btn.textContent = 'Регистрация...';
             btn.style.opacity = '0.8';
             const data = new FormData(e.target);
+            console.log(data.get('mobilePhone'));
             try {
                 await this.restClient.fetchData('/register', 'POST',
                     {
@@ -128,7 +129,7 @@ export class RegisterModal {
                         'X-Requested-With': 'XMLHttpRequest'
                     },
                     new URLSearchParams({
-                        mobilePhone: data.get('username'),
+                        mobilePhone: data.get('mobilePhone'),
                         password: data.get('password'),
                         name: data.get('name'),
                         surname: data.get('surname'),
@@ -156,7 +157,7 @@ export class RegisterModal {
                     }, 1000);
                 }, 10);
             }
-        })
+        });
     }
 
     show() {
