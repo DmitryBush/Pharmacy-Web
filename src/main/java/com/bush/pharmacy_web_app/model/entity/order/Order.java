@@ -20,7 +20,10 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.UuidGenerator;
 import org.hibernate.type.SqlTypes;
@@ -30,7 +33,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-@Data
+@Getter
+@Setter
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor
 @Entity
@@ -42,6 +47,7 @@ public class Order {
     @UuidGenerator(algorithm = UuidTimeEpochGeneratorAdapter.class)
     @JdbcTypeCode(SqlTypes.UUID)
     @Column(name = "order_id", nullable = false)
+    @EqualsAndHashCode.Include
     private UUID id;
 
     @Enumerated

@@ -13,11 +13,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode(exclude = {"items", "orders", "address", "supervisor", "userBranchAssigned"})
-@ToString(exclude = {"items", "orders", "address", "supervisor", "userBranchAssigned"})
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "pharmacy_branches")
 @DynamicInsert
@@ -25,6 +25,7 @@ public class PharmacyBranch {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "branch_id", nullable = false)
+    @EqualsAndHashCode.Include
     private Long id;
     @Column(nullable = false)
     private String name;

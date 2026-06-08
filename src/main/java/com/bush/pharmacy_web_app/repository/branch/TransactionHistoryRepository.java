@@ -10,14 +10,14 @@ import java.util.List;
 public interface TransactionHistoryRepository extends JpaRepository<TransactionHistory, Long> {
     List<TransactionHistory> findByBranchId(Long branchId);
 
-    @Query("SELECT m, SUM(ti.amount) as totalSold " +
+    @Query("SELECT m " +
             "FROM TransactionItem ti " +
             "JOIN ti.product m " +
             "JOIN ti.transaction th " +
             "JOIN th.type tt " +
             "WHERE tt.transactionName = 'SALE' " +
             "GROUP BY m " +
-            "ORDER BY totalSold DESC " +
+            "ORDER BY SUM(ti.amount) DESC " +
             "LIMIT :count")
     List<Product> findBestSellingProducts(Integer count);
 }
