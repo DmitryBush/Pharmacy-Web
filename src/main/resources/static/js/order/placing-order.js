@@ -19,9 +19,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     async function initialize() {
         try {
             const cartDto = await fetchCartItems();
-            if (cartDto.cartItems.length > 0) {
+            if (cartDto.length > 0) {
                 const branches = await fetchBranches();
-                renderOrderPlacePage(cartDto.cartItems, branches);
+                renderOrderPlacePage(cartDto, branches);
             } else {
                 renderEmptyCart(emptyOrderContainer, 'Добавьте товары из каталога, чтобы оформить заказ');
             }

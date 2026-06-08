@@ -48,10 +48,10 @@ public class SecurityConfig {
                 .csrf(setUpCsrfProtection())
                 .authorizeHttpRequests(registry -> registry
                         .requestMatchers("/login", "/register", "/catalog/**", "/", "/cart", "/error",
-                                "product/**", "news/**", "order/**").permitAll()
+                                "product/**", "news/**", "order/**", "api/*/auth/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/css/admin/**", "/js/admin/**")
                             .hasAnyRole("OPERATOR", "ADMIN", "ROOT")
-                        .requestMatchers(HttpMethod.GET, "/css/**", "/js/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/css/**", "/js/**", "favicon.ico").permitAll()
                         .requestMatchers("/admin/dashboard", "/admin/orders/**", "/admin/warehouse/**")
                             .hasAnyRole("ADMIN", "OPERATOR", "ROOT")
                         .requestMatchers("/admin/product", "/admin/categories").hasAnyRole("ADMIN", "ROOT")

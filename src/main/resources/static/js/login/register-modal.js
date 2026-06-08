@@ -123,12 +123,12 @@ export class RegisterModal {
             const data = new FormData(e.target);
             console.log(data.get('mobilePhone'));
             try {
-                await this.restClient.fetchData('/register', 'POST',
+                await this.restClient.fetchData('/api/v1/auth/register', 'POST',
                     {
-                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'Content-Type': 'application/json',
                         'X-Requested-With': 'XMLHttpRequest'
                     },
-                    new URLSearchParams({
+                    JSON.stringify({
                         mobilePhone: data.get('mobilePhone'),
                         password: data.get('password'),
                         name: data.get('name'),
