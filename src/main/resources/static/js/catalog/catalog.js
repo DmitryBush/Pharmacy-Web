@@ -60,19 +60,37 @@ document.addEventListener("DOMContentLoaded", async () => {
             throw Error('Integrity of the filter aggregation of manufacturers structure has been compromised');
         }
 
-        const manufacturerFilterContainer = document.getElementById('manufacturer-filters-container');
-        manufacturerFilterContainer.innerHTML = '';
+        const manufacturerFilterContainer = document
+            .getElementById('manufacturer-filters-container');
         const activeFiltersCountMap = new Map(Object.entries(activeFilters.manufacturers));
         const fullFiltersCountMap = new Map(Object.entries(fullFilters.manufacturers));
         fullFiltersCountMap.forEach((value, key) => {
-            const item = document.createElement("li");
-            if (activeFiltersCountMap.has(key)) {
-                item.append(createLabelFilter('manufacturer',
-                    `${key} (${activeFiltersCountMap.get(key)})`, key));
+            if (manufacturerFilterContainer.querySelector(`input[value="${key}"]`)) {
+                const parentElement = manufacturerFilterContainer
+                    .querySelector(`input[value="${key}"]`).parentElement;
+                if (activeFiltersCountMap.has(key)) {
+                    parentElement.querySelector('span').textContent =
+                        `${key} (${activeFiltersCountMap.get(key)})`;
+                } else {
+                    parentElement.querySelector('span').textContent = `${key} (${value})`;
+                }
             } else {
-                item.append(createLabelFilter('manufacturer', `${key} (${value})`, key));
+                const item = document.createElement("li");
+                if (activeFiltersCountMap.has(key)) {
+                    const labelElement = createLabelFilter('manufacturers',
+                        `${key} (${activeFiltersCountMap.get(key)})`, key);
+                    const text = createSpanFilter(key, activeFiltersCountMap.get(key));
+                    item.append(labelElement);
+                    labelElement.append(text);
+                } else {
+                    const labelFilter = createLabelFilter('manufacturers',
+                        `${key} (${value})`, key);
+                    const text = createSpanFilter(key, value);
+                    item.append(labelFilter);
+                    labelFilter.append(text);
+                }
+                manufacturerFilterContainer.append(item);
             }
-            manufacturerFilterContainer.append(item);
         });
     }
 
@@ -82,18 +100,39 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
 
         const countryFilterContainer = document.getElementById('country-filter-container');
-        countryFilterContainer.innerHTML = '';
         const activeFiltersCountMap = new Map(Object.entries(activeFilters.countries));
         const fullFiltersCountMap = new Map(Object.entries(fullFilters.countries));
+
         fullFiltersCountMap.forEach((value, key) => {
-            const item = document.createElement("li");
-            if (activeFiltersCountMap.has(key)) {
-                item.append(createLabelFilter('manufacturer',
-                    `${key} (${activeFiltersCountMap.get(key)})`, key));
+            const existingCheckbox = countryFilterContainer.querySelector(`input[value="${key}"]`);
+
+            if (existingCheckbox) {
+                const parentElement = existingCheckbox.parentElement;
+                const textSpan = parentElement.querySelector('span');
+                if (textSpan) {
+                    if (activeFiltersCountMap.has(key)) {
+                        textSpan.textContent = `${key} (${activeFiltersCountMap.get(key)})`;
+                    } else {
+                        textSpan.textContent = `${key} (${value})`;
+                    }
+                }
             } else {
-                item.append(createLabelFilter('manufacturer', `${key} (${value})`, key));
+                const item = document.createElement("li");
+                if (activeFiltersCountMap.has(key)) {
+                    const labelElement = createLabelFilter('countries',
+                        `${key} (${activeFiltersCountMap.get(key)})`, key);
+                    const text = createSpanFilter(key, activeFiltersCountMap.get(key));
+                    item.append(labelElement);
+                    labelElement.append(text);
+                } else {
+                    const labelFilter = createLabelFilter('countries',
+                        `${key} (${value})`, key);
+                    const text = createSpanFilter(key, value);
+                    item.append(labelFilter);
+                    labelFilter.append(text);
+                }
+                countryFilterContainer.append(item);
             }
-            countryFilterContainer.append(item);
         });
     }
 
@@ -102,19 +141,41 @@ document.addEventListener("DOMContentLoaded", async () => {
             throw Error('Integrity of the filter aggregation of active ingredients structure has been compromised');
         }
 
-        const activeIngredientFilterContainer = document.getElementById('active-ingredient-filter-container');
-        activeIngredientFilterContainer.innerHTML = '';
+        const activeIngredientFilterContainer = document
+            .getElementById('active-ingredient-filter-container');
         const activeFiltersCountMap = new Map(Object.entries(activeFilters.activeIngredients));
-        const fullFiltersCountMap = new Map(Object.entries(activeFilters.activeIngredients));
+
+        const fullFiltersCountMap = new Map(Object.entries(fullFilters.activeIngredients));
         fullFiltersCountMap.forEach((value, key) => {
-            const item = document.createElement("li");
-            if (activeFiltersCountMap.has(key)) {
-                item.append(createLabelFilter('manufacturer',
-                    `${key} (${activeFiltersCountMap.get(key)})`, key));
+            const existingCheckbox = activeIngredientFilterContainer
+                .querySelector(`input[value="${key}"]`);
+            if (existingCheckbox) {
+                const parentElement = existingCheckbox.parentElement;
+                const textSpan = parentElement.querySelector('span');
+                if (textSpan) {
+                    if (activeFiltersCountMap.has(key)) {
+                        textSpan.textContent = `${key} (${activeFiltersCountMap.get(key)})`;
+                    } else {
+                        textSpan.textContent = `${key} (${value})`;
+                    }
+                }
             } else {
-                item.append(createLabelFilter('manufacturer', `${key} (${value})`, key));
+                const item = document.createElement("li");
+                if (activeFiltersCountMap.has(key)) {
+                    const labelElement = createLabelFilter('activeIngredients',
+                        `${key} (${activeFiltersCountMap.get(key)})`, key);
+                    const text = createSpanFilter(key, activeFiltersCountMap.get(key));
+                    item.append(labelElement);
+                    labelElement.append(text);
+                } else {
+                    const labelFilter = createLabelFilter('activeIngredients',
+                        `${key} (${value})`, key);
+                    const text = createSpanFilter(key, value);
+                    item.append(labelFilter);
+                    labelFilter.append(text);
+                }
+                activeIngredientFilterContainer.append(item);
             }
-            activeIngredientFilterContainer.append(item);
         });
     }
 
@@ -122,7 +183,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         const labelItem = document.createElement("label");
         labelItem.classList.add('price-filter-group');
         labelItem.appendChild(createCheckbox(name, value));
-        labelItem.insertAdjacentHTML('beforeend', text);
         return labelItem;
     }
 
@@ -132,6 +192,12 @@ document.addEventListener("DOMContentLoaded", async () => {
         checkbox.name = name;
         checkbox.value = value;
         return checkbox;
+    }
+
+    function createSpanFilter(key, value) {
+        const span = document.createElement("span");
+        span.textContent = `${key} (${value})`;
+        return span;
     }
 
     function initializeFilterParams() {
@@ -168,7 +234,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             [fetchAllProducts(), fetchActiveFilterProducts()]);
         const pageStatistic = productResponse.pageResponse.page;
         catalogHeader.textContent = `Лекарства ${pageStatistic.totalElements} товаров`;
-        paginationManager.initializePagination(pageStatistic.number, pageStatistic.size, pageStatistic.totalElements);
+        paginationManager.initializePagination(pageStatistic.number, pageStatistic.size, pageStatistic.totalPages);
 
         loadFilters(productResponse.filterAggregation, aggregationResponse.filterAggregation);
         initializeFilterParams();
@@ -204,6 +270,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     function applyFilters() {
         const formData = new FormData(filterForm);
         const params = new URLSearchParams(formData);
+        applyNameSearch(params);
         applyPagination(params);
         window.history.replaceState(null, null, `?${params.toString()}`);
         applyTypeFilter(params);
@@ -212,6 +279,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     function applyFiltersForAggregation() {
         const params = new URLSearchParams();
+        applyNameSearch(params);
         applyTypeFilter(params);
         return params.toString();
     }
@@ -220,6 +288,15 @@ document.addEventListener("DOMContentLoaded", async () => {
         params.set('sort', sortSelector.value);
         params.set('page', paginationManager.currentPage);
         params.set('size', paginationManager.pageSize);
+    }
+
+    function applyNameSearch(params) {
+        const currentParams = new URLSearchParams(window.location.search);
+        if (currentParams.has('name')) {
+            params.set('name', currentParams.get('name'));
+        } else {
+            params.set('name', '');
+        }
     }
 
     function applyTypeFilter(params) {

@@ -98,7 +98,7 @@ document.addEventListener("DOMContentLoaded", function() {
     async function fetchResults(searchTerm) {
         try {
             const data = await
-                (await restClient.fetchData(`/api/v1/search/medicine?searchTerm=${encodeURIComponent(searchTerm)}`,
+                (await restClient.fetchData(`/api/v1/search/product?searchTerm=${encodeURIComponent(searchTerm)}`,
                     'GET')).json();
             displayResults(data);
         } catch (error) {

@@ -1,6 +1,7 @@
 package com.bush.pharmacy_web_app.controllers.rest.product;
 
 import com.bush.pharmacy_web_app.model.dto.product.ProductPreviewReadDto;
+import com.bush.pharmacy_web_app.model.dto.product.ProductReadDto;
 import com.bush.pharmacy_web_app.repository.product.filter.ProductFilter;
 import com.bush.pharmacy_web_app.service.branch.TransactionService;
 import com.bush.pharmacy_web_app.service.product.ProductService;
@@ -10,10 +11,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.PagedModel;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -40,5 +44,11 @@ public class ProductRestController {
                                                                                               ProductFilter filter,
                                                                                               PagedResourcesAssembler<ProductPreviewReadDto> assembler) {
         return ResponseEntity.ok(assembler.toModel(productService.findAllPreviews(filter, pageable)));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ProductReadDto> findProductById(@PathVariable Long id) {
+        return ResponseEntity.ok(productService.findMedicineById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND)));
     }
 }

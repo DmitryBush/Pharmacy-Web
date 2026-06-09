@@ -21,6 +21,8 @@ spring:
       parallelism: 1
       memory: 47104
       iterations: 1
+  threads:
+    virtual: enabled
 
 
 storage:

@@ -19,6 +19,7 @@ import com.bush.pharmacy_web_app.service.product.ProductService;
 import com.bush.pharmacy_web_app.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.messaging.MessageHeaders;
@@ -100,7 +101,11 @@ public class OrderService {
     }
 
     public Page<OrderReadDto> findAllUserOrders(String userId, Pageable pageable) {
-        return orderRepository.findAllUserOrders(userId, pageable)
+        List<UUID> allUserOrdersPaginatedIdList = orderRepository.findAllUserOrdersIdList(userId, pageable);
+        Long countUserOrders = orderRepository.countUserOrders(userId);
+
+        List<Order> orderList = orderRepository.findAllOrdersByIdList(allUserOrdersPaginatedIdList);
+        return new PageImpl<>(orderList, pageable, countUserOrders)
                 .map(orderReadMapper::mapToOrderReadDto);
     }
 

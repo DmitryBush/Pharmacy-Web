@@ -1,4 +1,5 @@
 import RestClient from "../RestClient.js";
+import {formatPhone} from "../formatter/formatter.js";
 
 export class RegisterModal {
     constructor() {
@@ -97,6 +98,9 @@ export class RegisterModal {
 
         closeBtn.addEventListener('click', () => this.hide());
 
+        document.getElementById('username')
+            .addEventListener('input', event => formatPhone(event.target));
+
         this.overlay.addEventListener('click', (e) => {
             if (e.target === this.overlay) {
                 this.hide();
@@ -117,14 +121,15 @@ export class RegisterModal {
             btn.textContent = 'Регистрация...';
             btn.style.opacity = '0.8';
             const data = new FormData(e.target);
+            console.log(data.get('mobilePhone'));
             try {
-                await this.restClient.fetchData('/register', 'POST',
+                await this.restClient.fetchData('/api/v1/auth/register', 'POST',
                     {
-                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'Content-Type': 'application/json',
                         'X-Requested-With': 'XMLHttpRequest'
                     },
-                    new URLSearchParams({
-                        mobilePhone: data.get('username'),
+                    JSON.stringify({
+                        mobilePhone: data.get('mobilePhone'),
                         password: data.get('password'),
                         name: data.get('name'),
                         surname: data.get('surname'),
@@ -140,7 +145,7 @@ export class RegisterModal {
                         btn.style.background = '';
                         window.location.reload();
                     }, 1000);
-                }, 1200);
+                }, 10);
             } catch (error) {
                 setTimeout(() => {
                     btn.textContent = 'Произошла ошибка. Пожалуйста, повторите позже';
@@ -150,9 +155,9 @@ export class RegisterModal {
                         btn.textContent = btnOriginalText;
                         btn.style.background = '';
                     }, 1000);
-                }, 1200);
+                }, 10);
             }
-        })
+        });
     }
 
     show() {

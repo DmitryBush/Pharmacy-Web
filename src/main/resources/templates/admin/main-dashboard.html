@@ -13,7 +13,8 @@
         <h1>Здравствуйте</h1>
         <div class="dashboard-cards">
             <!-- Карточка товаров -->
-            <a th:if="${authorities.contains(T(com.bush.pharmacy_web_app.model.entity.user.role.RoleType).ROLE_ADMIN.name())}"
+            <a th:if="${authorities.contains(T(com.bush.pharmacy_web_app.model.entity.user.role.RoleType).ROLE_ADMIN.name())
+            || authorities.contains(T(com.bush.pharmacy_web_app.model.entity.user.role.RoleType).ROLE_ROOT.name())}"
                href="/admin/product" class="card">
                 <div class="card-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="#3498db" viewBox="0 0 24 24">
@@ -25,7 +26,11 @@
             </a>
 
             <!-- Карточка заказов -->
-            <a href="/admin/orders" class="card">
+            <a href="/admin/orders"
+               th:if="${authorities.contains(T(com.bush.pharmacy_web_app.model.entity.user.role.RoleType).ROLE_ADMIN.name())
+               || authorities.contains(T(com.bush.pharmacy_web_app.model.entity.user.role.RoleType).ROLE_ROOT.name())
+               || authorities.contains(T(com.bush.pharmacy_web_app.model.entity.user.role.RoleType).ROLE_OPERATOR.name())}"
+               class="card">
                 <div class="card-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="#e74c3c" viewBox="0 0 24 24">
                         <path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1m3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4z"/>
@@ -36,7 +41,11 @@
             </a>
 
             <!-- Карточка склада -->
-            <a href="/admin/warehouse" class="card">
+            <a href="/admin/warehouse"
+               th:if="${authorities.contains(T(com.bush.pharmacy_web_app.model.entity.user.role.RoleType).ROLE_ADMIN.name())
+               || authorities.contains(T(com.bush.pharmacy_web_app.model.entity.user.role.RoleType).ROLE_ROOT.name())
+               || authorities.contains(T(com.bush.pharmacy_web_app.model.entity.user.role.RoleType).ROLE_OPERATOR.name())}"
+               class="card">
                 <div class="card-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="#4CAF50" viewBox="0 0 24 24">
                         <path d="M3.75 0a1 1 0 0 0-.8.4L.1 4.2a.5.5 0 0 0-.1.3V15a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V4.5a.5.5 0 0 0-.1-.3L13.05.4a1 1 0 0 0-.8-.4zM15 4.667V5H1v-.333L1.5 4h6V1h1v3h6z"/>
@@ -47,7 +56,8 @@
             </a>
 
             <!-- Карточка категорий -->
-            <a th:if="${authorities.contains(T(com.bush.pharmacy_web_app.model.entity.user.role.RoleType).ROLE_ADMIN.name())}"
+            <a th:if="${authorities.contains(T(com.bush.pharmacy_web_app.model.entity.user.role.RoleType).ROLE_ADMIN.name())
+            || authorities.contains(T(com.bush.pharmacy_web_app.model.entity.user.role.RoleType).ROLE_ROOT.name())}"
                href="/admin/categories" class="card">
                 <div class="card-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="#FFB900" viewBox="0 0 24 24">
@@ -58,7 +68,8 @@
                 <p>Добавление и удаление категорий</p>
             </a>
             <!-- Карточка новостей -->
-            <a th:if="${authorities.contains(T(com.bush.pharmacy_web_app.model.entity.user.role.RoleType).ROLE_ADMIN.name())}"
+            <a th:if="${authorities.contains(T(com.bush.pharmacy_web_app.model.entity.user.role.RoleType).ROLE_ADMIN.name())
+            || authorities.contains(T(com.bush.pharmacy_web_app.model.entity.user.role.RoleType).ROLE_ROOT.name())}"
                href="/admin/news" class="card">
                 <div class="card-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="#795548" viewBox="0 0 24 24">
@@ -69,7 +80,8 @@
                 <p>Добавление и удаление статей</p>
             </a>
             <!-- Карточка персонала -->
-            <a th:if="${authorities.contains(T(com.bush.pharmacy_web_app.model.entity.user.role.RoleType).ROLE_ADMIN.name())}"
+            <a th:if="${authorities.contains(T(com.bush.pharmacy_web_app.model.entity.user.role.RoleType).ROLE_ADMIN.name())
+            || authorities.contains(T(com.bush.pharmacy_web_app.model.entity.user.role.RoleType).ROLE_ROOT.name())}"
                href="/admin/staff" class="card">
                 <div class="card-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="purple" viewBox="0 0 24 24">
@@ -80,7 +92,8 @@
                 <p>Изменение ролей сотрудников</p>
             </a>
             <!-- Карточка филиала -->
-            <a th:if="${authorities.contains(T(com.bush.pharmacy_web_app.model.entity.user.role.RoleType).ROLE_ADMIN.name())}"
+            <a th:if="${authorities.contains(T(com.bush.pharmacy_web_app.model.entity.user.role.RoleType).ROLE_ADMIN.name())
+            || authorities.contains(T(com.bush.pharmacy_web_app.model.entity.user.role.RoleType).ROLE_ROOT.name())}"
                href="/admin/branch" class="card">
                 <div class="card-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="#5c6b73" viewBox="0 0 24 24">

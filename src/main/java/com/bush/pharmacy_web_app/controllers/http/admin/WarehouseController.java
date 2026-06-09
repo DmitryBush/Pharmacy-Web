@@ -43,7 +43,7 @@ public class WarehouseController {
         return "/admin/warehouse/warehouse";
     }
 
-    @PreAuthorize("@SecurityValidation.checkUserBranchAccess(#userDetails, #id)")
+    @PreAuthorize("@SecurityValidation.checkUserBranchAccess(#id)")
     @GetMapping("/{id}")
     public String getWarehouseInfo(Model model,
                                    HttpServletRequest httpServletRequest,
@@ -71,7 +71,7 @@ public class WarehouseController {
         return "/admin/warehouse/warehouse-info";
     }
 
-    @PreAuthorize("@SecurityValidation.checkUserBranchAccess(#userDetails, #id)")
+    @PreAuthorize("@SecurityValidation.checkUserBranchAccess(#id)")
     @GetMapping("/{id}/receiving")
     public String showReceivingForm(Model model,
                                     HttpServletRequest httpServletRequest,
@@ -88,7 +88,7 @@ public class WarehouseController {
         return "/admin/warehouse/warehouse-receipt";
     }
 
-    @PreAuthorize("@SecurityValidation.checkUserBranchAccess(#userDetails, #id)")
+    @PreAuthorize("@SecurityValidation.checkUserBranchAccess(#id)")
     @GetMapping("/{id}/sale")
     public String showSaleForm(Model model,
                                HttpServletRequest httpServletRequest,

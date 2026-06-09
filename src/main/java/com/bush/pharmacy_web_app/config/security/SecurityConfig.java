@@ -48,19 +48,19 @@ public class SecurityConfig {
                 .csrf(setUpCsrfProtection())
                 .authorizeHttpRequests(registry -> registry
                         .requestMatchers("/login", "/register", "/catalog/**", "/", "/cart", "/error",
-                                "product/**", "news/**", "order/**").permitAll()
+                                "product/**", "news/**", "order/**", "api/*/auth/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/css/admin/**", "/js/admin/**")
-                            .hasAnyRole("OPERATOR", "ADMIN")
-                        .requestMatchers(HttpMethod.GET, "/css/**", "/js/**").permitAll()
+                            .hasAnyRole("OPERATOR", "ADMIN", "ROOT")
+                        .requestMatchers(HttpMethod.GET, "/css/**", "/js/**", "favicon.ico").permitAll()
                         .requestMatchers("/admin/dashboard", "/admin/orders/**", "/admin/warehouse/**")
-                            .hasAnyRole("ADMIN", "OPERATOR")
-                        .requestMatchers("/admin/product", "/admin/categories").hasRole("ADMIN")
+                            .hasAnyRole("ADMIN", "OPERATOR", "ROOT")
+                        .requestMatchers("/admin/product", "/admin/categories").hasAnyRole("ADMIN", "ROOT")
                         .requestMatchers(HttpMethod.GET, "/api/*/admin/**")
-                            .hasAnyRole("ADMIN", "OPERATOR")
+                            .hasAnyRole("ADMIN", "OPERATOR", "ROOT")
                         .requestMatchers("/api/*/admin/**")
-                            .hasRole("ADMIN")
+                            .hasAnyRole("ADMIN", "ROOT")
                         .requestMatchers("/api/*/management/**")
-                            .hasAnyRole("ADMIN", "OPERATOR")
+                            .hasAnyRole("ADMIN", "OPERATOR", "ROOT")
                         .requestMatchers("/api/*/carts/**").authenticated()
                         .requestMatchers("/api/*/orders/**").authenticated()
                         .requestMatchers(HttpMethod.GET, "/api/**").permitAll()
@@ -94,7 +94,7 @@ public class SecurityConfig {
 
     public Customizer<CsrfConfigurer<HttpSecurity>> setUpCsrfProtection() {
         Set<String> profilesSet = Set.of(environment.getActiveProfiles());
-        if (profilesSet.contains("dev")) {
+        if (profilesSet.contains("dev") || profilesSet.contains("load")) {
             return configurer -> configurer
                     .ignoringRequestMatchers("/api/**", "/login/**", "/register/**", "/logout/**");
         }

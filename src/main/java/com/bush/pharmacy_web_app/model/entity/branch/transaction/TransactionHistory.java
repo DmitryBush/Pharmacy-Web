@@ -5,13 +5,18 @@ import com.bush.pharmacy_web_app.model.entity.order.Order;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -19,6 +24,7 @@ import java.util.List;
 public class TransactionHistory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @EqualsAndHashCode.Include
     private Long id;
     @Column(name = "completed_at", nullable = false)
     private ZonedDateTime completedAt;
@@ -32,6 +38,6 @@ public class TransactionHistory {
     @JoinColumn(name = "f_key_order_id")
     private Order order;
 
-    @OneToMany(mappedBy = "id.transaction", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @OneToMany(mappedBy = "transaction", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<TransactionItem> items = new ArrayList<>();
 }

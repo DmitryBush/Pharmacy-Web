@@ -10,7 +10,7 @@ import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
 
-public record PharmacyBranchCreateDto(@NotBlank @Length(min = 4, max = 32) String name,
+public record PharmacyBranchCreateDto(@NotBlank @Length(min = 4, max = 255) String name,
                                       @NotNull @Positive Integer warehouseLimitations,
                                       @MobilePhone String contactPhone,
                                       @Validated AddressCreateDto address,

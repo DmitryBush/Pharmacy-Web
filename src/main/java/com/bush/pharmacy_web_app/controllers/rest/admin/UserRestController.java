@@ -6,6 +6,7 @@ import com.bush.pharmacy_web_app.service.user.UserService;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.PagedModel;
@@ -29,10 +30,10 @@ public class UserRestController {
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public PagedModel<EntityModel<AdminUserReadDto>> findAllUsers(Pageable pageable,
-                                                                  @Validated UserFilter filter,
-                                                                  PagedResourcesAssembler<AdminUserReadDto> assembler) {
-        return assembler.toModel(userService.findAllByFilter(pageable, filter));
+    public Slice<AdminUserReadDto> findAllUsers(Pageable pageable,
+                                                @Validated UserFilter filter,
+                                                PagedResourcesAssembler<AdminUserReadDto> assembler) {
+        return userService.findAllByFilter(pageable, filter);
     }
 
     @PatchMapping(value = "/{mobilePhone}/role", consumes = MediaType.TEXT_PLAIN_VALUE,

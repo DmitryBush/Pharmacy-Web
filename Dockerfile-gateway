@@ -1,0 +1,14 @@
+FROM gradle:jdk25-alpine AS builder
+
+WORKDIR /build
+COPY ApiGateway/src ./src
+COPY ApiGateway/build.gradle.kts ./
+COPY ApiGateway/settings.gradle.kts ./
+
+RUN gradle build --no-daemon --parallel -x test
+
+FROM amazoncorretto:25-alpine
+
+WORKDIR /app
+COPY --from=builder build/build/libs/*.jar pharmacy-web-gateway-app.jar
+ENTRYPOINT [ "java", "-jar", "pharmacy-web-gateway-app.jar" ]

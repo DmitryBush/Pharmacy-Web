@@ -38,11 +38,11 @@ public class BranchUserAssignmentService {
     public AdminUserReadDto assignUserToBranch(Long branchId, String userId) {
         final User user = userService.getUserReferenceById(userId);
         final PharmacyBranch branch = branchService.getReferenceById(branchId);
-        BranchUserAssignment assignment = new BranchUserAssignment(new BranchUserAssignmentId(user, branch), LocalDateTime.now());
+        BranchUserAssignment assignment = new BranchUserAssignment(
+                new BranchUserAssignmentId(user.getMobilePhone(), branch.getId()), LocalDateTime.now(), user, branch);
         return Optional.of(assignment)
                 .map(userAssignmentRepository::save)
-                .map(BranchUserAssignment::getId)
-                .map(BranchUserAssignmentId::getUser)
+                .map(BranchUserAssignment::getUser)
                 .map(adminUserReadMapper::map)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST));
     }

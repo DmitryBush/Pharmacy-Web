@@ -8,13 +8,15 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Embeddable
 @Builder
 @IdClass(ProductTypeMappingId.class)
-public class ProductTypeMappingId {
+public class ProductTypeMappingId implements Serializable {
     @ManyToOne
     @JsonIgnore
     @JoinColumn(name = "product_id", nullable = false)

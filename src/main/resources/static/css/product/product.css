@@ -139,7 +139,7 @@
     color: white;
     padding: 12px 30px;
     border: none;
-    border-radius: 25px;
+    border-radius: 16px;
     cursor: pointer;
     font-size: 1.1rem;
     transition: background-color 0.3s;
@@ -147,6 +147,24 @@
 
 .cart-button:hover {
     background-color: #45a049;
+    border: none #45a049;
+    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4);
+}
+
+.cart-button:active {
+    box-shadow: 0 2px 4px rgba(76, 175, 80, 0.4);
+}
+
+.cart-button.in-cart {
+    background-color: transparent;
+    border-color: #4CAF50;
+    color: #4CAF50;
+}
+
+.cart-button.in-cart:hover {
+    background-color: white;
+    border-color: #f44336;
+    color: #f44336;
 }
 
 .details-section {}

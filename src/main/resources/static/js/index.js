@@ -12,6 +12,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     const dailyProductsContainer = document.getElementById('product-container');
     const dailyProductsLoader = new Loader(dailyProductsSection);
 
+    const bestSellersSection = document.getElementById("bestseller-section");
+    const bestSellersContainer = document.getElementById('bestseller-container');
+    const bestSellerLoader = new Loader(bestSellersSection);
+
     const newsSection = document.getElementById('news-section');
     const newsContainer = document.getElementById('news-container');
     const newsLoader = new Loader(newsSection);
@@ -26,6 +30,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         showLoadingAnimation();
         cartItemsSet = await getCartProductsSet();
         loadDailyProducts();
+        loadBestSellers();
         loadNews();
     }
 
@@ -40,6 +45,14 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         dailyProductsLoader.hideLoading();
         dailyProducts.forEach(dailyProduct => new ProductRenderer(dailyProduct, dailyProductsContainer, cartItemsSet));
+    }
+
+    async function loadBestSellers() {
+        const bestSellers = await (await restClient.fetchData('/api/v1/products/best-sellers',
+            'GET', {})).json();
+
+        bestSellerLoader.hideLoading();
+        bestSellers.forEach(bestSeller => new ProductRenderer(bestSeller, bestSellersContainer, cartItemsSet))
     }
 
     async function loadNews() {

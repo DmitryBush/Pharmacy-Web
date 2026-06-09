@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     function createTransactionItem(transaction) {
         const transactionItem = document.createElement("div");
-        transactionItem.classList.add("object");
+        transactionItem.classList.add("item");
         transactionItem.innerHTML = `
                     <div class="transaction-header">
                         <div class="transaction-info">
@@ -38,7 +38,9 @@ document.addEventListener("DOMContentLoaded", async function () {
                                 <h3>Транзакция ${transaction.transactionId}</h3>
                                 <p class="transaction-date">${formatDate(transaction.completedAt)}</p>
                             </div>
-                            <p class="transaction-status">${formatTransactionType(transaction.type)}</p>
+                            <p class="transaction-status ${transaction.type === 'RECEIVING' ? 'positive' : 'negative'}">
+                                ${formatTransactionType(transaction.type)}
+                            </p>
                         </div>
                         <div class="transaction-object-end">
                             <div class="transaction-price">

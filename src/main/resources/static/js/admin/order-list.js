@@ -6,9 +6,6 @@ document.addEventListener('DOMContentLoaded', () => {
         el.addEventListener('click', (e) => {
             try {
                 const orderId = e.target.dataset.id;
-                if (!/^\d+$/.test(orderId))
-                    throw new Error('Произошла критическая ошибка при подготовке ресурсов. ' +
-                        'Обратитесь к вашему администратору');
                 if (!/^\d+$/.test(branchId))
                     throw new Error('Произошла критическая ошибка при подготовке ресурсов. ' +
                         'Обратитесь к вашему администратору');

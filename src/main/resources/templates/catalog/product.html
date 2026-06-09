@@ -5,12 +5,12 @@
     <title th:text="${product.name}"></title>
     <link href="/css/base.css" rel="stylesheet"/>
     <link href="/css/product/product.css" rel="stylesheet" type="text/css">
-    <script src="/js/product/product.js"></script>
+    <script src="/js/product/product.js" type="module"></script>
 </head>
 <body>
     <div th:replace="~{/page-header.html :: page-header}"></div>
     <main class="main-content">
-        <div class="product-container">
+        <div class="product-container" id="product-container">
             <h1 class="product-title" th:text="${product.name}"></h1>
             <div class="product-main-content">
                 <div class="product-image-section">
@@ -22,8 +22,8 @@
                                  width="350px"
                                  class="product-image">
                         </div>
-                        <button class="carousel-btn prev">❮</button>
-                        <button class="carousel-btn next">❯</button>
+                        <button id="prev-image-btn" class="carousel-btn prev">❮</button>
+                        <button id="next-image-btn" class="carousel-btn next">❯</button>
                     </div>
                 </div>
                 <div class="product-details-section">
@@ -52,7 +52,7 @@
                     <div class="price-section">
                         <p class="price-label">Цена</p>
                         <p class="price-value" th:text="${product.price}+ ' ₽'"></p>
-                        <button class="cart-button" type="button">В корзину</button>
+                        <button id="buy-button" class="cart-button" type="button">В корзину</button>
                     </div>
                 </div>
             </div>

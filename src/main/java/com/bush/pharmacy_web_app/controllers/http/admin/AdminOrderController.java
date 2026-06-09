@@ -47,7 +47,7 @@ public class AdminOrderController {
         return "/admin/order/order";
     }
 
-    @PreAuthorize("@SecurityValidation.checkUserBranchAccess(#userDetails, #branchId)")
+    @PreAuthorize("@SecurityValidation.checkUserBranchAccess(#branchId)")
     @GetMapping("branch/{branchId}")
     public String getOrdersList(Model model,
                             HttpServletRequest httpRequest,
@@ -68,7 +68,7 @@ public class AdminOrderController {
         return "/admin/order/order-list";
     }
 
-    @PreAuthorize("@SecurityValidation.checkUserBranchAccess(#userDetails, #branchId)")
+    @PreAuthorize("@SecurityValidation.checkUserBranchAccess(#branchId)")
     @GetMapping("branch/{branchId}/order/{id}")
     public String getOrder(@PathVariable UUID id,
                            @PathVariable Long branchId,
