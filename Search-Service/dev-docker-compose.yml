@@ -74,6 +74,16 @@ services:
       - kafka_reindex_data_1:/kafka/data
       - kafka_reindex_log_1:/kafka/logs
       - kafka_reindex_config_1:/kafka/config
+  kafka-ui:
+    image: provectuslabs/kafka-ui
+    restart: always
+    ports:
+      - "8090:8080"
+    environment:
+      - KAFKA_CLUSTERS_0_NAME=local
+      - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=kafka-broker-reindex:9092
+    depends_on:
+      - kafka-broker-reindex
   # Kafka connect with debezium
   debezium-reindex:
     image: quay.io/debezium/connect:3.3.2.Final

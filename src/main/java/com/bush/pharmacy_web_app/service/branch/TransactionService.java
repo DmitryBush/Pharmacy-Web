@@ -59,12 +59,13 @@ public class TransactionService {
                 .toList();
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN', 'OPERATOR') and " +
-            "@SecurityValidation.checkUserBranchAccess(#userDetails, #transactionInfo.branchId)")
+    @PreAuthorize("(hasAnyRole('ADMIN', 'OPERATOR') and " +
+            "@SecurityValidation.checkUserBranchAccess(#transactionInfo.branchId)) " +
+            "or hasRole('ROOT')")
     @Transactional
     public List<StorageItemsReadDto> createReceiptTransaction(UserDetails userDetails,
                                                               TransactionCreateDto transactionInfo) {
-        var transactionType = typeRepository.getReferenceById(TransactionName.RECEIVING.ordinal());
+        var transactionType = typeRepository.getReferenceById(TransactionName.RECEIVING.ordinal() + 1);
         createTransaction(transactionInfo, transactionType);
 
         var inventoryRequestDto = new InventoryRequestDto(transactionInfo.branchId(), transactionInfo.transactionItemsList());
@@ -85,9 +86,8 @@ public class TransactionService {
                                 .price(productService.findMedicineById(item.medicineId())
                                         .map(ProductReadDto::price)
                                         .orElseThrow())
-                                .id(TransactionItemId.builder()
-                                        .product(productRepository.getReferenceById(item.medicineId()))
-                                        .build())
+                                .product(productRepository.getReferenceById(item.medicineId()))
+                                .id(new TransactionItemId(item.medicineId(), null))
                                 .build())
                         .toList())
                 .orElseThrow(IllegalArgumentException::new);
@@ -98,7 +98,7 @@ public class TransactionService {
                     transaction.setBranch(branch);
                     transaction.setOrder(order);
                     transaction.setItems(transactionItems.stream()
-                            .peek(transactionItem -> transactionItem.getId().setTransaction(transaction))
+                            .peek(transactionItem -> transactionItem.setTransaction(transaction))
                             .toList()
                     );
                     return transaction;
@@ -106,12 +106,13 @@ public class TransactionService {
                 .map(transactionRepository::save);
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN', 'OPERATOR') and " +
-            "@SecurityValidation.checkUserBranchAccess(#userDetails, #transactionInfo.branchId)")
+    @PreAuthorize("(hasAnyRole('ADMIN', 'OPERATOR') and " +
+            "@SecurityValidation.checkUserBranchAccess(#transactionInfo.branchId)) " +
+            "or hasRole('ROOT')")
     @Transactional
     public List<StorageItemsReadDto> createSaleTransaction(UserDetails userDetails,
                                                            TransactionCreateDto transactionInfo) {
-        var transactionType = typeRepository.getReferenceById(TransactionName.SALE.ordinal());
+        var transactionType = typeRepository.getReferenceById(TransactionName.SALE.ordinal() + 1);
         createTransaction(transactionInfo, transactionType);
 
         var inventoryRequestDto = new InventoryRequestDto(transactionInfo.branchId(), transactionInfo.transactionItemsList());

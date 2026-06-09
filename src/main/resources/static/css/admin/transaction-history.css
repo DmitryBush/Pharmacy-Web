@@ -1,16 +1,22 @@
-.transaction-status {
-    margin: 0;
-    font-size: 0.9rem;
-    font-weight: 600;
-    padding: 0.3rem 0.8rem;
-    border-radius: 20px;
-    background-color: #28a745;
-    color: white;
+* {
+    box-sizing: border-box;
 }
 
-.object {
+.item {
+    display: flex;
     flex-direction: column;
     align-items: stretch;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    margin-bottom: 15px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: box-shadow 0.2s ease;
+}
+
+.item:hover {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
 .transaction-header {
@@ -18,42 +24,79 @@
     justify-content: space-between;
     align-items: center;
     width: 100%;
+    padding: 15px 20px;
 }
 
 .transaction-info {
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: space-between;
-    gap: 30px;
+    gap: 20px;
+    flex: 1;
+}
+
+.transaction-info > div {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
 }
 
 .transaction-info h3 {
     font-size: 1.1rem;
+    margin: 0;
 }
 
 .transaction-date {
     color: #6c757d;
     font-size: 0.9rem;
+    margin: 0;
+}
+
+.transaction-status {
+    margin: 0;
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    background-color: #28a745;
+    color: white;
+    white-space: nowrap;
+}
+
+.transaction-object-end {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-shrink: 0;
 }
 
 .transaction-price {
     font-weight: bold;
     font-size: 1.2rem;
+    white-space: nowrap;
 }
 
 .positive {
-    color: #28a745;
+    background-color: #28a745;
 }
 
 .negative {
-    color: #dc3545;
+    background-color: #dc3545;
 }
 
-.transaction-object-end {
+.arrow {
+    transition: transform 0.3s ease;
     display: flex;
-    justify-content: flex-end;
-    gap: 20px;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+    color: #6c757d;
+}
+
+.arrow.rotated {
+    transform: rotate(180deg);
 }
 
 .transaction-details {
@@ -63,11 +106,11 @@
 }
 
 .transaction-details.active {
-    max-height: 500px;
+    max-height: 1000px;
 }
 
 .details-content {
-    padding: 20px;
+    padding: 0 20px 20px 20px;
     border-top: 1px solid #e1e5eb;
 }
 
@@ -79,17 +122,28 @@
     gap: 20px;
     padding: 15px;
     margin-bottom: 15px;
-    background-color: white;
+    background-color: #f8f9fa;
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
 }
 
-.arrow {
-    transition: transform 0.3s ease;
+.product-item:last-child {
+    margin-bottom: 0;
 }
 
-.arrow.rotated {
-    transform: rotate(180deg);
+.product-item img {
+    border-radius: 4px;
+    object-fit: cover;
+}
+
+.product-item a {
+    text-decoration: none;
+    color: #333;
+    font-weight: 500;
+}
+
+.product-item a:hover {
+    color: #007bff;
 }
 
 footer {

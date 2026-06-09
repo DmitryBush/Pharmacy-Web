@@ -1,5 +1,6 @@
 package com.bush.search.repository.filter;
 
+import co.elastic.clients.elasticsearch._types.FieldValue;
 import co.elastic.clients.elasticsearch._types.aggregations.Aggregate;
 import co.elastic.clients.elasticsearch._types.aggregations.Aggregation;
 import co.elastic.clients.elasticsearch._types.aggregations.Buckets;
@@ -30,6 +31,7 @@ import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.stereotype.Repository;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,7 +51,7 @@ public class DynamicProductFilterRepositoryImpl implements DynamicProductFilterR
     @Override
     public FilterResultTuple<Page<Product>, ProductAggregation> findProductsByFilter(ProductFilter filter, Pageable pageable) {
         BoolQuery boolQuery = getBoolQuery(filter);
-        NativeQuery nativeQuery = buildNativeQuery(boolQuery);
+        NativeQuery nativeQuery = buildNativeQuery(boolQuery, pageable);
 
         SearchHits<Product> productSearchHits = elasticsearchClient.search(nativeQuery, Product.class);
         return new FilterResultTuple<>(buildPage(productSearchHits, pageable),
@@ -62,7 +64,7 @@ public class DynamicProductFilterRepositoryImpl implements DynamicProductFilterR
     }
 
     @Nonnull
-    private NativeQuery buildNativeQuery(BoolQuery boolQuery) {
+    private NativeQuery buildNativeQuery(BoolQuery boolQuery, Pageable pageable) {
         return NativeQuery.builder()
                 .withQuery(boolQuery._toQuery())
                 .withAggregation("manufacturers", createNestedAggregation("manufacturer",
@@ -70,6 +72,7 @@ public class DynamicProductFilterRepositoryImpl implements DynamicProductFilterR
                 .withAggregation("countries", createNestedAggregation("manufacturer.country",
                         "manufacturer.country.countryName.keyword"))
                 .withAggregation("activeIngredients", createAggregation("activeIngredient"))
+                .withPageable(pageable)
                 .build();
     }
 
@@ -96,25 +99,43 @@ public class DynamicProductFilterRepositoryImpl implements DynamicProductFilterR
     }
 
     private BoolQuery getBoolQuery(ProductFilter filter) {
-        return BoolQuery.of(builder -> builder
-                .filter(createTypeQuery(filter))
+        BoolQuery.Builder builder = new BoolQuery.Builder();
+
+        builder.filter(createTypeQuery(filter))
                 .filter(createNestedFilterCriteriaQuery(filter.manufacturers(), "manufacturer",
                         "manufacturer.name.keyword"))
                 .filter(createNestedFilterCriteriaQuery(filter.countries(), "manufacturer.country",
                         "manufacturer.country.countryName.keyword"))
                 .filter(createFilterCriteriaQuery(filter.activeIngredients(), "activeIngredient"))
-                .filter(createPriceQuery(filter))
-                .filter(createRecipeQuery(filter))
-        );
+                .filter(createPriceQuery(filter));
+        if (Objects.nonNull(filter.recipe())) {
+            builder.filter(createRecipeQuery(filter));
+        }
+        boolean isPresentName = Optional.ofNullable(filter.name())
+                .filter(name -> !name.isBlank())
+                .isPresent();
+        if (isPresentName) {
+            builder.should(createNameQuery(filter)).minimumShouldMatch("1");
+        } else {
+            builder.minimumShouldMatch("0");
+        }
+        return builder.build();
+    }
+
+    private List<Query> createNameQuery(ProductFilter filter) {
+        return Optional.ofNullable(filter.name())
+                .filter(name -> !name.isBlank())
+                .map(name -> createMatchQuery(List.of(name), "name"))
+                .orElse(Collections.emptyList());
     }
 
     private List<Query> createTypeQuery(ProductFilter filter) {
-        Query.Builder builder = new Query.Builder();
-        return Optional.of(filter.type())
+        return Optional.ofNullable(filter.type())
                 .filter(type -> !type.isBlank())
-                .map(criteria -> builder.nested(n -> n.path("type").query(q ->
-                        q.term(t -> t.field("type.slugInheritanceChain").value(criteria)))))
-                .map(ObjectBuilder::build)
+                .map(criteria -> Query.of(q -> q.nested(n -> n.path("type")
+                        .query(q2 -> q2.term(t -> t.field("type.slugInheritanceChain")
+                                .value(criteria)))))
+                )
                 .stream()
                 .toList();
     }
@@ -140,35 +161,53 @@ public class DynamicProductFilterRepositoryImpl implements DynamicProductFilterR
     }
 
     private Query buildRecipeQuery(Integer recipe) {
-        Query.Builder builder = new Query.Builder();
-        return Optional.ofNullable(recipe)
-                .map(integer -> {
-                    if (integer.equals(1)) {
-                        return builder.term(t -> t.field("recipe").value(true)).build();
-                    } else if (integer.equals(2)) {
-                        return builder.term(t -> t.field("recipe").value(false)).build();
-                    }
-                    return null;
-                })
-                .orElse(null);
+        if (Objects.isNull(recipe)) {
+            return null;
+        } else if (recipe.equals(1)) {
+            return Query.of(q -> q.term(t -> t.field("recipe").value(true)));
+        } else if (recipe.equals(2)) {
+            return Query.of(q -> q.term(t -> t.field("recipe").value(false)));
+        }
+        return null;
     }
 
     private List<Query> createNestedFilterCriteriaQuery(List<String> filteringObjects, String path, String field) {
-        Query.Builder builder = new Query.Builder();
-        return Optional.ofNullable(filteringObjects).stream()
-                .flatMap(Collection::stream)
-                .map(filterCriteria -> builder.nested(n -> n.path(path)
-                        .query(q -> q.term(t -> t.field(field).value(filterCriteria)))))
-                .map(ObjectBuilder::build)
-                .toList();
+        if (filteringObjects == null || filteringObjects.isEmpty()) {
+            return Collections.emptyList();
+        }
+        return List.of(
+                Query.of(q -> q.nested(n -> n.path(path)
+                        .query(q2 -> q2.terms(t -> t
+                                .field(field)
+                                .terms(terms -> terms.value(filteringObjects.stream()
+                                        .map(FieldValue::of)
+                                        .toList()))
+                        ))
+                ))
+        );
     }
 
     private List<Query> createFilterCriteriaQuery(List<String> filteringObjects, String field) {
-        Query.Builder builder = new Query.Builder();
-        return Optional.ofNullable(filteringObjects).stream()
-                .flatMap(Collection::stream)
-                .map(filterCriteria -> builder.term(t -> t.field(field).value(filterCriteria)))
-                .map(ObjectBuilder::build)
+        return Optional.ofNullable(filteringObjects).orElse(Collections.emptyList()).stream()
+                .map(filterCriteria -> Query.of(q ->
+                        q.term(t -> t.field(field).value(filterCriteria))))
+                .toList();
+    }
+
+    private List<Query> createMatchQuery(List<String> filteringObjects, String field) {
+        return Optional.ofNullable(filteringObjects).orElse(Collections.emptyList()).stream()
+                .map(filterCriteria -> {
+                    if (filterCriteria.length() > 1) {
+                        return Query.of(q -> q.multiMatch(t -> t.query(filterCriteria)
+                                .fields("%s^3.0".formatted(field), "%s.suggest^1.0".formatted(field))
+                                .fuzziness("AUTO")));
+                    } else {
+                        return Query.of(q -> q.prefix(p -> p
+                                .field("%s.keyword".formatted(field))
+                                .value(filterCriteria)
+                                .caseInsensitive(true)));
+                    }
+                })
                 .toList();
     }
 

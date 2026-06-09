@@ -13,6 +13,7 @@ import com.bush.pharmacy_web_app.service.user.mapper.UserReadMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -38,11 +39,7 @@ public class UserService implements UserDetailsService {
     private final UserReadMapper readMapper;
     private final UserCreateMapper createMapper;
 
-    public List<CustomerReadDto> findAll() {
-        return userRepository.findAll().stream().map(readMapper::map).toList();
-    }
-
-    public Page<AdminUserReadDto> findAllByFilter(Pageable pageable, UserFilter filter) {
+    public Slice<AdminUserReadDto> findAllByFilter(Pageable pageable, UserFilter filter) {
         List<RoleType> roleType =  filter.role().stream()
                 .filter(s -> !s.isBlank())
                 .map(RoleType::valueOf)
@@ -89,7 +86,7 @@ public class UserService implements UserDetailsService {
         return userRepository.findById(username)
                 .map(customer -> new User(customer.getMobilePhone(),
                         customer.getPassword(),
-                        List.of(new SimpleGrantedAuthority("ROLE_" + customer.getRole().getType().name()))))
+                        List.of(new SimpleGrantedAuthority(customer.getRole().getType().name()))))
                 .orElseThrow(() -> new UsernameNotFoundException("Mistake in username or password"));
     }
 

@@ -1,0 +1,14 @@
+FROM gradle:jdk25-alpine AS builder
+
+WORKDIR /build
+COPY Search-Service/src ./src
+COPY Search-Service/build.gradle.kts ./
+COPY Search-Service/settings.gradle.kts ./
+
+RUN gradle build --no-daemon --parallel -x test
+
+FROM amazoncorretto:25-alpine
+
+WORKDIR /app
+COPY --from=builder build/build/libs/*.jar pharmacy-web-search-app.jar
+ENTRYPOINT [ "java", "-jar", "pharmacy-web-search-app.jar" ]

@@ -1,0 +1,37 @@
+spring:
+  application:
+    name: Search-Service
+  datasource:
+    pharmacies:
+      username: postgres
+      password: postgres
+  elsaticsearch:
+    url: 192.168.0.169:9200
+    username: elastic
+    password: elastic
+    aggregation:
+      bucket-size: 100
+  kafka:
+    consumer:
+      bootstrap-servers: 192.168.0.169:9096
+      trusted-packages: com.bush.search.event.kafka
+  debezium:
+    url: http://192.168.0.169:9083
+    connectors:
+      path: classpath:debezium/connectors/*.json
+  threads:
+    virtual: enabled
+
+server:
+  port: 8081
+
+logging:
+  level:
+    tracer: error
+    org.elasticsearch.client: error
+    org.springframework.data.elasticsearch.client.wire: error
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka

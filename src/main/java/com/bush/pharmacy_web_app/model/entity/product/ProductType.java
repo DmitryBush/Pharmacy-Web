@@ -20,7 +20,7 @@ public class ProductType {
     private Integer id;
     @Column(name = "type_name", nullable = false, unique = true, length = 64)
     private String name;
-    @Column(name = "type_slug", nullable = false, unique = true, length = 64)
+    @Column(name = "type_slug", nullable = false, unique = true, length = 128)
     private String slug;
     @OneToOne
     @JoinColumn(name = "parent_id")

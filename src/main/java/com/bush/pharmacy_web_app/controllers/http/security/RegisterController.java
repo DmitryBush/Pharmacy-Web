@@ -22,7 +22,7 @@ public class RegisterController {
         return "user/register/register";
     }
     @PostMapping
-    public String register(@ModelAttribute("customer")@Validated CustomerCreateDto createDto,
+    public String register(@ModelAttribute("customer") @Validated CustomerCreateDto createDto,
                            BindingResult bindingResult) {
         if (bindingResult.hasErrors())
             return "user/register/register";

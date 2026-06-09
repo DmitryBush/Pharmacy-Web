@@ -2,6 +2,7 @@ package com.bush.search.service.product.mapper;
 
 import com.bush.search.domain.document.product.Product;
 import com.bush.search.domain.document.product.ProductType;
+import com.bush.search.domain.dto.ProductImageDto;
 import com.bush.search.domain.dto.ProductPreviewDto;
 import com.bush.search.service.manufacturer.mapper.ManufacturerReadMapper;
 import org.mapstruct.Mapper;
@@ -17,6 +18,8 @@ public interface ProductReadMapper {
     @Mapping(target = "type", qualifiedByName = "mapMainType")
     @Mapping(target = "imagePaths", source = "image")
     ProductPreviewDto mapToProductPreviewDto(Product product);
+
+    ProductImageDto mapToProductImageDto(Long id);
 
     @Named("mapMainType")
     default String mapMainType(List<ProductType> types) {

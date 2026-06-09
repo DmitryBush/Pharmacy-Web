@@ -1,4 +1,6 @@
 import RestClient from "../RestClient.js";
+import {formatPhone} from "../formatter/formatter.js";
+import {RegisterModal} from "./register-modal.js";
 
 export class LoginModal {
     constructor() {
@@ -51,7 +53,7 @@ export class LoginModal {
                 </form>
                 
                 <div class="form-footer">
-                    <p>Нет аккаунта? <a href="/register">Зарегистрироваться</a></p>
+                    <p>Нет аккаунта? <a id="register-btn">Зарегистрироваться</a></p>
                 </div>
             </div>
         </div>
@@ -68,11 +70,17 @@ export class LoginModal {
 
         closeBtn.addEventListener('click', () => this.hide());
 
+        document.getElementById('username')
+            .addEventListener('input', event => formatPhone(event.target));
+
         this.overlay.addEventListener('click', (e) => {
             if (e.target === this.overlay) {
                 this.hide();
             }
         });
+
+        document.getElementById('register-btn').addEventListener('click',
+                event => RegisterModal.getInstance().show());
 
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape' && this.overlay.classList.contains('active')) {
@@ -97,7 +105,8 @@ export class LoginModal {
                     new URLSearchParams({
                         username: data.get('username'),
                         password: data.get('password')
-                    }));
+                    })
+                );
                 setTimeout(() => {
                     btn.textContent = 'Успешно!';
                     btn.style.background = '#55a630';
@@ -108,7 +117,7 @@ export class LoginModal {
                         btn.style.background = '';
                         window.location.reload();
                     }, 1000);
-                }, 1200);
+                }, 10);
             } catch (err) {
                 setTimeout(() => {
                     btn.textContent = 'Неверный номер телефона или пароль';
@@ -118,7 +127,7 @@ export class LoginModal {
                         btn.textContent = originalText;
                         btn.style.background = '';
                     }, 1000);
-                }, 1200);
+                }, 10);
             }
         });
     }

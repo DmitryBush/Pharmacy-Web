@@ -1,23 +1,23 @@
 package com.bush.pharmacy_web_app.config.security;
 
 import com.bush.pharmacy_web_app.service.user.UserService;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
 import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
-import java.util.Optional;
+import java.util.Set;
 
 
 @Configuration
@@ -40,26 +40,29 @@ public class SecurityConfig {
     private final CustomAuthenticationFailureHandler authenticationFailureHandler;
     private final AuthenticationExceptionHandler authenticationExceptionHandler;
 
+    private final Environment environment;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
-                .csrf(Customizer.withDefaults())
+                .csrf(setUpCsrfProtection())
                 .authorizeHttpRequests(registry -> registry
                         .requestMatchers("/login", "/register", "/catalog/**", "/", "/cart", "/error",
-                                "product/**", "news/**").permitAll()
+                                "product/**", "news/**", "order/**", "api/*/auth/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/css/admin/**", "/js/admin/**")
-                            .hasAnyRole("OPERATOR", "ADMIN")
-                        .requestMatchers(HttpMethod.GET, "/css/**", "/js/**").permitAll()
+                            .hasAnyRole("OPERATOR", "ADMIN", "ROOT")
+                        .requestMatchers(HttpMethod.GET, "/css/**", "/js/**", "favicon.ico").permitAll()
                         .requestMatchers("/admin/dashboard", "/admin/orders/**", "/admin/warehouse/**")
-                            .hasAnyRole("ADMIN", "OPERATOR")
-                        .requestMatchers("/admin/product", "/admin/categories").hasRole("ADMIN")
+                            .hasAnyRole("ADMIN", "OPERATOR", "ROOT")
+                        .requestMatchers("/admin/product", "/admin/categories").hasAnyRole("ADMIN", "ROOT")
                         .requestMatchers(HttpMethod.GET, "/api/*/admin/**")
-                            .hasAnyRole("ADMIN", "OPERATOR")
+                            .hasAnyRole("ADMIN", "OPERATOR", "ROOT")
                         .requestMatchers("/api/*/admin/**")
-                            .hasRole("ADMIN")
+                            .hasAnyRole("ADMIN", "ROOT")
                         .requestMatchers("/api/*/management/**")
-                            .hasAnyRole("ADMIN", "OPERATOR")
+                            .hasAnyRole("ADMIN", "OPERATOR", "ROOT")
                         .requestMatchers("/api/*/carts/**").authenticated()
+                        .requestMatchers("/api/*/orders/**").authenticated()
                         .requestMatchers(HttpMethod.GET, "/api/**").permitAll()
                         .requestMatchers("/api/**").authenticated()
                         .anyRequest().authenticated())
@@ -87,5 +90,14 @@ public class SecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new Argon2PasswordEncoder(saltLength, hashLength, parallelism, memory, iterations);
+    }
+
+    public Customizer<CsrfConfigurer<HttpSecurity>> setUpCsrfProtection() {
+        Set<String> profilesSet = Set.of(environment.getActiveProfiles());
+        if (profilesSet.contains("dev") || profilesSet.contains("load")) {
+            return configurer -> configurer
+                    .ignoringRequestMatchers("/api/**", "/login/**", "/register/**", "/logout/**");
+        }
+        return Customizer.withDefaults();
     }
 }

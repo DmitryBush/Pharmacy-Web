@@ -68,20 +68,32 @@ Build and run the project
 - Admin panel: `http://localhost:8080/admin/dashboard` ([Interface example](dashboard.png))
 - Main page: `http://localhost:8080`
 
+## Interface example
+### Admin panel
+![Admin panel](dashboard.png)
+### Catalog
+![Catalog](catalog.png)
+### Completing the order
+![Completing the order](complete_order.png)
+### Editing news
+![Editing news](edit_news.png)
+### View news
+![View news](view_news.png)
+
 ## Roadmap
 ### Admin panel
 - [x] Warehouse management (receipt/sale)
 - [x] Order management
 - [x] Product type management
 - [x] Product management
-- [ ] Staff management
+- [x] Staff management
 - [x] News management
 ### Client interface
-- [ ] Main page
+- [x] Main page
 - [x] News
 - [x] Product catalog
-- [ ] Order creation
-- [ ] Shopping cart
+- [x] Order creation
+- [x] Shopping cart
 
 ## License
 This project is distributed under the license GNU General Public License v3.0. For more details see the file [LICENSE](../LICENSE).

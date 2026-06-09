@@ -7,28 +7,33 @@ import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-@Data
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@ToString(exclude = {"image", "supplier"})
 @Entity
 @Table(name = "products")
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "product_id", nullable = false)
+    @EqualsAndHashCode.Include
     private Long id;
-    @Column(name = "product_name", nullable = false)
+    @Column(name = "product_name", nullable = false, length = 256)
     private String name;
     @Builder.Default
     @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REMOVE}, mappedBy = "id.product")
+    @Fetch(FetchMode.SUBSELECT)
     private List<ProductTypeMapping> type = new ArrayList<>();
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "fk_product_manufacturer", nullable = false)
@@ -38,9 +43,9 @@ public class Product {
     @Column(nullable = false)
     private Boolean recipe;
 
-    @Column(name = "active_ingredient", nullable = false, length = 25)
+    @Column(name = "active_ingredient", nullable = false, length = 128)
     private String activeIngredient;
-    @Column(name = "expiration", nullable = false, length = 25)
+    @Column(name = "expiration", nullable = false, length = 64)
     private String expirationDate;
     private String composition;
     @Column(name = "indications")
@@ -67,11 +72,8 @@ public class Product {
     @Builder.Default
     @JsonIdentityReference(alwaysAsId = true)
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @Fetch(FetchMode.SUBSELECT)
     private List<ProductImage> image = new ArrayList<>();
-
-    @JsonIgnore
-    @OneToOne(mappedBy = "product", cascade = CascadeType.REMOVE, orphanRemoval = true)
-    private DailyFeaturedProduct dailyFeaturedProductReference;
 
     public void setImage(List<ProductImage> image) {
         if (image != null) {

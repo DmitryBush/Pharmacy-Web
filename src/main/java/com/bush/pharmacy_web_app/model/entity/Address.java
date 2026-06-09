@@ -17,17 +17,18 @@ public class Address {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "address_id", nullable = false)
     private Long id;
-    @Column(nullable = false)
+    @Column(nullable = false, length = 128)
     private String subject;
+    @Column(length = 128)
     private String district;
-    @Column(nullable = false)
+    @Column(nullable = false, length = 128)
     private String settlement;
-    @Column(nullable = false)
+    @Column(nullable = false, length = 256)
     private String street;
-    @Column(nullable = false)
+    @Column(nullable = false, length = 32)
     private String house;
-    @Column(nullable = false)
+    @Column(nullable = false, length = 10)
     private String apartment;
-    @Column(name = "postal_code", nullable = false)
+    @Column(name = "postal_code", nullable = false, length = 6)
     private String postalCode;
 }

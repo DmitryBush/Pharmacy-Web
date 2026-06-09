@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Оформление заказа</title>
+    <link href="/css/base.css" rel="stylesheet"/>
+    <link href="/css/order/placing-order.css" rel="stylesheet"/>
+    <link href="/css/cart/cart-item.css" rel="stylesheet"/>
+    <link href="/css/warning/warning.css" rel="stylesheet"/>
+    <script src="/js/order/placing-order.js" type="module"></script>
+</head>
+<body>
+    <div th:replace="~{/page-header.html :: page-header}"></div>
+    <div class="cr-wrapper">
+        <main class="cr-container" id="main-container">
+            <h1 class="cr-page-title">Оформление заказа</h1>
+            <div class="cr-checkout-layout" id="order-layout"></div>
+            <div class="cr-empty" id="empty-order-container"></div>
+        </main>
+    </div>
+    <div th:replace="~{/page-footer.html :: page-footer}"></div>
+</body>
+</html>

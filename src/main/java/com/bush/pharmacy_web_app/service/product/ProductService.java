@@ -177,4 +177,8 @@ public class ProductService {
                 })
                 .orElse(false);
     }
+
+    public Product getReferenceById(Long productId) {
+        return productRepository.getReferenceById(productId);
+    }
 }

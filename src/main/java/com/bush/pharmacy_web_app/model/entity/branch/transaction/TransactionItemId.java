@@ -1,23 +1,19 @@
 package com.bush.pharmacy_web_app.model.entity.branch.transaction;
 
-import com.bush.pharmacy_web_app.model.entity.product.Product;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @Embeddable
-@IdClass(TransactionItemId.class)
-public class TransactionItemId {
-    @ManyToOne
-    @JoinColumn(name = "f_key_product_id")
-    private Product product;
-    @ManyToOne
-    @JoinColumn(name = "f_key_transaction_id")
-    private TransactionHistory transaction;
+public class TransactionItemId implements Serializable {
+    private Long productId;
+    private Long transactionId;
 }

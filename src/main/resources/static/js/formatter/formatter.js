@@ -70,6 +70,25 @@ export function getDayText(day) {
     throw new Error(`Unknown day: ${day}`);
 }
 
+export function getShortDayText(day) {
+    if (day === 'MONDAY') {
+        return 'Пн';
+    } else if (day === 'TUESDAY') {
+        return 'Вт';
+    } else  if (day === 'WEDNESDAY') {
+        return 'Ср';
+    } else  if (day === 'THURSDAY') {
+        return 'Чт';
+    } else  if (day === 'FRIDAY') {
+        return 'Пт';
+    } else  if (day === 'SATURDAY') {
+        return 'Сб';
+    } else  if (day === 'SUNDAY') {
+        return 'Вс';
+    }
+    throw new Error(`Unknown day: ${day}`);
+}
+
 export function getTimeText(workingHour) {
     if (workingHour.dayOff) {
         return 'Выходной';
@@ -87,13 +106,39 @@ export function getTimeText(workingHour) {
 }
 
 export function getRoleText(role) {
-    if (role === 'ADMIN') {
+    if (role === 'ROLE_ADMIN') {
         return 'Администратор';
-    } else if (role === 'OPERATOR') {
+    } else if (role === 'ROLE_OPERATOR') {
         return 'Оператор';
-    } else if (role === 'CUSTOMER') {
+    } else if (role === 'ROLE_CUSTOMER') {
         return 'Покупатель';
+    } else if (role === 'ROLE_LOGISTICS') {
+        return 'Логист';
+    } else if (role === 'ROLE_ROOT') {
+        return 'Суперпользователь';
     } else {
-        return 'Покупатель';
+        return 'Неизвестная роль';
+    }
+}
+
+export function getStatusText(statusName) {
+    switch (statusName) {
+        case 'PAYMENT_AWAIT': return 'Ожидает оплаты';
+        case 'CANCELLED': return 'Отменен';
+        case 'DEFERRED': return 'Отложен';
+        case 'DECOR': return 'Оформляется';
+        case 'ASSEMBLY': return 'Собирается';
+        case 'TRANSIT': return 'В пути';
+        case 'DELIVERED': return 'Доставлен';
+        case 'COMPLETED': return 'Завершен';
+        case 'NOT_DEMAND': return 'Не востребован';
+        case 'RETURN_REQUESTED': return 'Возврат запрошен';
+        case 'RETURN_REJECTED': return 'Возврат отклонен';
+        case 'AWAITING_CUSTOMER_SHIPMENT': return 'Ожидание возврата товара от пользователя';
+        case 'RETURN_SHIPPED_BY_CUSTOMER': return 'Покупатель вернул товары';
+        case 'RETURN_TRANSIT': return 'В пути к продавцу';
+        case 'RETURN_CLOSED': return 'Возврат завершен';
+        case 'RETURN_DEFERRED': return 'Возврат отложен';
+        default: return 'Неизвестен';
     }
 }

@@ -12,6 +12,7 @@ import org.springframework.statemachine.transition.Transition;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
@@ -25,7 +26,7 @@ public class OrderStateInterceptorListener extends StateMachineInterceptorAdapte
                                StateMachine<OrderState, OrderEvent> stateMachine,
                                StateMachine<OrderState, OrderEvent> rootStateMachine) {
         Optional.ofNullable(message)
-                .flatMap(msg -> Optional.ofNullable((Long) msg.getHeaders()
+                .flatMap(msg -> Optional.ofNullable((UUID) msg.getHeaders()
                                 .getOrDefault(OrderService.ORDER_HEADER, -1L)))
                 .ifPresent(orderId -> {
                     var order = orderRepository.findById(orderId).orElseThrow();

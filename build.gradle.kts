@@ -47,6 +47,7 @@ dependencies {
     annotationProcessor("org.mapstruct:mapstruct-processor:1.6.3")
 
     implementation(project(":Transaction-Outbox"))
+	implementation(project(":UUID-Adapter"))
 
 	testCompileOnly("org.projectlombok:lombok")
 	runtimeOnly("org.postgresql:postgresql")

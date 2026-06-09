@@ -22,7 +22,7 @@ public class RouteConfig {
                 .route("catalogHttp", predicateSpec -> predicateSpec
                         .path("/catalog/**")
                         .uri(ServiceUriEnum.PHARMACY_SERVICE.getUri()))
-                .route("product", predicateSpec -> predicateSpec
+                .route("productHttp", predicateSpec -> predicateSpec
                         .path("/product/**")
                         .uri(ServiceUriEnum.PHARMACY_SERVICE.getUri()))
                 .route("loginHttp", predicateSpec -> predicateSpec
@@ -38,7 +38,7 @@ public class RouteConfig {
                         .path("/cart")
                         .uri(ServiceUriEnum.PHARMACY_SERVICE.getUri()))
                 .route("orderHttp", predicateSpec -> predicateSpec
-                        .path("/orders")
+                        .path("/order/**")
                         .uri(ServiceUriEnum.PHARMACY_SERVICE.getUri()))
                 .route("adminHttp", predicateSpec -> predicateSpec
                         .path("/admin/**")
@@ -79,6 +79,9 @@ public class RouteConfig {
                 .route("cart", predicateSpec -> predicateSpec
                         .path("/api/*/carts/**")
                         .uri(ServiceUriEnum.PHARMACY_SERVICE.getUri()))
+                .route("order", predicateSpec -> predicateSpec
+                        .path("/api/*/orders/**")
+                        .uri(ServiceUriEnum.PHARMACY_SERVICE.getUri()))
                 .route("product-admin", predicateSpec -> predicateSpec
                         .path("/api/*/admin/products/**")
                         .uri(ServiceUriEnum.PHARMACY_SERVICE.getUri()))
@@ -86,7 +89,10 @@ public class RouteConfig {
                         .path("/api/*/admin/categories/**")
                         .uri(ServiceUriEnum.PHARMACY_SERVICE.getUri()))
                 .route("order-management", predicateSpec -> predicateSpec
-                        .path("/api/*/admin/management/orders/**")
+                        .path("/api/*/management/orders/**")
+                        .uri(ServiceUriEnum.PHARMACY_SERVICE.getUri()))
+                .route("branch-admin", predicateSpec -> predicateSpec
+                        .path("/api/*/admin/branches/**")
                         .uri(ServiceUriEnum.PHARMACY_SERVICE.getUri()))
                 // TODO Delegate endpoints to the search service
                 .route("country-search", predicateSpec -> predicateSpec
@@ -100,6 +106,9 @@ public class RouteConfig {
                         .uri(ServiceUriEnum.PHARMACY_SERVICE.getUri()))
                 .route("type-search", predicateSpec -> predicateSpec
                         .path("/api/*/search/type/**")
+                        .uri(ServiceUriEnum.PHARMACY_SERVICE.getUri()))
+                .route("employee-search", predicateSpec -> predicateSpec
+                        .path("/api/*/search/employees/**")
                         .uri(ServiceUriEnum.PHARMACY_SERVICE.getUri()))
                 .route("css", predicateSpec -> predicateSpec
                         .path("/css/**")

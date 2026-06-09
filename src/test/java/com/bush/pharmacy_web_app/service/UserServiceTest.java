@@ -21,13 +21,6 @@ public class UserServiceTest {
     private UserService service;
 
     @Test
-    public void findAllCustomers() {
-        var customers = service.findAll();
-
-        Assertions.assertNotNull(customers);
-        Assertions.assertFalse(customers.contains(null));
-    }
-    @Test
     public void findCustomerById() {
         var customer = service.findById("+79123456789");
 
@@ -36,8 +29,7 @@ public class UserServiceTest {
     @Test
     public void createCustomer() {
         String id = "+796010712089";
-        var expectedDto = new CustomerReadDto("Камилла", "Казакова",
-                "Егоровна", id, Collections.emptyList());
+        var expectedDto = new CustomerReadDto("Камилла", "Казакова", "Егоровна", id);
         var readDto = service.create(new CustomerCreateDto("Камилла", "Казакова",
                 "Егоровна", id, id));
         Assertions.assertEquals(expectedDto, readDto);
@@ -47,8 +39,7 @@ public class UserServiceTest {
         String id = "+796010712089";
         service.create(new CustomerCreateDto("Камилла","Казакова", "Егоровна", id, id));
 
-        var expected = new CustomerReadDto(id,"Камилла","Казакова", "Викторовна",
-                Collections.emptyList());
+        var expected = new CustomerReadDto(id,"Камилла","Казакова", "Викторовна");
         var actual = service.update(id,
                 new CustomerCreateDto("Камилла","Казакова", "Викторовна", id, id));
 

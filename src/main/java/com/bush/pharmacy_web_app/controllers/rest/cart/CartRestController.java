@@ -1,22 +1,29 @@
 package com.bush.pharmacy_web_app.controllers.rest.cart;
 
-import com.bush.pharmacy_web_app.model.dto.cart.CartReadDto;
+import com.bush.pharmacy_web_app.model.dto.cart.CartBatchDeleteDto;
+import com.bush.pharmacy_web_app.model.dto.cart.CartItemReadDto;
 import com.bush.pharmacy_web_app.model.dto.cart.CartUpdateDto;
 import com.bush.pharmacy_web_app.service.cart.CartService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/carts")
@@ -25,8 +32,9 @@ public class CartRestController {
     private final CartService cartService;
 
     @GetMapping(value = "/me", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<CartReadDto> getCartByUserId(@AuthenticationPrincipal UserDetails userDetails) {
-        return ResponseEntity.ok(cartService.findCartByUserId(userDetails.getUsername()));
+    public List<CartItemReadDto> getCartByUserId(@AuthenticationPrincipal UserDetails userDetails,
+                                                 @PageableDefault(sort = "id", size = 15) Pageable pageable) {
+        return cartService.findCartByUserId(userDetails.getUsername(), pageable);
     }
 
     @PatchMapping(value = "/me/items", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -40,6 +48,13 @@ public class CartRestController {
     public ResponseEntity<Void> removeItemFromCart(@AuthenticationPrincipal UserDetails userDetails,
                                                    @PathVariable Long productId) {
         cartService.deleteItemFromCart(userDetails.getUsername(), productId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @PostMapping("/me/items/batch-delete")
+    public ResponseEntity<Void> removeItemsInBatchFromCart(@AuthenticationPrincipal UserDetails userDetails,
+                                                           @RequestBody @Validated CartBatchDeleteDto dto) {
+        cartService.deleteItemsInBatchFromCart(userDetails.getUsername(), dto.productIdList());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

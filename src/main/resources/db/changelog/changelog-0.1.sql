@@ -4,12 +4,12 @@
 CREATE TABLE IF NOT EXISTS public.addresses
 (
     address_id bigint NOT NULL GENERATED ALWAYS AS IDENTITY,
-    subject character varying(30) NOT NULL,
-    district character varying(30),
-    settlement character varying(30) NOT NULL,
-    street character varying(30) NOT NULL,
-    house character varying(5) NOT NULL,
-    apartment character varying(5),
+    subject character varying(128) NOT NULL,
+    district character varying(128),
+    settlement character varying(128) NOT NULL,
+    street character varying(256) NOT NULL,
+    house character varying(32) NOT NULL,
+    apartment character varying(10),
     postal_code character varying(6) NOT NULL,
     CONSTRAINT suppliers_addreses_pkey PRIMARY KEY (address_id)
 );
@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS public.addresses
 CREATE TABLE IF NOT EXISTS public.suppliers
 (
     itn character varying(12) NOT NULL,
-    supplier_name character varying(50) NOT NULL,
+    supplier_name character varying(256) NOT NULL,
     f_key_address_id bigint NOT NULL,
     CONSTRAINT suppliers_pkey PRIMARY KEY (itn),
     CONSTRAINT suppliers_fkey_address_id_fkey FOREIGN KEY (f_key_address_id) REFERENCES public.addresses (address_id)
@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS public.suppliers
 CREATE TABLE IF NOT EXISTS public.country
 (
     country_id bigint NOT NULL GENERATED ALWAYS AS IDENTITY,
-    country character varying(50) NOT NULL,
+    country character varying(64) NOT NULL,
     CONSTRAINT country_pkey PRIMARY KEY (country_id),
     CONSTRAINT country_country_key UNIQUE (country)
 );
@@ -297,7 +297,7 @@ CREATE TABLE IF NOT EXISTS public.manufacturers
 (
     manufacturer_id bigint NOT NULL GENERATED ALWAYS AS IDENTITY,
     f_key_country_id bigint NOT NULL,
-    manufacturer_name character varying(64) NOT NULL,
+    manufacturer_name character varying(256) NOT NULL,
     CONSTRAINT manufacturers_pkey PRIMARY KEY (manufacturer_id),
     CONSTRAINT manufacturers_f_key_country_id_fkey FOREIGN KEY (f_key_country_id) REFERENCES public.country (country_id)
 );
@@ -307,7 +307,7 @@ CREATE TABLE IF NOT EXISTS public.product_types
 (
     type_id integer NOT NULL GENERATED ALWAYS AS IDENTITY,
     type_name character varying(64) NOT NULL UNIQUE,
-    type_slug VARCHAR(64) NOT NULL UNIQUE,
+    type_slug VARCHAR(128) NOT NULL UNIQUE,
     parent_id integer,
     CONSTRAINT product_types_pkey PRIMARY KEY (type_id),
     CONSTRAINT product_types_parent_id_fkey FOREIGN KEY (parent_id) REFERENCES public.product_types (type_id)
@@ -316,12 +316,12 @@ CREATE TABLE IF NOT EXISTS public.product_types
 CREATE TABLE IF NOT EXISTS public.products
 (
     product_id bigint NOT NULL GENERATED ALWAYS AS IDENTITY,
-    product_name character varying(128) NOT NULL,
+    product_name character varying(256) NOT NULL,
     price numeric(10,2) NOT NULL,
     f_key_supplier_itn character varying(12) NOT NULL,
     recipe boolean NOT NULL,
-    active_ingredient character varying(25),
-    expiration character varying(20),
+    active_ingredient character varying(128),
+    expiration character varying(64),
     composition text,
     indications text,
     contraindications text,
@@ -372,15 +372,16 @@ CREATE TABLE IF NOT EXISTS public.roles
     CONSTRAINT roles_role_name_key UNIQUE (role_name)
 );
 
-INSERT INTO roles (role_name) VALUES ('ADMIN'), ('OPERATOR'), ('CUSTOMER');
+INSERT INTO roles (role_name) VALUES ('ROLE_ADMIN'), ('ROLE_OPERATOR'), ('ROLE_CUSTOMER'),
+                                     ('ROLE_LOGISTICS'), ('ROLE_ROOT');
 
 CREATE EXTENSION IF NOT EXISTS pg_trgm;
 
 CREATE TABLE IF NOT EXISTS public.users
 (
-    name character varying(25) NOT NULL,
-    surname character varying(25) NOT NULL,
-    last_name character varying(25),
+    name character varying(32) NOT NULL,
+    surname character varying(32) NOT NULL,
+    last_name character varying(32),
     mobile_phone character varying(18) NOT NULL,
     password character varying(256) NOT NULL,
     f_key_role_id integer NOT NULL default(3) references roles(role_id),
@@ -395,7 +396,7 @@ CREATE TABLE IF NOT EXISTS public.pharmacy_branches
 (
     branch_id bigint NOT NULL GENERATED ALWAYS AS IDENTITY,
     f_key_address_id bigint NOT NULL,
-    name character varying(32),
+    name character varying(255),
     warehouse_limitation integer,
     branch_phone character varying(18),
     user_supervisor character varying(18),
@@ -408,10 +409,10 @@ CREATE TABLE IF NOT EXISTS public.pharmacy_branches
 --changeset Bushuev:Orders
 CREATE TABLE IF NOT EXISTS public.orders
 (
-    order_id bigint NOT NULL GENERATED ALWAYS AS IDENTITY,
+    order_id UUID NOT NULL,
     status_order smallint,
     date timestamp with time zone NOT NULL,
-    f_key_user_id character varying(15) NOT NULL,
+    f_key_user_id character varying(18) NOT NULL,
     f_key_branch_id bigint NOT NULL,
     CONSTRAINT orders_pkey PRIMARY KEY (order_id),
     CONSTRAINT orders_f_key_branch_id_fkey FOREIGN KEY (f_key_branch_id) REFERENCES public.pharmacy_branches (branch_id),
@@ -424,7 +425,7 @@ CREATE TABLE IF NOT EXISTS public.order_items
     obj_amount integer DEFAULT 1,
     obj_price numeric(10,2) NOT NULL,
     f_key_product_id bigint NOT NULL,
-    f_key_order_id bigint NOT NULL,
+    f_key_order_id UUID NOT NULL,
     CONSTRAINT order_items_pkey PRIMARY KEY (obj_id),
     CONSTRAINT order_items_f_key_product_id_fkey FOREIGN KEY (f_key_product_id) REFERENCES public.products (product_id),
     CONSTRAINT order_items_f_key_order_id_fkey FOREIGN KEY (f_key_order_id) REFERENCES public.orders (order_id)
@@ -455,8 +456,8 @@ CREATE TABLE IF NOT EXISTS public.branch_reservation
     expires_at timestamp with time zone NOT NULL,
     f_key_product_id bigint NOT NULL,
     f_key_branch_id bigint NOT NULL,
-    f_key_user_id character varying(15) NOT NULL,
-    f_key_order_id bigint,
+    f_key_user_id character varying(18) NOT NULL,
+    f_key_order_id UUID,
     CONSTRAINT branch_reservation_pkey PRIMARY KEY (id),
     CONSTRAINT branch_reservation_f_key_branch_id_fkey FOREIGN KEY (f_key_branch_id)
         REFERENCES public.pharmacy_branches (branch_id),
@@ -544,13 +545,15 @@ CREATE TABLE IF NOT EXISTS public.transaction_types
     CONSTRAINT transaction_types_transaction_name_key UNIQUE (transaction_name)
 );
 
+INSERT INTO public.transaction_types(transaction_name) VALUES ('RECEIVING'), ('SALE');
+
 CREATE TABLE IF NOT EXISTS public.transaction_history
 (
     id bigint NOT NULL GENERATED ALWAYS AS IDENTITY,
     completed_at timestamp with time zone NOT NULL,
     f_key_transaction_type integer NOT NULL,
     f_key_branch_id bigint NOT NULL,
-    f_key_order_id bigint,
+    f_key_order_id UUID,
     CONSTRAINT transaction_history_pkey PRIMARY KEY (id),
     CONSTRAINT transaction_history_f_key_branch_id_fkey FOREIGN KEY (f_key_branch_id)
         REFERENCES public.pharmacy_branches (branch_id),
@@ -577,13 +580,13 @@ CREATE TABLE IF NOT EXISTS public.transaction_items
 CREATE TABLE IF NOT EXISTS public.news_type
 (
     type_id SMALLINT NOT NULL PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    type character varying(25) NOT NULL UNIQUE
+    type character varying(32) NOT NULL UNIQUE
 );
 
 CREATE TABLE IF NOT EXISTS public.news
 (
     id bigint NOT NULL GENERATED ALWAYS AS IDENTITY,
-    slug character varying(64) NOT NULL,
+    slug character varying(255) NOT NULL,
     created_time timestamp with time zone NOT NULL,
     title character varying(255) NOT NULL,
     body text NOT NULL,
