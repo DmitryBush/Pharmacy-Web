@@ -1,11 +1,13 @@
-FROM gradle:jdk21 AS builder
+FROM gradle:jdk21-alpine AS builder
 
 WORKDIR /build
+COPY Transaction-Outbox ./Transaction-Outbox
+COPY UUID-Adapter ./UUID-Adapter
 COPY src ./src
 COPY build.gradle.kts ./
 COPY settings.gradle.kts ./
 
-RUN gradle build --no-daemon -x test
+RUN gradle build --no-daemon --parallel -x test
 
 FROM amazoncorretto:21-alpine
 

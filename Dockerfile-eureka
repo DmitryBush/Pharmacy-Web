@@ -1,0 +1,14 @@
+FROM gradle:jdk25-alpine AS builder
+
+WORKDIR /build
+COPY EurekaRegistry/src ./src
+COPY EurekaRegistry/build.gradle.kts ./
+COPY EurekaRegistry/settings.gradle.kts ./
+
+RUN gradle build --no-daemon --parallel -x test
+
+FROM amazoncorretto:25-alpine
+
+WORKDIR /app
+COPY --from=builder build/build/libs/*.jar pharmacy-web-eureka-app.jar
+ENTRYPOINT [ "java", "-jar", "pharmacy-web-eureka-app.jar" ]
